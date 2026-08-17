@@ -1,0 +1,43 @@
+DI FUTURO · TESTE v716 — LAYOUT NATIVO
+========================================
+
+OBJETIVO
+Fazer o bloco de DI Futuro parecer parte nativa da área "Inflação e juros",
+em vez de parecer uma página externa dentro da página.
+
+O QUE MUDOU EM RELAÇÃO À v715
+- um único card, seguindo a linguagem visual do catálogo;
+- removido o "card dentro de card" da v715;
+- cabeçalho, fundo, bordas e rodapé próprios dos widgets são ocultados;
+- os widgets passam a fornecer principalmente leitura, gráfico e movimentos;
+- a hierarquia e os títulos passam a ser comandados pelo catálogo;
+- cadeia Selic -> DI/CDI -> DI Futuro virou uma linha discreta;
+- histórico continua recolhido;
+- widget histórico só é carregado quando o usuário abrir o detalhe;
+- altura dos iframes é ajustada automaticamente.
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+- index-ipca15-teste.html        -> substituir
+- juros-futuros-teste-v716.css  -> novo
+- juros-futuros-teste-v716.js   -> novo
+
+MANTER COMO ESTÁ
+- app-selic-teste-v714.js
+- selic-teste-v714.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- app.js / style.css principais
+- robôs e workflows
+
+Os arquivos v715 podem permanecer na raiz; a v716 não os carrega.
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=716
+
+Depois do deploy:
+Ctrl + F5
+
+SE APROVADO
+A próxima etapa será gerar a versão oficial consolidada do site principal,
+com nomes finais e instruções exatas do que substituir/adicionar.

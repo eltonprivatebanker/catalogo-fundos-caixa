@@ -1,0 +1,234 @@
+/* =========================================================
+   DI FUTURO · TESTE v716
+   Visual nativo do catálogo; widgets usados apenas como motor/gráfico.
+   ========================================================= */
+
+.di-native-card-v716{
+  grid-column:1 / -1;
+}
+
+.di-native-head-v716{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.di-native-head-v716 h3{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.di-native-full-link-v716{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  min-height:30px;
+  padding:0 9px;
+  border:1px solid rgba(148,163,184,.12);
+  border-radius:8px;
+  color:#929eb5;
+  background:rgba(8,10,18,.28);
+  font:700 .49rem/1 Inter,system-ui,sans-serif;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.di-native-full-link-v716:hover{
+  color:#e6bd70;
+  border-color:rgba(213,168,78,.25);
+}
+
+.di-native-chain-v716{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin:10px 0 12px;
+  padding:7px 9px;
+  border:1px solid rgba(148,163,184,.08);
+  border-radius:9px;
+  background:rgba(7,10,18,.22);
+}
+
+.di-native-chain-v716 > span{
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  min-width:0;
+}
+
+.di-native-chain-v716 small{
+  color:#707c94;
+  font:650 .40rem/1 "JetBrains Mono",monospace;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+.di-native-chain-v716 strong{
+  color:#cbd4e3;
+  font:750 .55rem/1 Inter,system-ui,sans-serif;
+}
+
+.di-native-chain-v716 > i{
+  color:#59667d;
+  font-style:normal;
+  font-size:.58rem;
+}
+
+.di-native-chain-v716 .is-active-v716 strong{
+  color:#e3b863;
+}
+
+.di-native-section-head-v716{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin:2px 0 7px;
+}
+
+.di-native-section-head-v716 > div{
+  display:grid;
+  gap:2px;
+}
+
+.di-native-section-head-v716 span{
+  color:#c99d49;
+  font:850 .40rem/1 "JetBrains Mono",monospace;
+  letter-spacing:.08em;
+}
+
+.di-native-section-head-v716 strong{
+  color:#dbe3f0;
+  font:750 .58rem/1.25 Inter,system-ui,sans-serif;
+}
+
+.di-native-section-head-v716 > small{
+  color:#7f8ba2;
+  font:550 .46rem/1.3 Inter,system-ui,sans-serif;
+  text-align:right;
+}
+
+.di-native-embed-v716{
+  overflow:hidden;
+  width:100%;
+  border:1px solid rgba(148,163,184,.08);
+  border-radius:10px;
+  background:rgba(7,10,18,.18);
+}
+
+.di-native-frame-v716{
+  display:block;
+  width:100%;
+  height:430px;
+  min-height:360px;
+  border:0;
+  background:transparent;
+}
+
+.di-native-history-v716{
+  margin-top:9px;
+  border-top:1px solid rgba(148,163,184,.08);
+}
+
+.di-native-history-v716 > summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:46px;
+  padding:8px 2px 4px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.di-native-history-v716 > summary::-webkit-details-marker{
+  display:none;
+}
+
+.di-native-history-v716 > summary span{
+  display:grid;
+  gap:2px;
+}
+
+.di-native-history-v716 > summary b{
+  color:#d2dbea;
+  font:750 .55rem/1.2 Inter,system-ui,sans-serif;
+}
+
+.di-native-history-v716 > summary small{
+  color:#77839a;
+  font:550 .45rem/1.25 Inter,system-ui,sans-serif;
+}
+
+.di-native-history-v716 > summary i{
+  color:#79859c;
+  font-style:normal;
+  transition:transform .16s ease;
+}
+
+.di-native-history-v716[open] > summary i{
+  transform:rotate(180deg);
+}
+
+.di-native-history-body-v716{
+  padding-top:5px;
+}
+
+.di-native-history-body-v716 .di-native-frame-v716{
+  height:470px;
+}
+
+.di-native-footnote-v716{
+  margin:9px 1px 0;
+  color:#7f8ba2;
+  font:550 .47rem/1.4 Inter,system-ui,sans-serif;
+}
+
+.di-native-footnote-v716 strong{
+  color:#c9d2e2;
+  font-weight:760;
+}
+
+@media (max-width:900px){
+  .di-native-head-v716{
+    display:grid;
+  }
+
+  .di-native-full-link-v716{
+    width:max-content;
+  }
+
+  .di-native-section-head-v716{
+    align-items:flex-start;
+  }
+}
+
+@media (max-width:768px){
+  .di-native-chain-v716{
+    justify-content:flex-start;
+    overflow-x:auto;
+  }
+
+  .di-native-chain-v716 > span{
+    flex:0 0 auto;
+  }
+
+  .di-native-section-head-v716{
+    display:grid;
+    gap:4px;
+  }
+
+  .di-native-section-head-v716 > small{
+    text-align:left;
+  }
+
+  .di-native-frame-v716,
+  .di-native-history-body-v716 .di-native-frame-v716{
+    height:620px;
+    min-height:520px;
+  }
+}
