@@ -1,0 +1,41 @@
+DI FUTURO · TESTE v717 — ACABAMENTO FINAL
+=============================================
+
+OBJETIVO
+Refinar a v716 antes da promoção para a página principal.
+
+AJUSTES
+- removido o cabeçalho duplicado "LEITURA DO ÚLTIMO PREGÃO /
+  Curva atual × pregão anterior" que ficava fora do widget;
+- cadeia simplificada para:
+  Selic -> DI / CDI -> DI Futuro;
+- "Por que isso importa?" foi movido para antes do histórico;
+- "Juros Brasil completo" foi movido para o rodapé;
+- histórico continua recolhido e só carrega quando aberto;
+- gráficos, leitura automática e dados não foram alterados.
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+- index-ipca15-teste.html        -> substituir
+- juros-futuros-teste-v717.css  -> novo
+- juros-futuros-teste-v717.js   -> novo
+
+MANTER COMO ESTÁ
+- app-selic-teste-v714.js
+- selic-teste-v714.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- app.js / style.css principais
+- robôs e workflows
+
+Os arquivos v715/v716 podem permanecer por enquanto; a v717 não os carrega.
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=717
+
+Depois do deploy:
+Ctrl + F5
+
+SE FOR APROVADO
+A próxima etapa será gerar o pacote oficial consolidado da página principal,
+com nomes finais e instruções exatas do que substituir e do que adicionar.

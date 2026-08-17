@@ -82,7 +82,7 @@ document.documentElement.classList.add(
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<title>TESTE IPCA-15 + SELIC + DI FUTURO v716 · Catálogo de Fundos CAIXA</title>
+<title>TESTE IPCA-15 + SELIC + DI FUTURO v717 · Catálogo de Fundos CAIXA</title>
 <style id="critical-css-v50">
   :root{--bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--gold:#c8973a;--gold2:#e8bb6a;--text:#edf1fb;--muted:#a6b0c9;--border:rgba(200,151,58,.22);--border2:rgba(255,255,255,.085);}
   *{box-sizing:border-box} html{background:#07080f;color-scheme:dark} body{margin:0;min-height:100vh;background:#07080f;color:#edf1fb;font-family:Inter,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased} body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(200,151,58,.055),transparent 55%),radial-gradient(ellipse 60% 60% at 90% 105%,rgba(91,156,246,.04),transparent 55%)} .page{position:relative;z-index:1;max-width:1760px;margin:0 auto;padding:32px 28px 100px} header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:28px;border-bottom:1px solid rgba(200,151,58,.22)} .brand{display:flex;align-items:center;gap:16px}.brand-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#c8973a,#e8bb6a);color:#07080f;font-weight:800;font-size:1.55rem}.brand-text h1{margin:0;color:#e8bb6a;font-size:1.8rem;line-height:1.1}.brand-text p{margin:.35rem 0 0;color:#a6b0c9;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}.section-gap{margin-top:28px}.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.kpi,.fund-filter-shell,.rank-card,.ranking-exec-card,.table-wrap{background:#0c0e1a;border:1px solid rgba(200,151,58,.22);border-radius:14px}.kpi{padding:20px 18px}.section-title h2,.ranking-title-group h2{color:#e8bb6a}.table-wrap{overflow-x:auto;overflow-y:hidden} #loadMsg{padding:34px;text-align:center;color:#a6b0c9}.spinner{width:18px;height:18px;border:2px solid rgba(200,151,58,.22);border-top-color:#e8bb6a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}@keyframes spin{to{transform:rotate(360deg)}}
@@ -2767,7 +2767,7 @@ html.desktop-responsive-fit-v688 body{
 </style>
 <link rel="stylesheet" href="ipca15-teste.css?v=ipca15-v712"/>
 <link rel="stylesheet" href="selic-teste-v714.css?v=selic-v714"/>
-<link rel="stylesheet" href="juros-futuros-teste-v716.css?v=di-v716"/>
+<link rel="stylesheet" href="juros-futuros-teste-v717.css?v=di-v717"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -4028,47 +4028,41 @@ html.desktop-responsive-fit-v688 body{
       </article>
 
       
-      <article class="econ-dash-card-v378 di-native-card-v716" id="diFuturoV716">
-        <div class="econ-dash-card-head-v378 di-native-head-v716">
+      
+      <article class="econ-dash-card-v378 di-native-card-v717" id="diFuturoV717">
+        <div class="econ-dash-card-head-v378 di-native-head-v717">
           <div>
             <h3><span aria-hidden="true">📈</span> DI Futuro — curva de juros</h3>
             <p>Como o mercado está precificando os juros nos diferentes prazos.</p>
           </div>
-
-          <a class="di-native-full-link-v716"
-             href="https://eltonprivatebanker.github.io/curva-juros-brasil/v3.html"
-             target="_blank" rel="noopener">
-            Juros Brasil completo <span aria-hidden="true">↗</span>
-          </a>
         </div>
 
-        <div class="di-native-chain-v716" aria-label="Relação entre Selic, DI/CDI e DI Futuro">
-          <span><small>Taxa básica</small><strong>Selic</strong></span>
+        <div class="di-native-chain-v717" aria-label="Relação entre Selic, DI/CDI e DI Futuro">
+          <strong>Selic</strong>
           <i aria-hidden="true">→</i>
-          <span><small>Curto prazo</small><strong>DI / CDI</strong></span>
+          <strong>DI / CDI</strong>
           <i aria-hidden="true">→</i>
-          <span class="is-active-v716"><small>Mercado futuro</small><strong>DI Futuro</strong></span>
+          <strong class="is-active-v717">DI Futuro</strong>
         </div>
 
-        <div class="di-native-section-head-v716">
-          <div>
-            <span>LEITURA DO ÚLTIMO PREGÃO</span>
-            <strong>Curva atual × pregão anterior</strong>
-          </div>
-          <small>Taxas negociadas na B3 por diferentes vencimentos.</small>
-        </div>
-
-        <div class="di-native-embed-v716">
+        <div class="di-native-embed-v717">
           <iframe
-            class="di-native-frame-v716"
-            id="diCurrentFrameV716"
+            class="di-native-frame-v717"
+            id="diCurrentFrameV717"
             src="https://eltonprivatebanker.github.io/curva-juros-brasil/widgets/curva-di-fundos.html"
             title="Curva DI atual e movimentos do último pregão"
             loading="lazy"
             scrolling="no"></iframe>
         </div>
 
-        <details class="di-native-history-v716" id="diHistoryDetailsV716">
+        <div class="di-native-why-v717">
+          <strong>Por que isso importa?</strong>
+          <span>
+            Movimentos da curva ajudam a contextualizar a marcação a mercado de estratégias prefixadas e de maior duration.
+          </span>
+        </div>
+
+        <details class="di-native-history-v717" id="diHistoryDetailsV717">
           <summary>
             <span>
               <b>Ver evolução da curva</b>
@@ -4077,19 +4071,16 @@ html.desktop-responsive-fit-v688 body{
             <i aria-hidden="true">▾</i>
           </summary>
 
-          <div class="di-native-history-body-v716">
-            <div class="di-native-section-head-v716 is-history-v716">
-              <div>
-                <span>HISTÓRICO · CURVA DI</span>
-                <strong>Como a curva mudou no tempo</strong>
-              </div>
-              <small>A curva atual permanece como referência.</small>
+          <div class="di-native-history-body-v717">
+            <div class="di-native-history-label-v717">
+              <span>HISTÓRICO · CURVA DI</span>
+              <strong>Como a curva mudou no tempo</strong>
             </div>
 
-            <div class="di-native-embed-v716">
+            <div class="di-native-embed-v717">
               <iframe
-                class="di-native-frame-v716"
-                id="diHistoryFrameV716"
+                class="di-native-frame-v717"
+                id="diHistoryFrameV717"
                 data-src="https://eltonprivatebanker.github.io/curva-juros-brasil/widgets/evolucao-di-fundos.html"
                 title="Evolução histórica da Curva DI"
                 loading="lazy"
@@ -4098,11 +4089,15 @@ html.desktop-responsive-fit-v688 body{
           </div>
         </details>
 
-        <p class="di-native-footnote-v716">
-          <strong>Por que isso importa?</strong>
-          Aberturas e fechamentos da curva ajudam a contextualizar a marcação a mercado de estratégias prefixadas e de maior duration.
-        </p>
+        <div class="di-native-footer-v717">
+          <span>Curva de mercado ≠ previsão garantida.</span>
+          <a href="https://eltonprivatebanker.github.io/curva-juros-brasil/v3.html"
+             target="_blank" rel="noopener">
+            Juros Brasil completo <span aria-hidden="true">↗</span>
+          </a>
+        </div>
       </article>
+
 
 
     </div>
@@ -4243,6 +4238,6 @@ html.desktop-responsive-fit-v688 body{
 <!-- Desktop section toggle agora fica somente no app.js v542. -->
 
 <script src="ipca15-teste.js?v=ipca15-v712"></script>
-<script defer src="juros-futuros-teste-v716.js?v=di-v716"></script>
+<script defer src="juros-futuros-teste-v717.js?v=di-v717"></script>
 </body>
 </html>
