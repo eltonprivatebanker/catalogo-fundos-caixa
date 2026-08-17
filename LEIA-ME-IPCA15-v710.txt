@@ -1,0 +1,42 @@
+IPCA-15 · TESTE v710 — ACABAMENTO SEMÂNTICO FINAL
+===================================================
+
+OBJETIVO
+Fazer os últimos ajustes de linguagem e legibilidade antes de promover
+o IPCA-15 para a página principal.
+
+ALTERAÇÕES
+1. "SINAL ANTECIPADO" -> "LEITURA ANTECIPADA"
+   - evita sugerir que o IPCA-15 é uma previsão exata.
+
+2. Bloco comparativo:
+   - "Sinal antecipado" -> "Leitura antecipada".
+
+3. Frase final:
+   - "o IPCA-15 oferece uma leitura antecipada;
+      o IPCA confirma o resultado oficial."
+
+4. Legibilidade:
+   - aumenta contraste/tamanho das datas "Próx.:"
+   - aumenta contraste/tamanho da linha "Entenda:"
+   - reforça discretamente o kicker "LEITURA ANTECIPADA".
+
+ARQUIVOS A SUBSTITUIR NA RAIZ DA BRANCH Testes-da-versão-01
+- index-ipca15-teste.html
+- ipca15-teste.css
+- ipca15-teste.js
+
+NÃO ALTERAR
+- index.html
+- app.js
+- style.css
+- ipca15.json
+- robo_ipca15.py
+- .github/workflows/ipca15.yml
+
+TESTE
+1. Aguarde o pages-build-deployment ficar verde.
+2. Abra:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=710
+3. Faça Ctrl+F5.
+4. Abra "Inflação e juros".
