@@ -1,0 +1,40 @@
+SELIC · TESTE v714 — KPIs SEM PISCAR
+===================================
+
+PROBLEMA
+Ao trocar Ano atual / 3 anos / 5 anos / 10 anos / Histórico,
+mais de uma rotina antiga escreve nos mesmos campos de máxima,
+mínima e Selic vigente. Mesmo quando todos os valores são válidos,
+o navegador pode mostrar estados intermediários por alguns ms.
+
+CORREÇÃO v714
+- captura os seis textos atuais antes do clique;
+- mantém esses textos congelados durante o recálculo;
+- calcula o estado final a partir do período já selecionado;
+- atualiza valor + data dos três KPIs na mesma tarefa;
+- protege o resultado por alguns ms contra reescritas tardias;
+- não usa fade e não apaga os números.
+
+ARQUIVOS NA RAIZ DE Testes-da-versão-01
+1. index-ipca15-teste.html       -> substituir
+2. app-selic-teste-v714.js       -> novo
+3. selic-teste-v714.css          -> novo
+
+PODE MANTER OS ARQUIVOS v713
+Eles não serão carregados pela página v714. Depois podemos apagá-los.
+
+NÃO ALTERAR
+- index.html
+- app.js
+- style.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- robôs e workflows
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=714
+
+Teste várias trocas seguidas:
+10 anos -> 5 anos -> 3 anos -> Histórico -> Ano atual.
+Valor e data de cada KPI devem mudar juntos, sem piscar.
