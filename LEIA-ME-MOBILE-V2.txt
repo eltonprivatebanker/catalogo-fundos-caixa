@@ -1,0 +1,58 @@
+MOBILE V2 · TESTE 2.0.0 — INDICADORES DE MERCADO
+==================================================
+
+OBJETIVO
+Criar uma trilha separada de testes para o layout mobile sem mexer na
+página oficial nem no desktop.
+
+PÁGINA DE TESTE
+index-mobile-v2-teste.html
+
+A página usa os mesmos dados e os mesmos arquivos oficiais do catálogo,
+mas adiciona mobile-v2-teste.css e mobile-v2-teste.js somente para telas
+de até 768px.
+
+AJUSTES DESTA PRIMEIRA VERSÃO
+1. Indicadores dos EUA:
+   - "EUA / USD / BRL" passa a ficar explícito como:
+     "Bolsas EUA · moeda | USD | BRL"
+   - USD/BRL continua alterando SOMENTE S&P 500, Nasdaq e Dow.
+
+2. Resumo acumulado:
+   - cria um único título "Desempenho no ano";
+   - remove repetição "ANO ATUAL" de cada card;
+   - aumenta fonte dos valores;
+   - Dow ocupa as duas colunas para fechar o grid de 7 indicadores.
+
+3. Mês exibido:
+   - deixa de parecer uma tabela desktop comprimida;
+   - mês vira cabeçalho do bloco;
+   - indicadores são apresentados em grid de duas colunas;
+   - valores e rótulos ficam maiores;
+   - Dow fecha a linha ocupando a largura total.
+
+4. "Ver todos os meses":
+   - preservado.
+
+5. Desktop:
+   - nenhuma alteração.
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+- index-mobile-v2-teste.html
+- mobile-v2-teste.css
+- mobile-v2-teste.js
+
+NÃO SUBSTITUIR
+- index.html
+- app.js
+- style.css
+- ipca15.css/js
+- selic.css
+- juros-futuros.css/js
+- dados, robôs e workflows
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-mobile-v2-teste.html?v=2
+
+Abra no celular ou use o modo responsivo do navegador.
+Depois do deploy faça Ctrl+F5.
