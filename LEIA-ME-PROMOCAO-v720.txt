@@ -1,0 +1,62 @@
+CATÁLOGO DE FUNDOS CAIXA · PRODUÇÃO v720
+==========================================
+
+BASE APROVADA
+Este pacote promove para a página principal a versão visual testada em:
+index-ipca15-teste.html?v=719
+
+Ele consolida:
+- IPCA-15 (v712 aprovada)
+- Selic simplificada e KPIs estáveis (v714 aprovada)
+- DI Futuro / Curva de Juros (v719 aprovada)
+- todo o restante da base de produção v706 preservado
+
+ARQUIVOS PARA A RAIZ DA BRANCH Testes-da-versão-01
+
+SUBSTITUIR:
+1. index.html
+2. app.js
+
+ADICIONAR:
+3. ipca15.css
+4. ipca15.js
+5. selic.css
+6. juros-futuros.css
+7. juros-futuros.js
+
+NÃO ALTERAR:
+- style.css
+- tokens.css
+- ipca15.json
+- robo_ipca15.py
+- .github/workflows/ipca15.yml
+- fundos.json / CSVs / demais dados
+- robôs de fundos e indicadores
+
+IMPORTANTE
+O arquivo ipca15.json já existe e já é atualizado pelo robô.
+Os widgets de DI Futuro continuam sendo servidos pelo repositório
+curva-juros-brasil. Este catálogo apenas os incorpora.
+
+ARQUIVOS DE TESTE
+index-ipca15-teste.html e arquivos *-teste-* podem permanecer no repositório.
+Eles não são carregados pela página principal.
+
+VALIDAÇÃO APÓS O UPLOAD
+1. Aguarde o pages-build-deployment ficar verde.
+2. Abra:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/
+3. Faça Ctrl + F5.
+4. Verifique:
+   - busca e catálogo de fundos
+   - rankings
+   - IPCA e IPCA-15
+   - Selic (10 anos padrão + troca de períodos sem piscar)
+   - DI Futuro
+   - Evolução histórica da curva
+   - PTAX / demais indicadores
+
+ROLLBACK SIMPLES
+Se algo inesperado ocorrer, restaure apenas index.html e app.js da versão
+anterior. Os novos CSS/JS independentes podem continuar na raiz sem efeito
+se não estiverem referenciados pelo index.html.

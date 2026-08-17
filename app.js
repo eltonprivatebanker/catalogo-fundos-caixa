@@ -7709,7 +7709,7 @@ async function inicializarGraficos(d){
 }
 
 const econDashStateV378 = window.__ECON_DASH_STATE_V378__ || {
-  range:{ ipca:12, meta:12, selic:'all' },
+  range:{ ipca:12, meta:12, selic:120 },
   ipcaNorm:[],
   metaNorm:[],
   selicNorm:[],
@@ -8230,14 +8230,8 @@ function econAtualizarSelicKpiLabelsV381(range){
   const minLabel = document.getElementById('selicMinLabelV381');
   const currentLabel = document.querySelector('#mobileSelicV400 .selic-kpi-focus-card-v415.is-current span');
 
-  if(range === 'all'){
-    if(maxLabel) maxLabel.textContent = 'Maior Selic da série';
-    if(minLabel) minLabel.textContent = 'Menor Selic da série';
-  }else{
-    if(maxLabel) maxLabel.textContent = 'Maior Selic do período';
-    if(minLabel) minLabel.textContent = 'Menor Selic do período';
-  }
-
+  if(maxLabel) maxLabel.textContent = 'Máxima no período';
+  if(minLabel) minLabel.textContent = 'Mínima no período';
   if(currentLabel) currentLabel.textContent = 'Selic vigente';
 }
 
@@ -8379,7 +8373,15 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       <span><i class="max"></i> Máxima</span>
       <span><i class="min"></i> Mínima</span>
       <span><i class="current"></i> Selic vigente</span>
-      <strong>Período exibido: ${periodStart} → ${periodEnd} · Selic atual: ${econPctV378(last.value, false)} a.a.</strong>
+      <strong>${
+        range === 'all' ? 'Histórico completo' :
+        range === 'ytd' ? 'Ano atual' :
+        range === 'custom' ? 'Período personalizado' :
+        Number(range) === 36 ? '3 anos' :
+        Number(range) === 60 ? '5 anos' :
+        Number(range) === 120 ? '10 anos' :
+        'Período selecionado'
+      } · ${periodStart} → ${periodEnd}</strong>
     </div>
   `;
   bindSelicTooltipV596(el);
@@ -29922,7 +29924,7 @@ function buildDetailPanel(r,colspan){
       if(/Selic atual:\s*[\d,.]+%\s*a\.a\./i.test(t)){
         next = t.replace(/Selic atual:\s*[\d,.]+%\s*a\.a\./i, 'Selic atual: ' + txt);
       }else if(/Período exibido:/i.test(t) && !/Selic atual:/i.test(t)){
-        next = t + ' · Selic atual: ' + txt;
+        next = t;
       }
       if(next !== t) el.textContent = next;
     });
@@ -31700,3 +31702,261 @@ function buildDetailPanel(r,colspan){
 
   console.info('[Catálogo CAIXA] Rankings estáveis ativos:',BUILD);
 })();
+
+/* =========================================================
+   PRODUÇÃO v720 — Selic simplificada
+   - padrão 10 anos
+   - custom range avançado
+   - KPI vigente primeiro
+   - máxima/mínima no período
+   - legenda sem duplicar Selic atual
+   ========================================================= */
+window.__ELTAUM_SELIC_PROD_V720__ = {
+  build: 'ELTAUM_SELIC_PROD_V720',
+  defaultRange: 120
+};
+console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
+
+
+/* =========================================================
+   PRODUÇÃO v720 — Selic KPI atomic switch
+   ---------------------------------------------------------
+   Problema observado:
+   durante a troca de período, rotinas legadas escrevem valores/datas
+   válidos em momentos diferentes. O navegador pode pintar esses estados
+   intermediários, gerando a sensação de "pisca".
+
+   Estratégia:
+   1) captura os 6 textos atuais antes do clique;
+   2) congela visualmente esses textos enquanto o dashboard recalcula;
+   3) calcula o estado final a partir do range já atualizado;
+   4) publica valor + data dos 3 KPIs na mesma tarefa;
+   5) por alguns ms, impede reescritas tardias de patches antigos.
+   ========================================================= */
+(function selicKpiAtomicSwitchV714(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_SELIC_KPI_ATOMIC_V714';
+  const IDS = [
+    'selicHojeResumo','selicHojeData',
+    'selicMaxResumo','selicMaxData',
+    'selicMinResumo','selicMinData'
+  ];
+
+  let phase = 'idle'; // idle | freeze | settle
+  let frozen = Object.create(null);
+  let expected = Object.create(null);
+  let restoring = false;
+  let commitTimer = null;
+  let releaseTimer = null;
+
+  function root(){
+    return document.getElementById('mobileSelicV400');
+  }
+
+  function txt(id){
+    return String(document.getElementById(id)?.textContent || '').trim();
+  }
+
+  function snapshot(){
+    const obj = Object.create(null);
+    IDS.forEach(id => obj[id] = txt(id));
+    return obj;
+  }
+
+  function applyMap(map){
+    restoring = true;
+    try{
+      IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        const value = map[id];
+        if(value != null && el.textContent !== value) el.textContent = value;
+      });
+    }finally{
+      restoring = false;
+    }
+  }
+
+  function fmtPct(v){
+    const n = Number(v);
+    return Number.isFinite(n)
+      ? `${n.toFixed(2).replace('.', ',')}% a.a.`
+      : '—';
+  }
+
+  function fmtDate(dt){
+    if(!dt) return '—';
+    if(dt instanceof Date && !isNaN(dt.getTime())){
+      return dt.toLocaleDateString('pt-BR');
+    }
+    let s = String(dt).trim().replace(/^desde\s+/i,'');
+    const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(iso) return `${iso[3]}/${iso[2]}/${iso[1]}`;
+    return s || '—';
+  }
+
+  function officialCurrent(mercado, fallbackRow){
+    const card = mercado?.cards?.selic_meta || {};
+    let value = NaN;
+
+    try{
+      value = window.selicOfficialPositiveV666?.(mercado);
+    }catch(e){}
+
+    if(!Number.isFinite(value)){
+      try{
+        value = typeof econNumberV378 === 'function'
+          ? econNumberV378(card.valor ?? card.taxa ?? card.valor_atual)
+          : Number(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.'));
+      }catch(e){}
+    }
+
+    if(!Number.isFinite(value)) value = Number(fallbackRow?._valor);
+
+    let date = '';
+    try{
+      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+        ? resolverDataUltimaAlteracaoSelic(mercado)
+        : null;
+      date = ref?.data
+        || card.ultima_alteracao
+        || card.data_ultima_alteracao
+        || card.vigente_desde
+        || card.data_ref
+        || fallbackRow?._dt
+        || '';
+    }catch(e){
+      date = fallbackRow?._dt || '';
+    }
+
+    return {
+      value,
+      date: date ? `desde ${fmtDate(date)}` : 'vigente'
+    };
+  }
+
+  function computeFinal(){
+    const state = window.__ECON_DASH_STATE_V378__;
+    if(!state || !Array.isArray(state.selicNorm) || typeof econSelicVisibleRowsV381 !== 'function'){
+      return snapshot();
+    }
+
+    const range = state.range?.selic ?? 120;
+    const rows = econSelicVisibleRowsV381(state.selicNorm, range)
+      .filter(row => !row._periodContextOnly && Number.isFinite(Number(row._valor)));
+
+    if(!rows.length) return snapshot();
+
+    const max = rows.reduce((a,b) => Number(b._valor) > Number(a._valor) ? b : a, rows[0]);
+    const min = rows.reduce((a,b) => Number(b._valor) < Number(a._valor) ? b : a, rows[0]);
+    const last = rows[rows.length - 1];
+    const current = officialCurrent(state.mercado || window._dadosMercado || {}, last);
+
+    return {
+      selicHojeResumo: fmtPct(current.value),
+      selicHojeData: current.date,
+      selicMaxResumo: fmtPct(max._valor),
+      selicMaxData: fmtDate(max._dt),
+      selicMinResumo: fmtPct(min._valor),
+      selicMinData: fmtDate(min._dt)
+    };
+  }
+
+  function guard(){
+    if(restoring || phase === 'idle') return;
+    applyMap(phase === 'freeze' ? frozen : expected);
+  }
+
+  function commitFinal(){
+    expected = computeFinal();
+    phase = 'settle';
+
+    // Uma única tarefa JS: valor e data dos três KPIs mudam juntos
+    // antes de o navegador realizar a próxima pintura.
+    applyMap(expected);
+
+    try{
+      const state = window.__ECON_DASH_STATE_V378__;
+      if(state && typeof econAtualizarSelicKpiLabelsV381 === 'function'){
+        econAtualizarSelicKpiLabelsV381(state.range?.selic ?? 120);
+      }
+    }catch(e){}
+
+    clearTimeout(releaseTimer);
+    releaseTimer = setTimeout(() => {
+      applyMap(expected);
+      phase = 'idle';
+      root()?.classList.remove('selic-kpi-atomic-switch-v714');
+      frozen = snapshot();
+    }, 520);
+  }
+
+  function begin(){
+    const r = root();
+    if(!r) return;
+
+    frozen = snapshot();
+    expected = Object.create(null);
+    phase = 'freeze';
+    r.classList.add('selic-kpi-atomic-switch-v714');
+
+    clearTimeout(commitTimer);
+    clearTimeout(releaseTimer);
+
+    // Espera o handler normal atualizar state.range e reconstruir o gráfico.
+    // Até lá, qualquer escrita intermediária é revertida antes da pintura.
+    commitTimer = setTimeout(commitFinal, 165);
+
+    requestAnimationFrame(guard);
+    setTimeout(guard, 0);
+    setTimeout(guard, 50);
+    setTimeout(guard, 110);
+  }
+
+  function bind(){
+    const r = root();
+    if(!r || r.dataset.selicAtomicV714 === '1') return;
+    r.dataset.selicAtomicV714 = '1';
+
+    if(window.MutationObserver){
+      new MutationObserver(() => {
+        if(phase !== 'idle') guard();
+      }).observe(r, {
+        subtree:true,
+        childList:true,
+        characterData:true
+      });
+    }
+
+    // Capture: roda antes do handler normal do dashboard.
+    r.addEventListener('click', ev => {
+      const target = ev.target?.closest?.(
+        '[data-dash-range-target="selic"], #selicCustomApplyV596'
+      );
+      if(target) begin();
+    }, true);
+
+    document.documentElement.classList.add('desktop-selic-atomic-v714');
+    console.info('[Catálogo CAIXA] Selic KPI atomic switch ativo:', BUILD);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bind, {once:true});
+  }else{
+    bind();
+  }
+
+  window.addEventListener('load', bind, {once:true});
+
+  window.__ELTAUM_SELIC_KPI_ATOMIC_V714__ = {
+    build: BUILD,
+    state: () => ({
+      phase,
+      range: window.__ECON_DASH_STATE_V378__?.range?.selic,
+      frozen:{...frozen},
+      expected:{...expected}
+    })
+  };
+})();
+
