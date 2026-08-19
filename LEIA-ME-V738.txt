@@ -1,0 +1,14 @@
+V738 — Barra superior do catálogo equilibrada
+
+Correção:
+- a V737 compactou a primeira faixa para 42px;
+- Ordenar por e Por página ainda tinham grids/paddings de versões anteriores;
+- isso causava corte vertical de texto/controles.
+
+V738:
+- faixa principal: 48px;
+- busca e controles: 44px;
+- Ordenar por com grid de duas linhas real;
+- Por página com legenda + select corretamente dimensionados;
+- compensa o pequeno ganho de altura reduzindo 1px nas três linhas de filtros;
+- tabela e mobile preservados.

@@ -87101,3 +87101,143 @@ html.desktop-responsive-fit-v688 body{
     max-height:none!important;
   }
 }
+
+
+/* ============================================================
+   V738 — Desktop: barra Buscar / Ordenar / Por página equilibrada
+   Corrige corte vertical introduzido pela compactação da V737.
+   Mantém praticamente o mesmo ganho de primeira dobra.
+============================================================ */
+@media (min-width:1180px){
+
+  /* A V737 deixou a faixa em 42px, mas os controles internos ainda
+     carregam grid/paddings de versões anteriores. 48px resolve sem
+     devolver o espaço excessivo antigo. */
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .fund-primary-toolbar-v217{
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+    padding:0 0 4px!important;
+    align-items:stretch!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .fund-search-main,
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .fund-view-controls-v217{
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control,
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .exhibition-control{
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    overflow:hidden!important;
+  }
+
+  /* Busca: mesma densidade visual, alinhada ao centro. */
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .fund-search-main #searchInput{
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    line-height:42px!important;
+  }
+
+  /* Ordenação: duas linhas reais + botões centralizados, sem corte. */
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control{
+    grid-template-columns:minmax(0,1fr) 62px 62px!important;
+    grid-template-areas:
+      "caption desc asc"
+      "metric desc asc"!important;
+    grid-template-rows:12px 18px!important;
+    align-content:center!important;
+    align-items:center!important;
+    padding:4px 9px!important;
+    gap:1px 6px!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .control-caption-v217{
+    line-height:1!important;
+    margin:0!important;
+    align-self:end!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .sort-metric-v217{
+    line-height:1.05!important;
+    margin:0!important;
+    align-self:start!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn{
+    height:26px!important;
+    min-height:26px!important;
+    max-height:26px!important;
+    line-height:1!important;
+    align-self:center!important;
+    padding:0 7px!important;
+  }
+
+  /* Por página: legenda e select cabem dentro da mesma altura. */
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .exhibition-control{
+    grid-template-rows:11px 26px!important;
+    align-content:center!important;
+    gap:2px!important;
+    padding:3px 8px!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .exhibition-control > span{
+    line-height:1!important;
+    margin:0!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .exhibition-control #perPage{
+    height:26px!important;
+    min-height:26px!important;
+    max-height:26px!important;
+    line-height:26px!important;
+    margin:0!important;
+  }
+
+  /* Compensa quase todo o +6px da barra principal sem apertar a tabela. */
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-audience-filter-v488,
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .catalog-shortcuts-category-grid-v69,
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .fund-secondary-controls-v217{
+    min-height:37px!important;
+    height:37px!important;
+    max-height:37px!important;
+  }
+
+  html.desktop-toolbar-balance-v738 body #sec-fundos .table-wrap{
+    margin-top:4px!important;
+  }
+}
+
+/* Em desktops menores, deixa a estrutura respirar um pouco mais
+   se o navegador estiver com escala elevada. */
+@media (min-width:1180px) and (max-width:1450px){
+  html.desktop-toolbar-balance-v738 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control{
+    grid-template-columns:minmax(0,1fr) 58px 58px!important;
+  }
+}
