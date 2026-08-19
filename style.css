@@ -87997,3 +87997,152 @@ html.desktop-responsive-fit-v688 body{
     gap:7px!important;
   }
 }
+
+
+/* ============================================================
+   V742 — Desktop: saneamento GEOMÉTRICO de Juros de referência
+   ------------------------------------------------------------
+   Diagnóstico:
+   - V572 ainda forçava o bloco raiz em 320px + 1fr;
+   - V575 depois alterava .rates-detail-grid-v167 para display:block;
+   - a combinação deixava KPIs espremidos à esquerda e
+     Calendário/CDI empilhados apenas na coluna direita.
+
+   V742 define uma única geometria terminal:
+   Cabeçalho → 4 KPIs → Calendário → CDI recente.
+   SOMENTE DESKTOP.
+============================================================ */
+@media (min-width:769px){
+
+  html.desktop-rates-layout-v742.desktop-rates-terminal-v740 body #sec-mercado
+  section.rates-reference-v167.rates-executive-v255,
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .market-reference-block-v167.rates-reference-v167{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "head"
+      "summary"
+      "context"!important;
+    grid-template-rows:auto auto auto!important;
+    gap:9px!important;
+    align-items:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    padding:14px 16px 15px!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-reference-v167 > .market-reference-head-v167{
+    grid-area:head!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-reference-v167 > .rates-summary-v167{
+    grid-area:summary!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:13px 68px!important;
+    gap:5px 10px!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    align-self:stretch!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-reference-v167 > .rates-detail-grid-v167{
+    grid-area:context!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    gap:9px!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-detail-grid-v167 > .copom-compact-v167{
+    grid-column:1!important;
+    grid-row:1!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-detail-grid-v167 > #cdiYearHistory,
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-detail-grid-v167 > .cdi-year-history{
+    grid-column:1!important;
+    grid-row:2!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  /* Garante que os quatro KPIs não herdem larguras antigas. */
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-summary-v167 > .rate-summary-card-v167{
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    align-self:stretch!important;
+  }
+
+  /* CDI recente usa a largura útil, mas os dois cards não precisam
+     ficar gigantes; limita leitura mantendo alinhamento à esquerda. */
+  html.desktop-rates-layout-v742 body #sec-mercado
+  #cdiYearHistory .cdi-kpis-v271{
+    grid-template-columns:repeat(2,minmax(240px,360px))!important;
+    justify-content:start!important;
+    width:100%!important;
+  }
+}
+
+/* Em desktop intermediário: KPIs 2x2, sem quebrar a hierarquia. */
+@media (min-width:769px) and (max-width:1100px){
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-reference-v167 > .rates-summary-v167{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:13px 68px 68px!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-current-label-v739{
+    grid-column:1 / span 2!important;
+    grid-row:1!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-accum-label-v739{
+    display:none!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-summary-v167 .selic-summary-v167{
+    grid-column:1!important;
+    grid-row:2!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  .rates-summary-v167 .cdi-summary-v167{
+    grid-column:2!important;
+    grid-row:2!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  #ratesCdiYearSummaryV649{
+    grid-column:1!important;
+    grid-row:3!important;
+  }
+
+  html.desktop-rates-layout-v742 body #sec-mercado
+  #ratesCdi12mSummaryV649{
+    grid-column:2!important;
+    grid-row:3!important;
+  }
+}
