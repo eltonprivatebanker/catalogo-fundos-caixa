@@ -32100,3 +32100,319 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   window.addEventListener('pageshow',apply,{passive:true});
   window.addEventListener('resize',apply,{passive:true});
 })();
+
+
+/* ============================================================
+   V741 — Desktop: Poupança executiva
+   ------------------------------------------------------------
+   Objetivo:
+   - deixar evidente que existem DUAS regras;
+   - usar "Regra nova" e "Regra antiga";
+   - remover redundâncias visuais;
+   - resumir a condição da Selic em um único lugar;
+   - manter o motor/data-bind original oculto no desktop;
+   - adicionar UMA referência oficial do Banco Central.
+   Mobile preservado.
+============================================================ */
+(function desktopSavingsExecutiveV741(){
+  const MQ = '(min-width: 769px)';
+  const BCB_RULES_URL = 'https://www.bcb.gov.br/acessoinformacao/legado?url=https:%2F%2Fwww.bcb.gov.br%2Fpec%2Fpoupanca%2Fpoupanca.asp';
+  const BCB_CALC_URL = 'https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores';
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia(MQ).matches;
+  }
+
+  function clean(v){
+    return String(v ?? '').replace(/\s+/g,' ').trim();
+  }
+
+  function parseNum(v){
+    const s = clean(v).replace('%','').replace(/\./g,'').replace(',','.');
+    const n = Number(s);
+    return Number.isFinite(n) ? n : NaN;
+  }
+
+  function fmtPct(v, suffix='%'){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(2).replace('.',',') + suffix;
+  }
+
+  function market(){
+    return window._dadosMercado || window.__ECON_DASH_STATE_V378__?.mercado || window.__mercadoAtualV230 || {};
+  }
+
+  function firstNumber(){
+    for(const v of arguments){
+      if(v === null || v === undefined || v === '') continue;
+      const n = typeof v === 'number' ? v : parseNum(v);
+      if(Number.isFinite(n)) return n;
+    }
+    return NaN;
+  }
+
+  function currentSelic(){
+    const d = market();
+    try{
+      const s = window.selicOfficialPositiveV666?.(d);
+      if(Number.isFinite(s) && s > 0) return s;
+    }catch(_){}
+    const c = d?.cards || {};
+    return firstNumber(
+      c.selic_meta?.valor,
+      c.selic_meta?.taxa,
+      c.selic_meta?.valor_atual,
+      d?.selic_meta?.valor
+    );
+  }
+
+  function sourceValues(){
+    const monthlyText = clean(document.getElementById('mc-poup')?.textContent);
+    const ytdText = clean(document.getElementById('poupYearCompactV199')?.textContent);
+    const monthly = parseNum(monthlyText);
+    const ytd = parseNum(ytdText);
+    return { monthlyText, ytdText, monthly, ytd };
+  }
+
+  function formulaToday(selic){
+    if(Number.isFinite(selic) && selic > 8.5) return 'TR + 0,50% a.m.';
+    if(Number.isFinite(selic)) return '70% da Selic + TR';
+    return 'Definida pela Selic vigente';
+  }
+
+  function conditionToday(selic){
+    if(!Number.isFinite(selic)) return 'Aguardando Selic vigente';
+    if(selic > 8.5) return `Selic em ${fmtPct(selic)} a.a. · acima do corte de 8,50%`;
+    return `Selic em ${fmtPct(selic)} a.a. · igual ou abaixo do corte de 8,50%`;
+  }
+
+  function ensureShell(){
+    const root = document.querySelector('#sec-mercado .savings-reference-v167');
+    if(!root || !isDesktop()) return null;
+
+    let shell = document.getElementById('poupDesktopExecutiveV741');
+    if(shell) return shell;
+
+    shell = document.createElement('div');
+    shell.id = 'poupDesktopExecutiveV741';
+    shell.className = 'poup-desktop-executive-v741';
+    shell.innerHTML = `
+      <section class="poup-two-rules-v741" aria-label="Duas regras de remuneração da poupança">
+        <article class="poup-rule-summary-v741 is-new">
+          <header>
+            <div>
+              <span class="poup-rule-kicker-v741">Regra nova</span>
+              <strong>Depósitos desde 04/05/2012</strong>
+            </div>
+            <span class="poup-rule-status-v741">Vigente</span>
+          </header>
+          <div class="poup-rule-main-v741">
+            <span>Hoje</span>
+            <strong id="poupNewTodayFormulaV741">—</strong>
+          </div>
+          <p id="poupNewTodayConditionV741">Aguardando Selic vigente.</p>
+        </article>
+
+        <article class="poup-rule-summary-v741 is-old">
+          <header>
+            <div>
+              <span class="poup-rule-kicker-v741">Regra antiga</span>
+              <strong>Depósitos até 03/05/2012</strong>
+            </div>
+            <span class="poup-rule-status-v741 is-old">Anterior</span>
+          </header>
+          <div class="poup-rule-main-v741">
+            <span>Fórmula</span>
+            <strong>TR + 0,50% a.m.</strong>
+          </div>
+          <p>Não muda conforme o nível da Selic.</p>
+        </article>
+      </section>
+
+      <div class="poup-actions-v741">
+        <button type="button" id="poupRulesToggleV741" aria-expanded="false" aria-controls="poupRulesPanelV741">
+          Entender as regras <span aria-hidden="true">▾</span>
+        </button>
+        <a href="${BCB_CALC_URL}" target="_blank" rel="noopener">
+          Simular rendimento <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <section id="poupRulesPanelV741" class="poup-rules-panel-v741" hidden aria-label="Detalhamento das regras da poupança">
+        <div class="poup-rule-explain-grid-v741">
+          <article>
+            <header>
+              <span>Regra nova</span>
+              <strong>Desde 04/05/2012</strong>
+            </header>
+            <div class="poup-branch-v741">
+              <span>Selic &gt; 8,50% a.a.</span>
+              <strong>TR + 0,50% a.m.</strong>
+            </div>
+            <div class="poup-branch-v741">
+              <span>Selic ≤ 8,50% a.a.</span>
+              <strong>70% da Selic + TR</strong>
+            </div>
+          </article>
+
+          <article>
+            <header>
+              <span>Regra antiga</span>
+              <strong>Até 03/05/2012</strong>
+            </header>
+            <div class="poup-old-formula-v741">
+              <span>Em qualquer nível da Selic</span>
+              <strong>TR + 0,50% a.m.</strong>
+            </div>
+            <p>A fórmula permanece a mesma para os depósitos antigos.</p>
+          </article>
+        </div>
+
+        <div class="poup-today-band-v741">
+          <span>LEITURA DE HOJE</span>
+          <strong id="poupTodayBandV741">—</strong>
+        </div>
+
+        <section class="poup-scenarios-compact-v741" aria-labelledby="poupScenariosCompactTitleV741">
+          <div class="poup-scenarios-compact-head-v741">
+            <strong id="poupScenariosCompactTitleV741">Comparação rápida</strong>
+            <small>Como a regra nova muda com a Selic.</small>
+          </div>
+          <div class="poup-scenario-table-v741" role="table" aria-label="Comparação de cenários da poupança">
+            <div role="row" class="head">
+              <span role="columnheader">Selic</span>
+              <span role="columnheader">Regra nova</span>
+              <span role="columnheader">Regra antiga</span>
+            </div>
+            <div role="row">
+              <strong role="cell">4,00%</strong>
+              <span role="cell">70% da Selic + TR</span>
+              <span role="cell">TR + 0,50% a.m.</span>
+            </div>
+            <div role="row">
+              <strong role="cell">8,50%</strong>
+              <span role="cell">70% da Selic + TR</span>
+              <span role="cell">TR + 0,50% a.m.</span>
+            </div>
+            <div role="row" class="today">
+              <strong role="cell" id="poupScenarioTodaySelicV741">Hoje</strong>
+              <span role="cell" id="poupScenarioTodayNewV741">—</span>
+              <span role="cell">TR + 0,50% a.m.</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="poup-operational-note-v741">
+          <p><strong>Como o rendimento é creditado:</strong> para pessoa física e entidades sem fins lucrativos, o período é mensal e o crédito ocorre na data de aniversário. O cálculo considera o menor saldo do período.</p>
+          <a href="${BCB_RULES_URL}" target="_blank" rel="noopener">
+            Regras oficiais no Banco Central <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    `;
+
+    const header = root.querySelector('.savings-head-v167');
+    header?.insertAdjacentElement('afterend', shell);
+
+    const btn = shell.querySelector('#poupRulesToggleV741');
+    const panel = shell.querySelector('#poupRulesPanelV741');
+    btn?.addEventListener('click', () => {
+      const open = panel.hasAttribute('hidden');
+      panel.toggleAttribute('hidden', !open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.innerHTML = open
+        ? 'Ocultar regras <span aria-hidden="true">▴</span>'
+        : 'Entender as regras <span aria-hidden="true">▾</span>';
+    });
+
+    return shell;
+  }
+
+  function updateHeader(root, values){
+    const kicker = root.querySelector('.savings-title-v207 .market-reference-kicker-v167');
+    const subtitle = root.querySelector('.savings-title-v207 p');
+    const currentLabel = document.getElementById('poupCurrentLabelV214');
+    const currentBox = root.querySelector('.savings-current-v167');
+
+    if(kicker) kicker.textContent = 'Rendimento';
+    if(subtitle) subtitle.textContent = 'Duas regras de remuneração conforme a data do depósito.';
+    if(currentLabel) currentLabel.textContent = 'Rendimento do mês';
+
+    let ytd = currentBox?.querySelector('.poup-current-ytd-v741');
+    if(currentBox && !ytd){
+      ytd = document.createElement('small');
+      ytd.className = 'poup-current-ytd-v741';
+      currentBox.appendChild(ytd);
+    }
+    if(ytd){
+      ytd.textContent = Number.isFinite(values.ytd)
+        ? `Acum. 2026: ${values.ytd > 0 ? '+' : ''}${fmtPct(values.ytd)}`
+        : '';
+    }
+  }
+
+  function update(){
+    if(!isDesktop()) return;
+    const root = document.querySelector('#sec-mercado .savings-reference-v167');
+    const shell = ensureShell();
+    if(!root || !shell) return;
+
+    document.documentElement.classList.add('desktop-savings-executive-v741');
+
+    const selic = currentSelic();
+    const values = sourceValues();
+    const formula = formulaToday(selic);
+    const condition = conditionToday(selic);
+
+    updateHeader(root, values);
+
+    const f = document.getElementById('poupNewTodayFormulaV741');
+    const c = document.getElementById('poupNewTodayConditionV741');
+    const band = document.getElementById('poupTodayBandV741');
+    const todaySelic = document.getElementById('poupScenarioTodaySelicV741');
+    const todayNew = document.getElementById('poupScenarioTodayNewV741');
+
+    if(f) f.textContent = formula;
+    if(c) c.textContent = condition;
+    if(band){
+      band.textContent = Number.isFinite(selic)
+        ? `Selic ${fmtPct(selic)} a.a. → ${formula}`
+        : formula;
+    }
+    if(todaySelic){
+      todaySelic.textContent = Number.isFinite(selic)
+        ? `${fmtPct(selic)} hoje`
+        : 'Hoje';
+    }
+    if(todayNew) todayNew.textContent = formula;
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_SAVINGS_EXECUTIVE_V741';
+  }
+
+  function boot(){
+    if(!isDesktop()) return;
+    ensureShell();
+    update();
+
+    // Observa apenas os DOIS campos-fonte que recebem dados do motor existente.
+    ['mc-poup','poupYearCompactV199'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && !el.dataset.v741Observed && window.MutationObserver){
+        el.dataset.v741Observed = '1';
+        new MutationObserver(() => requestAnimationFrame(update))
+          .observe(el,{childList:true,characterData:true,subtree:true});
+      }
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot, {once:true});
+  }else{
+    boot();
+  }
+  window.addEventListener('load', update, {once:true});
+  window.addEventListener('pageshow', update, {passive:true});
+})();
+

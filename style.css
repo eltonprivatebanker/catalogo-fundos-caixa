@@ -87567,3 +87567,433 @@ html.desktop-responsive-fit-v688 body{
     display:none!important;
   }
 }
+
+
+/* ============================================================
+   V741 — Desktop: Poupança executiva
+   SOMENTE DESKTOP
+============================================================ */
+@media (min-width:769px){
+
+  html.desktop-savings-executive-v741 body #sec-mercado .savings-reference-v167{
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 .savings-head-v167{
+    min-height:72px!important;
+    padding:12px 18px!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 .savings-title-v207 p{
+    margin-top:3px!important;
+    color:#9aa8c0!important;
+  }
+
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167{
+    min-width:285px!important;
+    padding:8px 14px!important;
+    gap:3px!important;
+  }
+
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167 #mc-poup{
+    font-size:1.65rem!important;
+  }
+
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .poup-current-ytd-v741{
+    display:block!important;
+    margin-top:1px!important;
+    color:#91a0ba!important;
+    font-size:.57rem!important;
+    font-weight:700!important;
+    letter-spacing:.01em!important;
+  }
+
+  /* Camada antiga fica viva apenas como fonte de dados. */
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 > .savings-reading-v167,
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 > .savings-kpi-strip-v199,
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 > .savings-actions-v167,
+  html.desktop-savings-executive-v741 body #sec-mercado
+  .savings-reference-v167 > #poupDetailsPanelV167{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding:0!important;
+    margin:0!important;
+    overflow:hidden!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    white-space:nowrap!important;
+    border:0!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  .poup-desktop-executive-v741{
+    padding:12px 18px 14px;
+  }
+
+  .poup-two-rules-v741{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .poup-rule-summary-v741{
+    min-height:112px;
+    padding:12px 14px;
+    border:1px solid rgba(148,163,184,.15);
+    border-radius:13px;
+    background:rgba(8,13,24,.42);
+  }
+
+  .poup-rule-summary-v741.is-new{
+    border-color:rgba(222,172,83,.30);
+    background:linear-gradient(180deg,rgba(49,36,17,.17),rgba(8,13,24,.48));
+  }
+
+  .poup-rule-summary-v741 header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    padding-bottom:9px;
+    border-bottom:1px solid rgba(148,163,184,.12);
+  }
+
+  .poup-rule-summary-v741 header > div{
+    min-width:0;
+  }
+
+  .poup-rule-kicker-v741{
+    display:block;
+    margin-bottom:3px;
+    color:#e5b85e;
+    font-size:.60rem;
+    font-weight:900;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+  }
+
+  .poup-rule-summary-v741.is-old .poup-rule-kicker-v741{
+    color:#9ba8bf;
+  }
+
+  .poup-rule-summary-v741 header strong{
+    display:block;
+    color:#f3f6fb;
+    font-size:.82rem;
+    line-height:1.2;
+  }
+
+  .poup-rule-status-v741{
+    flex:0 0 auto;
+    padding:3px 8px;
+    border-radius:999px;
+    border:1px solid rgba(46,209,122,.24);
+    background:rgba(46,209,122,.08);
+    color:#78e4a4;
+    font-size:.53rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+
+  .poup-rule-status-v741.is-old{
+    border-color:rgba(148,163,184,.18);
+    background:rgba(148,163,184,.06);
+    color:#98a6bd;
+  }
+
+  .poup-rule-main-v741{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-top:10px;
+  }
+
+  .poup-rule-main-v741 > span{
+    color:#93a1ba;
+    font-size:.58rem;
+    font-weight:800;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+
+  .poup-rule-main-v741 > strong{
+    color:#f7d16f;
+    font-size:1.04rem;
+    line-height:1.1;
+  }
+
+  .poup-rule-summary-v741.is-old .poup-rule-main-v741 > strong{
+    color:#f3f6fb;
+  }
+
+  .poup-rule-summary-v741 > p{
+    margin:7px 0 0;
+    color:#a5b2c8;
+    font-size:.65rem;
+    line-height:1.35;
+  }
+
+  .poup-actions-v741{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:10px;
+  }
+
+  .poup-actions-v741 button,
+  .poup-actions-v741 a{
+    min-height:34px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:0 13px;
+    border:1px solid rgba(222,172,83,.34);
+    border-radius:10px;
+    background:rgba(55,38,17,.18);
+    color:#efc667;
+    font-size:.66rem;
+    font-weight:850;
+    text-decoration:none;
+    cursor:pointer;
+  }
+
+  .poup-actions-v741 a{
+    background:transparent;
+    border-color:rgba(148,163,184,.16);
+    color:#cad4e5;
+  }
+
+  .poup-rules-panel-v741{
+    margin-top:11px;
+    padding:12px;
+    border:1px solid rgba(148,163,184,.15);
+    border-radius:14px;
+    background:rgba(6,11,21,.52);
+  }
+
+  .poup-rules-panel-v741[hidden]{
+    display:none!important;
+  }
+
+  .poup-rule-explain-grid-v741{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .poup-rule-explain-grid-v741 > article{
+    padding:11px 12px;
+    border:1px solid rgba(148,163,184,.12);
+    border-radius:12px;
+    background:rgba(11,16,29,.54);
+  }
+
+  .poup-rule-explain-grid-v741 article header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:8px;
+  }
+
+  .poup-rule-explain-grid-v741 article header span{
+    color:#e4b75d;
+    font-size:.62rem;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .poup-rule-explain-grid-v741 article header strong{
+    color:#cbd5e6;
+    font-size:.68rem;
+  }
+
+  .poup-branch-v741,
+  .poup-old-formula-v741{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:8px 0;
+    border-top:1px solid rgba(148,163,184,.10);
+  }
+
+  .poup-branch-v741 span,
+  .poup-old-formula-v741 span{
+    color:#97a5bc;
+    font-size:.64rem;
+  }
+
+  .poup-branch-v741 strong,
+  .poup-old-formula-v741 strong{
+    color:#f1f5fb;
+    font-size:.70rem;
+    white-space:nowrap;
+  }
+
+  .poup-rule-explain-grid-v741 article > p{
+    margin:7px 0 0;
+    color:#8f9db4;
+    font-size:.61rem;
+    line-height:1.35;
+  }
+
+  .poup-today-band-v741{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    margin-top:10px;
+    padding:9px 12px;
+    border-left:3px solid #d5a447;
+    border-radius:9px;
+    background:rgba(213,164,71,.07);
+  }
+
+  .poup-today-band-v741 span{
+    color:#aa9873;
+    font-size:.56rem;
+    font-weight:900;
+    letter-spacing:.09em;
+  }
+
+  .poup-today-band-v741 strong{
+    color:#f1cf77;
+    font-size:.72rem;
+  }
+
+  .poup-scenarios-compact-v741{
+    margin-top:10px;
+  }
+
+  .poup-scenarios-compact-head-v741{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:6px;
+  }
+
+  .poup-scenarios-compact-head-v741 strong{
+    color:#eef3fa;
+    font-size:.72rem;
+  }
+
+  .poup-scenarios-compact-head-v741 small{
+    color:#8997ae;
+    font-size:.59rem;
+  }
+
+  .poup-scenario-table-v741{
+    border:1px solid rgba(148,163,184,.12);
+    border-radius:11px;
+    overflow:hidden;
+  }
+
+  .poup-scenario-table-v741 > div{
+    display:grid;
+    grid-template-columns:150px 1fr 1fr;
+    align-items:center;
+    min-height:32px;
+    border-top:1px solid rgba(148,163,184,.09);
+  }
+
+  .poup-scenario-table-v741 > div:first-child{
+    border-top:0;
+  }
+
+  .poup-scenario-table-v741 > div > *{
+    padding:7px 10px;
+    border-left:1px solid rgba(148,163,184,.08);
+    font-size:.62rem;
+  }
+
+  .poup-scenario-table-v741 > div > *:first-child{
+    border-left:0;
+  }
+
+  .poup-scenario-table-v741 .head{
+    min-height:28px;
+    background:rgba(18,25,40,.56);
+    color:#8f9db5;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    font-weight:850;
+  }
+
+  .poup-scenario-table-v741 > div:not(.head) strong{
+    color:#e9eef6;
+  }
+
+  .poup-scenario-table-v741 > div:not(.head) span{
+    color:#b5c0d2;
+  }
+
+  .poup-scenario-table-v741 .today{
+    background:rgba(213,164,71,.06);
+  }
+
+  .poup-operational-note-v741{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid rgba(148,163,184,.11);
+  }
+
+  .poup-operational-note-v741 p{
+    max-width:980px;
+    margin:0;
+    color:#8f9db5;
+    font-size:.58rem;
+    line-height:1.45;
+  }
+
+  .poup-operational-note-v741 a{
+    flex:0 0 auto;
+    color:#b9c7dd;
+    font-size:.60rem;
+    font-weight:750;
+    text-decoration:none;
+  }
+
+  .poup-operational-note-v741 a:hover{
+    color:#f1ca6f;
+  }
+}
+
+/* Em notebooks, mantém a mesma lógica sem quebrar o grid. */
+@media (min-width:769px) and (max-width:1180px){
+  .poup-two-rules-v741,
+  .poup-rule-explain-grid-v741{
+    grid-template-columns:1fr!important;
+  }
+
+  .poup-scenario-table-v741 > div{
+    grid-template-columns:115px 1fr 1fr!important;
+  }
+
+  .poup-operational-note-v741{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:7px!important;
+  }
+}
