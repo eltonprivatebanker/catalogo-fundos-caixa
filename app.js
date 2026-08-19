@@ -14815,7 +14815,7 @@ async function sharePainelMercado(){
         const all = perPage.querySelector('option[value="9999"]');
         if(all) all.textContent = 'Todos os fundos';
         const five = perPage.querySelector('option[value="5"]');
-        if(five) five.textContent = '05 por página';
+        if(five) five.textContent = '05 fundos';
         perPage.setAttribute('aria-label','Quantidade de fundos exibidos');
         perPage.title = perPage.options[perPage.selectedIndex]?.textContent || 'Exibição';
       }

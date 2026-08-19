@@ -89091,3 +89091,8 @@ html.desktop-responsive-fit-v688 body{
     grid-template-columns:minmax(165px,1fr) 86px!important;
   }
 }
+
+
+/* V749
+   A geometria terminal da toolbar está em #desktop-toolbar-terminal-v749
+   no fim do <head>, pois o PATCH inline V688 é carregado após style.css. */
