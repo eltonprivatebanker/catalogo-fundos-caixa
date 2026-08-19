@@ -1,0 +1,15 @@
+V737 — Primeira dobra mais eficiente no desktop
+
+Objetivo:
+- aumentar a chance de os 5 fundos padrão aparecerem na mesma tela;
+- preservar legibilidade e hierarquia.
+
+Alterações:
+- header: 100px -> 92px;
+- KPIs do header: 72px -> 66px;
+- remove altura fixa legada de 240px do shell de filtros;
+- barra Buscar/Ordenar/Por página: 42px;
+- Público/Categoria/Perfil: 38px;
+- reduz respiro filtros -> tabela;
+- tabela: redução leve do padding vertical das linhas;
+- mobile preservado.

@@ -86954,3 +86954,150 @@ html.desktop-responsive-fit-v688 body{
     margin-top:-6px!important;
   }
 }
+
+
+/* ============================================================
+   V737 — Desktop: primeira dobra mais eficiente
+   Meta: mostrar os 5 fundos padrão em mais telas sem "espremer".
+   Mobile preservado.
+============================================================ */
+@media (min-width:1180px){
+
+  /* 1) Header: pequeno ganho, sem mudar a hierarquia. */
+  html.desktop-first-fold-v737 body header.site-header-clean,
+  html.desktop-first-fold-v737 body .site-header-clean.site-header-v217{
+    height:92px!important;
+    min-height:92px!important;
+    max-height:92px!important;
+    padding-top:10px!important;
+    padding-bottom:10px!important;
+    margin-bottom:0!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-kpi.header-kpi-strip-v582{
+    height:66px!important;
+    min-height:66px!important;
+    max-height:66px!important;
+    grid-template-rows:66px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-kpi.header-kpi-strip-v582 .kpi-fundos,
+  html.desktop-first-fold-v737 body #sec-kpi.header-kpi-strip-v582 .kpi-categorias,
+  html.desktop-first-fold-v737 body #sec-kpi.header-kpi-strip-v582 .kpi-pl{
+    height:66px!important;
+    min-height:66px!important;
+    max-height:66px!important;
+    padding-top:7px!important;
+    padding-bottom:8px!important;
+  }
+
+  /* 2) Remove a altura fixa legada de 240px do shell.
+        O shell passa a ocupar somente o conteúdo real dos filtros. */
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding-top:2px!important;
+    padding-bottom:4px!important;
+  }
+
+  /* 3) Faixa principal ligeiramente menor. */
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .fund-primary-toolbar-v217{
+    min-height:42px!important;
+    height:42px!important;
+    max-height:42px!important;
+    padding-bottom:4px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .fund-search-main,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .fund-view-controls-v217,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .exhibition-control{
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+  }
+
+  /* 4) Público / Categoria / Perfil: compactação fina. */
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .desktop-audience-filter-v488,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .catalog-shortcuts-category-grid-v69,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .fund-secondary-controls-v217{
+    height:38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    padding-top:3px!important;
+    padding-bottom:3px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .desktop-audience-chip-v488,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .filter-preset-chip,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .shortcut-preset{
+    height:28px!important;
+    min-height:28px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .catalog-risk-filter-v198 select,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .catalog-risk-filter-v198 .ctrl-select{
+    height:34px!important;
+    min-height:34px!important;
+  }
+
+  /* 5) Filtros → tabela: só o respiro necessário. */
+  html.desktop-first-fold-v737 body #sec-fundos .table-wrap{
+    margin-top:5px!important;
+  }
+
+  /* 6) Tabela: reduz poucos pixels por linha.
+        Preserva nomes, CNPJ e liquidez em duas linhas. */
+  html.desktop-first-fold-v737 body #sec-fundos #mainTable thead th{
+    padding-top:9px!important;
+    padding-bottom:9px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #mainTable tbody > tr:not(.detail-row) > td{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #mainTable tbody > tr:not(.detail-row) > td:first-child{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #mainTable .fundo-cell-meta{
+    margin-top:3px!important;
+  }
+
+  html.desktop-first-fold-v737 body #sec-fundos #mainTable .liq-unified-inner{
+    gap:2px!important;
+  }
+}
+
+/* Em desktop intermediário, evita exagerar na compactação. */
+@media (min-width:1180px) and (max-width:1500px){
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .desktop-audience-filter-v488,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .catalog-shortcuts-category-grid-v69,
+  html.desktop-first-fold-v737 body #sec-fundos #fundFilterShell
+  .fund-secondary-controls-v217{
+    height:auto!important;
+    min-height:38px!important;
+    max-height:none!important;
+  }
+}
