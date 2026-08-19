@@ -1,0 +1,13 @@
+V724 — Comparador desktop mais fluido
+
+Alterações principais:
+1. Remove o botão antigo de "Comparar fundos" do toolbar superior, que estava sendo empurrado para uma linha implícita por regras antigas de grid e aparecia como uma linha/tooltip solto.
+2. Mantém o acesso principal pelo menu lateral "Comparar" e o comparativo rápido pelos checkboxes + barra flutuante.
+3. Adiciona "＋ Adicionar fundo" diretamente no cabeçalho do modal de comparação.
+4. A busca rápida funciona por nome, CNPJ, benchmark, categoria e perfil; resultados aparecem dentro do próprio modal.
+5. Ao adicionar um fundo, a tabela de comparação é atualizada imediatamente sem fechar o modal.
+6. Continua limitado a 6 fundos.
+7. Alterações visuais novas ficam restritas ao desktop.
+
+Arquivos alterados: index.html, app.js, style.css.
+tokens-caixa.css permanece inalterado.

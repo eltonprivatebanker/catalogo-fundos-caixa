@@ -85816,3 +85816,89 @@ html.desktop-responsive-fit-v688 body{
 @media (max-width:768px){
   .desktop-compar-nav-v723,.compar-workspace-v723{display:none!important;}
 }
+
+
+/* ============================================================
+   V724 — DESKTOP: COMPARADOR MAIS FLUIDO
+   1) Remove visualmente qualquer resíduo do antigo lançador no toolbar.
+   2) Adiciona busca rápida de outro fundo dentro do modal comparativo.
+============================================================ */
+@media (min-width:769px){
+  /* O acesso principal agora é pelo menu lateral / workspace.
+     Mantém a barra superior somente com ordenação + quantidade por página. */
+  html.desktop-compar-modal-quickadd-v724 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    grid-template-columns:minmax(0,1fr) 160px!important;
+    grid-auto-rows:50px!important;
+    height:50px!important;
+    max-height:50px!important;
+    overflow:hidden!important;
+  }
+
+  .compar-header-actions-v724{
+    display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;
+  }
+  .compar-selected-count-v724{
+    display:inline-flex;align-items:center;min-height:30px;padding:0 9px;
+    border:1px solid rgba(148,163,184,.13);border-radius:8px;
+    background:rgba(255,255,255,.02);color:#7f8ba1;
+    font:750 .56rem/1 Inter,sans-serif;white-space:nowrap;
+  }
+  .compar-selected-count-v724 b{margin-right:2px;color:#e5c198;font-variant-numeric:tabular-nums;}
+  .compar-add-fund-v724{
+    min-height:32px;padding:0 11px;border:1px solid rgba(199,155,109,.38);border-radius:8px;
+    background:rgba(176,132,84,.10);color:#e9c79f;cursor:pointer;
+    font:800 .61rem/1 Inter,sans-serif;white-space:nowrap;
+    transition:border-color .14s ease,background .14s ease,color .14s ease;
+  }
+  .compar-add-fund-v724:hover{border-color:rgba(199,155,109,.68);background:rgba(176,132,84,.18);color:#f4d7b2;}
+
+  .compar-quick-add-v724{
+    flex:0 0 auto;padding:10px 14px 11px;border-bottom:1px solid rgba(148,163,184,.12);
+    background:linear-gradient(180deg,rgba(10,15,26,.98),rgba(7,11,20,.98));
+  }
+  .compar-quick-add-v724[hidden]{display:none!important;}
+  .compar-quick-add-search-v724{
+    display:grid;grid-template-columns:22px minmax(0,1fr) 30px;align-items:center;gap:6px;
+    width:min(760px,100%);margin:0 auto;
+    border:1px solid rgba(176,132,84,.28);border-radius:10px;background:#0b101d;
+    box-shadow:0 7px 26px rgba(0,0,0,.16);
+  }
+  .compar-quick-add-search-v724>span{display:grid;place-items:center;color:#8c99ae;font-size:.92rem;}
+  .compar-quick-add-search-v724 input{
+    width:100%;height:38px;min-width:0;margin:0;padding:0 4px;border:0;outline:0;
+    background:transparent;color:#edf2f8;font:650 .69rem/1 Inter,sans-serif;
+  }
+  .compar-quick-add-search-v724 input::placeholder{color:#667389;}
+  .compar-quick-add-search-v724 button{
+    width:28px;height:28px;border:0;border-radius:7px;background:transparent;color:#7d899f;cursor:pointer;
+  }
+  .compar-quick-add-search-v724 button:hover{background:rgba(208,99,112,.08);color:#db7b87;}
+  .compar-quick-add-results-v724{
+    width:min(760px,100%);max-height:228px;margin:7px auto 0;overflow:auto;
+    scrollbar-width:thin;scrollbar-color:rgba(176,132,84,.30) transparent;
+  }
+  .compar-quick-add-empty-v724{
+    padding:12px 10px;color:#768399;text-align:center;font:600 .62rem/1.35 Inter,sans-serif;
+  }
+  .compar-quick-add-item-v724{
+    appearance:none;width:100%;display:grid;grid-template-columns:minmax(0,1fr) 82px 28px;
+    align-items:center;gap:10px;min-height:48px;margin:0 0 5px;padding:7px 9px 7px 11px;
+    border:1px solid rgba(148,163,184,.10);border-radius:9px;
+    background:rgba(255,255,255,.018);color:inherit;text-align:left;cursor:pointer;
+    transition:border-color .13s ease,background .13s ease,transform .13s ease;
+  }
+  .compar-quick-add-item-v724:hover{border-color:rgba(199,155,109,.38);background:rgba(176,132,84,.055);transform:translateX(1px);}
+  .compar-quick-add-main-v724{display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .compar-quick-add-main-v724 strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e7edf6;font:780 .66rem/1.1 Inter,sans-serif;}
+  .compar-quick-add-main-v724 small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#758299;font:550 .54rem/1.1 Inter,sans-serif;}
+  .compar-quick-add-return-v724{display:flex;flex-direction:column;align-items:flex-end;gap:3px;white-space:nowrap;}
+  .compar-quick-add-return-v724 small{color:#68758a;font:850 .46rem/1 Inter,sans-serif;letter-spacing:.08em;}
+  .compar-quick-add-return-v724 strong{color:#cbd4e2;font:850 .61rem/1 Inter,sans-serif;font-variant-numeric:tabular-nums;}
+  .compar-quick-add-return-v724.pos strong{color:var(--green,#3f9d6e);}
+  .compar-quick-add-return-v724.neg strong{color:var(--red,#d06370);}
+  .compar-quick-add-plus-v724{display:grid;place-items:center;width:25px;height:25px;border-radius:7px;background:rgba(176,132,84,.10);color:#dfbd94;font:900 .85rem/1 Inter,sans-serif;}
+}
+
+@media (max-width:768px){
+  .compar-add-fund-v724,.compar-selected-count-v724,.compar-quick-add-v724{display:none!important;}
+}

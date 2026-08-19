@@ -10728,7 +10728,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 /* ════════════════════════════════════════════════════════
-   COMPARADOR DE FUNDOS — v2.2 / seletor v721 + workspace v723
+   COMPARADOR DE FUNDOS — v2.3 / workspace v723 + quick add v724
    Máximo 6 fundos | seleção estável | busca + categoria | modal lado a lado
 ════════════════════════════════════════════════════════ */
 
@@ -10775,6 +10775,7 @@ function comparUpdateBar(){
   const workspaceCount = document.getElementById('comparWorkspaceSelectedCountV723');
   const workspaceCompare = document.getElementById('comparWorkspaceCompareV723');
   const navCount = document.getElementById('comparNavCountV723');
+  const modalCountV724 = document.getElementById('comparModalCountV724');
 
   if(bar) bar.style.display = n === 0 ? 'none' : 'flex';
   if(count) count.textContent = n;
@@ -10797,6 +10798,7 @@ function comparUpdateBar(){
   if(pickerCompare) pickerCompare.disabled = n < 2;
   if(workspaceCount) workspaceCount.textContent = n;
   if(workspaceCompare) workspaceCompare.disabled = n < 2;
+  if(modalCountV724) modalCountV724.textContent = n;
   if(navCount){
     navCount.textContent = n;
     navCount.classList.toggle('has-selection', n > 0);
@@ -10836,8 +10838,98 @@ function fecharComparador(){
   const ov = document.getElementById('comparOverlay');
   if(ov){
     ov.classList.remove('open');
+    comparQuickAddCloseV724();
     if(!document.getElementById('comparPickerOverlay')?.classList.contains('open')) document.body.style.overflow='';
   }
+}
+
+function comparQuickAddRenderV724(){
+  const box = document.getElementById('comparQuickAddResultsV724');
+  const input = document.getElementById('comparQuickAddSearchV724');
+  if(!box || !input) return;
+  const q = comparNormV721(input.value);
+  if(!q){
+    box.innerHTML = '<div class="compar-quick-add-empty-v724">Digite o nome, CNPJ ou benchmark do fundo que deseja adicionar.</div>';
+    return;
+  }
+  const rows = Array.isArray(allRows) ? allRows : [];
+  const matches = rows.map((row,idx)=>({row,idx})).filter(({row,idx})=>{
+    if(comparSet.has(idx)) return false;
+    const hay = comparNormV721([
+      row['Fundo'],row['CNPJ'],row['Benchmark'],row['Categoria'],row['Perfil de Risco'],row['Perfis']
+    ].filter(Boolean).join(' | '));
+    return hay.includes(q);
+  }).slice(0,8);
+  if(!matches.length){
+    box.innerHTML = '<div class="compar-quick-add-empty-v724">Nenhum outro fundo encontrado.</div>';
+    return;
+  }
+  box.innerHTML = matches.map(({row,idx})=>{
+    const nomeFull=String(row['Fundo']||'Fundo sem nome');
+    const nome=typeof catalogShortFundNameV594==='function' ? catalogShortFundNameV594(nomeFull) : nomeFull;
+    const cat=String(row['Categoria']||'—');
+    const bench=String(row['Benchmark']||'—');
+    const cnpj=String(row['CNPJ']||'').trim();
+    const rent=toNum(row['Acum. 12M (%)']);
+    const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+    const rentCls=rent===null?'':rent>0?'pos':rent<0?'neg':'';
+    return `<button class="compar-quick-add-item-v724" data-comp-quick-add="${idx}" type="button">
+      <span class="compar-quick-add-main-v724"><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong><small>${htmlAttr(cat)} · ${htmlAttr(bench)}${cnpj?` · ${htmlAttr(cnpj)}`:''}</small></span>
+      <span class="compar-quick-add-return-v724 ${rentCls}"><small>12M</small><strong>${rentTxt}</strong></span>
+      <span class="compar-quick-add-plus-v724">＋</span>
+    </button>`;
+  }).join('');
+  box.querySelectorAll('[data-comp-quick-add]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(comparSet.size>=COMPAR_MAX){ comparToastV721(`Máximo ${COMPAR_MAX} fundos para comparar`); return; }
+      const idx=Number(btn.dataset.compQuickAdd);
+      const row=allRows[idx];
+      if(!row || comparSet.has(idx)) return;
+      comparSet.set(idx,row);
+      comparSyncChecks(idx,true);
+      comparUpdateBar();
+      input.value='';
+      abrirComparador();
+      comparQuickAddRenderV724();
+      setTimeout(()=>input.focus(),30);
+    });
+  });
+}
+
+function comparQuickAddOpenV724(){
+  const panel=document.getElementById('comparQuickAddV724');
+  const btn=document.getElementById('comparAddFundBtnV724');
+  const input=document.getElementById('comparQuickAddSearchV724');
+  if(!panel) return;
+  if(comparSet.size>=COMPAR_MAX){ comparToastV721(`Máximo ${COMPAR_MAX} fundos para comparar`); return; }
+  panel.hidden=false;
+  btn?.setAttribute('aria-expanded','true');
+  comparQuickAddRenderV724();
+  setTimeout(()=>input?.focus(),30);
+}
+
+function comparQuickAddCloseV724(){
+  const panel=document.getElementById('comparQuickAddV724');
+  const btn=document.getElementById('comparAddFundBtnV724');
+  const input=document.getElementById('comparQuickAddSearchV724');
+  if(panel) panel.hidden=true;
+  if(input) input.value='';
+  btn?.setAttribute('aria-expanded','false');
+}
+
+function comparQuickAddToggleV724(){
+  const panel=document.getElementById('comparQuickAddV724');
+  if(!panel) return;
+  if(panel.hidden) comparQuickAddOpenV724(); else comparQuickAddCloseV724();
+}
+
+function initComparQuickAddV724(){
+  const btn=document.getElementById('comparAddFundBtnV724');
+  const close=document.getElementById('comparQuickAddCloseV724');
+  const input=document.getElementById('comparQuickAddSearchV724');
+  btn?.addEventListener('click',comparQuickAddToggleV724);
+  close?.addEventListener('click',comparQuickAddCloseV724);
+  input?.addEventListener('input',comparQuickAddRenderV724);
 }
 
 function abrirComparador(){
@@ -10937,6 +11029,8 @@ function abrirComparador(){
   tbody += '</tbody>';
 
   tbl.innerHTML = thead + tbody;
+  comparUpdateBar();
+  if(!document.getElementById('comparQuickAddV724')?.hidden) comparQuickAddRenderV724();
 
   const ov = document.getElementById('comparOverlay');
   if(ov){
@@ -11098,6 +11192,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const btn = document.getElementById('comparClose');
   if(btn) btn.addEventListener('click', fecharComparador);
   initComparPickerV721();
+  initComparQuickAddV724();
 });
 setTimeout(()=>{
   const btn = document.getElementById('comparClose');
