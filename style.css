@@ -87532,3 +87532,38 @@ html.desktop-responsive-fit-v688 body{
     grid-column:span 1!important;
   }
 }
+
+
+/* ============================================================
+   V740 — Desktop: estabilidade terminal Juros/CDI/Copom
+============================================================ */
+@media (min-width:769px){
+  html.desktop-rates-terminal-v740 body #sec-mercado .rates-reference-v167,
+  html.desktop-rates-terminal-v740 body #sec-mercado .rates-reference-v167 *{
+    animation:none!important;
+  }
+
+  html.desktop-rates-terminal-v740 body #sec-mercado
+  .cdi-summary-v167 .rate-summary-value-v167 strong,
+  html.desktop-rates-terminal-v740 body #sec-mercado
+  .cdi-summary-v167 .rate-summary-value-v167 strong.green{
+    color:#f4f7fb!important;
+  }
+
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-total,
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-12m,
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiMonthCarouselV322,
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory .cdi-chart-legend-v271,
+  html.desktop-rates-terminal-v740 body #sec-mercado #cdiYearHistory .reference-footnote-v167{
+    display:none!important;
+  }
+}

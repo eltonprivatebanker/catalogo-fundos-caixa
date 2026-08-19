@@ -1,4 +1,8 @@
 
+/* V740 terminal flag: impede patches antigos de reassumirem Juros/CDI no desktop. */
+window.__ELTAUM_DESKTOP_RATES_TERMINAL_V740__ = true;
+
+
 /* =========================================================
    PATCH v666 — Helper oficial da Selic vigente
    ---------------------------------------------------------
@@ -27967,7 +27971,7 @@ function buildDetailPanel(r,colspan){
 	      cdiMonths.style.setProperty('overflow','hidden','important');
 	    }
 	    var cdiHistory = document.getElementById('cdiYearHistory');
-	    if(cdiHistory){
+	    if(cdiHistory && !window.__ELTAUM_DESKTOP_RATES_TERMINAL_V740__){
 	      cdiHistory.style.setProperty('display','none','important');
 	      cdiHistory.style.setProperty('visibility','hidden','important');
 	      cdiHistory.style.setProperty('height','0','important');
@@ -29527,666 +29531,11 @@ function buildDetailPanel(r,colspan){
   };
 })();
 
-/* ============================================================
-   PATCH v647 — Desktop: Referências de juros + Agenda Copom 2026
-   Escopo: SOMENTE DESKTOP (min-width: 769px).
-   - Mantém o mobile preservado.
-   - Mostra as 8 reuniões do Copom em grade 4x2, sem rolagem.
-   - Corrige a semântica do bloco de juros e reduz textos redundantes.
-   ============================================================ */
-(function desktopRatesCopomAgendaV647(){
-  const MQ_DESKTOP = '(min-width: 769px)';
+/* V740: v647 neutralizado; controlador terminal abaixo. */
 
-  function isDesktop(){
-    return window.matchMedia(MQ_DESKTOP).matches;
-  }
+/* V740: v648 neutralizado; controlador terminal abaixo. */
 
-  function norm(txt){
-    return String(txt || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function setImportant(el, prop, value){
-    if(el && el.style) el.style.setProperty(prop, value, 'important');
-  }
-
-  function statusKind(item, result){
-    const cls = String(item?.className || '').toLowerCase();
-    const r = String(result || '').toLowerCase();
-    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
-    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
-    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
-    if(cls.includes('hike') || r.includes('alta')) return 'is-hike';
-    if(cls.includes('hold') || r.includes('mantida') || r.includes('manutenção') || r.includes('manutencao')) return 'is-hold';
-    return 'is-neutral';
-  }
-
-  function statusLabel(result, kind){
-    const r = norm(result);
-    if(kind === 'is-next') return 'Próxima';
-    if(kind === 'is-future') return 'Prevista';
-    if(kind === 'is-cut') return 'Corte';
-    if(kind === 'is-hike') return 'Alta';
-    if(kind === 'is-hold') return 'Mantida';
-    if(!r) return 'Status';
-    return r.replace(/→/g, '').slice(0, 18);
-  }
-
-  function resultDetail(result, kind){
-    const r = norm(result).replace(/\s*★\s*/g, '');
-    if(kind === 'is-next') return 'Decisão a definir';
-    if(kind === 'is-future') return 'Sem decisão';
-    if(!r) return '—';
-    return r.replace(/\s*→\s*/g, ' → ');
-  }
-
-  function applyDesktopLayout(){
-    if(!isDesktop()) return;
-
-    const root = document.querySelector('#sec-mercado .rates-reference-v167');
-    const head = root?.querySelector('.market-reference-head-v167');
-    const summaryCards = root?.querySelector('.rates-summary-v167');
-    const detailGrid = root?.querySelector('.rates-detail-grid-v167');
-    const copomBlock = root?.querySelector('.copom-compact-v167');
-    const cdiBlock = document.getElementById('cdiYearHistory');
-    const cdiKpis = document.querySelector('#cdiYearHistory .cdi-kpis-v271');
-
-    if(root){
-      setImportant(root, 'display', 'grid');
-      setImportant(root, 'grid-template-columns', '1fr');
-      setImportant(root, 'grid-template-areas', '"head" "summary" "detail"');
-      setImportant(root, 'gap', '9px');
-      setImportant(root, 'padding', '14px 16px 15px');
-      setImportant(root, 'overflow', 'visible');
-    }
-
-    if(head){
-      setImportant(head, 'grid-area', 'head');
-      setImportant(head, 'padding', '0 0 8px');
-      setImportant(head, 'margin', '0');
-    }
-
-    if(summaryCards){
-      setImportant(summaryCards, 'grid-area', 'summary');
-      setImportant(summaryCards, 'display', 'grid');
-      setImportant(summaryCards, 'grid-template-columns', 'repeat(2, minmax(0, 1fr))');
-      setImportant(summaryCards, 'gap', '12px');
-      setImportant(summaryCards, 'width', '100%');
-    }
-
-    if(detailGrid){
-      setImportant(detailGrid, 'grid-area', 'detail');
-      setImportant(detailGrid, 'display', 'grid');
-      setImportant(detailGrid, 'grid-template-columns', '1fr');
-      setImportant(detailGrid, 'gap', '9px');
-      setImportant(detailGrid, 'width', '100%');
-    }
-
-    if(copomBlock){
-      setImportant(copomBlock, 'padding', '14px 16px 12px');
-      setImportant(copomBlock, 'border-radius', '16px');
-      setImportant(copomBlock, 'overflow', 'visible');
-    }
-
-    if(cdiBlock){
-      setImportant(cdiBlock, 'margin', '0');
-      setImportant(cdiBlock, 'padding', '10px 12px 11px');
-    }
-
-    if(cdiKpis){
-      setImportant(cdiKpis, 'display', 'grid');
-      setImportant(cdiKpis, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
-      setImportant(cdiKpis, 'gap', '10px');
-    }
-  }
-
-  function applySemanticTexts(){
-    if(!isDesktop()) return;
-
-    const ratesTitle = document.getElementById('ratesReferenceTitleV167');
-    if(ratesTitle) ratesTitle.textContent = 'Juros de referência';
-
-    const ratesSubtitle = ratesTitle?.closest('.market-reference-head-v167')?.querySelector('p');
-    if(ratesSubtitle) ratesSubtitle.textContent = 'Selic meta, CDI e calendário Copom usados como referência no painel.';
-
-    const copomTitle = document.getElementById('copomCompactTitleV167');
-    if(copomTitle) copomTitle.textContent = 'Calendário Copom 2026';
-
-    const copomSubtitle = copomTitle?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(copomSubtitle) copomSubtitle.textContent = 'Decisões realizadas e próximas reuniões de política monetária.';
-
-    const cdiTitle = document.getElementById('cdiYearHistoryTitle');
-    if(cdiTitle) cdiTitle.textContent = 'CDI em 2026';
-
-    const cdiSubtitle = cdiTitle?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(cdiSubtitle) cdiSubtitle.textContent = 'Mês atual, último mês fechado e acumulados.';
-  }
-
-  function buildDesktopCopomAgenda(){
-    if(!isDesktop()) return;
-
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    const store = document.getElementById('copomMeetings');
-    if(!summary || !store) return;
-
-    const items = [...store.querySelectorAll('.copom-item')]
-      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
-
-    if(items.length < 2) return;
-
-    const html = items.map(item => {
-      const num = norm(item.querySelector('.copom-num')?.textContent).replace(/\s*reuni[aã]o\b/i, '').trim();
-      const date = norm(item.querySelector('.copom-date')?.textContent);
-      const result = norm(item.querySelector('.copom-result')?.textContent);
-      const kind = statusKind(item, result);
-      const label = statusLabel(result, kind);
-      const detail = resultDetail(result, kind);
-      return `
-        <article class="copom-exec-card-v270 copom-agenda-card-v647 ${kind}" role="listitem">
-          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
-          <strong class="copom-exec-date-v270">${date || '—'}</strong>
-          <div class="copom-exec-meta-v270">
-            <span class="copom-exec-status-v270 ${kind}">${label}</span>
-          </div>
-          <small class="copom-agenda-result-v647">${detail}</small>
-        </article>`;
-    }).join('');
-
-    if(summary.dataset.v647Html !== html){
-      summary.dataset.v647Html = html;
-      summary.dataset.v321Built = '0';
-      summary.dataset.v647Built = '1';
-      summary.classList.add('copom-agenda-grid-v647');
-      summary.setAttribute('role', 'list');
-      summary.setAttribute('aria-label', 'Calendário das 8 reuniões do Copom em 2026');
-      summary.innerHTML = html;
-    }
-
-    setImportant(summary, 'display', 'grid');
-    setImportant(summary, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
-    setImportant(summary, 'gap', '8px');
-    setImportant(summary, 'overflow', 'visible');
-    setImportant(summary, 'scroll-snap-type', 'none');
-    setImportant(summary, 'width', '100%');
-    setImportant(summary, 'max-width', '100%');
-
-    summary.querySelectorAll('.copom-agenda-card-v647').forEach(card => {
-      setImportant(card, 'min-width', '0');
-      setImportant(card, 'max-width', 'none');
-      setImportant(card, 'width', 'auto');
-      setImportant(card, 'min-height', '84px');
-      setImportant(card, 'padding', '10px 10px 9px');
-      setImportant(card, 'box-sizing', 'border-box');
-    });
-  }
-
-  function apply(){
-    if(!isDesktop()) return;
-    applyDesktopLayout();
-    applySemanticTexts();
-    buildDesktopCopomAgenda();
-  }
-
-  function boot(){
-    apply();
-    [120, 450, 900, 1600, 2600].forEach(ms => setTimeout(apply, ms));
-
-    const store = document.getElementById('copomMeetings');
-    if(store && !store.dataset.v647Observed){
-      store.dataset.v647Observed = '1';
-      new MutationObserver(() => requestAnimationFrame(apply)).observe(store, {childList:true, subtree:true, characterData:true});
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
-})();
-
-
-
-/* ============================================================
-   PATCH v648 — Desktop: Agenda Copom 2026 definitiva em 8 cards
-   Escopo: SOMENTE DESKTOP (min-width: 769px).
-   - Preserva mobile.
-   - Evita conflito com carrossel/summary legado usando um container dedicado.
-   - Mostra as 8 reuniões em grade compacta 4x2, sem rolagem.
-   - Remove redundância visual: não repete "Corte/Mantida" dentro do mesmo card.
-   ============================================================ */
-(function desktopCopomAgendaEightCardsV648(){
-  const BUILD = 'ELTAUM_DESKTOP_COPOM_AGENDA_8_V648';
-  const MQ_DESKTOP = '(min-width: 769px)';
-  const AGENDA_ID = 'desktopCopomAgendaV648';
-
-  function isDesktop(){
-    return window.matchMedia && window.matchMedia(MQ_DESKTOP).matches;
-  }
-
-  function clean(value){
-    return String(value || '')
-      .replace(/\s+/g, ' ')
-      .replace(/★/g, '')
-      .trim();
-  }
-
-  function escapeHtml(value){
-    return String(value || '').replace(/[&<>"']/g, ch => ({
-      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-    }[ch]));
-  }
-
-  function setImportant(el, prop, value){
-    if(el && el.style) el.style.setProperty(prop, value, 'important');
-  }
-
-  function getKind(item, result){
-    const cls = String(item?.className || '').toLowerCase();
-    const r = String(result || '').toLowerCase();
-    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
-    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
-    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
-    if(cls.includes('hike') || r.includes('alta')) return 'is-hike';
-    if(cls.includes('hold') || r.includes('mantida') || r.includes('mantido') || r.includes('manutenção') || r.includes('manutencao')) return 'is-hold';
-    return 'is-neutral';
-  }
-
-  function extractRate(result){
-    const r = clean(result);
-    const arrow = r.match(/(?:→|->)\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
-    if(arrow) return arrow[1];
-    const em = r.match(/\bem\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
-    if(em) return em[1];
-    return '';
-  }
-
-  function extractMove(result, kind){
-    const r = clean(result).replace(/−/g, '-');
-    const move = r.match(/(?:corte|alta)\s*([-+]?\d+(?:[,.]\d+)?)\s*p\.?p\.?/i);
-    if(move){
-      const prefix = kind === 'is-hike' ? 'Alta' : 'Corte';
-      return `${prefix} ${move[1].replace('.', ',')} p.p.`;
-    }
-    if(kind === 'is-cut') return 'Corte';
-    if(kind === 'is-hike') return 'Alta';
-    return '';
-  }
-
-  function buildTexts(item){
-    const numRaw = clean(item.querySelector('.copom-num')?.textContent);
-    const num = numRaw.replace(/\s*reuni[aã]o\b/i, '').trim() || 'Reunião';
-    const date = clean(item.querySelector('.copom-date')?.textContent) || '—';
-    const result = clean(item.querySelector('.copom-result')?.textContent);
-    const kind = getKind(item, result);
-    const rate = extractRate(result);
-    const move = extractMove(result, kind);
-
-    let status = 'Status a confirmar';
-    let detail = '—';
-
-    if(kind === 'is-next'){
-      status = 'Próxima reunião';
-      detail = 'Decisão a definir';
-    }else if(kind === 'is-future'){
-      status = 'Prevista';
-      detail = 'Sem decisão';
-    }else if(kind === 'is-hold'){
-      status = 'Mantida';
-      detail = rate ? `Selic ${rate}` : 'Sem alteração';
-    }else if(kind === 'is-cut'){
-      status = move || 'Corte';
-      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
-    }else if(kind === 'is-hike'){
-      status = move || 'Alta';
-      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
-    }else if(result){
-      status = result;
-      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
-    }
-
-    return {num, date, result, kind, status, detail};
-  }
-
-  function getStoreItems(){
-    const store = document.getElementById('copomMeetings');
-    if(!store) return [];
-    return [...store.querySelectorAll('.copom-item')]
-      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
-  }
-
-  function renderAgenda(){
-    if(!isDesktop()) return;
-
-    const copomBlock = document.querySelector('#sec-mercado .copom-compact-v167');
-    const legacySummary = document.getElementById('copomExecutiveSummaryV270');
-    const subhead = copomBlock?.querySelector('.reference-subhead-v167');
-    const items = getStoreItems();
-    if(!copomBlock || !items.length) return;
-
-    document.documentElement.classList.add('desktop-rates-copom-agenda-v648');
-
-    const title = document.getElementById('copomCompactTitleV167');
-    if(title) title.textContent = 'Calendário Copom 2026';
-    const subtitle = title?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(subtitle) subtitle.textContent = 'Agenda anual com decisões realizadas e próximas reuniões.';
-
-    if(legacySummary){
-      legacySummary.setAttribute('aria-hidden', 'true');
-      setImportant(legacySummary, 'display', 'none');
-      setImportant(legacySummary, 'visibility', 'hidden');
-      setImportant(legacySummary, 'height', '0');
-      setImportant(legacySummary, 'min-height', '0');
-      setImportant(legacySummary, 'margin', '0');
-      setImportant(legacySummary, 'padding', '0');
-      setImportant(legacySummary, 'overflow', 'hidden');
-    }
-
-    let agenda = document.getElementById(AGENDA_ID);
-    if(!agenda){
-      agenda = document.createElement('div');
-      agenda.id = AGENDA_ID;
-      agenda.className = 'desktop-copom-agenda-v648';
-      agenda.setAttribute('role', 'list');
-      agenda.setAttribute('aria-label', 'Calendário das 8 reuniões do Copom em 2026');
-      if(subhead && subhead.parentNode){
-        subhead.insertAdjacentElement('afterend', agenda);
-      }else{
-        copomBlock.insertBefore(agenda, copomBlock.firstChild);
-      }
-    }
-
-    const html = items.map(item => {
-      const data = buildTexts(item);
-      return `<article class="desktop-copom-card-v648 ${escapeHtml(data.kind)}" role="listitem" title="${escapeHtml(data.num)} reunião · ${escapeHtml(data.date)} · ${escapeHtml(data.status)}">
-        <span class="desktop-copom-num-v648">${escapeHtml(data.num)}</span>
-        <strong class="desktop-copom-date-v648">${escapeHtml(data.date)}</strong>
-        <span class="desktop-copom-status-v648">${escapeHtml(data.status)}</span>
-        <small class="desktop-copom-detail-v648">${escapeHtml(data.detail)}</small>
-      </article>`;
-    }).join('');
-
-    if(agenda.dataset.htmlV648 !== html){
-      agenda.dataset.htmlV648 = html;
-      agenda.innerHTML = html;
-    }
-
-    setImportant(copomBlock, 'padding', '11px 12px 12px');
-    setImportant(copomBlock, 'overflow', 'visible');
-    setImportant(agenda, 'display', 'grid');
-    setImportant(agenda, 'grid-template-columns', 'repeat(5, minmax(0, 1fr))');
-    setImportant(agenda, 'gap', '8px');
-    setImportant(agenda, 'width', '100%');
-    setImportant(agenda, 'max-width', '100%');
-    setImportant(agenda, 'overflow', 'visible');
-  }
-
-  let scheduled = false;
-  function scheduleRender(){
-    if(scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      renderAgenda();
-    });
-  }
-
-  function boot(){
-    renderAgenda();
-    [100, 350, 700, 1200, 2200, 4200, 8000, 14000, 23000].forEach(ms => setTimeout(renderAgenda, ms));
-
-    const store = document.getElementById('copomMeetings');
-    if(store && !store.dataset.v648Observed){
-      store.dataset.v648Observed = '1';
-      new MutationObserver(scheduleRender).observe(store, {childList:true, subtree:true, characterData:true});
-    }
-
-    const legacySummary = document.getElementById('copomExecutiveSummaryV270');
-    if(legacySummary && !legacySummary.dataset.v648Observed){
-      legacySummary.dataset.v648Observed = '1';
-      new MutationObserver(scheduleRender).observe(legacySummary, {childList:true, subtree:true, characterData:true});
-    }
-
-    console.log('[Catálogo CAIXA] Agenda Copom desktop 8 cards ativa:', BUILD);
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
-
-  window.addEventListener('load', renderAgenda, {once:true});
-  window.addEventListener('pageshow', renderAgenda, {passive:true});
-  window.addEventListener('resize', scheduleRender, {passive:true});
-})();
-
-
-/* ============================================================
-   PATCH v649 — Desktop: polimento final de Juros de referência
-   Escopo: SOMENTE DESKTOP (min-width: 769px).
-   - Mantém mobile preservado.
-   - Topo passa a ter 4 KPIs: Selic, CDI, CDI no ano e CDI 12M.
-   - Remove duplicidade dos KPIs de acumulado/12M no bloco CDI inferior.
-   - Refinamento visual do calendário Copom 2026 e texto da próxima reunião.
-   ============================================================ */
-(function desktopRatesReferenceFinePolishV649(){
-  const BUILD = 'ELTAUM_DESKTOP_RATES_FINE_POLISH_V649';
-  const MQ_DESKTOP = '(min-width: 769px)';
-
-  function isDesktop(){
-    return window.matchMedia && window.matchMedia(MQ_DESKTOP).matches;
-  }
-
-  function clean(value){
-    return String(value || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function escapeHtml(value){
-    return String(value || '').replace(/[&<>"']/g, ch => ({
-      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-    }[ch]));
-  }
-
-  function setImportant(el, prop, value){
-    if(el && el.style) el.style.setProperty(prop, value, 'important');
-  }
-
-  function textById(id){
-    return clean(document.getElementById(id)?.textContent);
-  }
-
-  function firstText(selectors){
-    for(const selector of selectors){
-      const txt = clean(document.querySelector(selector)?.textContent);
-      if(txt) return txt;
-    }
-    return '';
-  }
-
-  function ensureTopCard(summary, id, className, label, value, note, tone){
-    let card = document.getElementById(id);
-    if(!card){
-      card = document.createElement('article');
-      card.id = id;
-      card.className = `rate-summary-card-v167 ${className}`;
-      card.setAttribute('role', 'group');
-      summary.appendChild(card);
-    }
-    const safeValue = value || '—';
-    const html = `
-      <span>${escapeHtml(label)}</span>
-      <div class="rate-summary-value-v167">
-        <strong class="${escapeHtml(tone || '')}">${escapeHtml(safeValue)}</strong>
-      </div>
-      <small>${escapeHtml(note || '')}</small>`;
-    if(card.dataset.htmlV649 !== html){
-      card.dataset.htmlV649 = html;
-      card.innerHTML = html;
-    }
-    return card;
-  }
-
-  function ensureTopKpis(){
-    if(!isDesktop()) return;
-    const summary = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
-    if(!summary) return;
-
-    const cdiAno = textById('cdiAccumYearValueV271') || firstText(['#cdiYearHistoryTotal']);
-    const cdi12m = textById('cdiLast12mValueV296') || textById('cdiLast12mValueV271') || firstText(['#cdiYearHistory .cdi-kpi-v271.is-12m strong']);
-
-    ensureTopCard(summary, 'ratesCdiYearSummaryV649', 'cdi-year-summary-v649', 'CDI no ano', cdiAno || '—', 'Acumulado 2026', 'gold');
-    ensureTopCard(summary, 'ratesCdi12mSummaryV649', 'cdi-12m-summary-v649', 'CDI 12 meses', cdi12m || '—', 'Últimos 12 meses', '');
-
-    setImportant(summary, 'grid-area', 'summary');
-    setImportant(summary, 'display', 'grid');
-    setImportant(summary, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
-    setImportant(summary, 'gap', '10px');
-    setImportant(summary, 'width', '100%');
-    setImportant(summary, 'max-width', '100%');
-
-    summary.querySelectorAll('.rate-summary-card-v167').forEach(card => {
-      setImportant(card, 'min-height', '68px');
-      setImportant(card, 'height', 'auto');
-      setImportant(card, 'padding', '9px 12px');
-      setImportant(card, 'border-radius', '13px');
-    });
-  }
-
-  function polishTexts(){
-    if(!isDesktop()) return;
-
-    const cdiTitle = document.getElementById('cdiYearHistoryTitle');
-    if(cdiTitle) cdiTitle.textContent = 'CDI mensal em 2026';
-
-    const cdiSubtitle = cdiTitle?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(cdiSubtitle) cdiSubtitle.textContent = 'Mês atual e último mês fechado.';
-
-    document.querySelectorAll('#sec-mercado .desktop-copom-card-v648.is-next .desktop-copom-detail-v648').forEach(el => {
-      const txt = clean(el.textContent).toLowerCase();
-      if(!txt || txt.includes('definir') || txt.includes('sem decisão') || txt.includes('sem decisao')){
-        el.textContent = 'Aguardando decisão';
-      }
-    });
-
-    document.querySelectorAll('#sec-mercado .desktop-copom-card-v648.is-next').forEach(card => {
-      card.setAttribute('title', '5ª reunião · próxima decisão do Copom');
-    });
-  }
-
-  function polishCdiBlock(){
-    if(!isDesktop()) return;
-    const cdiBlock = document.getElementById('cdiYearHistory');
-    const kpis = cdiBlock?.querySelector('.cdi-kpis-v271');
-    if(!cdiBlock || !kpis) return;
-
-    setImportant(cdiBlock, 'margin', '0');
-    setImportant(cdiBlock, 'padding', '10px 12px 11px');
-    setImportant(cdiBlock, 'border-radius', '18px');
-
-    kpis.querySelectorAll('.cdi-kpi-v271.is-total, .cdi-kpi-v271.is-12m').forEach(card => {
-      setImportant(card, 'display', 'none');
-      card.setAttribute('aria-hidden', 'true');
-    });
-
-    setImportant(kpis, 'display', 'grid');
-    setImportant(kpis, 'grid-template-columns', 'repeat(2, minmax(0, 1fr))');
-    setImportant(kpis, 'gap', '10px');
-    setImportant(kpis, 'margin', '0');
-
-    kpis.querySelectorAll('.cdi-kpi-v271.is-current, .cdi-kpi-v271.is-lastclosed').forEach(card => {
-      setImportant(card, 'min-height', '56px');
-      setImportant(card, 'padding', '9px 12px');
-    });
-  }
-
-  function polishCopom(){
-    if(!isDesktop()) return;
-    const copomBlock = document.querySelector('#sec-mercado .copom-compact-v167');
-    const agenda = document.getElementById('desktopCopomAgendaV648');
-
-    if(copomBlock){
-      setImportant(copomBlock, 'padding', '11px 12px 12px');
-      setImportant(copomBlock, 'border-radius', '16px');
-    }
-
-    if(agenda){
-      setImportant(agenda, 'grid-template-columns', 'repeat(5, minmax(0, 1fr))');
-      setImportant(agenda, 'gap', '6px');
-      setImportant(agenda, 'margin', '8px 0 0');
-      setImportant(agenda, 'overflow', 'visible');
-    }
-
-    document.querySelectorAll('#sec-mercado .desktop-copom-card-v648').forEach(card => {
-      setImportant(card, 'min-height', '56px');
-      setImportant(card, 'padding', '7px 9px 7px 11px');
-      setImportant(card, 'border-radius', '12px');
-    });
-  }
-
-  function applyLayout(){
-    if(!isDesktop()) return;
-    document.documentElement.classList.add('desktop-rates-polish-v649');
-
-    const root = document.querySelector('#sec-mercado .rates-reference-v167');
-    const detailGrid = root?.querySelector('.rates-detail-grid-v167');
-
-    if(root){
-      setImportant(root, 'display', 'grid');
-      setImportant(root, 'grid-template-columns', '1fr');
-      setImportant(root, 'grid-template-areas', '"head" "summary" "detail"');
-      setImportant(root, 'gap', '9px');
-      setImportant(root, 'padding', '14px 16px 15px');
-      setImportant(root, 'overflow', 'visible');
-    }
-
-    if(detailGrid){
-      setImportant(detailGrid, 'display', 'grid');
-      setImportant(detailGrid, 'grid-template-columns', '1fr');
-      setImportant(detailGrid, 'gap', '9px');
-      setImportant(detailGrid, 'width', '100%');
-    }
-
-    ensureTopKpis();
-    polishTexts();
-    polishCdiBlock();
-    polishCopom();
-  }
-
-  let scheduled = false;
-  function scheduleApply(){
-    if(scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      applyLayout();
-    });
-  }
-
-  function boot(){
-    applyLayout();
-    [120, 360, 800, 1400, 2400, 4200, 7000, 12000, 20000].forEach(ms => setTimeout(applyLayout, ms));
-
-    ['cdiAccumYearValueV271', 'cdiLast12mValueV296', 'cdiLast12mValueV271', 'cdiYearHistory'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el && !el.dataset.v649Observed){
-        el.dataset.v649Observed = '1';
-        new MutationObserver(scheduleApply).observe(el, {childList:true, subtree:true, characterData:true});
-      }
-    });
-
-    const agenda = document.getElementById('desktopCopomAgendaV648');
-    if(agenda && !agenda.dataset.v649Observed){
-      agenda.dataset.v649Observed = '1';
-      new MutationObserver(scheduleApply).observe(agenda, {childList:true, subtree:true, characterData:true});
-    }
-
-    console.log('[Catálogo CAIXA] Polimento desktop juros ativo:', BUILD);
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
-
-  window.addEventListener('load', applyLayout, {once:true});
-  window.addEventListener('pageshow', applyLayout, {passive:true});
-  window.addEventListener('resize', scheduleApply, {passive:true});
-})();
-
+/* V740: v649 neutralizado; controlador terminal abaixo. */
 
 /* PATCH v653 — Desktop: Selic com leitura executiva e semântica simplificada */
 (function desktopSelicExecutiveV653(){
@@ -32475,29 +31824,106 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 
 
 
+/* V740: controlador V739 neutralizado; substituído pelo terminal V740. */
+
+
 /* ============================================================
-   V739 — Desktop: Juros de referência executivo
-   - separa Nível atual de CDI acumulado
-   - dá prioridade visual à próxima reunião do Copom
-   - transforma "CDI mensal" em "CDI recente"
-   - SOMENTE DESKTOP
+   V740 — Desktop: controlador terminal de Juros / CDI / Copom
+   ------------------------------------------------------------
+   Saneamento:
+   - v647, v648 e v649 não disputam mais o mesmo DOM.
+   - v574 não oculta mais #cdiYearHistory no desktop terminal.
+   - renderCdiYearHistory é encapsulado: a base atualiza os dados e,
+     na MESMA chamada, V740 aplica a semântica final antes do paint.
+   - Copom é reconstruído apenas quando #copomMeetings muda.
+   - Sem loops de setTimeout para "reassumir" a interface.
 ============================================================ */
-(function desktopRatesExecutiveV739(){
+(function desktopRatesTerminalV740(){
   const MQ = '(min-width: 769px)';
+  const AGENDA_ID = 'desktopCopomAgendaV648';
 
   function isDesktop(){
     return !window.matchMedia || window.matchMedia(MQ).matches;
   }
 
   function clean(v){
-    return String(v || '').replace(/\s+/g, ' ').trim();
+    return String(v || '').replace(/\s+/g,' ').replace(/★/g,'').trim();
   }
 
-  function ensureGroupLabels(){
-    if(!isDesktop()) return;
-    const summary = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
-    if(!summary) return;
+  function esc(v){
+    return String(v || '').replace(/[&<>"']/g, ch => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[ch]));
+  }
 
+  function setImp(el, prop, value){
+    if(el?.style) el.style.setProperty(prop, value, 'important');
+  }
+
+  function kindFor(item, result){
+    const cls = String(item?.className || '').toLowerCase();
+    const txt = String(result || '').toLowerCase();
+    if(cls.includes('next') || txt.includes('próxima') || txt.includes('proxima')) return 'is-next';
+    if(cls.includes('future') || txt.includes('prevista')) return 'is-future';
+    if(cls.includes('cut') || txt.includes('corte')) return 'is-cut';
+    if(cls.includes('hike') || txt.includes('alta')) return 'is-hike';
+    if(cls.includes('hold') || txt.includes('mantida') || txt.includes('mantido') || txt.includes('manutenção') || txt.includes('manutencao')) return 'is-hold';
+    return 'is-neutral';
+  }
+
+  function extractRate(result){
+    const r = clean(result);
+    const arrow = r.match(/(?:→|->)\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    if(arrow) return arrow[1];
+    const em = r.match(/\bem\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    return em ? em[1] : '';
+  }
+
+  function extractMove(result, kind){
+    const r = clean(result).replace(/−/g,'-');
+    const m = r.match(/(?:corte|alta)\s*([-+]?\d+(?:[,.]\d+)?)\s*p\.?p\.?/i);
+    if(m) return `${kind === 'is-hike' ? 'Alta' : 'Corte'} ${m[1].replace('.',',')} p.p.`;
+    if(kind === 'is-cut') return 'Corte';
+    if(kind === 'is-hike') return 'Alta';
+    return '';
+  }
+
+  function meetingData(item){
+    const num = clean(item.querySelector('.copom-num')?.textContent)
+      .replace(/\s*reuni[aã]o\b/i,'').trim() || 'Reunião';
+    const date = clean(item.querySelector('.copom-date')?.textContent) || '—';
+    const result = clean(item.querySelector('.copom-result')?.textContent);
+    const kind = kindFor(item, result);
+    const rate = extractRate(result);
+    const move = extractMove(result, kind);
+    let status='Status a confirmar', detail='—';
+    if(kind==='is-next') { status='Próxima reunião'; detail='Aguardando decisão'; }
+    else if(kind==='is-future') { status='Prevista'; detail='Sem decisão'; }
+    else if(kind==='is-hold') { status='Mantida'; detail=rate ? `Selic ${rate}` : 'Sem alteração'; }
+    else if(kind==='is-cut') { status=move || 'Corte'; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+    else if(kind==='is-hike') { status=move || 'Alta'; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+    else if(result) { status=result; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+    return {num,date,result,kind,status,detail};
+  }
+
+  function ensureTopCard(summary, id, cls, label, value, note){
+    let card = document.getElementById(id);
+    if(!card){
+      card = document.createElement('article');
+      card.id = id;
+      card.className = `rate-summary-card-v167 ${cls}`;
+      card.setAttribute('role','group');
+      summary.appendChild(card);
+    }
+    const html = `<span>${esc(label)}</span><div class="rate-summary-value-v167"><strong>${esc(value || '—')}</strong></div><small>${esc(note)}</small>`;
+    if(card.dataset.htmlV740 !== html){
+      card.dataset.htmlV740 = html;
+      card.innerHTML = html;
+    }
+    return card;
+  }
+
+  function ensureGroupLabels(summary){
     let current = document.getElementById('ratesCurrentGroupLabelV739');
     if(!current){
       current = document.createElement('div');
@@ -32506,7 +31932,6 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
       current.textContent = 'Nível atual';
       summary.prepend(current);
     }
-
     let accum = document.getElementById('ratesAccumGroupLabelV739');
     if(!accum){
       accum = document.createElement('div');
@@ -32515,126 +31940,163 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
       accum.textContent = 'CDI acumulado';
       current.insertAdjacentElement('afterend', accum);
     }
-
-    summary.setAttribute(
-      'aria-label',
-      'Nível atual de Selic e CDI e rentabilidade acumulada do CDI'
-    );
   }
 
-  function applyTexts(){
+  function applyTextsAndCdi(){
     if(!isDesktop()) return;
 
     const title = document.getElementById('ratesReferenceTitleV167');
     if(title) title.textContent = 'Juros de referência';
-
     const subtitle = title?.closest('.market-reference-head-v167')?.querySelector('p');
-    if(subtitle){
-      subtitle.textContent = 'Selic, CDI e calendário Copom em uma visão operacional.';
+    if(subtitle) subtitle.textContent = 'Selic, CDI e calendário Copom em uma visão operacional.';
+
+    const summary = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(summary){
+      ensureGroupLabels(summary);
+      const year = clean(document.getElementById('cdiAccumYearValueV271')?.textContent) || '—';
+      const m12 = clean(document.getElementById('cdiLast12mValueV296')?.textContent) || '—';
+      ensureTopCard(summary,'ratesCdiYearSummaryV649','cdi-year-summary-v649','CDI em 2026',year,'Acumulado no ano');
+      ensureTopCard(summary,'ratesCdi12mSummaryV649','cdi-12m-summary-v649','CDI em 12 meses',m12,'Acumulado em 12 meses');
     }
 
     const cdiNote = document.getElementById('cdiYearHistoryTotal');
-    if(cdiNote){
-      cdiNote.textContent = '≈ Selic − 0,10 p.p.';
-    }
-
-    const yCard = document.getElementById('ratesCdiYearSummaryV649');
-    if(yCard){
-      const label = yCard.querySelector(':scope > span');
-      const note = yCard.querySelector(':scope > small');
-      if(label) label.textContent = 'CDI em 2026';
-      if(note) note.textContent = 'Acumulado no ano';
-    }
-
-    const m12Card = document.getElementById('ratesCdi12mSummaryV649');
-    if(m12Card){
-      const label = m12Card.querySelector(':scope > span');
-      const note = m12Card.querySelector(':scope > small');
-      if(label) label.textContent = 'CDI em 12 meses';
-      if(note) note.textContent = 'Acumulado em 12 meses';
-    }
+    if(cdiNote) cdiNote.textContent = '≈ Selic − 0,10 p.p.';
 
     const copomTitle = document.getElementById('copomCompactTitleV167');
     if(copomTitle) copomTitle.textContent = 'Calendário Copom 2026';
-
     const copomSub = copomTitle?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(copomSub){
-      copomSub.textContent = 'Decisões realizadas, próxima reunião e agenda restante.';
-    }
+    if(copomSub) copomSub.textContent = 'Decisões realizadas, próxima reunião e agenda restante.';
 
     const cdiTitle = document.getElementById('cdiYearHistoryTitle');
     if(cdiTitle) cdiTitle.textContent = 'CDI recente';
-
     const cdiSub = cdiTitle?.closest('.reference-subhead-v167')?.querySelector('small');
-    if(cdiSub){
-      cdiSub.textContent = 'Mês atual e último mês fechado.';
+    if(cdiSub) cdiSub.textContent = 'Mês atual e último mês fechado.';
+
+    const cdiBlock = document.getElementById('cdiYearHistory');
+    if(cdiBlock){
+      setImp(cdiBlock,'display','block');
+      setImp(cdiBlock,'visibility','visible');
+      setImp(cdiBlock,'height','auto');
+      setImp(cdiBlock,'min-height','0');
+      setImp(cdiBlock,'max-height','none');
+      setImp(cdiBlock,'margin','0');
+      setImp(cdiBlock,'padding','10px 12px 11px');
+      setImp(cdiBlock,'border','');
+      setImp(cdiBlock,'overflow','hidden');
     }
 
-    const root = document.querySelector('#sec-mercado .rates-reference-v167');
-    if(root){
-      root.setAttribute('aria-label', 'Referências de juros e calendário Copom');
+    const kpis = cdiBlock?.querySelector('.cdi-kpis-v271');
+    if(kpis){
+      setImp(kpis,'display','grid');
+      setImp(kpis,'grid-template-columns','repeat(2,minmax(0,1fr))');
+      setImp(kpis,'gap','8px');
+      setImp(kpis,'margin','0');
+      kpis.querySelectorAll('.is-total,.is-12m').forEach(el=>{
+        setImp(el,'display','none');
+        el.setAttribute('aria-hidden','true');
+      });
+      kpis.querySelectorAll('.is-current,.is-lastclosed').forEach(el=>{
+        setImp(el,'display','block');
+        setImp(el,'min-height','56px');
+        setImp(el,'height','56px');
+        setImp(el,'padding','9px 12px');
+      });
     }
+
+    ['cdiMonthCarouselV322'].forEach(id=>{
+      const el=document.getElementById(id); if(el) setImp(el,'display','none');
+    });
+    cdiBlock?.querySelectorAll('.cdi-chart-canvas-wrap-v271,.cdi-chart-legend-v271,.reference-footnote-v167').forEach(el=>setImp(el,'display','none'));
   }
 
-  function classifyCopom(){
+  function renderAgenda(){
     if(!isDesktop()) return;
-    const agenda = document.getElementById('desktopCopomAgendaV648');
-    if(!agenda) return;
+    const copomBlock = document.querySelector('#sec-mercado .copom-compact-v167');
+    const store = document.getElementById('copomMeetings');
+    const subhead = copomBlock?.querySelector('.reference-subhead-v167');
+    if(!copomBlock || !store) return;
 
-    const cards = [...agenda.querySelectorAll('.desktop-copom-card-v648')];
-    cards.forEach((card, i) => {
-      card.classList.remove('is-realized-v739', 'is-upcoming-v739');
-      if(card.classList.contains('is-next')){
-        card.classList.add('is-upcoming-v739');
-      }else if(card.classList.contains('is-future')){
-        // future stays neutral
-      }else{
-        card.classList.add('is-realized-v739');
-      }
-      card.style.setProperty('order', String(i + 1), 'important');
-    });
+    const items = [...store.querySelectorAll('.copom-item')]
+      .sort((a,b)=>Number(a.dataset.originalOrder ?? 999)-Number(b.dataset.originalOrder ?? 999));
+    if(!items.length) return;
+
+    const legacy = document.getElementById('copomExecutiveSummaryV270');
+    if(legacy){
+      setImp(legacy,'display','none');
+      legacy.setAttribute('aria-hidden','true');
+    }
+
+    let agenda = document.getElementById(AGENDA_ID);
+    if(!agenda){
+      agenda=document.createElement('div');
+      agenda.id=AGENDA_ID;
+      agenda.className='desktop-copom-agenda-v648';
+      agenda.setAttribute('role','list');
+      agenda.setAttribute('aria-label','Calendário das reuniões do Copom em 2026');
+      subhead?.insertAdjacentElement('afterend',agenda);
+    }
+
+    const html = items.map((item,i)=>{
+      const d=meetingData(item);
+      const realized = d.kind!=='is-next' && d.kind!=='is-future' ? ' is-realized-v739' : '';
+      const upcoming = d.kind==='is-next' ? ' is-upcoming-v739' : '';
+      return `<article class="desktop-copom-card-v648 ${esc(d.kind)}${realized}${upcoming}" role="listitem" style="order:${i+1}">
+        <span class="desktop-copom-num-v648">${esc(d.num)}</span>
+        <strong class="desktop-copom-date-v648">${esc(d.date)}</strong>
+        <span class="desktop-copom-status-v648">${esc(d.status)}</span>
+        <small class="desktop-copom-detail-v648">${esc(d.detail)}</small>
+      </article>`;
+    }).join('');
+
+    if(agenda.dataset.htmlV740 !== html){
+      agenda.dataset.htmlV740=html;
+      agenda.innerHTML=html;
+    }
   }
 
   function apply(){
     if(!isDesktop()) return;
-    document.documentElement.classList.add('desktop-rates-executive-v739');
-    ensureGroupLabels();
-    applyTexts();
-    classifyCopom();
-
-    const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_EXECUTIVE_V739';
+    document.documentElement.classList.add('desktop-rates-terminal-v740','desktop-rates-executive-v739');
+    applyTextsAndCdi();
+    renderAgenda();
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_RATES_TERMINAL_V740';
   }
 
-  let raf = 0;
-  function schedule(){
-    cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(apply);
+  function wrapCdiRenderer(){
+    try{
+      if(typeof renderCdiYearHistory !== 'function' || renderCdiYearHistory.__v740Wrapped) return;
+      const original=renderCdiYearHistory;
+      const wrapped=function(){
+        const out=original.apply(this,arguments);
+        if(isDesktop()) applyTextsAndCdi();
+        return out;
+      };
+      wrapped.__v740Wrapped=true;
+      wrapped.__v740Original=original;
+      renderCdiYearHistory=wrapped;
+      try{ window.renderCdiYearHistory=wrapped; }catch(_){ }
+    }catch(_){ }
   }
 
   function boot(){
+    wrapCdiRenderer();
     apply();
-    [120, 420, 900, 1800, 3600, 7200, 12500, 20500, 24200].forEach(ms => setTimeout(apply, ms));
 
-    const root = document.querySelector('#sec-mercado .rates-reference-v167');
-    if(root && !root.dataset.v739Observed && window.MutationObserver){
-      root.dataset.v739Observed = '1';
-      new MutationObserver(schedule).observe(root, {
-        childList:true,
-        subtree:true,
-        characterData:true
-      });
+    const store=document.getElementById('copomMeetings');
+    if(store && !store.dataset.v740Observed && window.MutationObserver){
+      store.dataset.v740Observed='1';
+      let raf=0;
+      new MutationObserver(()=>{
+        cancelAnimationFrame(raf);
+        raf=requestAnimationFrame(()=>{ renderAgenda(); applyTextsAndCdi(); });
+      }).observe(store,{childList:true,subtree:true,characterData:true});
     }
   }
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot, {once:true});
-  }else{
-    boot();
-  }
-
-  window.addEventListener('load', apply, {once:true});
-  window.addEventListener('pageshow', apply, {passive:true});
-  window.addEventListener('resize', schedule, {passive:true});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+  else boot();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('pageshow',apply,{passive:true});
+  window.addEventListener('resize',apply,{passive:true});
 })();
-

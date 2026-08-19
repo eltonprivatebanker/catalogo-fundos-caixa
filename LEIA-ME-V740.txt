@@ -1,0 +1,23 @@
+V740 — Saneamento terminal do bloco Juros / CDI / Copom (desktop)
+
+Diagnóstico corrigido:
+- v647 reescrevia títulos/subtítulos em 120/450/900/1600/2600ms.
+- v648 reconstruía o calendário em 100/350/700/1200/2200/4200/8000/14000/23000ms.
+- v649 reescrevia 'CDI mensal em 2026' em 120/360/800/1400/2400/4200/7000/12000/20000ms e observava o mesmo DOM.
+- v739 tentava trocar novamente para 'CDI recente' e também observava o bloco inteiro.
+- renderCdiYearHistory, da base, também atualizava o título e o texto do CDI após cada carga de dados.
+- v574 ainda podia ocultar #cdiYearHistory em timers antigos.
+
+V740:
+- neutraliza v647/v648/v649/v739 no desktop;
+- impede v574 de ocultar o CDI neste modo;
+- cria um único controlador terminal;
+- encapsula renderCdiYearHistory para aplicar a semântica final na mesma chamada, antes do paint;
+- atualiza Copom apenas quando a store de reuniões muda;
+- remove loops de timers/observers concorrentes.
+
+Visual esperado:
+- Nível atual: Selic + CDI;
+- CDI acumulado: 2026 + 12 meses;
+- calendário com realizadas discretas, próxima reunião dominante, futuras neutras;
+- bloco inferior intitulado 'CDI recente'.
