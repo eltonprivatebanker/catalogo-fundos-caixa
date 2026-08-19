@@ -4401,7 +4401,10 @@ function setCdiSort(dir){
     }, true);
   }
   function setRankingWorkspaceV685(active){
-    document.body.classList.toggle('ranking-page-v685', !!active && isDesktop());
+    /* V750 — Rankings deixa de criar uma "página dedicada".
+       Clicar no menu deve apenas navegar até a seção, sem alterar
+       a estrutura/largura do documento e sem ocultar os demais blocos. */
+    document.body.classList.remove('ranking-page-v685');
   }
   function installRankingWorkspaceNavigationV685(){
     if(window.__rankingWorkspaceNavigationV685Installed) return;
@@ -4414,16 +4417,30 @@ function setCdiSort(dir){
         const targetId = link.dataset.anchorTarget;
         if(targetId === 'rankingsSection'){
           ev.preventDefault();
-          setRankingWorkspaceV685(true);
+          setRankingWorkspaceV685(false);
           try{ history.replaceState(null,'','#rankingsSection'); }catch(e){}
-          requestAnimationFrame(function(){ q('#rankingsSection')?.scrollIntoView({block:'start'}); });
+          requestAnimationFrame(function(){
+            const target = q('#rankingsSection');
+            if(!target) return;
+
+            /* V750 — preserva a coordenada horizontal.
+               scrollIntoView pode ajustar também o eixo X quando há
+               pequenas diferenças de overflow/zoom. */
+            const top = window.scrollY + target.getBoundingClientRect().top - 8;
+            window.scrollTo({
+              top: Math.max(0, top),
+              left: window.scrollX,
+              behavior: 'smooth'
+            });
+          });
         }else{
           setRankingWorkspaceV685(false);
         }
       }, true);
     }
-    if(location.hash === '#rankingsSection') setRankingWorkspaceV685(true);
-    window.addEventListener('hashchange', function(){ setRankingWorkspaceV685(location.hash === '#rankingsSection'); });
+    /* V750 — hash de Rankings não altera o modo/layout da página. */
+    setRankingWorkspaceV685(false);
+    window.addEventListener('hashchange', function(){ setRankingWorkspaceV685(false); });
   }
   function install(){
     if(!isDesktop()) return;
@@ -32857,5 +32874,27 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     }
   },true);
   window.addEventListener('pageshow',sync,{passive:true});
+})();
+
+
+
+/* ============================================================
+   V750 — Ranking navigation stability
+   Remove qualquer estado legado ranking-page-v685 que possa ter
+   ficado ativo por navegação/hash anterior.
+============================================================ */
+(function rankingNavigationStableV750(){
+  function clean(){
+    document.body?.classList.remove('ranking-page-v685');
+    document.documentElement.classList.add('desktop-ranking-nav-stable-v750');
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', clean, {once:true});
+  }else{
+    clean();
+  }
+  window.addEventListener('pageshow', clean, {passive:true});
+  window.addEventListener('hashchange', clean, {passive:true});
 })();
 

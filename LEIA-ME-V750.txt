@@ -1,0 +1,20 @@
+V750 — estabilidade de largura ao navegar para Rankings (desktop)
+
+Diagnóstico:
+- o clique no menu Rankings não funcionava como simples âncora;
+- a rotina V685 adicionava body.ranking-page-v685;
+- esse estado transformava Rankings em uma "tela dedicada" e ocultava:
+  sec-kpi, sec-fundos, sec-mercado, sec-dolar, sec-focus, sec-graficos e fontes;
+- portanto a estrutura do documento mudava no próprio clique;
+- além disso, scrollIntoView podia ajustar o eixo horizontal em cenários de zoom/overflow.
+
+Correção:
+- ranking-page-v685 foi neutralizado;
+- clicar em Rankings apenas navega verticalmente;
+- demais seções permanecem no fluxo;
+- scroll preserva window.scrollX;
+- hash #rankingsSection não ativa modo dedicado;
+- #rankingsSection fica com width:100% / max-width:none no desktop.
+
+Resultado esperado:
+a largura e o alinhamento do ranking são os mesmos antes e depois de clicar no menu Rankings.

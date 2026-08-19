@@ -89096,3 +89096,27 @@ html.desktop-responsive-fit-v688 body{
 /* V749
    A geometria terminal da toolbar está em #desktop-toolbar-terminal-v749
    no fim do <head>, pois o PATCH inline V688 é carregado após style.css. */
+
+
+/* ============================================================
+   V750 — Desktop: Rankings não muda a geometria ao navegar
+============================================================ */
+@media (min-width:769px){
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-kpi,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-fundos,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-mercado,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-dolar,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-focus,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #sec-graficos,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #siteSources{
+    display:revert!important;
+  }
+
+  html.desktop-ranking-nav-stable-v750 body #rankingsSection,
+  html.desktop-ranking-nav-stable-v750 body.ranking-page-v685 #rankingsSection{
+    width:100%!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+}

@@ -1,0 +1,29 @@
+V749 — toolbar terminal após diagnóstico via DevTools (desktop)
+
+Diagnóstico confirmado no navegador:
+- fund-view-controls-v217 computado como display:grid;
+- pai com 44px;
+- Ordenar e Exibir com 50px;
+- toolbar com 60px;
+- botões Maior/Menor já estavam SEM borda e SEM inline style.
+
+Causa:
+- o index.html contém <style id="desktop-responsive-fit-v688-final">.
+- esse CSS inline vem depois do link de style.css.
+- no intervalo 1180–1600px ele força novamente:
+  * fund-view-controls-v217 = grid;
+  * Ordenar/Exibir = 50px;
+  * toolbar com estrutura legada.
+- por isso V747/V748, que estavam apenas em style.css, não podiam prevalecer.
+
+V749:
+- adiciona regra terminal no FINAL do <head>;
+- pai direito = flex real;
+- Ordenar e Exibir = 44px;
+- toolbar = 50px total;
+- Maior/Menor = 24px, borderless;
+- Exibir = 150px;
+- mantém visual compacto e alinhado;
+- rotina V88 deixa de restaurar '05 por página' e passa a usar '05 fundos'.
+
+Somente desktop.
