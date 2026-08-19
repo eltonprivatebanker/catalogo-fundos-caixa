@@ -1,0 +1,7 @@
+V734 — Selic desktop compacta + comparador com seleção estável.
+- Oculta Período personalizado somente no desktop.
+- Cabeçalho da Selic em uma linha e KPIs em faixa executiva compacta.
+- Máxima/mínima neutras; Selic vigente recebe ênfase bronze.
+- Comparador: itens selecionados não são mais reordenados para o topo.
+- Preserva a posição de rolagem da lista ao marcar/remover fundos.
+- Mobile preservado.

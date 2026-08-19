@@ -1,0 +1,5 @@
+V733 — Compactação vertical desktop e nomenclatura operacional no comparador.
+- Reduz espaço entre Cabeçalho/Catálogo, Catálogo/Rankings e Rankings/Indicadores.
+- Compacta linhas de filtros sem remover respiro.
+- Renomeia Aplic. mínima para Aporte inicial mín. no comparador.
+- Mobile preservado.

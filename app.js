@@ -8247,8 +8247,8 @@ function econAtualizarSelicKpiLabelsV381(range){
   const minLabel = document.getElementById('selicMinLabelV381');
   const currentLabel = document.querySelector('#mobileSelicV400 .selic-kpi-focus-card-v415.is-current span');
 
-  if(maxLabel) maxLabel.textContent = 'Máxima no período';
-  if(minLabel) minLabel.textContent = 'Mínima no período';
+  if(maxLabel) maxLabel.textContent = 'Máxima no recorte';
+  if(minLabel) minLabel.textContent = 'Mínima no recorte';
   if(currentLabel) currentLabel.textContent = 'Selic vigente';
 }
 
@@ -10889,7 +10889,7 @@ function comparToggle(idx, row, checkbox){
   }
   comparUpdateBar();
   if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
-  if(!document.getElementById('comparWorkspaceV723')?.hidden) comparWorkspaceRenderV723();
+  if(!document.getElementById('comparWorkspaceV723')?.hidden) comparWorkspaceRenderV723({preserveScroll:true});
 }
 
 function limparComparador(){
@@ -11049,7 +11049,7 @@ function abrirComparador(){
     { label:'Identificação',   key: r => { const c=comparCodeInfoV725(r); const cnpj=r['CNPJ']||'—'; return c.value ? `${cnpj}<span class="ct-id-sep-v731">·</span><span class="ct-code-inline-v731">${c.label} ${c.value}</span>` : cnpj; }, tipo:'txt' },
 
     { label:'Taxa adm. ↓',     key: r => r['Taxa Adm (%)'] ? String(r['Taxa Adm (%)']).replace('.',',')+' %' : '—', tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', sectionStart:true },
-    { label:'Aplic. mínima ↓', key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min' },
+    { label:'Aporte inicial mín. ↓', key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min' },
 
     { label:'Mês',             key: r => fmt(r['Acum. Mes (%)']), tipo:'pct', val: r => pctNum(r['Acum. Mes (%)']), better:'max', sectionStart:true, perfKey:'Acum. Mes (%)' },
     { label:'Ano',             key: r => fmt(r['Acum. Ano (%)']), tipo:'pct', val: r => pctNum(r['Acum. Ano (%)']), better:'max', perfKey:'Acum. Ano (%)' },
@@ -11347,11 +11347,12 @@ function comparWorkspacePopulateCategoriesV723(){
   sel.dataset.ready='1';
 }
 
-function comparWorkspaceRenderV723(){
+function comparWorkspaceRenderV723(options={}){
   const section=document.getElementById('comparWorkspaceV723');
   const list=document.getElementById('comparWorkspaceListV723');
   const selectedBox=document.getElementById('comparWorkspaceSelectedV723');
   if(!section || !list || !selectedBox || section.hidden) return;
+  const previousScrollTop = options.preserveScroll ? list.scrollTop : 0;
 
   const rows=Array.isArray(allRows)?allRows:[];
   const search=comparNormV721(document.getElementById('comparWorkspaceSearchV723')?.value);
@@ -11366,11 +11367,9 @@ function comparWorkspaceRenderV723(){
     return comparSearchMatchV725(row,search);
   });
 
-  matches.sort((a,b)=>{
-    const sa=comparSet.has(a.idx)?0:1, sb=comparSet.has(b.idx)?0:1;
-    if(sa!==sb) return sa-sb;
-    return String(a.row['Fundo']||'').localeCompare(String(b.row['Fundo']||''),'pt-BR');
-  });
+  // V734: a lista permanece estável ao selecionar.
+  // A seleção aparece na carteira à direita, sem puxar o item marcado para o topo.
+  matches.sort((a,b)=>String(a.row['Fundo']||'').localeCompare(String(b.row['Fundo']||''),'pt-BR'));
 
   const total=matches.length;
   const LIMITE=220;
@@ -11410,6 +11409,7 @@ function comparWorkspaceRenderV723(){
       });
     });
   }
+  if(options.preserveScroll) requestAnimationFrame(()=>{ list.scrollTop = previousScrollTop; });
 
   const selected=[...comparSet.entries()];
   if(!selected.length){
@@ -11433,7 +11433,7 @@ function comparWorkspaceRenderV723(){
     selectedBox.querySelectorAll('[data-remove-comp-v723]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const idx=Number(btn.dataset.removeCompV723);
-        comparSet.delete(idx); comparSyncChecks(idx,false); comparUpdateBar(); comparWorkspaceRenderV723();
+        comparSet.delete(idx); comparSyncChecks(idx,false); comparUpdateBar(); comparWorkspaceRenderV723({preserveScroll:true});
         if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
       });
     });
