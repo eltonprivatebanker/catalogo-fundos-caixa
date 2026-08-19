@@ -85902,3 +85902,30 @@ html.desktop-responsive-fit-v688 body{
 @media (max-width:768px){
   .compar-add-fund-v724,.compar-selected-count-v724,.compar-quick-add-v724{display:none!important;}
 }
+
+
+/* ============================================================
+   V725 — DESKTOP: BUSCA AMPLIADA + CÓDIGO SIART/PRODUTO
+   - evidencia código no workspace de comparação;
+   - mantém nome legível sem aumentar excessivamente a altura;
+   - aplica o mesmo padrão à busca rápida do modal.
+============================================================ */
+@media (min-width:769px){
+  html.desktop-compar-search-codes-v725 .compar-workspace-name-row-v725,
+  html.desktop-compar-search-codes-v725 .compar-quick-add-name-v725{
+    display:flex;align-items:center;gap:7px;min-width:0;
+  }
+  html.desktop-compar-search-codes-v725 .compar-workspace-name-row-v725>strong,
+  html.desktop-compar-search-codes-v725 .compar-quick-add-name-v725>strong{
+    min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  html.desktop-compar-search-codes-v725 .compar-workspace-name-row-v725>em,
+  html.desktop-compar-search-codes-v725 .compar-quick-add-name-v725>em{
+    flex:0 0 auto;display:inline-flex;align-items:center;min-height:19px;padding:0 6px;
+    border:1px solid rgba(199,155,109,.25);border-radius:5px;background:rgba(176,132,84,.075);
+    color:#d9b98f;font:850 .48rem/1 Inter,sans-serif;font-style:normal;letter-spacing:.02em;
+    white-space:nowrap;font-variant-numeric:tabular-nums;
+  }
+  html.desktop-compar-search-codes-v725 .compar-workspace-item-v723{min-height:60px;}
+  html.desktop-compar-search-codes-v725 .compar-workspace-item-main-v723{gap:4px;}
+}

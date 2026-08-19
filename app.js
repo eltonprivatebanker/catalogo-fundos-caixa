@@ -10735,6 +10735,57 @@ document.addEventListener('DOMContentLoaded', function(){
 const COMPAR_MAX = 6;
 let comparSet = new Map(); // índice estável em allRows → row data
 
+/* V725 — código do fundo + índice de busca ampliado do comparador */
+function comparCodeInfoV725(row){
+  const candidates = [
+    ['Código SIART','SIART'],['Codigo SIART','SIART'],['SIART','SIART'],
+    ['Código SIICO','SIICO'],['Codigo SIICO','SIICO'],['SIICO','SIICO'],
+    ['Código do Produto','Produto'],['Codigo do Produto','Produto'],['Código Produto','Produto'],['Codigo Produto','Produto'],['Cod Produto','Produto'],['Cód. Produto','Produto'],
+    ['codfundo','Cód. fundo'],['Código do Fundo','Cód. fundo'],['Codigo do Fundo','Cód. fundo'],['Cod Fundo','Cód. fundo'],['Cód. Fundo','Cód. fundo']
+  ];
+  for(const [key,label] of candidates){
+    const value=String(row?.[key] ?? '').trim();
+    if(value && value!=='-' && value!=='—') return {value,label};
+  }
+  const cnpjLimpo=String(row?.['CNPJ']||'').replace(/\D/g,'');
+  const docCode=cnpjLimpo ? String(_fundosDocMap?.[cnpjLimpo]?.codfundo || '').trim() : '';
+  return docCode ? {value:docCode,label:'SIART'} : {value:'',label:''};
+}
+
+function comparSearchTextV725(row){
+  const code=comparCodeInfoV725(row);
+  const cnpj=String(row?.['CNPJ']||'');
+  const cnpjDigits=cnpj.replace(/\D/g,'');
+  const preferred=[
+    row?.['Fundo'], row?.['Nome'], row?.['Nome do Fundo'], row?.['CNPJ'], cnpjDigits,
+    row?.['Benchmark'], row?.['Categoria'], row?.['Perfil de Risco'], row?.['Perfil'], row?.['Perfis'],
+    row?.['Público Alvo'], row?.['Publico Alvo'], row?.['Público-alvo'], row?.['Publico-alvo'],
+    row?.['Administrador'], row?.['Gestor'], row?.['Classe'], row?.['Subclasse'], row?.['Estratégia'], row?.['Estrategia'],
+    row?.['Conversao Resgate'], row?.['Pagamento Resgate'], code.value, code.label
+  ];
+  // Acrescenta campos textuais curtos da própria base. Isso faz a busca continuar
+  // útil mesmo se o robô passar a trazer novos identificadores/códigos no futuro.
+  const extra=[];
+  try{
+    Object.entries(row||{}).forEach(([key,val])=>{
+      if(val===null || val===undefined) return;
+      const s=String(val).trim();
+      if(!s || s.length>180 || /^https?:\/\//i.test(s)) return;
+      if(/doc_|url|link/i.test(key)) return;
+      extra.push(key,s);
+    });
+  }catch(_e){}
+  return comparNormV721([...preferred,...extra].filter(Boolean).join(' | '));
+}
+
+function comparSearchMatchV725(row,query){
+  const q=comparNormV721(query);
+  if(!q) return true;
+  const hay=comparSearchTextV725(row);
+  const tokens=q.split(' ').filter(Boolean);
+  return tokens.every(token=>hay.includes(token));
+}
+
 function comparToastV721(msg){
   let t=document.getElementById('elton-fav-toast') || document.getElementById('kpiOpenToast');
   if(!t){
@@ -10855,10 +10906,7 @@ function comparQuickAddRenderV724(){
   const rows = Array.isArray(allRows) ? allRows : [];
   const matches = rows.map((row,idx)=>({row,idx})).filter(({row,idx})=>{
     if(comparSet.has(idx)) return false;
-    const hay = comparNormV721([
-      row['Fundo'],row['CNPJ'],row['Benchmark'],row['Categoria'],row['Perfil de Risco'],row['Perfis']
-    ].filter(Boolean).join(' | '));
-    return hay.includes(q);
+    return comparSearchMatchV725(row,q);
   }).slice(0,8);
   if(!matches.length){
     box.innerHTML = '<div class="compar-quick-add-empty-v724">Nenhum outro fundo encontrado.</div>';
@@ -10870,11 +10918,12 @@ function comparQuickAddRenderV724(){
     const cat=String(row['Categoria']||'—');
     const bench=String(row['Benchmark']||'—');
     const cnpj=String(row['CNPJ']||'').trim();
+    const codeInfo=comparCodeInfoV725(row);
     const rent=toNum(row['Acum. 12M (%)']);
     const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
     const rentCls=rent===null?'':rent>0?'pos':rent<0?'neg':'';
     return `<button class="compar-quick-add-item-v724" data-comp-quick-add="${idx}" type="button">
-      <span class="compar-quick-add-main-v724"><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong><small>${htmlAttr(cat)} · ${htmlAttr(bench)}${cnpj?` · ${htmlAttr(cnpj)}`:''}</small></span>
+      <span class="compar-quick-add-main-v724"><span class="compar-quick-add-name-v725"><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong>${codeInfo.value?`<em>${htmlAttr(codeInfo.label)} ${htmlAttr(codeInfo.value)}</em>`:''}</span><small>${htmlAttr(cat)} · ${htmlAttr(bench)}${cnpj?` · ${htmlAttr(cnpj)}`:''}</small></span>
       <span class="compar-quick-add-return-v724 ${rentCls}"><small>12M</small><strong>${rentTxt}</strong></span>
       <span class="compar-quick-add-plus-v724">＋</span>
     </button>`;
@@ -10965,6 +11014,7 @@ function abrirComparador(){
     { label:'Perfil',       key: r => r['Perfil de Risco']||r['Perfil']||'—',  tipo:'txt' },
     { label:'Categoria',    key: r => r['Categoria']||'—',                      tipo:'txt' },
     { label:'CNPJ',         key: r => r['CNPJ']||'—',                           tipo:'txt' },
+    { label:'Código',       key: r => { const c=comparCodeInfoV725(r); return c.value ? `${c.label} ${c.value}` : '—'; }, tipo:'txt' },
     { label:'Taxa Adm',     key: r => r['Taxa Adm (%)'] ? r['Taxa Adm (%)']+' %' : '—', tipo:'txt' },
     { label:'Var. Dia',     key: r => fmt(r['Variacao Dia (%)']),    tipo:'pct', val: r => parseFloat(String(r['Variacao Dia (%)']||'').replace(',','.')) },
     { label:'Acum. Mês',    key: r => fmt(r['Acum. Mes (%)']),       tipo:'pct', val: r => parseFloat(String(r['Acum. Mes (%)']||'').replace(',','.')) },
@@ -11236,8 +11286,7 @@ function comparWorkspaceRenderV723(){
     const rowRisk=String(row['Perfil de Risco']||row['Perfil']||'Sem classificação');
     if(risk && rowRisk!==risk) return false;
     if(!search) return true;
-    const hay=comparNormV721([row['Fundo'],row['CNPJ'],row['Benchmark'],row['Categoria'],rowRisk,row['Perfis']].filter(Boolean).join(' | '));
-    return hay.includes(search);
+    return comparSearchMatchV725(row,search);
   });
 
   matches.sort((a,b)=>{
@@ -11263,6 +11312,7 @@ function comparWorkspaceRenderV723(){
       const benchmark=String(row['Benchmark']||'—');
       const risco=String(row['Perfil de Risco']||row['Perfil']||'—');
       const cnpj=String(row['CNPJ']||'').trim();
+      const codeInfo=comparCodeInfoV725(row);
       const rent=toNum(row['Acum. 12M (%)']);
       const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
       const rentCls=rent===null?'':rent>0?'pos':rent<0?'neg':'';
@@ -11270,7 +11320,7 @@ function comparWorkspaceRenderV723(){
         <input class="compar-workspace-check-v723" data-comp-idx="${idx}" type="checkbox" ${checked?'checked':''}/>
         <span class="compar-workspace-check-ui-v723" aria-hidden="true"></span>
         <span class="compar-workspace-item-main-v723">
-          <strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong>
+          <span class="compar-workspace-name-row-v725"><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong>${codeInfo.value?`<em>${htmlAttr(codeInfo.label)} ${htmlAttr(codeInfo.value)}</em>`:''}</span>
           <small>${htmlAttr(categoria)} · ${htmlAttr(benchmark)} · ${htmlAttr(risco)}${cnpj?` · ${htmlAttr(cnpj)}`:''}</small>
         </span>
         <span class="compar-workspace-return-v723 ${rentCls}"><small>12M</small><strong>${rentTxt}</strong></span>
@@ -11293,11 +11343,12 @@ function comparWorkspaceRenderV723(){
       const nome=typeof catalogShortFundNameV594==='function'?catalogShortFundNameV594(nomeFull):nomeFull;
       const cat=String(row['Categoria']||'—');
       const risk=String(row['Perfil de Risco']||row['Perfil']||'—');
+      const codeInfo=comparCodeInfoV725(row);
       const rent=toNum(row['Acum. 12M (%)']);
       const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
       return `<article class="compar-workspace-selected-card-v723">
         <span class="compar-workspace-order-v723">${order+1}</span>
-        <div><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong><small>${htmlAttr(cat)} · ${htmlAttr(risk)}</small></div>
+        <div><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong><small>${codeInfo.value?`${htmlAttr(codeInfo.label)} ${htmlAttr(codeInfo.value)} · `:''}${htmlAttr(cat)} · ${htmlAttr(risk)}</small></div>
         <span class="compar-workspace-selected-return-v723">${rentTxt}</span>
         <button aria-label="Remover ${htmlAttr(nome)}" data-remove-comp-v723="${idx}" type="button">✕</button>
       </article>`;

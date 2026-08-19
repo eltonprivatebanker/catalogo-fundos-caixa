@@ -1,0 +1,12 @@
+V725 — Busca ampliada e identificação SIART/produto no comparador
+
+Alterações:
+1. Workspace desktop exibe o código disponível do fundo (SIART, SIICO, produto ou código do fundo).
+2. Busca do comparador passou a pesquisar nome, CNPJ com ou sem máscara, SIART/código do fundo, benchmark, categoria, perfil e demais campos textuais úteis da base.
+3. Busca aceita múltiplas palavras não necessariamente contíguas (ex.: "bdr nivel" ou "siart 12345").
+4. Busca rápida dentro do modal usa o mesmo índice ampliado e também mostra o código.
+5. Comparativo lado a lado ganhou a linha "Código".
+6. Alterações focadas no desktop; mobile preservado.
+
+Arquivos alterados: index.html, app.js e style.css.
+tokens-caixa.css preservado.
