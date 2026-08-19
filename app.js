@@ -10728,7 +10728,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 /* ════════════════════════════════════════════════════════
-   COMPARADOR DE FUNDOS — v2.1 / seletor v721
+   COMPARADOR DE FUNDOS — v2.2 / seletor v721 + workspace v723
    Máximo 6 fundos | seleção estável | busca + categoria | modal lado a lado
 ════════════════════════════════════════════════════════ */
 
@@ -10755,7 +10755,7 @@ function comparVisibleRow(compIdx){
 }
 
 function comparSyncChecks(compIdx, selected){
-  document.querySelectorAll(`.comp-check[data-comp-idx="${compIdx}"], .compar-picker-check-v721[data-comp-idx="${compIdx}"]`).forEach(cb=>{
+  document.querySelectorAll(`.comp-check[data-comp-idx="${compIdx}"], .compar-picker-check-v721[data-comp-idx="${compIdx}"], .compar-workspace-check-v723[data-comp-idx="${compIdx}"]`).forEach(cb=>{
     cb.checked = !!selected;
   });
   const tr = comparVisibleRow(compIdx);
@@ -10772,6 +10772,9 @@ function comparUpdateBar(){
   const launchCount = document.getElementById('comparLaunchCount');
   const pickerCount = document.getElementById('comparPickerSelectedCount');
   const pickerCompare = document.getElementById('comparPickerCompare');
+  const workspaceCount = document.getElementById('comparWorkspaceSelectedCountV723');
+  const workspaceCompare = document.getElementById('comparWorkspaceCompareV723');
+  const navCount = document.getElementById('comparNavCountV723');
 
   if(bar) bar.style.display = n === 0 ? 'none' : 'flex';
   if(count) count.textContent = n;
@@ -10792,6 +10795,13 @@ function comparUpdateBar(){
   }
   if(pickerCount) pickerCount.textContent = n;
   if(pickerCompare) pickerCompare.disabled = n < 2;
+  if(workspaceCount) workspaceCount.textContent = n;
+  if(workspaceCompare) workspaceCompare.disabled = n < 2;
+  if(navCount){
+    navCount.textContent = n;
+    navCount.classList.toggle('has-selection', n > 0);
+    navCount.setAttribute('aria-label', n ? `${n} fundo${n===1?'':'s'} selecionado${n===1?'':'s'}` : 'Nenhum fundo selecionado');
+  }
 }
 
 function comparToggle(idx, row, checkbox){
@@ -10810,14 +10820,16 @@ function comparToggle(idx, row, checkbox){
   }
   comparUpdateBar();
   if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
+  if(!document.getElementById('comparWorkspaceV723')?.hidden) comparWorkspaceRenderV723();
 }
 
 function limparComparador(){
   comparSet.clear();
-  document.querySelectorAll('.comp-check,.compar-picker-check-v721').forEach(c=>c.checked=false);
+  document.querySelectorAll('.comp-check,.compar-picker-check-v721,.compar-workspace-check-v723').forEach(c=>c.checked=false);
   document.querySelectorAll('.row-selected-compar').forEach(tr=>tr.classList.remove('row-selected-compar'));
   comparUpdateBar();
   if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
+  if(!document.getElementById('comparWorkspaceV723')?.hidden) comparWorkspaceRenderV723();
 }
 
 function fecharComparador(){
@@ -10939,6 +10951,7 @@ function comparRemover(idx){
   comparSyncChecks(idx, false);
   comparUpdateBar();
   if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
+  if(!document.getElementById('comparWorkspaceV723')?.hidden) comparWorkspaceRenderV723();
   if(comparSet.size < 1){ fecharComparador(); return; }
   if(comparSet.size < 2){ fecharComparador(); return; }
   abrirComparador();
@@ -11094,6 +11107,166 @@ setTimeout(()=>{
     if(launch){ launch.dataset.v721Late='1'; comparUpdateBar(); }
   }
 },600);
+
+
+/* ════════════════════════════════════════════════════════
+   V723 — WORKSPACE DE COMPARAÇÃO (DESKTOP)
+   Menu dedicado + busca/categoria/risco + seleção sincronizada
+════════════════════════════════════════════════════════ */
+function comparWorkspacePopulateCategoriesV723(){
+  const sel=document.getElementById('comparWorkspaceCategoryV723');
+  if(!sel || sel.dataset.ready==='1') return;
+  const cats=[...new Set((Array.isArray(allRows)?allRows:[]).map(r=>String(r['Categoria']||'').trim()).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  cats.forEach(cat=>{
+    const o=document.createElement('option');
+    o.value=cat; o.textContent=cat; sel.appendChild(o);
+  });
+  sel.dataset.ready='1';
+}
+
+function comparWorkspaceRenderV723(){
+  const section=document.getElementById('comparWorkspaceV723');
+  const list=document.getElementById('comparWorkspaceListV723');
+  const selectedBox=document.getElementById('comparWorkspaceSelectedV723');
+  if(!section || !list || !selectedBox || section.hidden) return;
+
+  const rows=Array.isArray(allRows)?allRows:[];
+  const search=comparNormV721(document.getElementById('comparWorkspaceSearchV723')?.value);
+  const category=String(document.getElementById('comparWorkspaceCategoryV723')?.value||'');
+  const risk=String(document.getElementById('comparWorkspaceRiskV723')?.value||'');
+
+  let matches=rows.map((row,idx)=>({row,idx})).filter(({row})=>{
+    if(category && String(row['Categoria']||'')!==category) return false;
+    const rowRisk=String(row['Perfil de Risco']||row['Perfil']||'Sem classificação');
+    if(risk && rowRisk!==risk) return false;
+    if(!search) return true;
+    const hay=comparNormV721([row['Fundo'],row['CNPJ'],row['Benchmark'],row['Categoria'],rowRisk,row['Perfis']].filter(Boolean).join(' | '));
+    return hay.includes(search);
+  });
+
+  matches.sort((a,b)=>{
+    const sa=comparSet.has(a.idx)?0:1, sb=comparSet.has(b.idx)?0:1;
+    if(sa!==sb) return sa-sb;
+    return String(a.row['Fundo']||'').localeCompare(String(b.row['Fundo']||''),'pt-BR');
+  });
+
+  const total=matches.length;
+  const LIMITE=220;
+  const shown=matches.slice(0,LIMITE);
+  const result=document.getElementById('comparWorkspaceResultV723');
+  if(result) result.textContent=total>LIMITE ? `${total.toLocaleString('pt-BR')} encontrados · exibindo ${LIMITE}` : `${total.toLocaleString('pt-BR')} fundo${total===1?'':'s'} encontrado${total===1?'':'s'}`;
+
+  if(!shown.length){
+    list.innerHTML='<div class="compar-workspace-empty-v723">Nenhum fundo encontrado com os filtros selecionados.</div>';
+  }else{
+    list.innerHTML=shown.map(({row,idx})=>{
+      const checked=comparSet.has(idx);
+      const nomeFull=String(row['Fundo']||'Fundo sem nome');
+      const nome=typeof catalogShortFundNameV594==='function'?catalogShortFundNameV594(nomeFull):nomeFull;
+      const categoria=String(row['Categoria']||'—');
+      const benchmark=String(row['Benchmark']||'—');
+      const risco=String(row['Perfil de Risco']||row['Perfil']||'—');
+      const cnpj=String(row['CNPJ']||'').trim();
+      const rent=toNum(row['Acum. 12M (%)']);
+      const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+      const rentCls=rent===null?'':rent>0?'pos':rent<0?'neg':'';
+      return `<label class="compar-workspace-item-v723${checked?' is-selected':''}">
+        <input class="compar-workspace-check-v723" data-comp-idx="${idx}" type="checkbox" ${checked?'checked':''}/>
+        <span class="compar-workspace-check-ui-v723" aria-hidden="true"></span>
+        <span class="compar-workspace-item-main-v723">
+          <strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong>
+          <small>${htmlAttr(categoria)} · ${htmlAttr(benchmark)} · ${htmlAttr(risco)}${cnpj?` · ${htmlAttr(cnpj)}`:''}</small>
+        </span>
+        <span class="compar-workspace-return-v723 ${rentCls}"><small>12M</small><strong>${rentTxt}</strong></span>
+      </label>`;
+    }).join('');
+    list.querySelectorAll('.compar-workspace-check-v723').forEach(cb=>{
+      cb.addEventListener('change',()=>{
+        const idx=Number(cb.dataset.compIdx);
+        comparToggle(idx,allRows[idx],cb);
+      });
+    });
+  }
+
+  const selected=[...comparSet.entries()];
+  if(!selected.length){
+    selectedBox.innerHTML='<div class="compar-workspace-empty-selected-v723">Selecione fundos na lista ao lado para montar o comparativo.</div>';
+  }else{
+    selectedBox.innerHTML=selected.map(([idx,row],order)=>{
+      const nomeFull=String(row['Fundo']||'Fundo sem nome');
+      const nome=typeof catalogShortFundNameV594==='function'?catalogShortFundNameV594(nomeFull):nomeFull;
+      const cat=String(row['Categoria']||'—');
+      const risk=String(row['Perfil de Risco']||row['Perfil']||'—');
+      const rent=toNum(row['Acum. 12M (%)']);
+      const rentTxt=rent===null?'—':`${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+      return `<article class="compar-workspace-selected-card-v723">
+        <span class="compar-workspace-order-v723">${order+1}</span>
+        <div><strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong><small>${htmlAttr(cat)} · ${htmlAttr(risk)}</small></div>
+        <span class="compar-workspace-selected-return-v723">${rentTxt}</span>
+        <button aria-label="Remover ${htmlAttr(nome)}" data-remove-comp-v723="${idx}" type="button">✕</button>
+      </article>`;
+    }).join('');
+    selectedBox.querySelectorAll('[data-remove-comp-v723]').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const idx=Number(btn.dataset.removeCompV723);
+        comparSet.delete(idx); comparSyncChecks(idx,false); comparUpdateBar(); comparWorkspaceRenderV723();
+        if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
+      });
+    });
+  }
+  comparUpdateBar();
+}
+
+function abrirComparWorkspaceV723(options={}){
+  if(window.matchMedia && !window.matchMedia('(min-width:769px)').matches){
+    abrirSeletorComparadorV721(); return;
+  }
+  if(!Array.isArray(allRows)||!allRows.length){ comparToastV721('Os fundos ainda estão carregando'); return; }
+  const section=document.getElementById('comparWorkspaceV723');
+  if(!section) return;
+  section.hidden=false;
+  comparWorkspacePopulateCategoriesV723();
+  comparWorkspaceRenderV723();
+  document.querySelectorAll('.desktop-anchor-link-v131').forEach(a=>a.classList.toggle('active',a.dataset.comparWorkspace==='1'));
+  requestAnimationFrame(()=>{
+    section.scrollIntoView({behavior:options.instant?'auto':'smooth',block:'start'});
+    setTimeout(()=>document.getElementById('comparWorkspaceSearchV723')?.focus({preventScroll:true}),250);
+  });
+}
+
+function fecharComparWorkspaceV723(){
+  const section=document.getElementById('comparWorkspaceV723');
+  if(section) section.hidden=true;
+  document.querySelectorAll('.desktop-anchor-link-v131').forEach(a=>a.classList.remove('active'));
+  const fundosLink=document.querySelector('.desktop-anchor-link-v131[data-anchor-target="sec-fundos"]');
+  fundosLink?.classList.add('active');
+  document.getElementById('sec-fundos')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function initComparWorkspaceV723(){
+  const section=document.getElementById('comparWorkspaceV723');
+  if(!section) return;
+  if(section.dataset.v723Bound==='1'){ comparUpdateBar(); return; }
+  section.dataset.v723Bound='1';
+  document.querySelectorAll('[data-compar-workspace="1"]').forEach(link=>{
+    link.addEventListener('click',e=>{e.preventDefault();abrirComparWorkspaceV723();});
+  });
+  document.getElementById('comparWorkspaceCloseV723')?.addEventListener('click',fecharComparWorkspaceV723);
+  document.getElementById('comparWorkspaceBackV723')?.addEventListener('click',fecharComparWorkspaceV723);
+  document.getElementById('comparWorkspaceClearV723')?.addEventListener('click',limparComparador);
+  document.getElementById('comparWorkspaceCompareV723')?.addEventListener('click',()=>{
+    if(comparSet.size<2){comparToastV721('Selecione ao menos 2 fundos');return;}
+    abrirComparador();
+  });
+  document.getElementById('comparWorkspaceSearchV723')?.addEventListener('input',comparWorkspaceRenderV723);
+  document.getElementById('comparWorkspaceCategoryV723')?.addEventListener('change',comparWorkspaceRenderV723);
+  document.getElementById('comparWorkspaceRiskV723')?.addEventListener('change',comparWorkspaceRenderV723);
+  comparUpdateBar();
+}
+
+document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
+setTimeout(initComparWorkspaceV723,700);
 
 (function(){
   'use strict';

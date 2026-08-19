@@ -78,7 +78,7 @@ document.documentElement.classList.add(
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_CATALOGO_OFICIAL_V722" name="app-build"/>
+<meta content="ELTAUM_CATALOGO_OFICIAL_V723" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -95,8 +95,8 @@ document.documentElement.classList.add(
   html.desktop-funds-load-stable-v692.app-booting .page{opacity:1!important;transform:none!important;}
   @media (min-width:769px){
     html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos{opacity:1!important;visibility:visible!important;transform:none!important;transition:none!important;overflow-anchor:none!important;}
-    html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{min-height:450px!important;overflow-anchor:none!important;}
-    html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{box-sizing:border-box!important;min-height:448px!important;height:448px!important;margin:0!important;padding:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;}
+    html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{min-height:386px!important;overflow-anchor:none!important;}
+    html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{box-sizing:border-box!important;min-height:384px!important;height:384px!important;margin:0!important;padding:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;}
   }
   html.app-ready .page{opacity:1;transform:none;transition:opacity .22s ease,transform .22s ease;}
   #appBootScreen{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(200,151,58,.12),transparent 60%),#07080f;color:#edf1fb;transition:opacity .22s ease,visibility .22s ease;}
@@ -139,7 +139,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=comparador-ajustes-v722" rel="stylesheet"/>
+<link href="style.css?v=desktop-compar-workspace-v723" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -244,7 +244,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=comparador-ajustes-v722"></script>
+<script defer="" src="app.js?v=desktop-compar-workspace-v723"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -2799,6 +2799,7 @@ html.desktop-responsive-fit-v688 body{
 <span class="desktop-anchor-kicker-v131">Navegação</span>
 <a class="desktop-anchor-link-v131 active" data-anchor-target="sec-kpi" href="#sec-kpi"><span>📊</span><strong>Resumo</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-fundos" href="#sec-fundos"><span>📁</span><strong>Fundos</strong></a>
+<a class="desktop-anchor-link-v131 desktop-compar-nav-v723" data-anchor-target="comparWorkspaceV723" data-compar-workspace="1" href="#comparWorkspaceV723"><span>⚖️</span><strong>Comparar</strong><em aria-label="Nenhum fundo selecionado" id="comparNavCountV723">0</em></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="rankingsSection" href="#rankingsSection"><span>🏆</span><strong>Rankings</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-mercado" href="#sec-mercado"><span>📈</span><strong>Indicadores</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-dolar" href="#sec-dolar"><span>💵</span><strong>Dólar PTAX</strong></a>
@@ -3061,6 +3062,67 @@ html.desktop-responsive-fit-v688 body{
 <div class="page-btns" id="pageBtns"></div>
 </div>
 </div>
+
+<!-- ═════════════════════════════════════ V723 · WORKSPACE DE COMPARAÇÃO (DESKTOP) ══ -->
+<section aria-labelledby="comparWorkspaceTitleV723" class="compar-workspace-v723" hidden id="comparWorkspaceV723">
+  <div class="compar-workspace-shell-v723">
+    <div class="compar-workspace-head-v723">
+      <div>
+        <span class="compar-workspace-kicker-v723">ANÁLISE LADO A LADO</span>
+        <h2 id="comparWorkspaceTitleV723"><span aria-hidden="true">⚖️</span> Comparar fundos</h2>
+        <p>Pesquise e marque de 2 a 6 fundos. A seleção também permanece sincronizada com a tabela do catálogo.</p>
+      </div>
+      <button aria-label="Fechar área de comparação" class="compar-workspace-close-v723" id="comparWorkspaceCloseV723" type="button">✕</button>
+    </div>
+
+    <div class="compar-workspace-grid-v723">
+      <div class="compar-workspace-browser-v723">
+        <div class="compar-workspace-controls-v723">
+          <label class="compar-workspace-search-v723">
+            <span>Buscar fundo</span>
+            <input autocomplete="off" id="comparWorkspaceSearchV723" placeholder="Nome, CNPJ ou benchmark..." type="search"/>
+          </label>
+          <label>
+            <span>Categoria</span>
+            <select id="comparWorkspaceCategoryV723"><option value="">Todas</option></select>
+          </label>
+          <label>
+            <span>Perfil de risco</span>
+            <select id="comparWorkspaceRiskV723">
+              <option value="">Todos</option>
+              <option value="Conservador">Conservador</option>
+              <option value="Moderado">Moderado</option>
+              <option value="Arrojado">Arrojado</option>
+              <option value="Agressivo">Agressivo</option>
+              <option value="Sem classificação">Sem classificação</option>
+            </select>
+          </label>
+        </div>
+        <div class="compar-workspace-status-v723">
+          <span id="comparWorkspaceResultV723">Carregando fundos...</span>
+          <span>Selecionados <b id="comparWorkspaceSelectedCountV723">0</b>/6</span>
+        </div>
+        <div aria-live="polite" class="compar-workspace-list-v723" id="comparWorkspaceListV723"></div>
+      </div>
+
+      <aside class="compar-workspace-selected-v723">
+        <div class="compar-workspace-selected-head-v723">
+          <div><span>CARTEIRA DE COMPARAÇÃO</span><strong>Fundos selecionados</strong></div>
+          <button id="comparWorkspaceClearV723" type="button">Limpar</button>
+        </div>
+        <div class="compar-workspace-selected-list-v723" id="comparWorkspaceSelectedV723">
+          <div class="compar-workspace-empty-selected-v723">Selecione fundos na lista ao lado para montar o comparativo.</div>
+        </div>
+        <div class="compar-workspace-actions-v723">
+          <button class="compar-workspace-back-v723" id="comparWorkspaceBackV723" type="button">← Voltar aos fundos</button>
+          <button class="compar-workspace-compare-v723" disabled id="comparWorkspaceCompareV723" type="button">⚖ Ver comparativo lado a lado</button>
+        </div>
+        <p class="compar-workspace-note-v723">A estrutura desta área já fica preparada para uma etapa posterior de impressão e geração de PDF do comparativo.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
 <div class="section-gap section-expanded" id="rankingsSection" aria-expanded="true">
 <div class="ranking-head">

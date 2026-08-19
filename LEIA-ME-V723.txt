@@ -1,0 +1,26 @@
+V723 — Desktop · Catálogo estável + Workspace de comparação
+
+Arquivos:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css (inalterado)
+
+Alterações principais
+1. Catálogo abre com 05 fundos por página.
+2. Reserva inicial da tabela ajustada de 450px para 386px, aproximando o primeiro frame da altura real das 5 linhas e eliminando o efeito de "folga que encolhe". Não foi adicionado atraso artificial.
+3. Novo item "⚖️ Comparar" na navegação desktop.
+4. Novo workspace desktop de comparação, aberto sob demanda entre Fundos e Rankings.
+5. Workspace permite buscar por nome/CNPJ/benchmark, filtrar categoria e perfil de risco e selecionar até 6 fundos.
+6. Seleção sincronizada com checkboxes da tabela e com o seletor rápido v721.
+7. Botão "Ver comparativo lado a lado" reutiliza o comparador existente.
+8. Comparador final mantém cabeçalho sticky da V722.
+9. Arquitetura visual deixa espaço para etapa posterior de impressão/PDF, sem criar geração de PDF nesta versão.
+10. Alterações novas são desktop-only; mobile permanece preservado.
+
+Validações recomendadas após publicar
+- Recarregar com Ctrl+F5 e observar se a tabela não muda perceptivelmente de altura.
+- Abrir "Comparar" pelo menu lateral.
+- Selecionar 2 a 6 fundos, filtrar e remover itens.
+- Conferir sincronização dos checkboxes ao voltar para Fundos.
+- Abrir o comparativo final e testar a rolagem com cabeçalho fixo.
