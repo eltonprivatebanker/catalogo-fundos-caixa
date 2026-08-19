@@ -78,7 +78,7 @@ document.documentElement.classList.add(
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_CATALOGO_OFICIAL_V726" name="app-build"/>
+<meta content="ELTAUM_CATALOGO_OFICIAL_V727" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -139,7 +139,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=ranking-desktop-sanitized-v726" rel="stylesheet"/>
+<link href="style.css?v=ranking-alerts-toggle-fix-v727" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -244,7 +244,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=ranking-desktop-sanitized-v726"></script>
+<script defer="" src="app.js?v=ranking-alerts-toggle-fix-v727"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -4320,6 +4320,7 @@ html.desktop-responsive-fit-v688 body{
   </div>
   <div aria-live="polite" class="compar-quick-add-results-v724" id="comparQuickAddResultsV724"></div>
 </div>
+<div class="compar-insights-v728" hidden id="comparInsightsV728"></div>
 <div class="compar-scroll">
 <table class="compar-table" id="comparTable"></table>
 </div>

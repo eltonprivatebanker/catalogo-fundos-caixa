@@ -1,0 +1,19 @@
+V727 — correção do botão Ver alertas (desktop)
+
+Problema identificado
+- O <details class="attention-details-v536"> mudava para open normalmente ao clicar em "Ver alertas".
+- Porém o CSS da v539 (seção compacta / Ver mais) tinha uma regra posterior com display:none!important para o corpo dos alertas quando #rankingsSection não estava .section-expanded.
+- Resultado: o controle abria semanticamente, mas o conteúdo continuava invisível.
+
+Correção
+- O botão "Ver alertas" passa a ser independente do estado geral "Ver mais" da seção Rankings.
+- Se o <details> estiver [open], .attention-details-body-v536 é exibido mesmo com #rankingsSection recolhido.
+- Mantido grid de 2 colunas no desktop e 1 coluna até 1120px.
+- Nenhuma alteração funcional no app.js.
+- Mobile não foi alterado.
+
+Arquivos
+- index.html: build/cache bust V727.
+- style.css: patch terminal V727.
+- app.js: mesmo conteúdo funcional da V726.
+- tokens-caixa.css: sem alteração.

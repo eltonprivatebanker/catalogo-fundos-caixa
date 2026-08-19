@@ -85929,3 +85929,86 @@ html.desktop-responsive-fit-v688 body{
   html.desktop-compar-search-codes-v725 .compar-workspace-item-v723{min-height:60px;}
   html.desktop-compar-search-codes-v725 .compar-workspace-item-main-v723{gap:4px;}
 }
+
+
+/* =========================================================
+   PATCH v727 — Desktop: "Ver alertas" independente do "Ver mais"
+   Causa corrigida:
+   a v539 ocultava o corpo dos alertas sempre que #rankingsSection
+   estava recolhido, mesmo quando o <details> estava [open].
+   O próprio botão "Ver alertas" agora controla sua expansão.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded)
+  #rankingAttentionV136 .attention-details-v536[open] + .attention-details-body-v536{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(320px,1fr))!important;
+    gap:12px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded)
+  #rankingAttentionV136 .attention-details-v536[open] + .attention-details-body-v536{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* ============================================================
+   V728 — comparador com leitura rápida de destaque objetivo
+============================================================ */
+.compar-insights-v728{
+  padding:10px 18px 12px;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  background:linear-gradient(180deg,rgba(8,13,25,.95),rgba(7,10,20,.88));
+}
+.compar-legend-v728,
+.compar-summary-v728{
+  display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;
+}
+.compar-summary-v728{margin-top:8px}
+.compar-legend-v728 span,
+.compar-summary-v728 span{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:5px 9px;border-radius:999px;border:1px solid rgba(148,163,184,.14);
+  background:rgba(255,255,255,.03);color:var(--muted2);font-size:.60rem;line-height:1.1;font-weight:700;
+}
+.compar-legend-v728 span.best{
+  color:#ffe2a8;border-color:rgba(199,155,109,.35);background:rgba(176,132,84,.12);
+}
+.compar-summary-v728 span strong{color:var(--text)}
+.ct-awards-v728{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.ct-award-chip-v728{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 6px;border-radius:999px;
+  border:1px solid rgba(199,155,109,.24);background:rgba(176,132,84,.12);
+  color:#f2d6b2;font-size:.54rem;font-weight:800;line-height:1.1;
+}
+.ct-award-chip-v728.total{
+  border-color:rgba(46,209,122,.24);background:rgba(46,209,122,.10);color:#b5f1cf;
+}
+.ct-campo-hint-v728{
+  display:block;margin-top:3px;color:#b58a55;font-size:.54rem;font-weight:700;letter-spacing:.02em;text-transform:none;
+}
+.ct-cell-flag-v728{
+  display:inline-flex;align-items:center;gap:4px;
+  margin-right:8px;padding:1px 7px;border-radius:999px;
+  font-size:.55rem;font-weight:800;line-height:1.2;vertical-align:middle;
+}
+.ct-cell-flag-v728.best{
+  background:rgba(46,209,122,.14);border:1px solid rgba(46,209,122,.28);color:#b9f3cf;
+}
+.ct-cell-flag-v728.worst{
+  background:rgba(240,85,101,.10);border:1px solid rgba(240,85,101,.18);color:#f4aab3;
+}
+.ct-cell-text-v728{vertical-align:middle}
+#comparTable td.ct-val.ct-has-best-v728{box-shadow:inset 0 0 0 1px rgba(46,209,122,.18)}
+#comparTable td.ct-val.ct-best{background:linear-gradient(90deg,rgba(46,209,122,.13),rgba(46,209,122,.05))!important}
+#comparTable td.ct-val.ct-worst{background:linear-gradient(90deg,rgba(240,85,101,.08),rgba(240,85,101,.03))!important}
+@media (max-width: 980px){
+  .compar-insights-v728{padding:9px 14px 10px}
+  .compar-legend-v728 span,
+  .compar-summary-v728 span{font-size:.56rem}
+}

@@ -1,0 +1,23 @@
+V728 — COMPARADOR COM LEITURA RÁPIDA
+
+Ajustes principais:
+- Comparador passa a destacar visualmente os melhores valores por linha com selo "🏆 melhor".
+- Lógica de comparação objetiva:
+  - maior é melhor em rentabilidade, % CDI e PL;
+  - menor é melhor em Taxa de Administração, Conversão, Pagamento e Aplicação Mínima.
+- Cabeçalho de cada fundo recebe chips de destaque, como:
+  - Maior 12M
+  - Menor taxa
+  - Maior % CDI
+  - Menor aplicação
+  - quantidade total de destaques objetivos.
+- Barra explicativa acima da tabela para leitura rápida do gerente.
+- Resumo superior com vencedores em Maior 12M, Menor taxa e Maior % CDI.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+Observação:
+- tokens-caixa.css mantido sem alteração funcional.
