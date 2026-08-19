@@ -1,0 +1,9 @@
+V731 — Navegação e comparador executivo
+
+1. Menu desktop: Resumo foi renomeado para Início, com aria-label/tooltip Voltar ao topo.
+2. Comparador: leitura rápida em três cards compactos.
+3. Cabeçalho dos fundos sem medalhas/chips de destaque.
+4. Tabela reduzida: Categoria foi para o cabeçalho; CNPJ + código foram unidos; Variação diária saiu da comparação principal.
+5. Destaque do melhor valor usa bronze neutro, preservando verde/vermelho somente para o sinal dos retornos.
+6. PL deixa de ser tratado como “melhor”; permanece apenas como dado de escala.
+7. Separadores discretos organizam custos/acesso, desempenho e resgate.

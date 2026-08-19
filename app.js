@@ -11045,16 +11045,16 @@ function abrirComparador(){
   };
 
   const campos = [
-    { label:'Perfil',       key: r => r['Perfil de Risco']||r['Perfil']||'—',  tipo:'txt' },
-    { label:'Categoria',    key: r => r['Categoria']||'—',                      tipo:'txt' },
-    { label:'CNPJ',         key: r => r['CNPJ']||'—',                           tipo:'txt' },
-    { label:'Código',       key: r => { const c=comparCodeInfoV725(r); return c.value ? `${c.label} ${c.value}` : '—'; }, tipo:'txt' },
-    { label:'Taxa Adm',     key: r => r['Taxa Adm (%)'] ? r['Taxa Adm (%)']+' %' : '—', tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', hint:'↓ menor' },
-    { label:'Var. Dia',     key: r => fmt(r['Variacao Dia (%)']),    tipo:'pct', val: r => pctNum(r['Variacao Dia (%)']), better:'max' },
-    { label:'Acum. Mês',    key: r => fmt(r['Acum. Mes (%)']),       tipo:'pct', val: r => pctNum(r['Acum. Mes (%)']), better:'max' },
-    { label:'Acum. Ano',    key: r => fmt(r['Acum. Ano (%)']),       tipo:'pct', val: r => pctNum(r['Acum. Ano (%)']), better:'max' },
-    { label:'Acum. 12M',    key: r => fmt(r['Acum. 12M (%)']),       tipo:'pct dest compare', val: r => pctNum(r['Acum. 12M (%)']), better:'max' },
-    { label:'% CDI 12M',    key: r => {
+    { label:'Perfil',          key: r => r['Perfil de Risco']||r['Perfil']||'—', tipo:'txt' },
+    { label:'Identificação',   key: r => { const c=comparCodeInfoV725(r); const cnpj=r['CNPJ']||'—'; return c.value ? `${cnpj}<span class="ct-id-sep-v731">·</span><span class="ct-code-inline-v731">${c.label} ${c.value}</span>` : cnpj; }, tipo:'txt' },
+
+    { label:'Taxa adm. ↓',     key: r => r['Taxa Adm (%)'] ? String(r['Taxa Adm (%)']).replace('.',',')+' %' : '—', tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', sectionStart:true },
+    { label:'Aplic. mínima ↓', key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min' },
+
+    { label:'Mês',             key: r => fmt(r['Acum. Mes (%)']), tipo:'pct', val: r => pctNum(r['Acum. Mes (%)']), better:'max', sectionStart:true, perfKey:'Acum. Mes (%)' },
+    { label:'Ano',             key: r => fmt(r['Acum. Ano (%)']), tipo:'pct', val: r => pctNum(r['Acum. Ano (%)']), better:'max', perfKey:'Acum. Ano (%)' },
+    { label:'12 meses',        key: r => fmt(r['Acum. 12M (%)']), tipo:'pct dest compare', val: r => pctNum(r['Acum. 12M (%)']), better:'max', perfKey:'Acum. 12M (%)' },
+    { label:'% CDI 12M',       key: r => {
         const rent = pctNum(r['Acum. 12M (%)']);
         const cdi  = indicState?.cdi?.m12;
         if(isNaN(rent)||!cdi) return '—';
@@ -11063,53 +11063,14 @@ function abrirComparador(){
         const rent = pctNum(r['Acum. 12M (%)']);
         const cdi  = indicState?.cdi?.m12;
         return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
-      }, better:'max'
-    },
-    { label:'PL',           key: r => fmtPL(r['PL (milhoes R$)']),  tipo:'txt', val: r => pctNum(r['PL (milhoes R$)']), better:'max' },
-    { label:'Conversão',    key: r => r['Conversao Resgate']||'—',   tipo:'txt compare', val: r => parsePrazo(r['Conversao Resgate']), better:'min', hint:'↓ menor' },
-    { label:'Pagamento',    key: r => r['Pagamento Resgate']||'—',   tipo:'txt compare', val: r => parsePrazo(r['Pagamento Resgate']), better:'min', hint:'↓ menor' },
-    { label:'Aplic. Mín.',  key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min', hint:'↓ menor' },
+      }, better:'max' },
+    { label:'PL',              key: r => fmtPL(r['PL (milhoes R$)']), tipo:'txt' },
+
+    { label:'Conversão ↓',     key: r => r['Conversao Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Conversao Resgate']), better:'min', sectionStart:true },
+    { label:'Pagamento ↓',     key: r => r['Pagamento Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Pagamento Resgate']), better:'min' },
   ];
 
   const catAbrev = {'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'RF','RENDA FIXA REFERENCIADO':'RF Ref.','RENDA FIXA CURTO PRAZO':'RF CP','MULTIMERCADO':'MM','CAMBIAL':'CAM','ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'};
-
-  const winsByFund = Array(fundos.length).fill(0);
-  campos.forEach(campo=>{
-    if(typeof campo.val !== 'function' || !campo.better) return;
-    const vals = fundos.map(r=>campo.val(r));
-    const valid = vals.filter(v=>!isNaN(v));
-    if(!valid.length) return;
-    const best = campo.better==='min' ? Math.min(...valid) : Math.max(...valid);
-    const winners = vals.map((v,i)=>(!isNaN(v) && v===best)?i:-1).filter(i=>i>=0);
-    if(winners.length===1) winsByFund[winners[0]] += 1;
-  });
-
-  const awardBadges = fundos.map(()=>[]);
-  const addAward = (label, icon, getter, better='max', titlePrefix='Destaque') => {
-    const vals = fundos.map(getter);
-    const valid = vals.filter(v=>!isNaN(v));
-    if(!valid.length) return;
-    const best = better==='min' ? Math.min(...valid) : Math.max(...valid);
-    const winners = vals.map((v,i)=>(!isNaN(v) && v===best)?i:-1).filter(i=>i>=0);
-    if(winners.length!==1) return;
-    const i = winners[0];
-    awardBadges[i].push({icon,label,title:`${titlePrefix}: ${label}`});
-  };
-  addAward('Maior 12M','🏆', r=>pctNum(r['Acum. 12M (%)']), 'max', 'Melhor retorno em 12 meses');
-  addAward('Menor taxa','🥇', r=>pctNum(r['Taxa Adm (%)']), 'min', 'Menor taxa de administração');
-  addAward('Maior % CDI','⭐', r=>{
-    const rent = pctNum(r['Acum. 12M (%)']);
-    const cdi  = indicState?.cdi?.m12;
-    return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
-  }, 'max', 'Melhor percentual do CDI em 12 meses');
-  addAward('Menor aplicação','🎯', r=>num(r['Aplicacao Minima (R$)']), 'min', 'Menor aplicação mínima');
-
-  const awardShortLabel = label => ({
-    'Maior 12M':'12M',
-    'Menor taxa':'Taxa',
-    'Maior % CDI':'% CDI',
-    'Menor aplicação':'Aplic. mín.'
-  }[label] || label);
 
   let thead = '<thead><tr><th class="ct-campo">Campo</th>';
   fundos.forEach((r,i)=>{
@@ -11117,17 +11078,10 @@ function abrirComparador(){
     const catCls = (CAT_CLS?.[cat])||'RF';
     const catLabel = catAbrev[cat]||cat.slice(0,10);
     const nome = (r['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim();
-    const awardList = awardBadges[i].map(a=>awardShortLabel(a.label));
-    const awardMeta = winsByFund[i] > 0 ? `
-        <div class="ct-awards-line-v729">
-          <span class="ct-awards-count-v729" title="${winsByFund[i]} destaque(s) objetivos no comparativo">🏅 ${winsByFund[i]} destaque${winsByFund[i]===1?'':'s'}</span>
-          ${awardList.length ? `<span class="ct-awards-list-v729" title="${htmlAttr(awardBadges[i].map(a=>a.label).join(', '))}">${htmlAttr(awardList.join(' · '))}</span>` : ''}
-        </div>` : '';
     thead += `<th class="ct-fundo">
       <span class="ct-fundo-nome" title="${htmlAttr(nome)}">${htmlAttr(nome)}</span>
-      <div class="ct-fundo-meta-v729">
+      <div class="ct-fundo-meta-v731">
         <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${htmlAttr(catLabel)}</span>
-        ${awardMeta}
         <button class="ct-remove" onclick="comparRemover(${chaves[i]})" title="Remover da comparação">Remover</button>
       </div>
     </th>`;
@@ -11139,25 +11093,18 @@ function abrirComparador(){
     const vals = fundos.map(r=>campo.val ? campo.val(r) : NaN);
     const validos = vals.filter(v=>!isNaN(v));
     const best = validos.length && campo.better ? (campo.better==='min' ? Math.min(...validos) : Math.max(...validos)) : NaN;
-    const worst = validos.length && campo.better ? (campo.better==='min' ? Math.max(...validos) : Math.min(...validos)) : NaN;
     const bestCount = validos.length && campo.better ? vals.filter(v=>!isNaN(v) && v===best).length : 0;
-    const worstCount = validos.length && campo.better ? vals.filter(v=>!isNaN(v) && v===worst).length : 0;
+    const rowClass = campo.sectionStart ? ' class="ct-section-start-v731"' : '';
 
-    tbody += `<tr><td class="ct-campo">${campo.label}${campo.hint?`<small class="ct-campo-hint-v728">${campo.hint}</small>`:''}</td>`;
+    tbody += `<tr${rowClass}><td class="ct-campo">${campo.label}</td>`;
     fundos.forEach((r,i)=>{
       const txt  = campo.key(r);
       const vn   = vals[i];
-      const isBest   = !isNaN(vn) && vn===best && bestCount===1;
-      const isWorst  = !isNaN(vn) && vn===worst && worstCount===1 && best!==worst;
-      let valCls = campo.tipo.includes('pct') ? cls(r[
-        campo.label==='Var. Dia'?'Variacao Dia (%)':
-        campo.label==='Acum. Mês'?'Acum. Mes (%)':
-        campo.label==='Acum. Ano'?'Acum. Ano (%)':'Acum. 12M (%)'
-      ]) : (campo.tipo==='cdi'?(vn>=100?'pos':vn>=80?'':vn>0?'neg':''):'');
+      const isBest = !isNaN(vn) && vn===best && bestCount===1;
+      let valCls = campo.tipo.includes('pct') ? cls(r[campo.perfKey||'Acum. 12M (%)']) : (campo.tipo==='cdi'?(vn>=100?'pos':vn>=80?'':vn>0?'neg':''):'');
       const destCls = campo.tipo.includes('dest') ? ' dest' : '';
-      const bgCls = isBest ? ' ct-best' : isWorst ? ' ct-worst' : '';
-      const badge = isBest ? `<span class="ct-cell-flag-v728 best" title="Melhor valor desta linha${campo.better==='min'?' (menor é melhor)':' (maior é melhor)'}">Melhor</span>` : '';
-      tbody += `<td class="ct-val${destCls}${bgCls} ${valCls}${isBest?' ct-has-best-v728':''}">${badge}<span class="ct-cell-text-v728">${txt}</span></td>`;
+      const bestCls = isBest ? ' ct-best-v731' : '';
+      tbody += `<td class="ct-val${destCls}${bestCls} ${valCls}"${isBest?' title="Melhor valor relativo entre os fundos selecionados"':''}><span class="ct-cell-text-v728">${txt}</span>${isBest?'<span class="ct-best-mark-v731" aria-label="Melhor valor relativo">•</span>':''}</td>`;
     });
     tbody += '</tr>';
   });
@@ -11175,10 +11122,10 @@ function abrirComparador(){
       return winners.length===1 ? winners[0] : -1;
     };
     const shortName = idx => idx>=0 ? htmlAttr((fundos[idx]['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim()) : '—';
-    const fmtPctPlain = v => {
+    const fmtPctPlain = (v, sign=true) => {
       const n = pctNum(v);
       if(isNaN(n)) return '—';
-      return (n>0?'+':'') + n.toFixed(2).replace('.',',') + '%';
+      return (sign && n>0?'+':'') + n.toFixed(2).replace('.',',') + '%';
     };
     const idx12 = winnerIndex(r=>pctNum(r['Acum. 12M (%)']), 'max');
     const idxFee = winnerIndex(r=>pctNum(r['Taxa Adm (%)']), 'min');
@@ -11187,26 +11134,26 @@ function abrirComparador(){
       const cdi = indicState?.cdi?.m12;
       return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
     }, 'max');
-    const idxLiq = winnerIndex(r=>parsePrazo(r['Conversao Resgate']), 'min');
 
     const cards = [];
-    if(idx12>=0) cards.push(`<article class="compar-kpi-v729"><span>Maior 12M</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small>${shortName(idx12)}</small><em>Rentabilidade acumulada em 12 meses</em></article>`);
-    if(idxFee>=0) cards.push(`<article class="compar-kpi-v729"><span>Menor taxa</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'])}</strong><small>${shortName(idxFee)}</small><em>Menor taxa de administração</em></article>`);
-    if(idxCdi>=0) {
+    if(idx12>=0){
+      const rent = pctNum(fundos[idx12]['Acum. 12M (%)']);
+      const cdi = indicState?.cdi?.m12;
+      const ratio = (isNaN(rent)||!cdi) ? '' : `${Math.round((rent/cdi)*100)}% do CDI`;
+      cards.push(`<article class="compar-kpi-v731"><span>Retorno 12M</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small title="${shortName(idx12)}">${shortName(idx12)}</small>${ratio?`<em>${ratio}</em>`:''}</article>`);
+    }
+    if(idxFee>=0) cards.push(`<article class="compar-kpi-v731"><span>Menor taxa</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'], false)}</strong><small title="${shortName(idxFee)}">${shortName(idxFee)}</small><em>Taxa de administração</em></article>`);
+    if(idxCdi>=0){
       const rent = pctNum(fundos[idxCdi]['Acum. 12M (%)']);
       const cdi = indicState?.cdi?.m12;
       const ratio = (isNaN(rent)||!cdi) ? '—' : Math.round((rent/cdi)*100) + '%';
-      cards.push(`<article class="compar-kpi-v729"><span>Maior % CDI</span><strong>${ratio}</strong><small>${shortName(idxCdi)}</small><em>Eficiência relativa ao CDI em 12 meses</em></article>`);
+      cards.push(`<article class="compar-kpi-v731"><span>% CDI 12M</span><strong>${ratio}</strong><small title="${shortName(idxCdi)}">${shortName(idxCdi)}</small><em>Maior relação no recorte</em></article>`);
     }
-    if(idxLiq>=0) cards.push(`<article class="compar-kpi-v729"><span>Liquidez mais curta</span><strong>${htmlAttr(fundos[idxLiq]['Conversao Resgate']||'—')}</strong><small>${shortName(idxLiq)}</small><em>Menor prazo de conversão</em></article>`);
 
     insightsBox.innerHTML = `
-      <div class="compar-insights-wrap-v729">
-        <div class="compar-insights-head-v729">
-          <strong>Leitura rápida</strong>
-          <small>Os destaques abaixo são automáticos e comparativos por campo. Em rentabilidade, % CDI e PL, maior tende a ser melhor. Em taxa, conversão, pagamento e aplicação mínima, menor tende a ser melhor.</small>
-        </div>
-        <div class="compar-kpi-grid-v729">${cards.join('')}</div>
+      <div class="compar-insights-v731">
+        <div class="compar-insights-title-v731"><strong>Leitura rápida</strong><span title="Destaques relativos entre os fundos selecionados. Rentabilidade e % CDI: maior valor. Taxa, aplicação e prazos: menor valor.">ⓘ</span></div>
+        <div class="compar-kpi-grid-v731">${cards.join('')}</div>
       </div>`;
     insightsBox.hidden = false;
   }
