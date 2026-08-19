@@ -2456,6 +2456,24 @@ function formatarAtualizacaoHeader(valor){
   };
 }
 
+function syncDesktopNavUpdateV730(data,opcoes={}){
+  const box=document.getElementById('desktopNavUpdateBoxV730');
+  const main=document.getElementById('desktopNavUpdateV730');
+  const sub=document.getElementById('desktopNavUpdateSubV730');
+  if(!box || !main || !sub) return;
+
+  if(opcoes.cache){
+    box.dataset.state='cache';
+    main.textContent='Dados em cache';
+    sub.textContent='Última sincronização indisponível';
+    return;
+  }
+
+  box.dataset.state='ok';
+  main.textContent=data.compacto || 'Atualizado';
+  sub.textContent='Última sincronização concluída';
+}
+
 function atualizarDataHeader(valor,opcoes={}){
   const elemento=document.getElementById('lastUpdate');
   if(!elemento) return;
@@ -2469,24 +2487,29 @@ function atualizarDataHeader(valor,opcoes={}){
     texto.className='live-update-label';
     texto.textContent='Dados em cache';
     elemento.replaceChildren(dot,texto);
+    elemento.dataset.state='cache';
     elemento.title='Os dados mais recentes não puderam ser carregados.';
     elemento.setAttribute('aria-label','Dados em cache');
+    syncDesktopNavUpdateV730({},opcoes);
     return;
   }
 
   const data=formatarAtualizacaoHeader(valor);
   const label=document.createElement('span');
   label.className='live-update-label';
-  label.textContent='Atualizado ·';
+  label.textContent='Dados atualizados em';
 
   const time=document.createElement('time');
   time.className='live-update-time';
   if(data.datetime) time.dateTime=data.datetime;
-  time.textContent=data.compacto || String(valor || '');
+  time.dataset.short=data.compacto || String(valor || '');
+  time.textContent=data.completo || String(valor || '');
 
   elemento.replaceChildren(dot,label,time);
-  elemento.title=`Dados atualizados em ${data.completo || valor}`;
-  elemento.setAttribute('aria-label',`Dados atualizados em ${data.completo || valor}`);
+  elemento.dataset.state='ok';
+  elemento.title=`Última sincronização concluída em ${data.completo || valor}`;
+  elemento.setAttribute('aria-label',`Dados atualizados em ${data.completo || valor}. Última sincronização concluída.`);
+  syncDesktopNavUpdateV730(data,opcoes);
 }
 
 /* ════════════════════════════════════════════════════
@@ -10844,6 +10867,7 @@ function comparUpdateBar(){
   if(modalCountV724) modalCountV724.textContent = n;
   if(navCount){
     navCount.textContent = n;
+    navCount.hidden = n === 0;
     navCount.classList.toggle('has-selection', n > 0);
     navCount.setAttribute('aria-label', n ? `${n} fundo${n===1?'':'s'} selecionado${n===1?'':'s'}` : 'Nenhum fundo selecionado');
   }
@@ -23593,8 +23617,10 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function currentDateText(){
     const time = document.querySelector('#lastUpdate .live-update-time, #lastUpdate time');
+    const short = time?.dataset?.short || '';
+    if(short) return short;
     const raw = (time?.textContent || document.getElementById('lastUpdate')?.textContent || '').replace(/\s+/g,' ').trim();
-    return raw.replace(/^Atualizado\s*·\s*/i,'') || '';
+    return raw.replace(/^Atualizado\s*·\s*/i,'').replace(/^Dados atualizados em\s*/i,'') || '';
   }
 
   function removeDesktopInlineDateV483(){

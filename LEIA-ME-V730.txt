@@ -1,0 +1,8 @@
+V730 — Navegação semântica e status explícito de atualização
+
+- Menu desktop reorganizado em Visão geral / Fundos / Mercado / Apoio.
+- Fundos renomeado para Catálogo; Comparar para Comparador.
+- Contador do comparador fica oculto quando zero.
+- Buscar fundo passa a ser identificado como ação rápida.
+- Status da última atualização fica explícito no cabeçalho e persistente na barra lateral.
+- Cache-busting de app.js e style.css atualizado para v730, garantindo que o navegador carregue o comparador refinado da V729.
