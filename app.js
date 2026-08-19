@@ -25980,6 +25980,13 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
   function applyMarketFix(){
     if (!isDesktop() || !hasPatch()) return;
+
+    /* V743 — o controlador terminal V740/V742 governa Juros/CDI.
+       Este patch legado escrevia grid 300px + 1fr em STYLE INLINE !important,
+       portanto vencia qualquer CSS posterior. No desktop terminal, não toca
+       mais na geometria do bloco de juros. */
+    if (window.__ELTAUM_DESKTOP_RATES_TERMINAL_V740__) return;
+
     document.documentElement.classList.add('desktop-market-hierarchy-v520');
     const root = document.getElementById('sec-mercado');
     if (!root) return;
@@ -26180,6 +26187,30 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(!isDesktop()||!hasPatch()) return;
     document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
     const root=document.getElementById('sec-mercado');
+
+    /* V743 — preserva apenas as tarefas neutras deste patch antigo.
+       A antiga rotina abaixo também escrevia, inline + !important:
+       - rates: 260px + 1fr
+       - summary: 1 coluna
+       - detail: flex
+       e por isso anulava a geometria da V742. */
+    if(window.__ELTAUM_DESKTOP_RATES_TERMINAL_V740__){
+      if(root){
+        set(root,'width','100%');
+        set(root,'max-width','none');
+        set(root,'margin-left','0');
+        set(root,'margin-right','0');
+        set(root,'padding-left','0');
+        set(root,'padding-right','0');
+        root.querySelectorAll('#cdiAnalyticLinkV274,.cdi-analytic-link-v274').forEach(el=>{
+          set(el,'display','none');
+          set(el,'visibility','hidden');
+          set(el,'pointer-events','none');
+        });
+      }
+      return;
+    }
+
     if(root){
       set(root,'width','100%');set(root,'max-width','none');set(root,'margin-left','0');set(root,'margin-right','0');set(root,'padding-left','0');set(root,'padding-right','0');
       root.querySelectorAll('#cdiAnalyticLinkV274,.cdi-analytic-link-v274').forEach(el=>{set(el,'display','none');set(el,'visibility','hidden');set(el,'pointer-events','none');});
@@ -32414,5 +32445,83 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   }
   window.addEventListener('load', update, {once:true});
   window.addEventListener('pageshow', update, {passive:true});
+})();
+
+
+
+/* ============================================================
+   V743 — limpeza única de inline legacy no bloco Juros
+   ------------------------------------------------------------
+   Necessária porque style="" com !important tem precedência sobre
+   qualquer seletor do style.css.
+============================================================ */
+(function desktopRatesInlineCleanupV743(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  const clear = (el, props) => {
+    if(!el?.style) return;
+    props.forEach(p => el.style.removeProperty(p));
+  };
+
+  function apply(){
+    if(!isDesktop()) return;
+
+    const root = document.querySelector('#sec-mercado .rates-reference-v167, #sec-mercado .rates-executive-v255');
+    if(!root) return;
+
+    clear(root, [
+      'display','grid-template-columns','grid-template-areas','grid-template-rows',
+      'gap','align-items','overflow','min-height','height','padding'
+    ]);
+
+    const head = root.querySelector(':scope > .market-reference-head-v167');
+    clear(head, ['grid-area','margin','padding','width','min-width']);
+
+    const summary = root.querySelector(':scope > .rates-summary-v167');
+    clear(summary, [
+      'grid-area','display','grid-template-columns','grid-template-rows',
+      'gap','align-self','width','min-width','margin','padding'
+    ]);
+
+    const detail = root.querySelector(':scope > .rates-detail-grid-v167');
+    clear(detail, [
+      'grid-area','display','flex-direction','grid-template-columns',
+      'grid-template-rows','grid-template-areas','gap','width','min-width',
+      'margin','padding','overflow','isolation','align-items'
+    ]);
+
+    const copom = detail?.querySelector(':scope > .copom-compact-v167');
+    clear(copom, [
+      'grid-area','grid-column','grid-row','justify-self','align-self',
+      'width','min-width','max-width','height','min-height','max-height',
+      'margin','position','overflow','z-index','padding','border-radius'
+    ]);
+
+    const cdi = detail?.querySelector(':scope > #cdiYearHistory, :scope > .cdi-year-history');
+    clear(cdi, [
+      'grid-area','grid-column','grid-row','justify-self','align-self',
+      'width','min-width','max-width','height','min-height','max-height',
+      'margin','position','overflow','z-index','padding','border-radius',
+      'display','visibility'
+    ]);
+
+    const cdiKpis = cdi?.querySelector('.cdi-kpis-v271');
+    clear(cdiKpis, ['display','grid-template-columns','gap','width','margin']);
+
+    document.documentElement.classList.add('desktop-rates-inline-sanitized-v743');
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_INLINE_SANITIZED_V743';
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('pageshow', apply, {passive:true});
 })();
 

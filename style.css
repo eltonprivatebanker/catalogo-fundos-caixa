@@ -88146,3 +88146,49 @@ html.desktop-responsive-fit-v688 body{
     grid-row:3!important;
   }
 }
+
+
+/* ============================================================
+   V743 — geometria final de Juros após remoção dos inline legacy
+============================================================ */
+@media (min-width:769px){
+  html.desktop-rates-inline-sanitized-v743 body #sec-mercado
+  .rates-reference-v167{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"head" "summary" "context"!important;
+    grid-template-rows:auto auto auto!important;
+    gap:9px!important;
+    width:100%!important;
+  }
+
+  html.desktop-rates-inline-sanitized-v743 body #sec-mercado
+  .rates-reference-v167 > .rates-summary-v167{
+    grid-area:summary!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:13px 68px!important;
+    gap:5px 10px!important;
+    width:100%!important;
+  }
+
+  html.desktop-rates-inline-sanitized-v743 body #sec-mercado
+  .rates-reference-v167 > .rates-detail-grid-v167{
+    grid-area:context!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    gap:9px!important;
+    width:100%!important;
+  }
+
+  html.desktop-rates-inline-sanitized-v743 body #sec-mercado
+  .rates-detail-grid-v167 > .copom-compact-v167,
+  html.desktop-rates-inline-sanitized-v743 body #sec-mercado
+  .rates-detail-grid-v167 > #cdiYearHistory{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+  }
+}
