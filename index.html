@@ -78,7 +78,7 @@ document.documentElement.classList.add(
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_CATALOGO_OFICIAL_V720" name="app-build"/>
+<meta content="ELTAUM_CATALOGO_OFICIAL_V721" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -139,7 +139,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-filter-no-wrap-v693" rel="stylesheet"/>
+<link href="style.css?v=comparador-seletor-v721" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -244,7 +244,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=oficial-v720"></script>
+<script defer="" src="app.js?v=comparador-seletor-v721"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -2879,14 +2879,19 @@ html.desktop-responsive-fit-v688 body{
 <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
 <span>Por página</span>
 <select aria-label="Quantidade de fundos por página" class="ctrl-select" id="perPage">
-<option value="5">05 por página</option>
-<option selected="" value="10">10 por página</option>
+<option selected="" value="5">05 por página</option>
+<option value="10">10 por página</option>
 <option value="25">25 por página</option>
 <option value="50">50 por página</option>
 <option value="100">100 por página</option>
 <option value="9999">Todos</option>
 </select>
 </label>
+<button aria-controls="comparPickerOverlay" aria-haspopup="dialog" class="compar-launch-btn-v721" id="comparLaunchBtn" type="button" title="Selecionar fundos e comparar lado a lado">
+<span aria-hidden="true" class="compar-launch-icon-v721">⚖</span>
+<span class="compar-launch-copy-v721"><small>Ferramenta</small><strong>Comparar fundos</strong></span>
+<span aria-label="Nenhum fundo selecionado" class="compar-launch-count-v721" id="comparLaunchCount">0</span>
+</button>
 </div>
 </div>
 <div aria-label="Filtro por público-alvo" class="desktop-audience-filter-v488" role="group">
@@ -4195,6 +4200,43 @@ html.desktop-responsive-fit-v688 body{
 <!-- ════════════════════════════════════════════
      COMPARADOR DE FUNDOS
 ════════════════════════════════════════════ -->
+<!-- Seletor visível: busca, filtro e marcação dos fundos -->
+<div aria-labelledby="comparPickerTitle" aria-modal="true" class="compar-picker-overlay-v721" id="comparPickerOverlay" role="dialog">
+<div class="compar-picker-panel-v721">
+<div class="compar-picker-header-v721">
+<div>
+<span class="compar-picker-kicker-v721">COMPARAÇÃO</span>
+<h2 id="comparPickerTitle">Selecionar fundos</h2>
+<p>Busque, filtre e marque de 2 a 6 fundos para comparar lado a lado.</p>
+</div>
+<button aria-label="Fechar seletor de fundos" class="compar-picker-close-v721" id="comparPickerClose" type="button">✕</button>
+</div>
+<div class="compar-picker-controls-v721">
+<label class="compar-picker-search-v721">
+<span>Buscar fundo</span>
+<input autocomplete="off" id="comparPickerSearch" placeholder="Nome, CNPJ ou benchmark..." type="search"/>
+</label>
+<label class="compar-picker-category-v721">
+<span>Categoria</span>
+<select id="comparPickerCategory">
+<option value="">Todas as categorias</option>
+</select>
+</label>
+</div>
+<div class="compar-picker-status-v721">
+<span id="comparPickerResultCount">—</span>
+<strong><b id="comparPickerSelectedCount">0</b>/6 selecionados</strong>
+</div>
+<div aria-live="polite" class="compar-picker-list-v721" id="comparPickerList"></div>
+<div class="compar-picker-footer-v721">
+<button class="compar-picker-clear-v721" id="comparPickerClear" type="button">Limpar seleção</button>
+<div class="compar-picker-footer-actions-v721">
+<button class="compar-picker-cancel-v721" id="comparPickerCancel" type="button">Fechar</button>
+<button class="compar-picker-compare-v721" disabled id="comparPickerCompare" type="button">⚖ Comparar selecionados</button>
+</div>
+</div>
+</div>
+</div>
 <!-- Barra flutuante de seleção -->
 <div class="compar-bar" id="comparBar" role="status" style="display:none">
 <span class="compar-bar-count"><strong id="comparCount">0</strong> fundo(s) selecionado(s)</span>

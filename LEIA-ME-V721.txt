@@ -1,0 +1,23 @@
+V721 — Comparador visível + 05 fundos por página
+
+Alterações:
+1. Catálogo passa a abrir com 05 fundos por página.
+   - index.html: option value=5 fica selected.
+   - app.js: perPage inicial = 5 e fallback desktop v217 = 5.
+
+2. Comparador de fundos passa a ter acesso visível na barra do catálogo.
+   - Botão "Comparar fundos" sempre visível.
+   - Modal de seleção com busca por nome/CNPJ/benchmark.
+   - Filtro por categoria.
+   - Seleção de 2 a 6 fundos.
+   - Fundos selecionados aparecem primeiro no modal.
+   - Reaproveita o comparador lado a lado já existente.
+   - Seleção usa índice estável de allRows para não se perder ao filtrar/ordenar/paginar.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+Arquivo sem alteração funcional:
+- tokens-caixa.css (incluído apenas para manter o conjunto dos arquivos enviados).

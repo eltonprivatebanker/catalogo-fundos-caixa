@@ -3313,7 +3313,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=10;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
@@ -6433,10 +6433,11 @@ function buildRowHTML(r,idx){
   html+=`<td style="width:28px;padding:11px 8px;text-align:center">
     <button class="exp-btn" data-idx="${idx}" aria-expanded="${isExpanded?'true':'false'}" title="${isExpanded?'Fechar detalhes e voltar para a lista':'Ver detalhes do fundo'}" aria-label="${isExpanded?'Fechar detalhes e voltar para a lista':'Ver detalhes do fundo'}">${isExpanded?'▲':'▼'}</button>
   </td>`;
-  // Checkbox comparador
-  const isCompSelected = comparSet.has(idx);
+  // Checkbox comparador — usa índice estável em allRows para preservar a seleção mesmo após filtros/ordenação.
+  const compIdx = allRows.indexOf(r);
+  const isCompSelected = compIdx >= 0 && comparSet.has(compIdx);
   html+=`<td class="comp-check-wrap" style="width:28px;padding:0 4px">
-    <input type="checkbox" class="comp-check" data-idx="${idx}" ${isCompSelected?'checked':''} title="Selecionar para comparar">
+    <input type="checkbox" class="comp-check" data-idx="${idx}" data-comp-idx="${compIdx}" ${isCompSelected?'checked':''} title="Selecionar para comparar">
   </td>`;
   visibleHeaders.forEach(h=>{
     const val=String(r[h]||'');
@@ -6556,9 +6557,10 @@ function render(){
   // Eventos checkboxes comparador
   tbody.querySelectorAll('.comp-check').forEach(cb=>{
     const idx = parseInt(cb.dataset.idx);
+    const compIdx = parseInt(cb.dataset.compIdx);
     cb.addEventListener('change', ()=>{
-      const row = filtered[idx] || allRows[idx];
-      comparToggle(idx, row, cb);
+      const row = (Number.isInteger(compIdx) && compIdx >= 0 ? allRows[compIdx] : null) || filtered[idx];
+      comparToggle(Number.isInteger(compIdx) && compIdx >= 0 ? compIdx : idx, row, cb);
     });
     cb.addEventListener('click', e=>e.stopPropagation());
   });
@@ -10726,12 +10728,39 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 /* ════════════════════════════════════════════════════════
-   COMPARADOR DE FUNDOS — v1.0
-   Máximo 6 fundos | Checkbox em cada linha | Modal lado a lado
+   COMPARADOR DE FUNDOS — v2.1 / seletor v721
+   Máximo 6 fundos | seleção estável | busca + categoria | modal lado a lado
 ════════════════════════════════════════════════════════ */
 
 const COMPAR_MAX = 6;
-let comparSet = new Map(); // idx → row data
+let comparSet = new Map(); // índice estável em allRows → row data
+
+function comparToastV721(msg){
+  let t=document.getElementById('elton-fav-toast') || document.getElementById('kpiOpenToast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='comparToastV721';
+    t.className='kpi-open-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(t._comparTid);
+  t._comparTid=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function comparVisibleRow(compIdx){
+  const cb = document.querySelector(`.comp-check[data-comp-idx="${compIdx}"]`);
+  return cb?.closest('tr') || null;
+}
+
+function comparSyncChecks(compIdx, selected){
+  document.querySelectorAll(`.comp-check[data-comp-idx="${compIdx}"], .compar-picker-check-v721[data-comp-idx="${compIdx}"]`).forEach(cb=>{
+    cb.checked = !!selected;
+  });
+  const tr = comparVisibleRow(compIdx);
+  if(tr) tr.classList.toggle('row-selected-compar', !!selected);
+}
 
 function comparUpdateBar(){
   const n = comparSet.size;
@@ -10739,53 +10768,70 @@ function comparUpdateBar(){
   const btn = document.getElementById('comparBtn');
   const hint = document.getElementById('comparHint');
   const count = document.getElementById('comparCount');
-  if(!bar) return;
-  if(n === 0){ bar.style.display='none'; return; }
-  bar.style.display='flex';
-  count.textContent = n;
+  const launch = document.getElementById('comparLaunchBtn');
+  const launchCount = document.getElementById('comparLaunchCount');
+  const pickerCount = document.getElementById('comparPickerSelectedCount');
+  const pickerCompare = document.getElementById('comparPickerCompare');
+
+  if(bar) bar.style.display = n === 0 ? 'none' : 'flex';
+  if(count) count.textContent = n;
   if(btn) btn.disabled = n < 2;
   if(hint){
-    if(n < 2) hint.textContent = 'selecione ao menos 2';
+    if(n < 2 && n > 0) hint.textContent = 'selecione ao menos 2';
     else if(n >= COMPAR_MAX) hint.textContent = `máximo ${COMPAR_MAX} fundos`;
     else hint.textContent = '';
   }
+
+  if(launch){
+    launch.classList.toggle('has-selection', n > 0);
+    launch.setAttribute('aria-label', n ? `Comparar fundos: ${n} selecionado${n===1?'':'s'}` : 'Selecionar fundos para comparar');
+  }
+  if(launchCount){
+    launchCount.textContent = n;
+    launchCount.setAttribute('aria-label', n ? `${n} fundo${n===1?'':'s'} selecionado${n===1?'':'s'}` : 'Nenhum fundo selecionado');
+  }
+  if(pickerCount) pickerCount.textContent = n;
+  if(pickerCompare) pickerCompare.disabled = n < 2;
 }
 
 function comparToggle(idx, row, checkbox){
+  if(!row) return;
   if(comparSet.has(idx)){
     comparSet.delete(idx);
-    checkbox.checked = false;
-    const tr = document.querySelector(`tr[data-idx="${idx}"]`);
-    if(tr) tr.classList.remove('row-selected-compar');
+    comparSyncChecks(idx, false);
   } else {
     if(comparSet.size >= COMPAR_MAX){
-      showToast(`Máximo ${COMPAR_MAX} fundos para comparar`);
-      checkbox.checked = false;
+      comparToastV721(`Máximo ${COMPAR_MAX} fundos para comparar`);
+      if(checkbox) checkbox.checked = false;
       return;
     }
     comparSet.set(idx, row);
-    checkbox.checked = true;
-    const tr = document.querySelector(`tr[data-idx="${idx}"]`);
-    if(tr) tr.classList.add('row-selected-compar');
+    comparSyncChecks(idx, true);
   }
   comparUpdateBar();
+  if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
 }
 
 function limparComparador(){
   comparSet.clear();
-  document.querySelectorAll('.comp-check').forEach(c=>c.checked=false);
+  document.querySelectorAll('.comp-check,.compar-picker-check-v721').forEach(c=>c.checked=false);
   document.querySelectorAll('.row-selected-compar').forEach(tr=>tr.classList.remove('row-selected-compar'));
   comparUpdateBar();
+  if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
 }
 
 function fecharComparador(){
   const ov = document.getElementById('comparOverlay');
-  if(ov){ ov.classList.remove('open'); document.body.style.overflow=''; }
+  if(ov){
+    ov.classList.remove('open');
+    if(!document.getElementById('comparPickerOverlay')?.classList.contains('open')) document.body.style.overflow='';
+  }
 }
 
 function abrirComparador(){
-  if(comparSet.size < 2){ showToast('Selecione ao menos 2 fundos'); return; }
+  if(comparSet.size < 2){ comparToastV721('Selecione ao menos 2 fundos'); return; }
   const fundos = [...comparSet.values()];
+  const chaves = [...comparSet.keys()];
   const tbl = document.getElementById('comparTable');
   if(!tbl) return;
 
@@ -10811,7 +10857,6 @@ function abrirComparador(){
     return n > 0 ? 'pos' : n < 0 ? 'neg' : '';
   };
 
-  // Campos a comparar
   const campos = [
     { label:'Perfil',       key: r => r['Perfil de Risco']||r['Perfil']||'—',  tipo:'txt' },
     { label:'Categoria',    key: r => r['Categoria']||'—',                      tipo:'txt' },
@@ -10838,7 +10883,6 @@ function abrirComparador(){
     { label:'Aplic. Mín.',  key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt' },
   ];
 
-  // Cabeçalho com nomes dos fundos
   const catAbrev = {'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'RF','RENDA FIXA REFERENCIADO':'RF Ref.','RENDA FIXA CURTO PRAZO':'RF CP','MULTIMERCADO':'MM','CAMBIAL':'CAM','ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'};
   let thead = '<thead><tr><th class="ct-campo">Campo</th>';
   fundos.forEach((r,i)=>{
@@ -10847,17 +10891,15 @@ function abrirComparador(){
     const catLabel = catAbrev[cat]||cat.slice(0,10);
     const nome = (r['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim();
     thead += `<th class="ct-fundo">
-      <span class="ct-fundo-nome">${nome}</span>
-      <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${catLabel}</span>
-      <button class="ct-remove" onclick="comparRemover(${[...comparSet.keys()][i]})" title="Remover da comparação">✕ remover</button>
+      <span class="ct-fundo-nome">${htmlAttr(nome)}</span>
+      <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${htmlAttr(catLabel)}</span>
+      <button class="ct-remove" onclick="comparRemover(${chaves[i]})" title="Remover da comparação">✕ remover</button>
     </th>`;
   });
   thead += '</tr></thead>';
 
-  // Corpo com cada campo
   let tbody = '<tbody>';
   campos.forEach(campo=>{
-    // Calcular valores numéricos para highlight melhor/pior
     const vals = fundos.map(r=>campo.val ? campo.val(r) : NaN);
     const validos = vals.filter(v=>!isNaN(v));
     const melhor = validos.length ? Math.max(...validos) : NaN;
@@ -10890,28 +10932,167 @@ function abrirComparador(){
     document.body.style.overflow='hidden';
     ov.addEventListener('click', e=>{ if(e.target===ov) fecharComparador(); }, {once:true});
   }
-  document.addEventListener('keydown', e=>{ if(e.key==='Escape') fecharComparador(); }, {once:true});
 }
 
 function comparRemover(idx){
   comparSet.delete(idx);
-  const tr = document.querySelector(`tr[data-idx="${idx}"]`);
-  if(tr) tr.classList.remove('row-selected-compar');
-  const cb = tr?.querySelector('.comp-check');
-  if(cb) cb.checked = false;
+  comparSyncChecks(idx, false);
   comparUpdateBar();
+  if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) comparPickerRenderV721();
   if(comparSet.size < 1){ fecharComparador(); return; }
-  abrirComparador(); // re-render
+  if(comparSet.size < 2){ fecharComparador(); return; }
+  abrirComparador();
 }
 
-// Fechar botão
+function comparNormV721(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/\s+/g,' ').trim();
+}
+
+function comparPickerPopulateCategoriesV721(){
+  const sel = document.getElementById('comparPickerCategory');
+  if(!sel || sel.dataset.ready==='1') return;
+  const cats = [...new Set((Array.isArray(allRows)?allRows:[]).map(r=>String(r['Categoria']||'').trim()).filter(Boolean))]
+    .sort((a,b)=>a.localeCompare(b,'pt-BR'));
+  cats.forEach(cat=>{
+    const o=document.createElement('option');
+    o.value=cat; o.textContent=cat;
+    sel.appendChild(o);
+  });
+  sel.dataset.ready='1';
+}
+
+function comparPickerRenderV721(){
+  const list = document.getElementById('comparPickerList');
+  if(!list) return;
+  const rows = Array.isArray(allRows) ? allRows : [];
+  const search = comparNormV721(document.getElementById('comparPickerSearch')?.value);
+  const category = String(document.getElementById('comparPickerCategory')?.value||'');
+
+  let matches = rows.map((row,idx)=>({row,idx})).filter(({row})=>{
+    if(category && String(row['Categoria']||'')!==category) return false;
+    if(!search) return true;
+    const hay = comparNormV721([
+      row['Fundo'],row['CNPJ'],row['Benchmark'],row['Categoria'],row['Perfil de Risco'],row['Perfis']
+    ].filter(Boolean).join(' | '));
+    return hay.includes(search);
+  });
+
+  matches.sort((a,b)=>{
+    const sa = comparSet.has(a.idx) ? 0 : 1;
+    const sb = comparSet.has(b.idx) ? 0 : 1;
+    if(sa!==sb) return sa-sb;
+    return String(a.row['Fundo']||'').localeCompare(String(b.row['Fundo']||''),'pt-BR');
+  });
+
+  const total = matches.length;
+  const LIMITE = 180;
+  const exibidos = matches.slice(0,LIMITE);
+  const result = document.getElementById('comparPickerResultCount');
+  if(result) result.textContent = total > LIMITE ? `${total.toLocaleString('pt-BR')} encontrados · exibindo ${LIMITE}` : `${total.toLocaleString('pt-BR')} fundo${total===1?'':'s'}`;
+
+  if(!exibidos.length){
+    list.innerHTML='<div class="compar-picker-empty-v721">Nenhum fundo encontrado com esses filtros.</div>';
+    comparUpdateBar();
+    return;
+  }
+
+  list.innerHTML = exibidos.map(({row,idx})=>{
+    const checked = comparSet.has(idx);
+    const nomeFull = String(row['Fundo']||'Fundo sem nome');
+    const nome = typeof catalogShortFundNameV594==='function' ? catalogShortFundNameV594(nomeFull) : nomeFull;
+    const categoria = String(row['Categoria']||'—');
+    const benchmark = String(row['Benchmark']||'—');
+    const cnpj = String(row['CNPJ']||'').trim();
+    const rent = toNum(row['Acum. 12M (%)']);
+    const rentTxt = rent===null ? '—' : `${rent>0?'+':''}${rent.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+    const rentCls = rent===null ? '' : rent>0 ? 'pos' : rent<0 ? 'neg' : '';
+    return `<label class="compar-picker-item-v721${checked?' is-selected':''}">
+      <input class="compar-picker-check-v721" data-comp-idx="${idx}" type="checkbox" ${checked?'checked':''}/>
+      <span class="compar-picker-check-ui-v721" aria-hidden="true"></span>
+      <span class="compar-picker-main-v721">
+        <strong title="${htmlAttr(nomeFull)}">${htmlAttr(nome)}</strong>
+        <small>${htmlAttr(categoria)} · ${htmlAttr(benchmark)}${cnpj?` · CNPJ ${htmlAttr(cnpj)}`:''}</small>
+      </span>
+      <span class="compar-picker-return-v721 ${rentCls}"><small>12M</small><strong>${rentTxt}</strong></span>
+    </label>`;
+  }).join('');
+
+  list.querySelectorAll('.compar-picker-check-v721').forEach(cb=>{
+    cb.addEventListener('change',()=>{
+      const idx=Number(cb.dataset.compIdx);
+      comparToggle(idx, allRows[idx], cb);
+    });
+  });
+  comparUpdateBar();
+}
+
+function abrirSeletorComparadorV721(){
+  if(!Array.isArray(allRows) || !allRows.length){
+    comparToastV721('Os fundos ainda estão carregando');
+    return;
+  }
+  comparPickerPopulateCategoriesV721();
+  comparPickerRenderV721();
+  const ov=document.getElementById('comparPickerOverlay');
+  if(!ov) return;
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.getElementById('comparPickerSearch')?.focus(),80);
+}
+
+function fecharSeletorComparadorV721(){
+  const ov=document.getElementById('comparPickerOverlay');
+  if(ov) ov.classList.remove('open');
+  if(!document.getElementById('comparOverlay')?.classList.contains('open')) document.body.style.overflow='';
+}
+
+function compararSelecionadosDoPickerV721(){
+  if(comparSet.size < 2){ comparToastV721('Selecione ao menos 2 fundos'); return; }
+  fecharSeletorComparadorV721();
+  abrirComparador();
+}
+
+function initComparPickerV721(){
+  const launch=document.getElementById('comparLaunchBtn');
+  const close=document.getElementById('comparPickerClose');
+  const cancel=document.getElementById('comparPickerCancel');
+  const clear=document.getElementById('comparPickerClear');
+  const compare=document.getElementById('comparPickerCompare');
+  const search=document.getElementById('comparPickerSearch');
+  const category=document.getElementById('comparPickerCategory');
+  const overlay=document.getElementById('comparPickerOverlay');
+
+  launch?.addEventListener('click',abrirSeletorComparadorV721);
+  close?.addEventListener('click',fecharSeletorComparadorV721);
+  cancel?.addEventListener('click',fecharSeletorComparadorV721);
+  clear?.addEventListener('click',limparComparador);
+  compare?.addEventListener('click',compararSelecionadosDoPickerV721);
+  search?.addEventListener('input',comparPickerRenderV721);
+  category?.addEventListener('change',comparPickerRenderV721);
+  overlay?.addEventListener('click',e=>{ if(e.target===overlay) fecharSeletorComparadorV721(); });
+
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape') return;
+    if(document.getElementById('comparOverlay')?.classList.contains('open')) fecharComparador();
+    else if(document.getElementById('comparPickerOverlay')?.classList.contains('open')) fecharSeletorComparadorV721();
+  });
+
+  comparUpdateBar();
+}
+
+// Fechar botão do comparador final + inicializar seletor visível v721.
 document.addEventListener('DOMContentLoaded', ()=>{
   const btn = document.getElementById('comparClose');
   if(btn) btn.addEventListener('click', fecharComparador);
+  initComparPickerV721();
 });
 setTimeout(()=>{
   const btn = document.getElementById('comparClose');
   if(btn && !btn._cpatched){ btn._cpatched=true; btn.addEventListener('click', fecharComparador); }
+  if(!document.getElementById('comparLaunchBtn')?.dataset.v721Late){
+    const launch=document.getElementById('comparLaunchBtn');
+    if(launch){ launch.dataset.v721Late='1'; comparUpdateBar(); }
+  }
 },600);
 
 (function(){
@@ -19274,7 +19455,7 @@ if(document.readyState === 'loading'){
     if(meta) meta.content=BUILD;
     document.documentElement.classList.add('catalog-desktop-professional-v217');
     const per=document.getElementById('perPage');
-    if(per && String(per.value)!=='10' && typeof window.perPage==='undefined') per.value='10';
+    if(per && String(per.value)!=='5' && typeof window.perPage==='undefined') per.value='5';
     const search=document.getElementById('searchInput');
     if(search) search.setAttribute('aria-describedby','filterResultSummary');
   }
