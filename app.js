@@ -28198,9 +28198,9 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('resize', apply);
   document.addEventListener('elton:market-data-refresh', apply);
   document.addEventListener('elton:market-period-change', apply);
-  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 23000, 37000].forEach(function(delay){
-    setTimeout(apply, delay);
-  });
+  /* V745: sem timers tardios. O layout já é aplicado no boot,
+     load, resize e eventos reais de mercado. */
+  requestAnimationFrame(apply);
 })();
 
 
@@ -28310,14 +28310,10 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('resize', schedule);
   document.addEventListener('elton:market-data-refresh', schedule);
   document.addEventListener('elton:market-period-change', schedule);
-  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 23000, 37000, 60000, 90000, 130000].forEach(function(delay){
-    setTimeout(boot, delay);
-  });
-
-  intervalId = setInterval(apply, 1500);
-  setTimeout(function(){
-    if(intervalId) clearInterval(intervalId);
-  }, 180000);
+  /* V745: elimina reaplicações periódicas de geometria.
+     O lock continua reagindo a resize e eventos reais, sem ficar
+     reescrevendo estilo a cada 1,5s durante 3 minutos. */
+  requestAnimationFrame(boot);
 })();
 
 
@@ -32566,3 +32562,269 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   window.addEventListener('load',apply,{once:true});
   window.addEventListener('pageshow',apply,{passive:true});
 })();
+
+
+/* ============================================================
+   V745 — Desktop: Juros de referência em view isolada
+   ------------------------------------------------------------
+   Em vez de continuar disputando CSS com dezenas de patches antigos,
+   a interface desktop passa a usar uma camada visual nova.
+   O bloco antigo permanece no DOM somente como motor/fonte de dados.
+   Sem timers de reassunção.
+============================================================ */
+(function desktopRatesCleanViewV745(){
+  const MQ = '(min-width: 769px)';
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia(MQ).matches;
+  }
+
+  function clean(v){
+    return String(v ?? '').replace(/\s+/g,' ').trim();
+  }
+
+  function esc(v){
+    return String(v ?? '').replace(/[&<>"']/g, ch => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[ch]));
+  }
+
+  function sourceText(id, fallback='—'){
+    const el = document.getElementById(id);
+    const txt = clean(el?.textContent);
+    return txt || fallback;
+  }
+
+  function meetingKind(item, result){
+    const cls = String(item?.className || '').toLowerCase();
+    const txt = String(result || '').toLowerCase();
+    if(cls.includes('next') || txt.includes('próxima') || txt.includes('proxima')) return 'next';
+    if(cls.includes('future') || txt.includes('prevista')) return 'future';
+    if(cls.includes('cut') || txt.includes('corte')) return 'cut';
+    if(cls.includes('hike') || txt.includes('alta')) return 'hike';
+    if(cls.includes('hold') || txt.includes('mantida') || txt.includes('mantido')) return 'hold';
+    return 'neutral';
+  }
+
+  function extractRate(result){
+    const r = clean(result);
+    const arrow = r.match(/(?:→|->)\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    if(arrow) return arrow[1];
+    const em = r.match(/\bem\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    return em ? em[1] : '';
+  }
+
+  function extractMove(result, kind){
+    const r = clean(result).replace(/−/g,'-');
+    const m = r.match(/(?:corte|alta)\s*([-+]?\d+(?:[,.]\d+)?)\s*p\.?p\.?/i);
+    if(m) return `${kind === 'hike' ? 'Alta' : 'Corte'} ${m[1].replace('.',',')} p.p.`;
+    if(kind === 'cut') return 'Corte';
+    if(kind === 'hike') return 'Alta';
+    return '';
+  }
+
+  function meetingData(item){
+    const num = clean(item.querySelector('.copom-num')?.textContent)
+      .replace(/\s*reuni[aã]o\b/i,'').trim() || '—';
+    const date = clean(item.querySelector('.copom-date')?.textContent) || '—';
+    const result = clean(item.querySelector('.copom-result')?.textContent);
+    const kind = meetingKind(item,result);
+    const rate = extractRate(result);
+    const move = extractMove(result,kind);
+
+    let status='Status a confirmar', detail='—';
+    if(kind==='next'){ status='Próxima reunião'; detail='Aguardando decisão'; }
+    else if(kind==='future'){ status='Prevista'; detail='Sem decisão'; }
+    else if(kind==='hold'){ status='Mantida'; detail=rate ? `Selic ${rate}` : 'Sem alteração'; }
+    else if(kind==='cut'){ status=move || 'Corte'; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+    else if(kind==='hike'){ status=move || 'Alta'; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+    else if(result){ status=result; detail=rate ? `Selic ${rate}` : 'Decisão realizada'; }
+
+    return {num,date,status,detail,kind};
+  }
+
+  function ensure(){
+    if(!isDesktop()) return null;
+    const root = document.querySelector('#sec-mercado .rates-reference-v167');
+    if(!root) return null;
+
+    let view = document.getElementById('ratesDesktopCleanV745');
+    if(view) return view;
+
+    view = document.createElement('div');
+    view.id = 'ratesDesktopCleanV745';
+    view.className = 'rates-desktop-clean-v745';
+    view.innerHTML = `
+      <div class="rates-clean-groups-v745">
+        <div class="rates-clean-group-v745">
+          <span>Nível atual</span>
+          <div class="rates-clean-cards-v745 two">
+            <article class="rates-clean-kpi-v745 is-selic">
+              <small>Selic meta</small>
+              <strong id="ratesV745Selic">—</strong>
+              <em id="ratesV745SelicDate">Vigente desde —</em>
+            </article>
+            <article class="rates-clean-kpi-v745">
+              <small>CDI</small>
+              <strong id="ratesV745Cdi">—</strong>
+              <em>≈ Selic − 0,10 p.p.</em>
+            </article>
+          </div>
+        </div>
+
+        <div class="rates-clean-group-v745">
+          <span>CDI acumulado</span>
+          <div class="rates-clean-cards-v745 two">
+            <article class="rates-clean-kpi-v745">
+              <small>CDI em 2026</small>
+              <strong id="ratesV745Year">—</strong>
+              <em>Acumulado no ano</em>
+            </article>
+            <article class="rates-clean-kpi-v745">
+              <small>CDI em 12 meses</small>
+              <strong id="ratesV74512m">—</strong>
+              <em>Acumulado em 12 meses</em>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <section class="rates-clean-copom-v745">
+        <header>
+          <div>
+            <strong>Calendário Copom 2026</strong>
+            <small>Decisões realizadas, próxima reunião e agenda restante.</small>
+          </div>
+        </header>
+        <div id="ratesV745Copom" class="rates-clean-copom-grid-v745" role="list"></div>
+      </section>
+
+      <section class="rates-clean-recent-v745">
+        <header>
+          <strong>CDI recente</strong>
+          <small>Mês atual e último mês fechado.</small>
+        </header>
+        <div class="rates-clean-recent-grid-v745">
+          <article>
+            <small id="ratesV745CurrentLabel">Mês atual</small>
+            <strong id="ratesV745CurrentValue">—</strong>
+          </article>
+          <article>
+            <small id="ratesV745ClosedLabel">Último fechado</small>
+            <strong id="ratesV745ClosedValue">—</strong>
+          </article>
+        </div>
+      </section>
+    `;
+
+    const head = root.querySelector(':scope > .market-reference-head-v167');
+    head?.insertAdjacentElement('afterend', view);
+    return view;
+  }
+
+  function renderCopom(){
+    const box = document.getElementById('ratesV745Copom');
+    const store = document.getElementById('copomMeetings');
+    if(!box || !store) return;
+
+    const items = [...store.querySelectorAll('.copom-item')]
+      .sort((a,b)=>Number(a.dataset.originalOrder ?? 999)-Number(b.dataset.originalOrder ?? 999));
+
+    const html = items.map((item,i)=>{
+      const d = meetingData(item);
+      return `<article class="rates-clean-meeting-v745 is-${esc(d.kind)}" role="listitem" style="--meeting-order:${i+1}">
+        <span class="num">${esc(d.num)}</span>
+        <strong>${esc(d.date)}</strong>
+        <b>${esc(d.status)}</b>
+        <small>${esc(d.detail)}</small>
+      </article>`;
+    }).join('');
+
+    if(box.dataset.htmlV745 !== html){
+      box.dataset.htmlV745 = html;
+      box.innerHTML = html;
+    }
+  }
+
+  function update(){
+    if(!isDesktop()) return;
+    const view = ensure();
+    if(!view) return;
+
+    document.documentElement.classList.add('desktop-rates-cleanview-v745');
+
+    const selic = sourceText('mc-selic');
+    const selicDate = sourceText('selic-last-change');
+    const cdi = sourceText('mc-cdi');
+    const year = sourceText('cdiAccumYearValueV271');
+    const m12 = sourceText('cdiLast12mValueV296');
+    const curLabel = sourceText('cdiCurrentMonthLabelV271','Mês atual');
+    const curValue = sourceText('cdiCurrentMonthValueV271');
+    const closedLabel = sourceText('cdiLastClosedLabelV271','Último fechado');
+    const closedValue = sourceText('cdiLastClosedValueV271');
+
+    const map = {
+      ratesV745Selic: selic,
+      ratesV745SelicDate: `Vigente desde ${selicDate}`,
+      ratesV745Cdi: cdi,
+      ratesV745Year: year,
+      ratesV74512m: m12,
+      ratesV745CurrentLabel: curLabel,
+      ratesV745CurrentValue: curValue,
+      ratesV745ClosedLabel: closedLabel,
+      ratesV745ClosedValue: closedValue
+    };
+    Object.entries(map).forEach(([id,txt])=>{
+      const el=document.getElementById(id);
+      if(el && el.textContent !== txt) el.textContent = txt;
+    });
+
+    renderCopom();
+
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_RATES_CLEANVIEW_V745';
+  }
+
+  function observe(){
+    const ids = [
+      'mc-selic','selic-last-change','mc-cdi',
+      'cdiAccumYearValueV271','cdiLast12mValueV296',
+      'cdiCurrentMonthLabelV271','cdiCurrentMonthValueV271',
+      'cdiLastClosedLabelV271','cdiLastClosedValueV271'
+    ];
+    let raf=0;
+    const schedule=()=>{
+      cancelAnimationFrame(raf);
+      raf=requestAnimationFrame(update);
+    };
+
+    ids.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el && !el.dataset.v745Observed && window.MutationObserver){
+        el.dataset.v745Observed='1';
+        new MutationObserver(schedule).observe(el,{childList:true,characterData:true,subtree:true});
+      }
+    });
+
+    const store=document.getElementById('copomMeetings');
+    if(store && !store.dataset.v745Observed && window.MutationObserver){
+      store.dataset.v745Observed='1';
+      new MutationObserver(schedule).observe(store,{childList:true,characterData:true,subtree:true});
+    }
+  }
+
+  function boot(){
+    ensure();
+    update();
+    observe();
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',boot,{once:true});
+  }else{
+    boot();
+  }
+  window.addEventListener('load',update,{once:true});
+  window.addEventListener('pageshow',update,{passive:true});
+})();
+

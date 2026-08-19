@@ -88192,3 +88192,322 @@ html.desktop-responsive-fit-v688 body{
     margin:0!important;
   }
 }
+
+
+/* ============================================================
+   V745 — Desktop: view limpa de Juros + estabilidade da tabela
+============================================================ */
+@media (min-width:769px){
+
+  /* ---- JUROS: DOM legado continua vivo, mas fora do layout visual. ---- */
+  html.desktop-rates-cleanview-v745 body #sec-mercado
+  .rates-reference-v167 > .rates-summary-v167,
+  html.desktop-rates-cleanview-v745 body #sec-mercado
+  .rates-reference-v167 > .rates-detail-grid-v167{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:1px!important;
+    max-height:1px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    white-space:nowrap!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-rates-cleanview-v745 body #sec-mercado
+  .rates-reference-v167{
+    display:block!important;
+    width:100%!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:14px 16px 15px!important;
+  }
+
+  html.desktop-rates-cleanview-v745 body #sec-mercado
+  .rates-reference-v167 > .market-reference-head-v167{
+    width:100%!important;
+    margin:0!important;
+    padding:0 0 8px!important;
+  }
+
+  .rates-desktop-clean-v745{
+    display:grid;
+    gap:10px;
+    width:100%;
+  }
+
+  .rates-clean-groups-v745{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .rates-clean-group-v745 > span{
+    display:block;
+    margin:0 0 5px 2px;
+    color:#8d9bb4;
+    font-size:.56rem;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+  }
+
+  .rates-clean-cards-v745{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .rates-clean-kpi-v745{
+    min-height:66px;
+    padding:9px 12px;
+    border:1px solid rgba(148,163,184,.14);
+    border-radius:12px;
+    background:linear-gradient(180deg,rgba(12,16,29,.74),rgba(7,10,19,.88));
+  }
+
+  .rates-clean-kpi-v745.is-selic{
+    border-color:rgba(232,187,106,.22);
+  }
+
+  .rates-clean-kpi-v745 small{
+    display:block;
+    color:#9ba8be;
+    font-size:.56rem;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  .rates-clean-kpi-v745 strong{
+    display:block;
+    margin-top:5px;
+    color:#edf3fb;
+    font-size:1.05rem;
+    line-height:1;
+    font-weight:900;
+  }
+
+  .rates-clean-kpi-v745.is-selic strong{
+    color:#eac268;
+  }
+
+  #ratesV745Cdi{
+    color:#f0f4fa;
+  }
+
+  .rates-clean-kpi-v745 em{
+    display:block;
+    margin-top:5px;
+    color:#8997af;
+    font-size:.56rem;
+    line-height:1.15;
+    font-style:normal;
+    font-weight:700;
+  }
+
+  .rates-clean-copom-v745,
+  .rates-clean-recent-v745{
+    padding:11px 12px 12px;
+    border:1px solid rgba(148,163,184,.13);
+    border-radius:14px;
+    background:rgba(8,12,22,.48);
+  }
+
+  .rates-clean-copom-v745 > header,
+  .rates-clean-recent-v745 > header{
+    margin-bottom:8px;
+  }
+
+  .rates-clean-copom-v745 > header strong,
+  .rates-clean-recent-v745 > header strong{
+    display:block;
+    color:#f2f6fc;
+    font-size:.78rem;
+    line-height:1.05;
+  }
+
+  .rates-clean-copom-v745 > header small,
+  .rates-clean-recent-v745 > header small{
+    display:block;
+    margin-top:3px;
+    color:#8997ae;
+    font-size:.56rem;
+    line-height:1.2;
+  }
+
+  .rates-clean-copom-grid-v745{
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .rates-clean-meeting-v745{
+    position:relative;
+    order:var(--meeting-order);
+    display:grid;
+    grid-template-columns:26px minmax(0,1fr);
+    grid-template-areas:
+      "num date"
+      "num status"
+      "num detail";
+    align-content:center;
+    column-gap:8px;
+    row-gap:2px;
+    min-height:54px;
+    padding:7px 9px 7px 11px;
+    border:1px solid rgba(148,163,184,.12);
+    border-radius:10px;
+    background:rgba(9,13,24,.58);
+    overflow:hidden;
+  }
+
+  .rates-clean-meeting-v745::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:8px;
+    bottom:8px;
+    width:3px;
+    border-radius:0 999px 999px 0;
+    background:#64748b;
+  }
+
+  .rates-clean-meeting-v745.is-cut::before{background:#ec6782}
+  .rates-clean-meeting-v745.is-hike::before{background:#6ca4ed}
+  .rates-clean-meeting-v745.is-hold::before,
+  .rates-clean-meeting-v745.is-next::before{background:#e1b55e}
+
+  .rates-clean-meeting-v745.is-next{
+    grid-column:span 3;
+    border-color:rgba(232,187,106,.30);
+    background:linear-gradient(180deg,rgba(45,34,18,.25),rgba(12,13,20,.86));
+  }
+
+  .rates-clean-meeting-v745.is-future{
+    opacity:.68;
+  }
+
+  .rates-clean-meeting-v745 .num{
+    grid-area:num;
+    align-self:start;
+    display:grid;
+    place-items:center;
+    width:24px;
+    min-width:24px;
+    height:22px;
+    border:1px solid rgba(232,187,106,.25);
+    border-radius:7px;
+    color:#dab05c;
+    font-size:.56rem;
+    font-weight:900;
+  }
+
+  .rates-clean-meeting-v745 > strong{
+    grid-area:date;
+    color:#f1f5fb;
+    font-size:.75rem;
+    line-height:1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .rates-clean-meeting-v745 > b{
+    grid-area:status;
+    color:#bbc6d8;
+    font-size:.58rem;
+    line-height:1.05;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .rates-clean-meeting-v745.is-cut > b{color:#ed718a}
+  .rates-clean-meeting-v745.is-next > b{color:#e4b75d}
+
+  .rates-clean-meeting-v745 > small{
+    grid-area:detail;
+    color:#8492aa;
+    font-size:.52rem;
+    line-height:1.05;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .rates-clean-recent-grid-v745{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(220px,360px));
+    gap:8px;
+    justify-content:start;
+  }
+
+  .rates-clean-recent-grid-v745 article{
+    min-height:54px;
+    padding:9px 12px;
+    border:1px solid rgba(148,163,184,.12);
+    border-radius:10px;
+    background:rgba(10,15,27,.62);
+  }
+
+  .rates-clean-recent-grid-v745 article:first-child{
+    background:rgba(17,79,76,.22);
+  }
+
+  .rates-clean-recent-grid-v745 small{
+    display:block;
+    color:#9aa8bf;
+    font-size:.56rem;
+    font-weight:900;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+  }
+
+  .rates-clean-recent-grid-v745 strong{
+    display:block;
+    margin-top:6px;
+    color:#edc768;
+    font-size:1rem;
+    line-height:1;
+  }
+
+  .rates-clean-recent-grid-v745 article:first-child strong{
+    color:#22d8a1;
+  }
+
+  /* ---- FUNDOS: reserva passa a refletir a tabela compacta de 5 linhas. ---- */
+  html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692)
+  body:not(.fund-card-mode) #sec-fundos .table-wrap,
+  html.desktop-funds-load-stable-v692.desktop-initial-load-stable-v591:not(.catalog-user-interacted-v692)
+  body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:344px!important;
+  }
+
+  html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591)
+  body:not(.fund-card-mode) #sec-fundos #loadMsg{
+    min-height:342px!important;
+    height:342px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1100px){
+  .rates-clean-groups-v745{
+    grid-template-columns:1fr;
+  }
+  .rates-clean-copom-grid-v745{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .rates-clean-meeting-v745.is-next{
+    grid-column:span 1;
+  }
+}
