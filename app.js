@@ -11080,20 +11080,32 @@ function abrirComparador(){
   }, 'max', 'Melhor percentual do CDI em 12 meses');
   addAward('Menor aplicação','🎯', r=>num(r['Aplicacao Minima (R$)']), 'min', 'Menor aplicação mínima');
 
+  const awardShortLabel = label => ({
+    'Maior 12M':'12M',
+    'Menor taxa':'Taxa',
+    'Maior % CDI':'% CDI',
+    'Menor aplicação':'Aplic. mín.'
+  }[label] || label);
+
   let thead = '<thead><tr><th class="ct-campo">Campo</th>';
   fundos.forEach((r,i)=>{
     const cat = r['Categoria']||'';
     const catCls = (CAT_CLS?.[cat])||'RF';
     const catLabel = catAbrev[cat]||cat.slice(0,10);
     const nome = (r['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim();
-    const awards = [];
-    if(winsByFund[i]>0) awards.push(`<span class="ct-award-chip-v728 total" title="${winsByFund[i]} destaque(s) objetivos no comparativo">🏅 ${winsByFund[i]} destaque${winsByFund[i]===1?'':'s'}</span>`);
-    awardBadges[i].forEach(a=>awards.push(`<span class="ct-award-chip-v728" title="${htmlAttr(a.title)}">${a.icon} ${htmlAttr(a.label)}</span>`));
+    const awardList = awardBadges[i].map(a=>awardShortLabel(a.label));
+    const awardMeta = winsByFund[i] > 0 ? `
+        <div class="ct-awards-line-v729">
+          <span class="ct-awards-count-v729" title="${winsByFund[i]} destaque(s) objetivos no comparativo">🏅 ${winsByFund[i]} destaque${winsByFund[i]===1?'':'s'}</span>
+          ${awardList.length ? `<span class="ct-awards-list-v729" title="${htmlAttr(awardBadges[i].map(a=>a.label).join(', '))}">${htmlAttr(awardList.join(' · '))}</span>` : ''}
+        </div>` : '';
     thead += `<th class="ct-fundo">
-      <span class="ct-fundo-nome">${htmlAttr(nome)}</span>
-      <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${htmlAttr(catLabel)}</span>
-      ${awards.length?`<div class="ct-awards-v728">${awards.join('')}</div>`:''}
-      <button class="ct-remove" onclick="comparRemover(${chaves[i]})" title="Remover da comparação">✕ remover</button>
+      <span class="ct-fundo-nome" title="${htmlAttr(nome)}">${htmlAttr(nome)}</span>
+      <div class="ct-fundo-meta-v729">
+        <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${htmlAttr(catLabel)}</span>
+        ${awardMeta}
+        <button class="ct-remove" onclick="comparRemover(${chaves[i]})" title="Remover da comparação">Remover</button>
+      </div>
     </th>`;
   });
   thead += '</tr></thead>';
@@ -11120,7 +11132,7 @@ function abrirComparador(){
       ]) : (campo.tipo==='cdi'?(vn>=100?'pos':vn>=80?'':vn>0?'neg':''):'');
       const destCls = campo.tipo.includes('dest') ? ' dest' : '';
       const bgCls = isBest ? ' ct-best' : isWorst ? ' ct-worst' : '';
-      const badge = isBest ? `<span class="ct-cell-flag-v728 best" title="Melhor valor desta linha${campo.better==='min'?' (menor é melhor)':' (maior é melhor)'}">🏆 melhor</span>` : isWorst ? `<span class="ct-cell-flag-v728 worst" title="Ponto mais fraco desta linha">◦ menor</span>` : '';
+      const badge = isBest ? `<span class="ct-cell-flag-v728 best" title="Melhor valor desta linha${campo.better==='min'?' (menor é melhor)':' (maior é melhor)'}">Melhor</span>` : '';
       tbody += `<td class="ct-val${destCls}${bgCls} ${valCls}${isBest?' ct-has-best-v728':''}">${badge}<span class="ct-cell-text-v728">${txt}</span></td>`;
     });
     tbody += '</tr>';
@@ -11130,19 +11142,48 @@ function abrirComparador(){
   tbl.innerHTML = thead + tbody;
 
   if(insightsBox){
-    const top12mIdx = awardBadges.findIndex(list=>list.some(a=>a.label==='Maior 12M'));
-    const lowFeeIdx = awardBadges.findIndex(list=>list.some(a=>a.label==='Menor taxa'));
-    const bestCdiIdx = awardBadges.findIndex(list=>list.some(a=>a.label==='Maior % CDI'));
-    const parts = [
-      '<div class="compar-legend-v728"><span class="best">🏆 destaque objetivo</span><span class="note">↑ maior é melhor em rentabilidade, % CDI e PL</span><span class="note">↓ menor é melhor em Taxa Adm, Conversão, Pagamento e Aplic. Mín.</span></div>'
-    ];
-    const summary = [];
-    const shortName = idx => idx>=0 ? htmlAttr((fundos[idx]['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim()) : '';
-    if(top12mIdx>=0) summary.push(`<span><strong>Maior 12M:</strong> ${shortName(top12mIdx)}</span>`);
-    if(lowFeeIdx>=0) summary.push(`<span><strong>Menor taxa:</strong> ${shortName(lowFeeIdx)}</span>`);
-    if(bestCdiIdx>=0) summary.push(`<span><strong>Maior % CDI:</strong> ${shortName(bestCdiIdx)}</span>`);
-    if(summary.length) parts.push(`<div class="compar-summary-v728">${summary.join('')}</div>`);
-    insightsBox.innerHTML = parts.join('');
+    const winnerIndex = (getter, better='max') => {
+      const vals = fundos.map(getter);
+      const valid = vals.filter(v=>!isNaN(v));
+      if(!valid.length) return -1;
+      const best = better==='min' ? Math.min(...valid) : Math.max(...valid);
+      const winners = vals.map((v,i)=>(!isNaN(v) && v===best)?i:-1).filter(i=>i>=0);
+      return winners.length===1 ? winners[0] : -1;
+    };
+    const shortName = idx => idx>=0 ? htmlAttr((fundos[idx]['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim()) : '—';
+    const fmtPctPlain = v => {
+      const n = pctNum(v);
+      if(isNaN(n)) return '—';
+      return (n>0?'+':'') + n.toFixed(2).replace('.',',') + '%';
+    };
+    const idx12 = winnerIndex(r=>pctNum(r['Acum. 12M (%)']), 'max');
+    const idxFee = winnerIndex(r=>pctNum(r['Taxa Adm (%)']), 'min');
+    const idxCdi = winnerIndex(r=>{
+      const rent = pctNum(r['Acum. 12M (%)']);
+      const cdi = indicState?.cdi?.m12;
+      return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
+    }, 'max');
+    const idxLiq = winnerIndex(r=>parsePrazo(r['Conversao Resgate']), 'min');
+
+    const cards = [];
+    if(idx12>=0) cards.push(`<article class="compar-kpi-v729"><span>Maior 12M</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small>${shortName(idx12)}</small><em>Rentabilidade acumulada em 12 meses</em></article>`);
+    if(idxFee>=0) cards.push(`<article class="compar-kpi-v729"><span>Menor taxa</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'])}</strong><small>${shortName(idxFee)}</small><em>Menor taxa de administração</em></article>`);
+    if(idxCdi>=0) {
+      const rent = pctNum(fundos[idxCdi]['Acum. 12M (%)']);
+      const cdi = indicState?.cdi?.m12;
+      const ratio = (isNaN(rent)||!cdi) ? '—' : Math.round((rent/cdi)*100) + '%';
+      cards.push(`<article class="compar-kpi-v729"><span>Maior % CDI</span><strong>${ratio}</strong><small>${shortName(idxCdi)}</small><em>Eficiência relativa ao CDI em 12 meses</em></article>`);
+    }
+    if(idxLiq>=0) cards.push(`<article class="compar-kpi-v729"><span>Liquidez mais curta</span><strong>${htmlAttr(fundos[idxLiq]['Conversao Resgate']||'—')}</strong><small>${shortName(idxLiq)}</small><em>Menor prazo de conversão</em></article>`);
+
+    insightsBox.innerHTML = `
+      <div class="compar-insights-wrap-v729">
+        <div class="compar-insights-head-v729">
+          <strong>Leitura rápida</strong>
+          <small>Os destaques abaixo são automáticos e comparativos por campo. Em rentabilidade, % CDI e PL, maior tende a ser melhor. Em taxa, conversão, pagamento e aplicação mínima, menor tende a ser melhor.</small>
+        </div>
+        <div class="compar-kpi-grid-v729">${cards.join('')}</div>
+      </div>`;
     insightsBox.hidden = false;
   }
 

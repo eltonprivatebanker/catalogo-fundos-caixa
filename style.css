@@ -86012,3 +86012,168 @@ html.desktop-responsive-fit-v688 body{
   .compar-legend-v728 span,
   .compar-summary-v728 span{font-size:.56rem}
 }
+
+
+/* ============================================================
+   V729 — comparador com semântica e hierarquia mais limpa
+============================================================ */
+.compar-insights-v728{
+  padding:12px 18px 14px;
+}
+.compar-insights-wrap-v729{
+  display:grid;
+  grid-template-columns:minmax(220px,290px) 1fr;
+  gap:14px;
+  align-items:start;
+}
+.compar-insights-head-v729 strong{
+  display:block;
+  color:#f7fafc;
+  font-size:.88rem;
+  font-weight:850;
+  letter-spacing:.01em;
+  margin-bottom:6px;
+}
+.compar-insights-head-v729 small{
+  display:block;
+  color:#97a6c1;
+  font-size:.64rem;
+  line-height:1.45;
+}
+.compar-kpi-grid-v729{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.compar-kpi-v729{
+  padding:10px 12px;
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(13,19,34,.70),rgba(9,14,26,.64));
+  min-height:88px;
+}
+.compar-kpi-v729 span{
+  display:block;
+  color:#94a3b8;
+  font-size:.60rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  margin-bottom:5px;
+}
+.compar-kpi-v729 strong{
+  display:block;
+  color:#f8fafc;
+  font-size:1rem;
+  line-height:1.1;
+  font-weight:850;
+  margin-bottom:6px;
+}
+.compar-kpi-v729 small{
+  display:block;
+  color:#d8e1ef;
+  font-size:.63rem;
+  line-height:1.35;
+  font-weight:700;
+  margin-bottom:5px;
+}
+.compar-kpi-v729 em{
+  display:block;
+  color:#8091b0;
+  font-size:.58rem;
+  line-height:1.35;
+  font-style:normal;
+}
+.ct-awards-v728{display:none!important}
+#comparTable th.ct-fundo{
+  vertical-align:top!important;
+}
+#comparTable .ct-fundo-nome{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  overflow:hidden!important;
+  min-height:34px!important;
+  max-height:none!important;
+  line-height:1.22!important;
+  font-size:.70rem!important;
+  margin-bottom:5px!important;
+}
+#comparTable .ct-fundo-meta-v729{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+}
+#comparTable .ct-fundo-cat{
+  margin-top:0!important;
+}
+.ct-awards-line-v729{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 8px;
+  align-items:center;
+}
+.ct-awards-count-v729{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 8px;
+  border-radius:999px;
+  background:rgba(46,209,122,.10);
+  border:1px solid rgba(46,209,122,.22);
+  color:#b8f1cf;
+  font-size:.56rem;
+  font-weight:850;
+  line-height:1.15;
+}
+.ct-awards-list-v729{
+  color:#94a3b8;
+  font-size:.57rem;
+  font-weight:700;
+  line-height:1.2;
+}
+#comparTable .ct-remove{
+  margin-top:0!important;
+  padding:0!important;
+  background:transparent!important;
+  border:0!important;
+  color:#8ea2c6!important;
+  font-size:.58rem!important;
+  font-weight:700!important;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+#comparTable .ct-remove:hover{color:#cfd8e8!important}
+.ct-campo-hint-v728{
+  color:#8fa0bc!important;
+  font-size:.52rem!important;
+  font-weight:650!important;
+}
+.ct-cell-flag-v728{
+  margin-right:6px!important;
+  padding:1px 6px!important;
+  font-size:.52rem!important;
+}
+.ct-cell-flag-v728.best{
+  background:rgba(46,209,122,.10)!important;
+  border:1px solid rgba(46,209,122,.20)!important;
+  color:#bdf2d0!important;
+}
+#comparTable td.ct-val{position:relative}
+#comparTable td.ct-val.ct-best{
+  background:linear-gradient(90deg,rgba(46,209,122,.09),rgba(46,209,122,.03))!important;
+  box-shadow:inset 2px 0 0 rgba(46,209,122,.55), inset 0 0 0 1px rgba(46,209,122,.10)!important;
+}
+#comparTable td.ct-val.ct-has-best-v728{box-shadow:inset 2px 0 0 rgba(46,209,122,.55), inset 0 0 0 1px rgba(46,209,122,.10)!important}
+#comparTable td.ct-val.ct-worst{
+  background:linear-gradient(90deg,rgba(240,85,101,.05),rgba(240,85,101,.02))!important;
+  box-shadow:inset 2px 0 0 rgba(240,85,101,.40)!important;
+}
+@media (max-width:1320px){
+  .compar-insights-wrap-v729{grid-template-columns:1fr}
+  .compar-kpi-grid-v729{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:980px){
+  .compar-kpi-grid-v729{grid-template-columns:1fr}
+}
