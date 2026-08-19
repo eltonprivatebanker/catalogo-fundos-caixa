@@ -85615,3 +85615,103 @@ html.desktop-responsive-fit-v688 body{
   .compar-picker-footer-actions-v721{display:grid;grid-template-columns:1fr 1.35fr;width:100%}
   .compar-picker-clear-v721,.compar-picker-cancel-v721,.compar-picker-compare-v721{min-height:40px}
 }
+
+/* ============================================================
+   V722 — CATÁLOGO 5 ITENS + COMPARADOR COMPACTO/STICKY
+   1) Reserva inicial compatível com 5 fundos (sem grande vazio)
+   2) Comparador cabe melhor no desktop
+   3) Cabeçalho com nomes dos fundos permanece visível ao rolar
+============================================================ */
+@media (min-width:769px){
+  /* O padrão agora é 5 fundos. Evita reservar a altura antiga de 10 linhas. */
+  html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap,
+  html.desktop-funds-load-stable-v692.desktop-initial-load-stable-v591:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:450px!important;
+  }
+
+  html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos #loadMsg{
+    min-height:448px!important;
+    height:448px!important;
+  }
+
+  /* Comparador final: usa mais da altura útil e reduz espaços internos. */
+  .compar-panel{
+    width:min(1320px,96vw)!important;
+    max-height:94vh!important;
+  }
+
+  .compar-header{
+    padding:12px 18px 10px!important;
+    min-height:54px!important;
+  }
+
+  .compar-scroll{
+    overflow:auto!important;
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
+  }
+
+  /* Cabeçalho superior congelado: nome/categoria/remover continuam visíveis. */
+  #comparTable thead th.ct-campo{
+    position:sticky!important;
+    top:0!important;
+    left:0!important;
+    z-index:14!important;
+    background:var(--bg3,#111526)!important;
+    box-shadow:0 1px 0 var(--border2,rgba(255,255,255,.085))!important;
+  }
+
+  #comparTable thead th.ct-fundo{
+    position:sticky!important;
+    top:0!important;
+    z-index:13!important;
+    background:var(--bg2,#0c0e1a)!important;
+    box-shadow:0 1px 0 var(--border2,rgba(255,255,255,.085))!important;
+  }
+
+  /* Compactação vertical suficiente para 13 campos caberem na maioria dos desktops. */
+  #comparTable th.ct-campo,
+  #comparTable td.ct-campo,
+  #comparTable th.ct-fundo,
+  #comparTable td.ct-val{
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+
+  #comparTable th.ct-fundo{
+    padding:8px 12px 7px!important;
+  }
+
+  #comparTable .ct-fundo-nome{
+    min-height:28px!important;
+    max-height:31px!important;
+    line-height:1.16!important;
+    font-size:.66rem!important;
+    margin-bottom:2px!important;
+  }
+
+  #comparTable .ct-fundo-cat{
+    margin-top:3px!important;
+  }
+
+  #comparTable .ct-remove{
+    margin-top:3px!important;
+    font-size:.57rem!important;
+  }
+
+  #comparTable td.ct-campo,
+  #comparTable td.ct-val{
+    line-height:1.15!important;
+  }
+}
+
+/* Em notebooks baixos, mantém o cabeçalho fixo e deixa somente o miolo rolar. */
+@media (min-width:769px) and (max-height:720px){
+  .compar-panel{max-height:96vh!important;}
+  .compar-header{padding:9px 16px 8px!important;min-height:48px!important;}
+  #comparTable th.ct-campo,
+  #comparTable td.ct-campo,
+  #comparTable th.ct-fundo,
+  #comparTable td.ct-val{padding-top:5px!important;padding-bottom:5px!important;}
+  #comparTable .ct-fundo-nome{min-height:25px!important;max-height:27px!important;font-size:.63rem!important;}
+}

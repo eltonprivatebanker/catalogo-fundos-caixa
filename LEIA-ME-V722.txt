@@ -1,0 +1,22 @@
+CATÁLOGO DE FUNDOS CAIXA — V722
+
+Ajustes sobre a V721:
+
+1. Catálogo com 5 fundos por página
+- Mantido o padrão automático de 05 fundos.
+- A reserva de altura da tabela foi reduzida de 720px para 450px.
+- Remove o grande espaço vazio abaixo das 5 linhas antes da paginação.
+
+2. Comparador de fundos
+- Painel final passou a usar até 94% da altura da tela e largura maior no desktop.
+- Linhas e cabeçalho foram compactados para que a comparação inteira caiba sem rolagem vertical na maioria dos monitores/notebooks.
+- Se ainda houver rolagem por causa da altura disponível, o cabeçalho dos fundos fica sticky.
+- Nome do fundo, categoria e botão remover permanecem visíveis enquanto se rola a comparação.
+- A coluna "Campo" continua fixa à esquerda.
+
+Arquivos alterados:
+- index.html
+- style.css
+
+app.js é o mesmo da V721 (incluído no pacote para facilitar a substituição completa).
+tokens-caixa.css não precisou de mudança funcional.
