@@ -88929,3 +88929,165 @@ html.desktop-responsive-fit-v688 body{
     max-width:142px!important;
   }
 }
+
+
+/* ============================================================
+   V748 — Desktop: acabamento da ordenação + cabeçalho da Poupança
+============================================================ */
+@media (min-width:1180px){
+
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn{
+    border:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    color:#96a4bc!important;
+    border-radius:6px!important;
+    transition:background .14s ease,color .14s ease!important;
+  }
+
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn:hover{
+    background:rgba(148,163,184,.07)!important;
+    color:#d6dfed!important;
+  }
+
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn.active,
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn[aria-pressed="true"]{
+    border:0!important;
+    background:rgba(214,164,71,.11)!important;
+    color:#efc86d!important;
+    box-shadow:inset 0 -1px 0 rgba(214,164,71,.34)!important;
+  }
+
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn[data-cdi-sort="asc"]{
+    box-shadow:inset 1px 0 0 rgba(148,163,184,.10)!important;
+  }
+
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn[data-cdi-sort="asc"].active,
+  html.desktop-toolbar-polish-v748 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control .cdi-sort-btn[data-cdi-sort="asc"][aria-pressed="true"]{
+    box-shadow:
+      inset 1px 0 0 rgba(148,163,184,.10),
+      inset 0 -1px 0 rgba(214,164,71,.34)!important;
+  }
+}
+
+@media (min-width:769px){
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167{
+    display:grid!important;
+    grid-template-columns:minmax(185px,1fr) 92px!important;
+    grid-template-rows:auto 1fr!important;
+    grid-template-areas:
+      "label ytd"
+      "monthly ytd"!important;
+    align-items:center!important;
+    column-gap:13px!important;
+    row-gap:2px!important;
+    min-width:350px!important;
+    width:350px!important;
+    max-width:350px!important;
+    min-height:58px!important;
+    height:58px!important;
+    padding:7px 11px!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167 > #poupCurrentLabelV214{
+    grid-area:label!important;
+    align-self:end!important;
+    margin:0!important;
+    color:#9ca9c0!important;
+    font-size:.55rem!important;
+    font-weight:900!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167 > div:not(.poup-current-ytd-v748){
+    grid-area:monthly!important;
+    display:flex!important;
+    align-items:baseline!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167 #mc-poup{
+    margin:0!important;
+    font-size:1.82rem!important;
+    line-height:.95!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167 > div:not(.poup-current-ytd-v748) > small{
+    margin:0!important;
+    color:#9aa8bf!important;
+    font-size:.55rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .poup-current-ytd-v748{
+    grid-area:ytd!important;
+    align-self:stretch!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    align-items:flex-end!important;
+    gap:4px!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0 0 0 12px!important;
+    border-left:1px solid rgba(148,163,184,.13)!important;
+    color:inherit!important;
+    text-align:right!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .poup-current-ytd-v748 > span{
+    display:block!important;
+    margin:0!important;
+    color:#8f9db5!important;
+    font-size:.50rem!important;
+    font-weight:850!important;
+    line-height:1.05!important;
+    letter-spacing:.05em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .poup-current-ytd-v748 > strong{
+    display:block!important;
+    margin:0!important;
+    color:#b9c7db!important;
+    font-size:.72rem!important;
+    font-weight:850!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-poupanca-header-v748 body #sec-mercado
+  .savings-reference-v167 .savings-current-v167{
+    min-width:320px!important;
+    width:320px!important;
+    max-width:320px!important;
+    grid-template-columns:minmax(165px,1fr) 86px!important;
+  }
+}

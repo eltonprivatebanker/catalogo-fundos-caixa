@@ -32389,15 +32389,21 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     if(currentLabel) currentLabel.textContent = 'Rendimento do mês';
 
     let ytd = currentBox?.querySelector('.poup-current-ytd-v741');
-    if(currentBox && !ytd){
-      ytd = document.createElement('small');
-      ytd.className = 'poup-current-ytd-v741';
+    if(currentBox && (!ytd || !ytd.classList.contains('poup-current-ytd-v748'))){
+      if(ytd) ytd.remove();
+      ytd = document.createElement('div');
+      ytd.className = 'poup-current-ytd-v741 poup-current-ytd-v748';
+      ytd.setAttribute('aria-label','Rendimento acumulado da poupança em 2026');
+      ytd.innerHTML = '<span>Acum. 2026</span><strong>—</strong>';
       currentBox.appendChild(ytd);
     }
     if(ytd){
-      ytd.textContent = Number.isFinite(values.ytd)
-        ? `Acum. 2026: ${values.ytd > 0 ? '+' : ''}${fmtPct(values.ytd)}`
-        : '';
+      const ytdValue = ytd.querySelector('strong');
+      if(ytdValue){
+        ytdValue.textContent = Number.isFinite(values.ytd)
+          ? `${values.ytd > 0 ? '+' : ''}${fmtPct(values.ytd)}`
+          : '—';
+      }
     }
   }
 
