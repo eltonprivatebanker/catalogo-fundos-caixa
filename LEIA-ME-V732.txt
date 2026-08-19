@@ -1,0 +1,6 @@
+V732 — Limpeza desktop
+
+1. Oculta a faixa “Pontos de atenção” no Ranking desktop. A estrutura permanece preservada para mobile/compatibilidade.
+2. Remove PL do modal Comparador de fundos. O campo apresentava inconsistência de escala/origem e não é necessário para a leitura operacional principal do comparativo.
+3. Mantém PL nas demais áreas do site sem alteração.
+4. Atualiza cache-busting de app.js/style.css para V732.

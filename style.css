@@ -86549,3 +86549,30 @@ html.desktop-responsive-fit-v688 body{
   html.desktop-compar-professional-v731 .compar-kpi-grid-v731{grid-template-columns:repeat(3,minmax(0,1fr))!important;}
   html.desktop-compar-professional-v731 .compar-insights-title-v731{min-height:auto!important;}
 }
+
+
+/* ============================================================
+   V732 — Desktop: remove faixa de alertas do ranking + comparador sem PL
+   A rotina de alertas é preservada para mobile/compatibilidade, mas não
+   ocupa mais espaço na experiência desktop.
+============================================================ */
+@media (min-width:769px){
+  html.desktop-hide-ranking-attention-v732 body #rankingsSection #rankingAttentionV136,
+  html.desktop-hide-ranking-attention-v732 body #rankingAttentionV136{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  /* Sem PL, a leitura fica em: identificação → custo/acesso → desempenho → liquidez. */
+  html.desktop-compar-professional-v731 #comparTable tr.ct-section-start-v731 td{
+    border-top-color:rgba(176,132,84,.16)!important;
+  }
+}

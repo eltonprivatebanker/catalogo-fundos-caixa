@@ -11064,8 +11064,6 @@ function abrirComparador(){
         const cdi  = indicState?.cdi?.m12;
         return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
       }, better:'max' },
-    { label:'PL',              key: r => fmtPL(r['PL (milhoes R$)']), tipo:'txt' },
-
     { label:'Conversão ↓',     key: r => r['Conversao Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Conversao Resgate']), better:'min', sectionStart:true },
     { label:'Pagamento ↓',     key: r => r['Pagamento Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Pagamento Resgate']), better:'min' },
   ];
