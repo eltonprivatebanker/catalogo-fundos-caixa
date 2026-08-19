@@ -1,0 +1,10 @@
+V735 — Refinamento do ritmo vertical no desktop
+
+- Reduz o espaço entre o cabeçalho e o catálogo.
+- Compacta busca / ordenação / quantidade por página.
+- Reduz a altura ociosa de Público-alvo, Categoria e Perfil de risco.
+- Aproxima filtros e tabela.
+- Reduz, com moderação, os intervalos Catálogo → Rankings → Indicadores.
+- Não altera a altura das linhas dos fundos.
+- Não altera o mobile.
+- Mantém as mudanças da V734 (Selic compacta + seleção estável no comparador).

@@ -86786,3 +86786,130 @@ html.desktop-responsive-fit-v688 body{
     flex-wrap:wrap!important;
   }
 }
+
+
+/* ============================================================
+   V735 — Desktop: ritmo vertical refinado do Catálogo
+   Objetivo: ganhar área útil sem deixar a interface apertada.
+   Mobile preservado.
+============================================================ */
+@media (min-width:769px){
+
+  /* Cabeçalho → catálogo: reduz o vazio inicial.
+     Sobrescreve a margem de 18px da V733. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos.section-gap{
+    margin-top:6px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-fundos > .section-title{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* Shell geral dos filtros: menos ar vertical, mesmo respiro horizontal. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell{
+    padding:8px 14px!important;
+  }
+
+  /* Primeira faixa: busca + ordenação + paginação. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .fund-primary-toolbar-v217{
+    min-height:46px!important;
+    height:auto!important;
+    padding:0 0 7px!important;
+    gap:10px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .fund-search-main,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .fund-view-controls-v217{
+    height:46px!important;
+    min-height:46px!important;
+    max-height:46px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .desktop-cdi-sort-control,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .exhibition-control{
+    height:46px!important;
+    min-height:46px!important;
+    max-height:46px!important;
+  }
+
+  /* Linhas Público-alvo / Categoria / Perfil.
+     O ganho vem sobretudo daqui: mantém separadores, reduz altura ociosa. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .desktop-audience-filter-v488,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .catalog-shortcuts-category-grid-v69,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .fund-secondary-controls-v217{
+    min-height:43px!important;
+    padding-top:5px!important;
+    padding-bottom:5px!important;
+  }
+
+  /* Chips e select continuam confortáveis, mas ligeiramente mais baixos. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .desktop-audience-chip-v488,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .filter-preset-chip,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .shortcut-preset{
+    min-height:30px!important;
+    height:30px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .catalog-risk-filter-v198 select,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .catalog-risk-filter-v198 .ctrl-select{
+    min-height:38px!important;
+    height:38px!important;
+  }
+
+  /* Filtros → tabela. */
+  html.desktop-vertical-rhythm-v735 body #sec-fundos .table-wrap{
+    margin-top:8px!important;
+  }
+
+  /* Catálogo → Rankings e Rankings → Mercado:
+     mantém a leitura por blocos sem a sensação de "buracos". */
+  html.desktop-vertical-rhythm-v735 body #rankingsSection.section-gap{
+    margin-top:12px!important;
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-mercado.section-gap{
+    margin-top:10px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-mercado .market-section-head{
+    margin-top:0!important;
+    margin-bottom:8px!important;
+  }
+}
+
+/* Em notebooks/escala de Windows, mantém o mesmo ritmo sem esmagar. */
+@media (min-width:769px) and (max-width:1500px){
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell{
+    padding-top:7px!important;
+    padding-bottom:7px!important;
+  }
+
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .desktop-audience-filter-v488,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .catalog-shortcuts-category-grid-v69,
+  html.desktop-vertical-rhythm-v735 body #sec-fundos #fundFilterShell
+  .fund-secondary-controls-v217{
+    min-height:42px!important;
+    padding-top:4px!important;
+    padding-bottom:4px!important;
+  }
+}
