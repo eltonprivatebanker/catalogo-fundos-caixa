@@ -1,0 +1,7 @@
+V736 — Aproximação do cabeçalho ao catálogo no desktop
+
+- Reduz a margem inferior residual do cabeçalho.
+- Reduz/compensa a margem superior do bloco de fundos.
+- Diminui o padding superior do shell de filtros.
+- Preserva a compactação interna da V735.
+- Não altera a tabela nem o mobile.

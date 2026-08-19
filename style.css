@@ -86913,3 +86913,44 @@ html.desktop-responsive-fit-v688 body{
     padding-bottom:4px!important;
   }
 }
+
+
+/* ============================================================
+   V736 — Desktop: aproxima Cabeçalho → Catálogo
+   O vazio remanescente era cumulativo: margem inferior do header,
+   margem da seção e padding superior do shell de filtros.
+   Mobile preservado.
+============================================================ */
+@media (min-width:1180px){
+  /* V601 ainda deixava 10px abaixo do cabeçalho. */
+  html.desktop-top-gap-tight-v736 body header.site-header-clean,
+  html.desktop-top-gap-tight-v736 body .site-header-clean.site-header-v217{
+    margin-bottom:2px!important;
+  }
+
+  /* Compensa o espaço estrutural legado entre os dois blocos. */
+  html.desktop-top-gap-tight-v736 body #sec-fundos.section-gap{
+    margin-top:-8px!important;
+  }
+
+  /* Busca começa mais perto do topo da própria área de filtros. */
+  html.desktop-top-gap-tight-v736 body #sec-fundos #fundFilterShell{
+    padding-top:4px!important;
+    padding-bottom:7px!important;
+  }
+
+  /* Mantém o restante do ritmo da V735. */
+  html.desktop-top-gap-tight-v736 body #sec-fundos #fundFilterShell
+  .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-top-gap-tight-v736 body #sec-fundos #fundFilterShell
+  .fund-primary-toolbar-v217{
+    padding-top:0!important;
+    padding-bottom:6px!important;
+  }
+}
+
+@media (min-width:1180px) and (max-width:1500px){
+  html.desktop-top-gap-tight-v736 body #sec-fundos.section-gap{
+    margin-top:-6px!important;
+  }
+}
