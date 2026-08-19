@@ -29594,8 +29594,8 @@ function buildDetailPanel(r,colspan){
       setImportant(root, 'display', 'grid');
       setImportant(root, 'grid-template-columns', '1fr');
       setImportant(root, 'grid-template-areas', '"head" "summary" "detail"');
-      setImportant(root, 'gap', '14px');
-      setImportant(root, 'padding', '18px 20px 20px');
+      setImportant(root, 'gap', '9px');
+      setImportant(root, 'padding', '14px 16px 15px');
       setImportant(root, 'overflow', 'visible');
     }
 
@@ -29617,7 +29617,7 @@ function buildDetailPanel(r,colspan){
       setImportant(detailGrid, 'grid-area', 'detail');
       setImportant(detailGrid, 'display', 'grid');
       setImportant(detailGrid, 'grid-template-columns', '1fr');
-      setImportant(detailGrid, 'gap', '12px');
+      setImportant(detailGrid, 'gap', '9px');
       setImportant(detailGrid, 'width', '100%');
     }
 
@@ -29629,7 +29629,7 @@ function buildDetailPanel(r,colspan){
 
     if(cdiBlock){
       setImportant(cdiBlock, 'margin', '0');
-      setImportant(cdiBlock, 'padding', '12px 12px 14px');
+      setImportant(cdiBlock, 'padding', '10px 12px 11px');
     }
 
     if(cdiKpis){
@@ -29909,10 +29909,10 @@ function buildDetailPanel(r,colspan){
       agenda.innerHTML = html;
     }
 
-    setImportant(copomBlock, 'padding', '14px 16px 16px');
+    setImportant(copomBlock, 'padding', '11px 12px 12px');
     setImportant(copomBlock, 'overflow', 'visible');
     setImportant(agenda, 'display', 'grid');
-    setImportant(agenda, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+    setImportant(agenda, 'grid-template-columns', 'repeat(5, minmax(0, 1fr))');
     setImportant(agenda, 'gap', '8px');
     setImportant(agenda, 'width', '100%');
     setImportant(agenda, 'max-width', '100%');
@@ -30041,9 +30041,9 @@ function buildDetailPanel(r,colspan){
     setImportant(summary, 'max-width', '100%');
 
     summary.querySelectorAll('.rate-summary-card-v167').forEach(card => {
-      setImportant(card, 'min-height', '92px');
+      setImportant(card, 'min-height', '68px');
       setImportant(card, 'height', 'auto');
-      setImportant(card, 'padding', '13px 14px');
+      setImportant(card, 'padding', '9px 12px');
       setImportant(card, 'border-radius', '13px');
     });
   }
@@ -30076,7 +30076,7 @@ function buildDetailPanel(r,colspan){
     if(!cdiBlock || !kpis) return;
 
     setImportant(cdiBlock, 'margin', '0');
-    setImportant(cdiBlock, 'padding', '12px 12px 14px');
+    setImportant(cdiBlock, 'padding', '10px 12px 11px');
     setImportant(cdiBlock, 'border-radius', '18px');
 
     kpis.querySelectorAll('.cdi-kpi-v271.is-total, .cdi-kpi-v271.is-12m').forEach(card => {
@@ -30090,8 +30090,8 @@ function buildDetailPanel(r,colspan){
     setImportant(kpis, 'margin', '0');
 
     kpis.querySelectorAll('.cdi-kpi-v271.is-current, .cdi-kpi-v271.is-lastclosed').forEach(card => {
-      setImportant(card, 'min-height', '70px');
-      setImportant(card, 'padding', '13px 14px');
+      setImportant(card, 'min-height', '56px');
+      setImportant(card, 'padding', '9px 12px');
     });
   }
 
@@ -30101,20 +30101,20 @@ function buildDetailPanel(r,colspan){
     const agenda = document.getElementById('desktopCopomAgendaV648');
 
     if(copomBlock){
-      setImportant(copomBlock, 'padding', '14px 16px 14px');
+      setImportant(copomBlock, 'padding', '11px 12px 12px');
       setImportant(copomBlock, 'border-radius', '16px');
     }
 
     if(agenda){
-      setImportant(agenda, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
-      setImportant(agenda, 'gap', '8px');
-      setImportant(agenda, 'margin', '10px 0 0');
+      setImportant(agenda, 'grid-template-columns', 'repeat(5, minmax(0, 1fr))');
+      setImportant(agenda, 'gap', '6px');
+      setImportant(agenda, 'margin', '8px 0 0');
       setImportant(agenda, 'overflow', 'visible');
     }
 
     document.querySelectorAll('#sec-mercado .desktop-copom-card-v648').forEach(card => {
-      setImportant(card, 'min-height', '66px');
-      setImportant(card, 'padding', '9px 10px 9px 12px');
+      setImportant(card, 'min-height', '56px');
+      setImportant(card, 'padding', '7px 9px 7px 11px');
       setImportant(card, 'border-radius', '12px');
     });
   }
@@ -30130,15 +30130,15 @@ function buildDetailPanel(r,colspan){
       setImportant(root, 'display', 'grid');
       setImportant(root, 'grid-template-columns', '1fr');
       setImportant(root, 'grid-template-areas', '"head" "summary" "detail"');
-      setImportant(root, 'gap', '14px');
-      setImportant(root, 'padding', '18px 20px 20px');
+      setImportant(root, 'gap', '9px');
+      setImportant(root, 'padding', '14px 16px 15px');
       setImportant(root, 'overflow', 'visible');
     }
 
     if(detailGrid){
       setImportant(detailGrid, 'display', 'grid');
       setImportant(detailGrid, 'grid-template-columns', '1fr');
-      setImportant(detailGrid, 'gap', '12px');
+      setImportant(detailGrid, 'gap', '9px');
       setImportant(detailGrid, 'width', '100%');
     }
 
@@ -32471,5 +32471,170 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
       expected:{...expected}
     })
   };
+})();
+
+
+
+/* ============================================================
+   V739 — Desktop: Juros de referência executivo
+   - separa Nível atual de CDI acumulado
+   - dá prioridade visual à próxima reunião do Copom
+   - transforma "CDI mensal" em "CDI recente"
+   - SOMENTE DESKTOP
+============================================================ */
+(function desktopRatesExecutiveV739(){
+  const MQ = '(min-width: 769px)';
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia(MQ).matches;
+  }
+
+  function clean(v){
+    return String(v || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function ensureGroupLabels(){
+    if(!isDesktop()) return;
+    const summary = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(!summary) return;
+
+    let current = document.getElementById('ratesCurrentGroupLabelV739');
+    if(!current){
+      current = document.createElement('div');
+      current.id = 'ratesCurrentGroupLabelV739';
+      current.className = 'rates-group-label-v739 rates-current-label-v739';
+      current.textContent = 'Nível atual';
+      summary.prepend(current);
+    }
+
+    let accum = document.getElementById('ratesAccumGroupLabelV739');
+    if(!accum){
+      accum = document.createElement('div');
+      accum.id = 'ratesAccumGroupLabelV739';
+      accum.className = 'rates-group-label-v739 rates-accum-label-v739';
+      accum.textContent = 'CDI acumulado';
+      current.insertAdjacentElement('afterend', accum);
+    }
+
+    summary.setAttribute(
+      'aria-label',
+      'Nível atual de Selic e CDI e rentabilidade acumulada do CDI'
+    );
+  }
+
+  function applyTexts(){
+    if(!isDesktop()) return;
+
+    const title = document.getElementById('ratesReferenceTitleV167');
+    if(title) title.textContent = 'Juros de referência';
+
+    const subtitle = title?.closest('.market-reference-head-v167')?.querySelector('p');
+    if(subtitle){
+      subtitle.textContent = 'Selic, CDI e calendário Copom em uma visão operacional.';
+    }
+
+    const cdiNote = document.getElementById('cdiYearHistoryTotal');
+    if(cdiNote){
+      cdiNote.textContent = '≈ Selic − 0,10 p.p.';
+    }
+
+    const yCard = document.getElementById('ratesCdiYearSummaryV649');
+    if(yCard){
+      const label = yCard.querySelector(':scope > span');
+      const note = yCard.querySelector(':scope > small');
+      if(label) label.textContent = 'CDI em 2026';
+      if(note) note.textContent = 'Acumulado no ano';
+    }
+
+    const m12Card = document.getElementById('ratesCdi12mSummaryV649');
+    if(m12Card){
+      const label = m12Card.querySelector(':scope > span');
+      const note = m12Card.querySelector(':scope > small');
+      if(label) label.textContent = 'CDI em 12 meses';
+      if(note) note.textContent = 'Acumulado em 12 meses';
+    }
+
+    const copomTitle = document.getElementById('copomCompactTitleV167');
+    if(copomTitle) copomTitle.textContent = 'Calendário Copom 2026';
+
+    const copomSub = copomTitle?.closest('.reference-subhead-v167')?.querySelector('small');
+    if(copomSub){
+      copomSub.textContent = 'Decisões realizadas, próxima reunião e agenda restante.';
+    }
+
+    const cdiTitle = document.getElementById('cdiYearHistoryTitle');
+    if(cdiTitle) cdiTitle.textContent = 'CDI recente';
+
+    const cdiSub = cdiTitle?.closest('.reference-subhead-v167')?.querySelector('small');
+    if(cdiSub){
+      cdiSub.textContent = 'Mês atual e último mês fechado.';
+    }
+
+    const root = document.querySelector('#sec-mercado .rates-reference-v167');
+    if(root){
+      root.setAttribute('aria-label', 'Referências de juros e calendário Copom');
+    }
+  }
+
+  function classifyCopom(){
+    if(!isDesktop()) return;
+    const agenda = document.getElementById('desktopCopomAgendaV648');
+    if(!agenda) return;
+
+    const cards = [...agenda.querySelectorAll('.desktop-copom-card-v648')];
+    cards.forEach((card, i) => {
+      card.classList.remove('is-realized-v739', 'is-upcoming-v739');
+      if(card.classList.contains('is-next')){
+        card.classList.add('is-upcoming-v739');
+      }else if(card.classList.contains('is-future')){
+        // future stays neutral
+      }else{
+        card.classList.add('is-realized-v739');
+      }
+      card.style.setProperty('order', String(i + 1), 'important');
+    });
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-rates-executive-v739');
+    ensureGroupLabels();
+    applyTexts();
+    classifyCopom();
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_EXECUTIVE_V739';
+  }
+
+  let raf = 0;
+  function schedule(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(apply);
+  }
+
+  function boot(){
+    apply();
+    [120, 420, 900, 1800, 3600, 7200, 12500, 20500, 24200].forEach(ms => setTimeout(apply, ms));
+
+    const root = document.querySelector('#sec-mercado .rates-reference-v167');
+    if(root && !root.dataset.v739Observed && window.MutationObserver){
+      root.dataset.v739Observed = '1';
+      new MutationObserver(schedule).observe(root, {
+        childList:true,
+        subtree:true,
+        characterData:true
+      });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot, {once:true});
+  }else{
+    boot();
+  }
+
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('pageshow', apply, {passive:true});
+  window.addEventListener('resize', schedule, {passive:true});
 })();
 

@@ -1,0 +1,18 @@
+V739 — Juros de referência executivo (SOMENTE DESKTOP)
+
+Objetivos:
+- melhorar hierarquia e semântica;
+- reduzir altura sem perder informação;
+- priorizar a próxima reunião do Copom.
+
+Alterações:
+- topo separado visualmente em Nível atual e CDI acumulado;
+- Selic e CDI atuais tratados como referências, não como "positivo/negativo";
+- calendário Copom em 5 colunas:
+  - reuniões realizadas mais discretas;
+  - próxima reunião ocupa 3 colunas na segunda linha;
+  - futuras ficam neutras;
+- CDI mensal em 2026 renomeado para CDI recente;
+- CDI recente mostra somente mês atual e último mês fechado;
+- footnotes secundárias ocultas no desktop;
+- mobile preservado.
