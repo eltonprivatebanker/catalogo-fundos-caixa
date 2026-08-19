@@ -4086,7 +4086,7 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645','desktop-ranking-closed-badge-v646');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645','desktop-ranking-closed-badge-v646');
     const meta = q('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
     const period = q('#rankingPeriodSelectV136');
@@ -26185,8 +26185,21 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   };
   function apply(){
     if(!isDesktop()||!hasPatch()) return;
-    document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
     const root=document.getElementById('sec-mercado');
+
+    /* V744 — no modo terminal, a classe desktop-market-hierarchy-v523
+       NÃO pode existir, pois o index.html contém CSS legado inline
+       associado a ela. Mantemos apenas a classe de filtros. */
+    if(window.__ELTAUM_DESKTOP_RATES_TERMINAL_V740__){
+      document.documentElement.classList.remove(
+        'desktop-market-hierarchy-v523',
+        'desktop-rates-compact-v572',
+        'desktop-rates-reference-slim-v575'
+      );
+      document.documentElement.classList.add('desktop-filter-buttons-v523');
+    }else{
+      document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
+    }
 
     /* V743 — preserva apenas as tarefas neutras deste patch antigo.
        A antiga rotina abaixo também escrevia, inline + !important:
@@ -27951,8 +27964,8 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
 	    document.documentElement.classList.add(
 	      'desktop-hide-closed-month-launch-v571',
-	      'desktop-rates-compact-v572',
-	      'desktop-rates-reference-slim-v575',
+	      
+	      
 	      'desktop-monthly-us-markets-v576',
 	      'desktop-monthly-comparison-chart-v580',
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
@@ -27976,10 +27989,10 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
     document.documentElement.classList.add(
       'desktop-hide-closed-month-launch-v571',
-	      'desktop-rates-compact-v572',
+	      
 	      'desktop-dolar-no-collapse-v573',
 	      'desktop-monthly-indicators-v574',
-	      'desktop-rates-reference-slim-v575',
+	      
 	      'desktop-monthly-us-markets-v576',
 	      'desktop-monthly-comparison-chart-v580',
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
@@ -28039,7 +28052,7 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isDesktop()) return;
-	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
+	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
 	    var meta = document.querySelector('meta[name="app-build"]');
 	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
 
@@ -32087,7 +32100,16 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 
   function apply(){
     if(!isDesktop()) return;
-    document.documentElement.classList.add('desktop-rates-terminal-v740','desktop-rates-executive-v739');
+    document.documentElement.classList.remove(
+      'desktop-market-hierarchy-v523',
+      'desktop-rates-compact-v572',
+      'desktop-rates-reference-slim-v575'
+    );
+    document.documentElement.classList.add(
+      'desktop-rates-terminal-v740',
+      'desktop-rates-executive-v739',
+      'desktop-rates-final-v744'
+    );
     applyTextsAndCdi();
     renderAgenda();
     const meta=document.querySelector('meta[name="app-build"]');
@@ -32525,3 +32547,22 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   window.addEventListener('pageshow', apply, {passive:true});
 })();
 
+
+
+/* V744 — marcador de geometria final, sem timers. */
+(function desktopRatesFinalMarkerV744(){
+  function apply(){
+    if(!window.matchMedia || !window.matchMedia('(min-width:769px)').matches) return;
+    document.documentElement.classList.remove(
+      'desktop-market-hierarchy-v523',
+      'desktop-rates-compact-v572',
+      'desktop-rates-reference-slim-v575'
+    );
+    document.documentElement.classList.add('desktop-rates-final-v744');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',apply,{once:true});
+  }else apply();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('pageshow',apply,{passive:true});
+})();
