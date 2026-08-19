@@ -32828,3 +32828,28 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   window.addEventListener('pageshow',update,{passive:true});
 })();
 
+
+
+/* V746 — acessibilidade/estado visual do segmented sort */
+(function catalogSortAriaV746(){
+  function sync(){
+    if(!window.matchMedia || !window.matchMedia('(min-width:1180px)').matches) return;
+    const box=document.querySelector('#sec-fundos .desktop-cdi-sort-control');
+    if(!box) return;
+    const buttons=[...box.querySelectorAll('.cdi-sort-btn')];
+    buttons.forEach(btn=>{
+      const active=btn.classList.contains('active');
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',sync,{once:true});
+  }else sync();
+  document.addEventListener('click',ev=>{
+    if(ev.target?.closest?.('#sec-fundos .cdi-sort-btn')){
+      requestAnimationFrame(sync);
+    }
+  },true);
+  window.addEventListener('pageshow',sync,{passive:true});
+})();
+
