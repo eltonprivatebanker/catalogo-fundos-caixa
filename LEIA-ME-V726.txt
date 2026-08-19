@@ -1,0 +1,29 @@
+V726 — SANEAMENTO DO RANKING DESKTOP
+
+Objetivo
+- Eliminar os pequenos saltos verticais do bloco "Rankings de fundos" durante a abertura da página.
+- Não alterar o comportamento mobile.
+
+O que foi saneado no app.js
+1. v562-terminal legado: neutralizado.
+2. v562 oficial: instalado uma única vez; removidos load + timers de 150/500/1200/2200 ms.
+3. v151: no desktop continua sincronizando controles/alertas, mas não chama renderRankings automaticamente.
+4. v555-final: passou a apenas registrar a referência do v562, sem renderizações temporizadas.
+5. v567-final: removidos lockToolbar inline e a cascata de renders até 36 segundos. A geometria fica com o CSS final v706.
+6. v685-terminal: mantém workspace/referência, sem renderizar nem usar timers.
+7. carregarDados(): removida a segunda chamada imediata de renderRankings, porque applyFilter() já publica o ranking.
+
+Resultado esperado
+- O ranking é renderizado quando dados_atuais.csv chega, através de applyFilter().
+- Mudanças reais de período/universo/categoria/risco continuam redesenhando normalmente.
+- Abertura do site deixa de redesenhar o ranking repetidamente nos primeiros segundos.
+
+Arquivos
+- index.html: build/cache atualizado para V726 + classe de diagnóstico.
+- app.js: saneamento funcional.
+- style.css: mantido da V725; nenhum ajuste visual necessário.
+- tokens-caixa.css: mantido da V725.
+
+Diagnóstico no console
+window.__ELTAUM_RANKING_SANITIZED_V726__.renderer()
+Esperado no desktop: "v562".

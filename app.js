@@ -3790,22 +3790,11 @@ function setCdiSort(dir){
 })();
 
 
-/* PATCH v562-terminal — garante que o ranking podio permaneça ativo apos patches legados */
-(function desktopRankingPodiumV562Terminal(){
-  function isDesktop(){
-    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
-  }
-  function reinstall(){
-    if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576');
-    window.renderRankings = window.__renderRankingsV562;
-    try{ renderRankings = window.__renderRankingsV562; }catch(_){}
-    try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
-  else reinstall();
-  window.addEventListener('load', reinstall, {once:true});
-  [250, 700, 1500, 2600].forEach(function(delay){ setTimeout(reinstall, delay); });
+/* PATCH v726 — saneamento: v562-terminal legado neutralizado.
+   O renderer oficial é registrado pelo bloco desktopRankingPodiumV562 abaixo
+   e renderiza quando os dados chegam, sem reinstalações temporizadas. */
+(function desktopRankingPodiumV562TerminalV726(){
+  window.__desktopRankingV562TerminalSanitizedV726 = true;
 })();
 
 
@@ -4416,15 +4405,18 @@ function setCdiSort(dir){
     bind();
     installRankingWorkspaceNavigationV685();
     installActiveSectionSyncV683();
-    renderRankingsV562();
+    /* v726: só desenha aqui se os dados já existirem. No carregamento normal,
+       applyFilter() é o gatilho único quando dados_atuais.csv termina de carregar. */
+    if(typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length){
+      renderRankingsV562();
+    }
     syncActiveSectionV683();
   }
 
   window.__renderRankingsV562 = renderRankingsV562;
+  /* v726: uma única instalação; sem load + cascata de timers. */
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
   else install();
-  window.addEventListener('load', install, {once:true});
-  [150, 500, 1200, 2200].forEach(function(delay){ setTimeout(install, delay); });
 })();
 
 
@@ -6854,7 +6846,7 @@ async function carregarDados(){
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
     document.documentElement.classList.add('catalog-table-ready-v591','catalog-table-ready-v692');
-    renderRankings();
+    /* v726: applyFilter() acima já publicou o ranking uma vez. */
   }catch(err){
     $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
   }
@@ -17918,7 +17910,12 @@ if(!isSearchInput(el)) return;
   }
 
   function renderRankingsAndAttention(){
-    try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){console.error('v151 ranking render',e);}
+    const desktopSanitized = window.matchMedia && window.matchMedia('(min-width:769px)').matches;
+    /* v726: no desktop o v562 é a única autoridade de renderização.
+       A v151 continua sincronizando controles/alertas, mas não redesenha o ranking. */
+    if(!desktopSanitized){
+      try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){console.error('v151 ranking render',e);}
+    }
     syncRankingControls();
     renderAttention();
   }
@@ -27481,31 +27478,27 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
 
 /* =========================================================
-   PATCH v555-final — Reinstala ranking novo apos patches legados
+   PATCH v726 — saneamento do antigo v555-final
+   Mantém apenas compatibilidade de referência; não redesenha o ranking.
    ========================================================= */
-(function desktopRankingRedesignV555Final(){
+(function desktopRankingRedesignV555FinalV726(){
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
-  function installFinal(){
+  function registerOnly(){
     if(!isDesktop()) return;
     if(window.__desktopRankingPodiumV562Installed && typeof window.__renderRankingsV562 === 'function'){
       window.renderRankings = window.__renderRankingsV562;
       try{ renderRankings = window.__renderRankingsV562; }catch(e){}
-      try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 stable', e); }
       return;
     }
-    if(!window.__renderRankingsV555) return;
-    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556','desktop-ranking-cdi-pl-fix-v557');
-    window.renderRankings = window.__renderRankingsV555;
-    try{ renderRankings = window.__renderRankingsV555; }catch(e){}
-    try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
-    try{ window.__renderRankingsV555(); }catch(e){ console.error('ranking v555 final', e); }
+    if(typeof window.__renderRankingsV555 === 'function'){
+      window.renderRankings = window.__renderRankingsV555;
+      try{ renderRankings = window.__renderRankingsV555; }catch(e){}
+      try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
+    }
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installFinal, {once:true});
-  else installFinal();
-  window.addEventListener('load', installFinal, {once:true});
-  [120, 500, 1300, 2600].forEach(function(delay){ setTimeout(installFinal, delay); });
+  registerOnly();
 })();
 
 
@@ -27811,94 +27804,19 @@ function buildDetailPanel(r,colspan){
 })();
 
 
-/* PATCH v567-final — reinstala ranking podio e trava toolbar no fim do arquivo */
-(function desktopRankingPodiumV562Final(){
+/* PATCH v726 — saneamento do antigo v567-final.
+   O CSS ranking-stable-final-v706 governa a geometria; este bloco apenas
+   preserva a referência do renderer v562, sem estilos inline e sem timers. */
+(function desktopRankingPodiumV562FinalV726(){
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
-  function lockToolbar(){
-    if(!isDesktop()) return;
-    document.documentElement.classList.add(
-      'desktop-ranking-podium-v562',
-      'desktop-ranking-semantico-cdi-v563',
-      'desktop-ranking-cdi-ano-scale-v564',
-      'desktop-ranking-filters-centered-v565',
-      'desktop-ranking-stable-v566',
-      'desktop-ranking-toolbar-locked-v567',
-	      'desktop-ranking-compact-height-v568',
-	      'desktop-ranking-ultra-compact-v569',
-	      'desktop-docs-compact-v570',
-	      'desktop-hide-closed-month-launch-v571',
-	      'desktop-rates-compact-v572',
-	      'desktop-dolar-no-collapse-v573',
-	      'desktop-monthly-indicators-v574',
-	      'desktop-rates-reference-slim-v575',
-	      'desktop-monthly-us-markets-v576',
-	      'desktop-monthly-comparison-chart-v580',
-	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
-	    );
-	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
-    var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
-    if(closedMonthLaunch){
-      closedMonthLaunch.style.setProperty('display','none','important');
-      closedMonthLaunch.style.setProperty('visibility','hidden','important');
-      closedMonthLaunch.style.setProperty('height','0','important');
-      closedMonthLaunch.style.setProperty('min-height','0','important');
-      closedMonthLaunch.style.setProperty('margin','0','important');
-      closedMonthLaunch.style.setProperty('padding','0','important');
-      closedMonthLaunch.style.setProperty('border','0','important');
-      closedMonthLaunch.style.setProperty('overflow','hidden','important');
-    }
-    var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
-    if(toolbar){
-      toolbar.style.setProperty('width','min(100%, 940px)','important');
-      toolbar.style.setProperty('max-width','940px','important');
-      toolbar.style.setProperty('display','grid','important');
-      toolbar.style.setProperty('grid-template-columns','190px 310px 310px','important');
-      toolbar.style.setProperty('grid-auto-flow','row','important');
-      toolbar.style.setProperty('grid-auto-columns','initial','important');
-      toolbar.style.setProperty('justify-content','center','important');
-      toolbar.style.setProperty('align-items','end','important');
-      toolbar.style.setProperty('column-gap','14px','important');
-      toolbar.style.setProperty('row-gap','10px','important');
-      toolbar.style.setProperty('margin','5px auto 8px','important');
-      toolbar.style.setProperty('padding','8px 12px','important');
-      toolbar.style.setProperty('border-radius','11px','important');
-      if(window.matchMedia && window.matchMedia('(max-width: 1050px)').matches){
-        toolbar.style.setProperty('width','min(100%, 560px)','important');
-        toolbar.style.setProperty('max-width','560px','important');
-        toolbar.style.setProperty('grid-template-columns','1fr','important');
-      }
-    }
-    document.querySelectorAll('#rankingsSection .ranking-select-v136').forEach(function(select){
-      select.style.setProperty('min-height','32px','important');
-      select.style.setProperty('padding-top','5px','important');
-      select.style.setProperty('padding-bottom','5px','important');
-    });
-    var row = document.querySelector('#rankingsSection .ranking-filter-row-compat-v136');
-    if(row){
-      row.style.setProperty('display','none','important');
-      row.style.setProperty('visibility','hidden','important');
-      row.style.setProperty('height','0','important');
-      row.style.setProperty('min-height','0','important');
-      row.style.setProperty('margin','0','important');
-      row.style.setProperty('padding','0','important');
-      row.style.setProperty('overflow','hidden','important');
-    }
-  }
-  function reinstall(){
+  function registerOnly(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    lockToolbar();
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
-    try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 final', e); }
-    lockToolbar();
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
-  else reinstall();
-  window.addEventListener('load', reinstall, {once:true});
-  [80, 300, 900, 1800, 3200, 7000, 12000, 23000, 36000].forEach(function(delay){ setTimeout(reinstall, delay); });
+  registerOnly();
 })();
 
 
@@ -30857,22 +30775,19 @@ function buildDetailPanel(r,colspan){
 })();
 
 
-/* PATCH v685-terminal — mantém renderer e modo de workspace ativos após patches legados */
-(function rankingWorkspaceV685Terminal(){
+/* PATCH v726 — saneamento do antigo v685-terminal.
+   Mantém a classe do workspace e a referência do renderer, sem redesenhar. */
+(function rankingWorkspaceV685TerminalV726(){
   function apply(){
     if(!window.matchMedia || window.matchMedia('(min-width:769px)').matches){
-      document.documentElement.classList.add('desktop-ranking-workspace-v685');
-      const meta=document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content='ELTAUM_RANKING_WORKSPACE_V685';
+      document.documentElement.classList.add('desktop-ranking-workspace-v685','desktop-ranking-sanitized-v726');
       if(typeof window.__renderRankingsV562==='function'){
         window.renderRankings=window.__renderRankingsV562;
-        try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v685 terminal',e); }
+        try{ renderRankings=window.__renderRankingsV562; }catch(e){}
       }
     }
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
-  window.addEventListener('load',apply,{once:true});
-  [250,900,1900,3200].forEach(function(ms){setTimeout(apply,ms);});
+  apply();
 })();
 
 /* =========================================================
@@ -32202,6 +32117,17 @@ function buildDetailPanel(r,colspan){
 
   console.info('[Catálogo CAIXA] Rankings estáveis ativos:',BUILD);
 })();
+
+
+/* =========================================================
+   V726 — Desktop Ranking Sanitation
+   Uma única autoridade de renderização (v562), sem cascatas temporizadas.
+   ========================================================= */
+window.__ELTAUM_RANKING_SANITIZED_V726__ = {
+  build:'ELTAUM_RANKING_SANITIZED_V726',
+  renderer:function(){ return window.renderRankings === window.__renderRankingsV562 ? 'v562' : 'other'; },
+  desktop:function(){ return !window.matchMedia || window.matchMedia('(min-width:769px)').matches; }
+};
 
 /* =========================================================
    PRODUÇÃO v720 — Selic simplificada
