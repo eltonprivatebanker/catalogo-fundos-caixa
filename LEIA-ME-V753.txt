@@ -1,0 +1,28 @@
+V753 — TESTE ISOLADO via v3.html
+
+Mudança principal:
+- a CAIXA bloqueia a visualização do PDF dentro de iframe em outro domínio;
+- por isso o clique no nome do fundo agora abre a lâmina oficial diretamente em NOVA ABA;
+- o comparador permanece aberto e intacto na aba original;
+- o ícone ao lado do nome ganhou indicação ↗;
+- tooltip informa que a lâmina será aberta em nova aba.
+
+Fallback:
+- se o navegador bloquear a nova aba/pop-up, aparece um modal pequeno com o botão
+  "Abrir em nova aba";
+- não tentamos mais incorporar o PDF da CAIXA no iframe.
+
+Troféu:
+- permanece no melhor valor relativo de cada linha.
+
+Como testar:
+1. subir na raiz:
+   v3.html
+   app-v753.js
+   style-v753.css
+2. abrir:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v3.html
+3. abrir o Comparador e clicar no nome de um fundo.
+
+Produção:
+- index.html/app.js/style.css não são alterados por esse teste.
