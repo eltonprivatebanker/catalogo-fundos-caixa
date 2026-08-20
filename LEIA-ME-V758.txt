@@ -1,0 +1,56 @@
+V758 — TESTE ISOLADO via v8.html
+
+Foco: otimizar a tela de SELEÇÃO E FILTRO do Comparador.
+
+Principais mudanças:
+
+1. Cabeçalho
+- texto reduzido para:
+  "Selecione de 2 a 6 fundos para comparar lado a lado."
+- remove mensagem técnica de sincronização com o catálogo.
+
+2. Busca e filtros
+- label "Buscar fundos";
+- placeholder: "Nome, CNPJ, código ou benchmark...";
+- Categoria e Perfil permanecem;
+- botão "Limpar filtros" na mesma barra.
+
+3. Status
+- resultado mais curto:
+  "211 fundos"
+  "18 fundos filtrados"
+  "3 fundos para “BDR”"
+- seleção: "2/6 selecionados".
+
+4. Lista
+- CNPJ sai da linha visível (continua pesquisável e disponível no title);
+- mostra só:
+  Categoria · Perfil · Cód. xxxx
+- 12M permanece à direita;
+- item inteiro continua clicável;
+- altura menor e menos ruído.
+
+5. Painel direito
+- reduzido de ~360px para ~300px;
+- título: "Fundos selecionados 0/6";
+- vazio mais discreto, sem caixa tracejada grande;
+- cards selecionados sem retorno 12M;
+- "Limpar seleção" fica desabilitado quando vazio;
+- removidos "Voltar aos fundos" e texto técnico sobre PDF;
+- existe somente uma ação principal.
+
+6. Botão principal
+- 0 fundos: "Selecione pelo menos 2 fundos"
+- 1 fundo: "Selecione mais 1 fundo"
+- 2+ fundos: "Comparar N fundos"
+
+Teste:
+subir na raiz:
+  v8.html
+  app-v758.js
+  style-v758.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v8.html
+
+Produção não é alterada.
