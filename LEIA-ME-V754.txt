@@ -1,0 +1,28 @@
+V754 — TESTE ISOLADO via v4.html
+
+Correção do comportamento observado no Firefox:
+- a lâmina ABRIA em nova aba;
+- porém window.open(..., 'noopener,noreferrer') podia retornar null;
+- o código interpretava null como "popup bloqueado";
+- por isso mostrava o modal "O navegador bloqueou..." mesmo com a aba já aberta.
+
+V754:
+- não usa mais o retorno de window.open;
+- cria um link real <a target="_blank" rel="noopener noreferrer">;
+- o clique no nome do fundo dispara esse link diretamente;
+- não existe mais modal/fallback de "navegador bloqueou";
+- não tenta mais iframe;
+- comparador permanece intacto na aba original.
+
+Como testar:
+1. subir na raiz:
+   v4.html
+   app-v754.js
+   style-v754.css
+2. abrir:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v4.html
+3. Comparador > clique no nome do fundo.
+4. Deve abrir a LAC em nova aba e NÃO mostrar nenhuma janela intermediária.
+
+Produção:
+- index.html/app.js/style.css continuam intactos.
