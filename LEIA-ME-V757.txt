@@ -1,0 +1,42 @@
+V757 — TESTE ISOLADO via v7.html
+
+Foco: SEMÂNTICA E HIERARQUIA do Comparador.
+
+Alterações:
+1. "Leitura rápida" -> "Destaques do comparativo".
+2. Cards superiores:
+   - Maior retorno em 12 meses
+   - Menor taxa de administração
+   - Maior % do CDI em 12 meses
+3. Nota: destaques são relativos somente aos fundos selecionados.
+4. "CAMPO" -> "INDICADOR".
+5. Nomes das linhas mais explícitos:
+   - Perfil de risco
+   - Taxa de administração
+   - Aplicação mínima
+   - Retorno no mês / ano / 12 meses
+   - % do CDI em 12 meses
+   - Conversão da cota
+   - Pagamento do resgate
+6. Agrupadores visuais:
+   FUNDO / CUSTOS E ACESSO / RENTABILIDADE / LIQUIDEZ.
+7. Tooltips explicativos em indicadores que podem gerar dúvida.
+8. Troféu passa para antes do valor destacado.
+9. "Remover" vira × discreto com tooltip.
+10. Largura adaptativa:
+    2 fundos ~340 px
+    3 fundos ~290 px
+    4 fundos ~245 px
+    5 fundos ~218 px
+    6 fundos ~205 px
+
+Teste:
+subir na raiz:
+  v7.html
+  app-v757.js
+  style-v757.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v7.html
+
+Produção não é alterada.
