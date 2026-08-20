@@ -1,0 +1,32 @@
+V760 — TESTE ISOLADO via v10.html
+
+Último refinamento visual sobre V759.
+
+COMPARATIVO
+- corrige definitivamente "Destaques do comparativo":
+  regras antigas V731 tinham maior especificidade e ainda forçavam coluna lateral;
+- título agora fica em uma faixa curta acima dos cards;
+- 3 cards ocupam toda a largura;
+- cards ficam um pouco mais baixos;
+- legenda do troféu mais discreta;
+- coluna INDICADOR reduzida para ~150 px;
+- larguras adaptativas continuam conforme quantidade de fundos.
+
+SELETOR
+- painel direito reduzido para ~252 px;
+- "Fundos selecionados" -> "Selecionados";
+- estado vazio sem caixa visual pesada;
+- texto reduzido para "Marque fundos na lista ao lado.";
+- "Limpar filtros" fica totalmente oculto quando não há busca/filtro;
+- reaparece como ação textual quando houver algo para limpar.
+
+Teste:
+subir na raiz:
+  v10.html
+  app-v760.js
+  style-v760.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v10.html
+
+Produção não é alterada.
