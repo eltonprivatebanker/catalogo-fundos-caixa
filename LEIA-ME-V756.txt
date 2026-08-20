@@ -1,0 +1,42 @@
+V756 — TESTE ISOLADO via v6.html
+
+Objetivo: reduzir largura e poluição visual do Comparador.
+
+Alterações:
+1. Código do fundo
+- sai da linha "Identificação";
+- aparece no cabeçalho, ao lado da categoria:
+  RF · Cód. 5908
+
+2. Identificação
+- passa a se chamar "CNPJ";
+- mostra somente o CNPJ.
+
+3. Aporte
+- "Aporte inicial mín. ↓" passa a "Aporte mín. ↓".
+
+4. Nome dos fundos
+- nome oficial NÃO é alterado na base;
+- no Comparador existe um nome de exibição mais curto;
+- remove termos estruturais como CAIXA, FIC, FIF, RESP LTDA/LIMITADA e LP final;
+- categoria continua no badge;
+- no máximo 2 linhas;
+- hover/title mantém o nome oficial completo;
+- clique continua abrindo a LAC/lâmina em nova aba.
+
+5. Largura
+- coluna CAMPO: ~118px;
+- cada fundo: ~205px em desktop grande;
+- em notebook: ~188px;
+- objetivo: 6 fundos caberem com bem menos rolagem horizontal.
+
+Teste:
+subir na raiz:
+  v6.html
+  app-v756.js
+  style-v756.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v6.html
+
+Produção não é alterada.
