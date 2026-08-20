@@ -1,0 +1,31 @@
+V759 — TESTE ISOLADO via v9.html
+
+Refinamento visual sobre V757/V758. A lógica do comparador não muda.
+
+COMPARATIVO
+- "Destaques do comparativo" vira uma faixa horizontal curta;
+- deixa de ocupar aquela coluna estreita que quebrava o texto;
+- os 3 cards de destaque ocupam toda a largura disponível;
+- legenda do troféu fica mais discreta;
+- tabela, grupos semânticos, troféus e links das lâminas permanecem.
+
+SELEÇÃO / FILTROS
+- painel direito reduzido para ~270 px;
+- removido o contador duplicado "0/6 selecionados" da área de resultados;
+- o contador fica apenas em "Fundos selecionados 0/6";
+- estado vazio fica menor;
+- "Limpar filtros" vira ação secundária textual;
+- fica desabilitado enquanto nenhum filtro/busca estiver ativo;
+- lista recebe pequeno ganho de densidade;
+- continua existindo apenas uma ação principal: Comparar.
+
+Teste:
+subir na raiz:
+  v9.html
+  app-v759.js
+  style-v759.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v9.html
+
+Produção não é alterada.
