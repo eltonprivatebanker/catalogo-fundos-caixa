@@ -1,0 +1,35 @@
+PROMOÇÃO V761 PARA A PÁGINA PRINCIPAL
+
+GitHub Pages está publicando a branch:
+Testes-da-versão-01
+
+ARQUIVO QUE PRECISA SER SUBSTITUÍDO NA RAIZ:
+- index.html
+
+Os arquivos abaixo já são os utilizados pela v11.html e só precisam ser enviados
+novamente se você quiser garantir que a raiz está com exatamente a versão aprovada:
+- app-v761.js
+- style-v761.css
+- tokens-caixa.css
+
+O novo index.html:
+- é baseado exatamente na v11.html aprovada;
+- remove noindex,nofollow;
+- altera x-build de V761-test para V761-prod;
+- remove “Teste V761” do título;
+- continua apontando para app-v761.js e style-v761.css;
+- não altera JSONs, CSVs, robôs, workflows ou arquivos de mercado.
+
+MODO MAIS SEGURO:
+1. Na branch Testes-da-versão-01, faça backup/download do index.html atual.
+2. Faça upload SOMENTE do novo index.html e confirme Replace/Commit.
+3. Aguarde o GitHub Pages publicar.
+4. Teste:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/
+5. Faça Ctrl+F5 para evitar cache.
+
+ROLLBACK:
+Se algo não funcionar, restaure apenas o index.html anterior.
+
+Não é necessário alterar Settings > Pages.
+Não é necessário fazer merge com main.
