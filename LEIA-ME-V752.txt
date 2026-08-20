@@ -1,0 +1,25 @@
+V752 — TESTE ISOLADO via v2.html
+
+Objetivo:
+1) Comparador: substituir o ponto amarelo de "melhor valor" por um troféu monocromático.
+2) Nome do fundo clicável: abrir lâmina/material comercial oficial em visualizador sobre o comparador.
+
+Como testar sem mexer no index.html de produção:
+- envie para a RAIZ do repositório:
+  v2.html
+  app-v752.js
+  style-v752.css
+- tokens-caixa.css e os JSON/CSV existentes continuam sendo usados normalmente.
+- abra:
+  https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v2.html
+
+Documento:
+- prioridade: Boletim Comercial/LAC já presente nos dados;
+- depois: Lâmina;
+- fallback: https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_CODIGO.pdf
+- o PDF tenta abrir dentro de iframe;
+- "Abrir em nova aba" permanece disponível caso o site da CAIXA bloqueie incorporação por iframe.
+
+Importante:
+- index.html, app.js e style.css de produção NÃO precisam ser substituídos para este teste.
+- depois de aprovado, a V752 pode ser promovida para o index principal.
