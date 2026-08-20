@@ -1,0 +1,38 @@
+V761 — TESTE ISOLADO via v11.html
+
+Foco: corrigir o deslocamento horizontal do texto no buscador principal.
+
+Problema observado:
+- placeholder começava em uma posição;
+- ao digitar, o texto começava alguns pixels mais à direita.
+
+Causa saneada:
+- patches legados alternavam o wrapper entre flex/grid;
+- alguns ainda aplicavam padding-left no próprio #searchInput;
+- o campo era type="search", que pode ter geometria interna própria no Firefox.
+
+V761:
+1. #searchInput passa a type="text" com role="searchbox".
+2. O wrapper .fund-search-main passa a controlar TODO o espaçamento.
+3. Input sempre usa:
+   padding: 0;
+   text-indent: 0;
+4. Placeholder e texto digitado começam exatamente no mesmo ponto.
+5. Foco:
+   borda dourada mais fina;
+   halo muito mais discreto.
+6. Incluído botão × para limpar a busca quando houver texto.
+7. Tecla Escape também limpa a busca.
+
+Somente desktop.
+
+Teste:
+subir na raiz:
+  v11.html
+  app-v761.js
+  style-v761.css
+
+Abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v11.html
+
+Produção não é alterada.
