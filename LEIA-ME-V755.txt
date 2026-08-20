@@ -1,0 +1,30 @@
+V755 — TESTE ISOLADO via v5.html
+
+Mudança:
+- o nome de cada fundo no Comparador virou um LINK HTML real para a lâmina/LAC;
+- não usa window.open(), modal ou botão JavaScript;
+- target="_blank" + rel="noopener noreferrer".
+
+Uso:
+- clique normal: abre em nova aba;
+- Ctrl/Cmd + clique: comportamento nativo;
+- botão do meio: abre em nova aba;
+- o gerente pode abrir rapidamente várias lâminas;
+- o comparador fica intacto na aba original.
+
+Visual:
+- nome permanece branco;
+- hover/foco em dourado discreto;
+- apenas ↗ ao lado do nome;
+- removido o ícone extra de documento.
+
+Documento:
+1. Boletim/Lâmina comercial (LAC) presente nos dados;
+2. Lâmina;
+3. fallback LAC_<código>.pdf.
+
+Teste:
+subir v5.html, app-v755.js e style-v755.css na raiz e abrir:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v5.html
+
+Produção não é alterada.
