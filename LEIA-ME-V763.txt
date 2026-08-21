@@ -1,0 +1,23 @@
+V763 / v13.html — RANKING COMPACTO
+
+Mantém a nova hierarquia da V12, mas reduz o espaço vertical.
+
+O que mudou:
+- eliminada a faixa separada "Ranking atual";
+- período, universo, categoria e perfil aparecem dentro de "Líderes por categoria";
+- quantidade de categorias elegíveis aparece no mesmo cabeçalho;
+- filtros, título e cards de extremos ficaram mais baixos;
+- tabela ligeiramente mais compacta;
+- permanece "Ranking por: Retorno no período";
+- continuam apenas Maior retorno e Menor retorno no resumo.
+
+Arquivos para subir:
+v13.html
+app-v763.js
+style-v763.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v13.html
+
+A produção/index.html não é alterada.
