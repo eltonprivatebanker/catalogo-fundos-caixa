@@ -1,0 +1,28 @@
+V762 / v12.html — TESTE DO RANKING
+
+Objetivo:
+testar nova hierarquia, semântica e fluidez da área Rankings de fundos,
+sem alterar a página principal.
+
+Mudanças:
+- título/subtítulo em linha própria;
+- filtros em barra única;
+- critério explícito: Ranking por Retorno no período;
+- resumo reduzido a Maior retorno e Menor retorno;
+- faixa "Ranking atual" com período/universo/categoria/risco;
+- quantidade elegível vira informação secundária;
+- "Melhor fundo de cada categoria" vira "Líderes por categoria";
+- retorno ganha mais peso que % CDI;
+- tabela um pouco mais compacta;
+- pódio destacado e posições seguintes neutras.
+
+Arquivos:
+v12.html
+app-v762.js
+style-v762.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v12.html
+
+A produção/index.html não é alterada.
