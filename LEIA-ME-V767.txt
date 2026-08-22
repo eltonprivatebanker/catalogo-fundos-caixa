@@ -1,0 +1,30 @@
+V767 / v17.html — CTA CENTRAL DO COMPARADOR
+
+Objetivo:
+recuperar o protagonismo da ação "Comparar" sem voltar à barra
+flutuante antiga e sem duplicar botões.
+
+O que mudou em relação à V16:
+- o botão "Comparar N fundos" saiu da extrema direita da faixa superior;
+- a faixa superior ficou apenas com:
+  Selecionados + chips + Limpar;
+- foi criado um único CTA principal central:
+  "⚖ Comparar N fundos";
+- o CTA aparece apenas quando existe ao menos 1 fundo selecionado;
+- com 1 fundo, fica desabilitado como "Selecione mais 1";
+- com 2 ou mais, fica habilitado;
+- com muitos resultados, o CTA fica sticky na base da área;
+- com poucos resultados, ele acompanha naturalmente o fim da lista;
+- a barra antiga inferior continua escondida dentro do workspace;
+- a tela final do comparador não foi alterada.
+
+Arquivos:
+v17.html
+app-v767.js
+style-v767.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v17.html
+
+V16, V15 e index.html permanecem intactos.
