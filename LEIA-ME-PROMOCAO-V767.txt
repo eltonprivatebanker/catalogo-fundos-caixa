@@ -1,0 +1,24 @@
+PROMOÇÃO V767 / V17 PARA PRODUÇÃO
+
+O GitHub Pages continuará usando a branch:
+Testes-da-versão-01
+
+Para publicar a V17 como página principal:
+1. Substitua APENAS o index.html atual pelo index.html deste pacote.
+2. app-v767.js, style-v767.css e tokens-caixa.css já podem permanecer como estão
+   caso já estejam na raiz da mesma branch.
+3. Não é necessário renomear v17.html.
+4. Não é necessário alterar Settings > Pages.
+5. Após o commit, aguarde o GitHub Pages concluir o novo deployment.
+
+O index.html de produção:
+- é baseado integralmente na v17.html;
+- aponta para app-v767.js;
+- aponta para style-v767.css;
+- continua usando tokens-caixa.css;
+- remove noindex,nofollow da página de teste;
+- troca x-build de V767-test para V767-prod;
+- remove "Teste V767" do <title>.
+
+Recomendação:
+Mantenha v17.html no repositório como cópia/teste e substitua somente index.html.
