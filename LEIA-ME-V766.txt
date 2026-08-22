@@ -1,0 +1,28 @@
+V766 / v16.html — REFINAMENTO DO SELETOR DO COMPARADOR
+
+Objetivo:
+corrigir os pontos observados no teste da V15 sem alterar a tela final
+do comparativo.
+
+Mudanças:
+1. Os chips dos fundos selecionados agora usam flex-direction: row.
+   Eles ficam realmente lado a lado e só usam rolagem horizontal se necessário.
+2. A antiga barra flutuante inferior do comparador é ocultada enquanto
+   o workspace de seleção estiver aberto.
+3. A lista não tem mais altura fixa:
+   - poucos resultados: o bloco encolhe naturalmente;
+   - muitos resultados: max-height aproximado de 9 linhas + rolagem.
+4. Busca com 1 resultado não deixa um grande vazio abaixo.
+5. A separação entre filtros, fundos selecionados e resultados ficou mais sutil.
+6. A tela final do comparador não foi redesenhada nesta versão.
+
+Arquivos:
+v16.html
+app-v766.js
+style-v766.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v16.html
+
+index.html, V13, V14 e V15 permanecem intactos.
