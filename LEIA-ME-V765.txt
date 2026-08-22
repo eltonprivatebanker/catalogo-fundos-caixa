@@ -1,0 +1,30 @@
+V765 / v15.html — COMPARADOR EM LARGURA TOTAL
+
+Objetivo:
+resolver o problema estrutural percebido na V14: a coluna lateral de
+selecionados consumia muita largura mesmo vazia.
+
+Mudanças da V15:
+- removida completamente a coluna lateral "Selecionados";
+- lista de fundos agora usa 100% da largura disponível;
+- "Selecionados 0/6" vira uma faixa horizontal compacta abaixo dos filtros;
+- fundos escolhidos aparecem como chips numerados na ordem da seleção;
+- cada chip pode ser removido individualmente pelo X;
+- botão "Limpar" aparece na mesma faixa;
+- botão "Comparar N fundos" também fica na faixa;
+- estado 0/6 não cria painel vazio;
+- linhas da lista caem para aproximadamente 44 px;
+- mantém uma única referência "Retorno 12M" no cabeçalho;
+- botão "Limpar filtros" fica invisível quando não existe filtro ativo;
+- restante da V14/V13 permanece intacto.
+
+Arquivos:
+v15.html
+app-v765.js
+style-v765.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v15.html
+
+index.html, V14 e V13 não são alterados.
