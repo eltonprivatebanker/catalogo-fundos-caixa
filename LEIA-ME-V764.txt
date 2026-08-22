@@ -1,0 +1,30 @@
+V764 / v14.html — SELETOR DO COMPARADOR MAIS LIMPO
+
+Objetivo:
+reduzir a poluição visual da área de seleção de fundos.
+
+Mudanças principais:
+- busca é o controle principal;
+- categoria e perfil são filtros auxiliares;
+- removidos os mini-cards arredondados de cada fundo;
+- lista contínua com separadores discretos;
+- selecionado recebe somente uma faixa lateral suave;
+- "12M" não se repete em todas as linhas;
+- cabeçalho único "Retorno 12M";
+- linhas mais compactas;
+- painel Selecionados reduzido para 236 px;
+- estado vazio simplificado;
+- "SELEÇÃO / Selecionados / Nenhum fundo selecionado" vira somente "Selecionados 0/6";
+- selecionados aparecem em linhas compactas;
+- botão de comparar mantém texto dinâmico.
+
+Arquivos:
+v14.html
+app-v764.js
+style-v764.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v14.html
+
+index.html e V13 permanecem intactos.
