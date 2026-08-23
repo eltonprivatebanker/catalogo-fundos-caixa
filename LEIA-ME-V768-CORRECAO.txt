@@ -1,0 +1,21 @@
+V768 / V18 — CORREÇÃO DE CARREGAMENTO
+
+Problema identificado:
+na primeira geração da V18, a substituição do bloco buildDetailPanel
+removeu acidentalmente funções auxiliares que vinham logo depois dele,
+incluindo obterDadosOperacionaisFundo e classeStatusOperacional.
+
+Efeito:
+o JavaScript era sintaticamente válido, mas falhava em tempo de execução,
+fazendo o catálogo permanecer em "Carregando catálogo de fundos...".
+
+Correção:
+- app-v768.js foi reconstruído a partir da V17 íntegra;
+- somente buildDetailPanel foi substituído;
+- todos os helpers e rotinas originais foram preservados;
+- layout visual da V18 foi mantido;
+- app-v768.js foi validado novamente com Node.
+
+Para corrigir no GitHub:
+substitua somente app-v768.js.
+Se preferir, pode reenviar os 4 arquivos do pacote completo.
