@@ -1,0 +1,32 @@
+V768 / v18.html — DETALHE OPERACIONAL DO FUNDO
+
+Objetivo:
+simplificar a hierarquia e a leitura do bloco expandido de cada fundo.
+
+Mudanças:
+- troca a grade de muitos mini-cards por uma ficha operacional;
+- primeiro nível:
+  Captação + Perfil + Taxa de administração + Aplicação inicial + Resgate;
+- segundo nível:
+  Estratégia, Benchmark, Código SIART, Tributação, Público-alvo e Saldo mínimo;
+- terceiro nível:
+  apenas dois agrupamentos principais: Aplicar e Resgatar;
+- os dados internos usam separadores, não mini-cards;
+- "Aplicação" virou "Aplicar";
+- "Resgate" virou "Resgatar";
+- "Horário máximo" virou "Horário limite";
+- status informa explicitamente "Aberto para captação" ou "Fechado para captação";
+- Página do fundo permanece no cabeçalho;
+- ajuste apenas para desktop;
+- fluxo do comparador V17 permanece intacto.
+
+Arquivos:
+v18.html
+app-v768.js
+style-v768.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v18.html
+
+A V17 e o index.html não são alterados.
