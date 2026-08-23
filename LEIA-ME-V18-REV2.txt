@@ -1,0 +1,16 @@
+V18 REV2 — CORREÇÃO DO VISUAL
+
+O app contém 2 definições históricas de buildDetailPanel().
+A versão anterior corrigiu apenas a primeira; a definição mais abaixo
+sobrescrevia o novo layout, por isso visualmente nada mudava.
+
+Nesta REV2:
+- todas as 2 definições foram substituídas pelo novo layout;
+- a rotina de carregamento continua preservada;
+- o CSS V768 já existente passa agora a encontrar as classes corretas.
+
+No GitHub, substitua apenas:
+app-v768.js
+
+Depois faça Ctrl+F5 em:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v18.html

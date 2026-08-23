@@ -6048,28 +6048,12 @@ function buildDetailPanel(r,colspan){
 
   const safe = value => htmlAttr(value || '—');
   const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 detail-doc-link-v768 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
-
-  const summaryFact = (label, value) => `
-    <div class="detail-summary-fact-v768">
-      <span>${htmlAttr(label)}</span>
-      <strong>${safe(value)}</strong>
-    </div>`;
-
-  const metaFact = (label, value) => `
-    <div class="detail-meta-fact-v768">
-      <span>${htmlAttr(label)}</span>
-      <strong>${safe(value)}</strong>
-    </div>`;
-
-  const operRow = (label, value) => `
-    <div class="detail-oper-row-v768">
-      <span>${htmlAttr(label)}</span>
-      <strong>${safe(value)}</strong>
-    </div>`;
+  const summaryFact = (label, value) => `<div class="detail-summary-fact-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
+  const metaFact = (label, value) => `<div class="detail-meta-fact-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
+  const operRow = (label, value) => `<div class="detail-oper-row-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
 
   return `<tr class="detail-row detail-row-v559 detail-row-v768"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-v559 detail-panel-v768">
-
       <div class="detail-compact-head-v559 detail-head-v768">
         <div>
           <strong>Dados operacionais do fundo</strong>
@@ -6085,7 +6069,6 @@ function buildDetailPanel(r,colspan){
           <span>Captação</span>
           <strong>${htmlAttr(capHeadline)}</strong>
         </div>
-
         <div class="detail-summary-facts-v768">
           ${summaryFact('Perfil', profile)}
           ${summaryFact('Taxa de administração', taxAdm)}
@@ -6130,7 +6113,6 @@ function buildDetailPanel(r,colspan){
           </div>
         </section>
       </div>
-
     </div>
   </td></tr>`;
 }
@@ -28138,7 +28120,12 @@ function buildDocsCompactos(row){
 function buildDetailPanel(r,colspan){
   const d = obterDadosOperacionaisFundo(r);
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
-  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : (d.captacao.texto || 'Não informada');
+  const capHeadline = capCls === 'positive'
+    ? 'Aberto para captação'
+    : capCls === 'negative'
+      ? 'Fechado para captação'
+      : 'Captação não informada';
+
   const code = detailValueV158(r,['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo']);
   const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
   const profile = detailValueV158(r,['Perfil de Risco']);
@@ -28154,54 +28141,73 @@ function buildDetailPanel(r,colspan){
   const audienceText = audience.length ? audience.map(item=>item.short || item.label).join(' · ') : 'Não informado';
   const urlFund = isFallbackUrl(r) ? '' : getFundUrl(r);
 
-  const field = (label, value, cls='') => `<div class="detail-field-v559 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value || '—')}</strong></div>`;
-  const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
+  const safe = value => htmlAttr(value || '—');
+  const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 detail-doc-link-v768 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
+  const summaryFact = (label, value) => `<div class="detail-summary-fact-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
+  const metaFact = (label, value) => `<div class="detail-meta-fact-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
+  const operRow = (label, value) => `<div class="detail-oper-row-v768"><span>${htmlAttr(label)}</span><strong>${safe(value)}</strong></div>`;
 
-  return `<tr class="detail-row detail-row-v559"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel detail-panel-v559">
-      <div class="detail-compact-head-v559">
+  return `<tr class="detail-row detail-row-v559 detail-row-v768"><td colspan="${colspan}" style="padding:0">
+    <div class="detail-panel detail-panel-v559 detail-panel-v768">
+      <div class="detail-compact-head-v559 detail-head-v768">
         <div>
           <strong>Dados operacionais do fundo</strong>
-          <small>Campos essenciais para consulta rápida no atendimento.</small>
+          <small>Consulta rápida para atendimento.</small>
         </div>
-        <div class="detail-doc-actions-v559">
-          ${urlFund ? link(urlFund,'Página do fundo') : ''}
+        <div class="detail-doc-actions-v559 detail-doc-actions-v768">
+          ${urlFund ? link(urlFund,'Página do fundo ↗') : ''}
         </div>
       </div>
 
-      <div class="detail-key-grid-v559">
-        ${field('Captação', capLabel, capCls)}
-        ${field('Estratégia', d.estrategia.texto)}
-        ${field('Benchmark', d.benchmark.texto)}
-        ${field('Taxa adm.', taxAdm)}
-        ${field('Perfil de risco', profile)}
-        ${field('Código SIART', code)}
-        ${field('Saldo mínimo', balanceMin)}
-        ${field('Tributação', trib)}
-        ${field('Público-alvo', audienceText, 'wide')}
+      <div class="detail-summary-v768">
+        <div class="detail-status-v768 ${capCls}">
+          <span>Captação</span>
+          <strong>${htmlAttr(capHeadline)}</strong>
+        </div>
+        <div class="detail-summary-facts-v768">
+          ${summaryFact('Perfil', profile)}
+          ${summaryFact('Taxa de administração', taxAdm)}
+          ${summaryFact('Aplicação inicial', appInitial)}
+          ${summaryFact('Resgate', `${conversionRed || '—'} → ${paymentRed || '—'}`)}
+        </div>
       </div>
 
-      <div class="detail-oper-grid-v559">
-        <section class="detail-oper-card-v559 application">
-          <h4>Aplicação</h4>
-          <div class="detail-oper-fields-v559">
-            ${field('Horário máximo', d.horarios.aplicacao)}
-            ${field('Conversão da cota', conversionApp)}
-            ${field('Aplicação inicial', appInitial)}
-            ${field('Aplicação adicional', appAdditional)}
+      <div class="detail-meta-v768" aria-label="Dados cadastrais do fundo">
+        ${metaFact('Estratégia', d.estrategia.texto)}
+        ${metaFact('Benchmark', d.benchmark.texto)}
+        ${metaFact('Código SIART', code)}
+        ${metaFact('Tributação', trib)}
+        ${metaFact('Público-alvo', audienceText)}
+        ${metaFact('Saldo mínimo', balanceMin)}
+      </div>
+
+      <div class="detail-oper-grid-v559 detail-oper-grid-v768">
+        <section class="detail-oper-card-v559 detail-oper-card-v768 application">
+          <div class="detail-oper-title-v768">
+            <h4>Aplicar</h4>
+            <small>Condições de entrada</small>
+          </div>
+          <div class="detail-oper-list-v768">
+            ${operRow('Aplicação inicial', appInitial)}
+            ${operRow('Aplicação adicional', appAdditional)}
+            ${operRow('Conversão', conversionApp)}
+            ${operRow('Horário limite', d.horarios.aplicacao)}
           </div>
         </section>
-        <section class="detail-oper-card-v559 redemption">
-          <h4>Resgate</h4>
-          <div class="detail-oper-fields-v559">
-            ${field('Horário máximo', d.horarios.resgate)}
-            ${field('Conversão da cota', conversionRed)}
-            ${field('Crédito em conta', paymentRed)}
-            ${field('Resgate mínimo', redemptionMin)}
+
+        <section class="detail-oper-card-v559 detail-oper-card-v768 redemption">
+          <div class="detail-oper-title-v768">
+            <h4>Resgatar</h4>
+            <small>Prazo até o crédito</small>
+          </div>
+          <div class="detail-oper-list-v768">
+            ${operRow('Conversão', conversionRed)}
+            ${operRow('Crédito em conta', paymentRed)}
+            ${operRow('Resgate mínimo', redemptionMin)}
+            ${operRow('Horário limite', d.horarios.resgate)}
           </div>
         </section>
       </div>
-
     </div>
   </td></tr>`;
 }
