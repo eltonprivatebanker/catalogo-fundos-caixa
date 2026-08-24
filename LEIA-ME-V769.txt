@@ -1,0 +1,19 @@
+V19 — AJUSTE DE HIERARQUIA NO BLOCO DE DADOS OPERACIONAIS
+
+Objetivo desta versão:
+- reduzir redundância no resumo superior do detalhe do fundo;
+- trocar o rótulo "Resgate" por "Liquidez" no resumo executivo;
+- manter "Aplicação inicial" apenas dentro do bloco "Aplicar";
+- deixar o topo mais direto para leitura rápida: Captação | Perfil | Taxa de administração | Liquidez.
+
+Arquivos desta versão:
+- v19.html
+- app-v769.js
+- style-v769.css
+- tokens-caixa.css
+
+Para testar no GitHub Pages:
+1. envie os 4 arquivos acima para a pasta raiz do projeto;
+2. abra:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v19.html
+3. faça Ctrl+F5 para evitar cache antigo.
