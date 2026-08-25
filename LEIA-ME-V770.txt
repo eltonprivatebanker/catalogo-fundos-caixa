@@ -1,0 +1,27 @@
+V770 / v20.html — FILTROS PREMIUM DO CATÁLOGO (DESKTOP)
+
+Objetivo:
+refinar visualmente as três linhas de filtros do catálogo sem alterar a lógica.
+
+O que mudou:
+- Público-alvo, Categoria e Perfil de risco passam a usar a mesma malha;
+- labels laterais têm largura e hierarquia consistentes;
+- chips inativos ficam mais discretos;
+- estado ativo dourado fica mais sofisticado e menos "chapado";
+- hover é sutil, sem transformar todo botão em CTA;
+- Categoria continua totalmente visível em uma linha;
+- dropdown de Perfil de risco passa a seguir a mesma linguagem dos chips;
+- divisórias horizontais ficam mais suaves;
+- ajuste é exclusivamente desktop;
+- filtros e funções permanecem os mesmos.
+
+Arquivos:
+v20.html
+app-v770.js
+style-v770.css
+tokens-caixa.css
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/v20.html
+
+A V19 e o index.html não são alterados.
