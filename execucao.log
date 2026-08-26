@@ -23865,3 +23865,143 @@ Stacktrace:
 [14:27:34] =================================================================
 [14:27:34] [FIM] 174 fundos consolidados. Pipeline v18.9/v678 completo.
 [14:27:34] =================================================================
+[02:16:43] =================================================================
+[02:16:43] ⚡ ROBÔ SIPII v18.9 / v678 — modo fundos/full
+[02:16:43] =================================================================
+[02:16:46]   [CAIXA] renda-fixa → +35 links (35 total)
+[02:16:47]   [CAIXA] referenciados → +4 links (39 total)
+[02:16:49]   [CAIXA] fundo-simples → +2 links (41 total)
+[02:16:50]   [CAIXA] curto-prazo → +1 links (42 total)
+[02:16:51]   [CAIXA] multimercado → +19 links (61 total)
+[02:16:53]   [CAIXA] cambiais → +1 links (62 total)
+[02:16:55]   [CAIXA] fundos-de-acoes → +12 links (74 total)
+[02:16:56]   [CAIXA] fundos-de-indices → +2 links (76 total)
+[02:16:58]   [CAIXA] renda-fixa → +8 links (84 total)
+[02:17:00]   [CAIXA] empresa → +5 links (89 total)
+[02:17:01]   [CAIXA] fmp-fgts → HTTP 404
+[02:17:02]   [CAIXA] rpps → +8 links (97 total)
+[02:17:03] [CAIXA] Total URLs dinâmicas: 97
+[02:17:03] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[02:17:07] [Fundos.json] Download OK e arquivo local atualizado — 199 registros.
+[02:17:07] [Fundos.json DEBUG] Campos do 1º registro (84 campos):
+[02:17:07]   'ItemInternalId'                    = '72e4a09b-30b8-4b08-94e4-6dc47579754b'
+[02:17:07]   'co_siico'                          = '53'
+[02:17:07]   'nu_cnpj'                           = '01525057000177'
+[02:17:07]   'no_fundo'                          = 'CAIXA FIC FIF ACOES IBOVESPA - RESP LTDA'
+[02:17:07]   'ic_flag_exibir_portfolio'          = '1'
+[02:17:07]   'dt_inicial'                        = '1997-01-15T00:00:00Z'
+[02:17:07]   'id_perfil_risco'                   = '3'
+[02:17:07]   'no_perfil_risco'                   = 'Arrojado'
+[02:17:07]   'id_classificacao_cvm'              = '1'
+[02:17:07]   'no_classificacao_cvm'              = 'Ações'
+[02:17:07]   'de_horario_resgate'                = '17h00'
+[02:17:07]   'vr_aplicacao_inicial'              = '0.01'
+[02:17:07]   'co_oferta_siart'                   = 'PF, PJ, GOV'
+[02:17:07]   'ic_aberto_captacao'                = 'True'
+[02:17:07]   'id_estrategia'                     = '32'
+[02:17:07]   'no_estrategia'                     = 'RV - Ações                                                  '
+[02:17:07]   'pc_taxa_adm_cliente'               = '2.0'
+[02:17:07]   'de_link_detalhes'                  = '/Sistemas/#/PortfolioQS/53'
+[02:17:07]   'dt_cota_atual'                     = '2026-08-17T00:00:00Z'
+[02:17:07]   'vr_cota_atual'                     = '8.295593'
+[02:17:07]   'dt_cota_dia_anterior'              = '2026-08-14T00:00:00Z'
+[02:17:07]   'vr_cota_dia_anterior'              = '8.30342'
+[02:17:07]   'pc_rentabilidade_dia_anterior'     = '-0.09426236418246939'
+[02:17:07]   'dt_cota_mes_anterior'              = '2026-07-31T00:00:00Z'
+[02:17:07]   'vr_cota_mes_anterior'              = '8.844829'
+[02:17:07]   'pc_rentabilidade_mes_anterior'     = '-6.209684777399314'
+[02:17:07]   'dt_cota_ano_anterior'              = '2025-12-31T00:00:00Z'
+[02:17:07]   'vr_cota_ano_anterior'              = '8.096514'
+[02:17:07]   'pc_rentabilidade_ano_anterior'     = '2.45882363693807'
+[02:17:07]   'dt_cota_12m_anterior'              = '2025-08-18T00:00:00Z'
+[02:17:07]   'vr_cota_12m_anterior'              = '6.957382'
+[02:17:07]   'pc_rentabilidade_12m_anterior'     = '19.23440455044728'
+[02:17:07]   'in_cdi_atual'                      = '19.49166485'
+[02:17:07]   'in_cdi_ano'                        = '17.92159302'
+[02:17:07]   'pc_cdi_ano'                        = '8.760782793109'
+[02:17:07]   'pc_rentabilidade_cdi_ano'          = '31.68'
+[02:17:07]   'in_cdi_12m'                        = '17.00736153'
+[02:17:07]   'pc_cdi_12m'                        = '14.607223570915'
+[02:17:07]   'pc_rentabilidade_cdi_12m'          = '131.67'
+[02:17:07]   'co_siico00'                        = '0053'
+[02:17:07]   'de_pesquisa_index'                 = 'CAIXA FIC FIF ACOES IBOVESPA - RESP LTDA 0053 01525057000177'
+[02:17:07]   'de_link_aplicacao'                 = 'http://plataforma.caixa'
+[02:17:07]   'vr_pl'                             = '82580178.56'
+[02:17:07]   'no_benchmark'                      = 'IBOV'
+[02:17:07]   'de_tipo_api'                       = 'SIM'
+[02:17:07]   'vr_resgate_minimo'                 = '0.01'
+[02:17:07]   'vr_aplicacao_adicional_minima'     = '0.01'
+[02:17:07]   'vr_saldo_minimo'                   = '0.01'
+[02:17:07]   'de_conversao_aplicacao'            = 'D+1 (du)'
+[02:17:07]   'de_conversao_resgate'              = 'D+1 (du)'
+[02:17:07]   'de_pagamento_resgate'              = 'D+03 (du)'
+[02:17:07]   'ic_adiantamento_resgate'           = 'True'
+[02:17:07]   'de_adiant_manual_automatico'       = 'AUTOMATICO'
+[02:17:07]   'pc_adiant_resgate'                 = '100.0'
+[02:17:07]   'pc_taxa_adm_maxima'                = '2.0'
+[02:17:07]   'co_mn'                             = 'FI657'
+[02:17:07]   'no_classificacao_tributaria'       = 'AÇÕES'
+[02:17:07]   'no_razao_social'                   = 'CAIXA IBOVESPA FUNDO DE INVESTIMENTO EM COTAS DE CLASSE DE F'
+[02:17:07]   'no_classificacao_investidor'       = 'GERAL'
+[02:17:07]   'de_observacao_qs'                  = 'A contagem para conversão de cotas e pagamento do resgate é '
+[02:17:07]   'de_tipo_estorno_aplicacao'         = 'NÃO'
+[02:17:07]   'co_oferta_ibc'                     = 'FX, GC, GOV, GR, GV, INST, PJ Atacado, PJ Varejo, RPPS'
+[02:17:07]   'de_due_diligence'                  = 'INDISPONIVEL'
+[02:17:07]   'de_horario_limite'                 = '17:00'
+[02:17:07]   'de_destino'                        = 'PF, PJ PRIV, PJ PUB'
+[02:17:07]   'de_link_regulamento'               = 'https://www.caixa.gov.br/downloads/aplicacao-financeira-regu'
+[02:17:07]   'de_link_lamina'                    = 'INDISPONIVEL'
+[02:17:07]   'de_link_termo_adesao'              = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-term'
+[02:17:07]   'de_link_boletim_comercial'         = 'INDISPONIVEL'
+[02:17:07]   'de_link_fato_relevante'            = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-comu'
+[02:17:07]   'de_link_raio_x'                    = 'INDISPONIVEL'
+[02:17:07]   'de_link_info_compl'                = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-'
+[02:17:07]   'de_link_pagina_fundo'              = 'http://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/'
+[02:17:07]   'de_link_sumario'                   = 'INDISPONIVEL'
+[02:17:07]   'lista_publico_alvo'                = '["GOV", "Institucional", "Pessoa Física", "PJ Atacado", "PJ '
+[02:17:07]   'lista_segmento'                    = '["GOV", "Institucional", "Pessoa Física", "PJ Atacado", "PJ '
+[02:17:07] [Fundos.json] 197 produtos indexados.
+[02:17:07] [Fundos.json] fundos_caixa.json salvo — 198 CNPJs indexados.
+[02:17:07] Raspando segmento: PESSOA FÍSICA...
+[02:17:09] [PF] Abrindo SIPII...
+[02:19:09] [PF] Erro geral: HTTPConnectionPool(host='localhost', port=38599): Read timed out. (read timeout=120)
+[02:19:20] Raspando segmento: PESSOA JURÍDICA...
+[02:19:20] [PJ] Abrindo SIPII...
+[02:21:21] [PJ] Erro geral: HTTPConnectionPool(host='localhost', port=59535): Read timed out. (read timeout=120)
+[02:21:35] Raspando segmento: GOVERNO...
+[02:21:36] [GOV] Abrindo SIPII...
+[02:23:36] [GOV] Erro geral: HTTPConnectionPool(host='localhost', port=36535): Read timed out. (read timeout=120)
+[02:23:50] Raspando segmento: RPPS...
+[02:23:51] [RPPS] Abrindo SIPII...
+[02:25:51] [RPPS] Erro geral: HTTPConnectionPool(host='localhost', port=42269): Read timed out. (read timeout=120)
+[02:26:06] Raspando segmento: TODOS...
+[02:26:06] [TODOS] Abrindo SIPII...
+[02:28:06] [TODOS] Erro geral: HTTPConnectionPool(host='localhost', port=55335): Read timed out. (read timeout=120)
+[02:28:19] [AVISO] SIPII sem dados. Ativando fallback...
+[02:28:19] [FALLBACK SIPII] 174 fundos de 'dados_atuais.csv'.
+[02:28:19] [FALLBACK] Continuando com 174 fundos.
+[02:28:19] [VALIDAÇÃO] Publicação segura: 174 fundos; 140 com rentabilidade válida.
+[02:28:19]   [Meta] Fallback nome→codfundo 5980 para 'CAIXA FIF E-SIMPLES RENDA FIXA LP RESP LTDA' (fallback_estatico:e simples renda fixa)
+[02:28:19]   [Meta] Fallback nome→codfundo 5972 para 'CAIXA FIC FIF EXCLUSIVO FUNC RF CREDITO PRIVADO LP RESP' (fallback_estatico:exclusivo func)
+[02:28:19]   [Meta] Fallback nome→codfundo 5570 para 'CAIXA FIC FIF GERAÇÃO JOVEM CRED PRIV RF LP RESP LTDA' (fallback_estatico:geracao jovem)
+[02:28:19]   [Meta] Fallback nome→codfundo 89 para 'CAIXA FIC FIFINVESTIDOR RF LP RESP LTDA' (fallback_estatico:fifinvestidor)
+[02:28:19]   [Meta] Fallback nome→codfundo 6533 para 'CAIXA FIC FIF PLUS QUALI RF CREDI PRIV LP RESP LTDA' (fallback_estatico:plus quali)
+[02:28:19]   [Meta] Fallback nome→codfundo 5411 para 'CAIXA FIC FIF MEGA RF REFERENC DI LONGO PRAZO - RESP LT' (fallback_estatico:mega rf ref)
+[02:28:19]   [Meta] Fallback nome→codfundo 82 para 'CAIXA FIF MULTIMERCADO RV 30 LP RESP LTDA' (fallback_estatico:multimercado rv 30)
+[02:28:19]   [Meta] Fallback nome→codfundo 7991 para 'CAIXA CARTEIRA QUANT QUALI FIC FIF MM LP RESP LTDA' (fallback_estatico:carteira quant quali)
+[02:28:19]   [Meta] Fallback nome→codfundo 7980 para 'CAIXA HASHDEX NASDAQ CRYPTO INDEX FIC FIF MM RESP LTDA' (fallback_estatico:hashdex nasdaq crypto)
+[02:28:19]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA ETF IBOVESPA FUNDO DE ÍNDICE RESP LTDA' (fallback_estatico:etf ibovespa)
+[02:28:19]   [Meta] Fallback nome→codfundo 5413 para 'CAIXA FIC FIF TRANSFERÊNCIA VOLUNTÁRIA RF CP RESP LTDA' (fallback_estatico:transferencia voluntaria)
+[02:28:19]   [Meta] Fallback nome→codfundo 5825 para 'CAIXA FIF BRASIL IDKA IPCA 2A TIT PUB RF LP RESP LTDA' (fallback_estatico:brasil idka ipca 2a)
+[02:28:19]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA FIF AÇÕES BRASIL ETF IBOVESPA RESP LTDA' (fallback_estatico:etf ibovespa)
+[02:28:19] [Fundos.json] Vinculados: 171/174 | URLs válidas: 164/174 | codfundo: 174/174
+[02:28:19] [Auditoria] auditoria_fundos.json salvo — 171/174 vinculados.
+[02:28:19] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[02:28:20] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260826.xlsx
+[02:28:20] [KPIs] JSON exportado: kpis_dashboard.json
+[02:28:20] [MODO fundos] Indicadores não atualizados neste modo.
+[02:28:20] [LIMPEZA] Removido: sipii_caixa_20260818.csv
+[02:28:20] [LIMPEZA] Removido: sipii_caixa_20260818.xlsx
+[02:28:20] =================================================================
+[02:28:20] [FIM] 174 fundos consolidados. Pipeline v18.9/v678 completo.
+[02:28:20] =================================================================
