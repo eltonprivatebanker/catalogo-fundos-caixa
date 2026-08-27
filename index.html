@@ -245,7 +245,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app-v767.js?v=filtros-v776"></script>
+<script defer="" src="app-v767.js?v=filtros-v777"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -3138,10 +3138,14 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 </style>
-
-<style id="desktop-filter-initial-v776">
-/* V776 â€” geometria dos filtros definida no HTML para evitar layout shift */
+<style id="desktop-filter-initial-v777">
+/* V777 â€” geometria final dos filtros desde o primeiro frame */
 @media (min-width:769px){
+  /* Confirmado no DevTools: Categoria nasce 12px Ã  direita (394 vs 382). */
+  html body #sec-fundos #fundFilterShell .category-grid-v69{
+    margin-left:-12px!important;
+  }
+
   html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
   html body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
     width:200px!important;
@@ -3153,6 +3157,7 @@ html.desktop-responsive-fit-v688 body{
     border-radius:8px!important;
     box-sizing:border-box!important;
   }
+
   html body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
     padding:0 32px 0 12px!important;
     border:1px solid rgba(148,163,184,.20)!important;
@@ -3163,25 +3168,26 @@ html.desktop-responsive-fit-v688 body{
     font-weight:800!important;
     line-height:1!important;
   }
+
   html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198 > span[aria-hidden="true"]{
     color:rgba(166,176,201,.82)!important;
   }
 }
+
 @media (min-width:769px) and (max-width:1179px){
   html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:128px 200px!important;
     column-gap:12px!important;
   }
 }
+
 @media (min-width:1180px) and (max-width:1600px){
-  html body #sec-fundos #fundFilterShell .category-grid-v69{
-    margin-left:-12px!important;
-  }
   html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:132px 200px!important;
     column-gap:10px!important;
   }
 }
+
 @media (min-width:1601px){
   html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:140px 200px!important;
