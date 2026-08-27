@@ -79,7 +79,7 @@ import calendar
 import argparse
 import os
 from pathlib import Path
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 from zoneinfo import ZoneInfo
 import io
 import time, unicodedata, traceback, re, requests
@@ -138,6 +138,28 @@ CAIXA_LISTING_PAGES = [
 MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
 
 DEBUG_COLUNAS = False
+
+# ---------------------------------------------------------------------------
+# Relógio oficial do robô — horário de Brasília
+# ---------------------------------------------------------------------------
+# No GitHub Actions o sistema operacional normalmente trabalha em UTC.
+# Toda regra que dependa de "agora" ou "hoje" deve passar por esta função.
+try:
+    FUSO_BRASILIA = ZoneInfo("America/Sao_Paulo")
+except Exception:
+    # Fallback seguro caso o ambiente não tenha a base IANA de fusos.
+    # Brasília está em UTC-3 desde 2019 (sem horário de verão vigente).
+    FUSO_BRASILIA = timezone(timedelta(hours=-3))
+
+def agora_brasilia(*, com_fuso=False):
+    """Retorna a data/hora atual de Brasília.
+
+    Por padrão devolve datetime sem tzinfo para manter compatibilidade com
+    as rotinas antigas. Use com_fuso=True quando for necessário calcular
+    timestamp/epoch corretamente.
+    """
+    agora = datetime.now(FUSO_BRASILIA)
+    return agora if com_fuso else agora.replace(tzinfo=None)
 
 # ---------------------------------------------------------------------------
 # v678 — Selic dinâmica / Vigência protegida
@@ -344,7 +366,7 @@ URL_ESTATICO = {
 # Utilidades gerais
 # ---------------------------------------------------------------------------
 def log(msg):
-    linha = f"[{datetime.now().strftime('%H:%M:%S')}] {msg}"
+    linha = f"[{agora_brasilia().strftime('%H:%M:%S')}] {msg}"
     print(linha)
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(linha + "\n")
@@ -517,7 +539,7 @@ _FOCUS_PDF_PADROES = {
 }
 
 def _ultima_sexta(offset_semanas=0):
-    hoje = datetime.now()
+    hoje = agora_brasilia()
     dias = (hoje.weekday() - 4) % 7
     data = hoje - timedelta(days=dias + offset_semanas * 7)
     return data.strftime("%Y%m%d"), data.strftime("%d/%m/%Y")
@@ -679,7 +701,7 @@ def buscar_focus(headers):
             data_pdf_br = f"{data_pdf[6:]}/{data_pdf[4:6]}/{data_pdf[:4]}"
 
             focus_pdf = {
-                "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                "data_coleta": agora_brasilia().strftime("%d/%m/%Y %H:%M"),
                 "fonte": "pdf",
                 "data_pdf": data_pdf,
                 "data_pdf_br": data_pdf_br,
@@ -708,7 +730,7 @@ def buscar_focus(headers):
             return cache
 
     focus = {
-        "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "data_coleta": agora_brasilia().strftime("%d/%m/%Y %H:%M"),
         "fonte": "odata",
         "IPCA":       raw_focus.get("IPCA", {}),
         "Selic":      raw_focus.get("Selic", {}),
@@ -1070,7 +1092,7 @@ def buscar_fundos_json(headers):
     mapa_cnpj = indice.get("cnpj", {})
     if mapa_cnpj:
         saida_html = {
-            "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "gerado_em": agora_brasilia().strftime("%d/%m/%Y %H:%M:%S"),
             "origem": origem,
             "total": len(mapa_cnpj),
             "por_cnpj": mapa_cnpj,
@@ -1224,7 +1246,7 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
     log(f"[Fundos.json] Vinculados: {vinculados}/{len(df)} | URLs válidas: {preenchidas}/{len(df)} | codfundo: {com_cod}/{len(df)}")
 
     auditoria = {
-        "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+        "gerado_em": agora_brasilia().strftime("%d/%m/%Y %H:%M:%S"),
         "origem_fundos_json": indice_json.get("_origem", "desconhecida"),
         "registros_catalogo_oficial": indice_json.get("_total_catalogo", 0),
         "linhas_csv": int(len(df)),
@@ -1386,9 +1408,9 @@ class ColetorMercado:
 
     def _hoje_key_brasilia(self):
         try:
-            return datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%Y-%m-%d")
+            return agora_brasilia().strftime("%Y-%m-%d")
         except Exception:
-            return datetime.now().strftime("%Y-%m-%d")
+            return agora_brasilia().strftime("%Y-%m-%d")
 
     def _buscar_bcb(self, codigo_serie):
         """Busca último valor da série BCB. Para Selic 432, usa rotina segura."""
@@ -1633,9 +1655,9 @@ class ColetorMercado:
     def _agora_brasilia():
         """Retorna horário de Brasília sem timezone para compatibilidade interna."""
         try:
-            return datetime.now(ZoneInfo("America/Sao_Paulo")).replace(tzinfo=None)
+            return agora_brasilia()
         except Exception:
-            return datetime.now()
+            return agora_brasilia()
 
     def _buscar_cdi_parcial_diario(self, hoje=None):
         """
@@ -1953,7 +1975,7 @@ class ColetorMercado:
         """
         log(f"[PTAX] Buscando histórico {meses}M via CotacaoDolarPeriodo mês a mês...")
 
-        hoje = datetime.now().date()
+        hoje = agora_brasilia().date()
 
         def fmt_odata(d):
             # Formato exigido pela API Olinda PTAX: MM-DD-YYYY
@@ -1982,7 +2004,7 @@ class ColetorMercado:
             try:
                 PTAX_CACHE_PATH.write_text(
                     json.dumps({
-                        "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                        "gerado_em": agora_brasilia().strftime("%d/%m/%Y %H:%M:%S"),
                         "total": len(historico),
                         "ptax_historico": historico,
                     }, ensure_ascii=False, indent=2),
@@ -2142,7 +2164,7 @@ class ColetorMercado:
             return None
 
         hist = sorted(ptax_historico, key=lambda x: x.get("key", ""))
-        hoje = datetime.now().date()
+        hoje = agora_brasilia().date()
         mes_atual_key = f"{hoje.year}-{hoje.month:02d}"
 
         def calc_var(atual_val, base_val):
@@ -2420,7 +2442,7 @@ class ColetorMercado:
         Busca histórico diário no Yahoo Finance.
         1250 dias cobre aproximadamente 36 meses com folga.
         """
-        fim = datetime.now() + timedelta(days=1)
+        fim = agora_brasilia(com_fuso=True) + timedelta(days=1)
         inicio = fim - timedelta(days=dias)
 
         period1 = int(inicio.timestamp())
@@ -2516,7 +2538,7 @@ class ColetorMercado:
         - início do ano;
         - bases de 12M, 24M e 36M.
         """
-        hoje = pd.Timestamp(datetime.now().date())
+        hoje = pd.Timestamp(agora_brasilia().date())
 
         primeiro_mes_atual = hoje.replace(day=1)
         ultimo_dia_mes_anterior = primeiro_mes_atual - pd.Timedelta(days=1)
@@ -2569,7 +2591,7 @@ class ColetorMercado:
 
         # Se o último dado ainda pertence ao mês anterior, não existe parcial do mês atual.
         ultimo_ano_mes = str(fechamento_atual.get("data"))[:7] if fechamento_atual else ""
-        tem_mes_atual = ultimo_ano_mes == datetime.now().strftime("%Y-%m")
+        tem_mes_atual = ultimo_ano_mes == agora_brasilia().strftime("%Y-%m")
 
         fechamento_base_ano = self._ultimo_registro_ate(df, ref["data_base_ano"])
         fechamento_base_12m = self._ultimo_registro_ate(df, ref["data_base_12m"])
@@ -2722,7 +2744,7 @@ class ColetorMercado:
             var_fechado_brl = self._variacao_pct(mes_ant_brl, mes_base_brl)
             override_mes = FECHAMENTOS_CONFIRMADOS.get("indices_mensais", {}).get(
                 indice_usd.get("ticker"), {}
-            ).get(datetime.now().replace(day=1).strftime("%Y-%m"), {})
+            ).get(agora_brasilia().replace(day=1).strftime("%Y-%m"), {})
 
             # O override de BRL normalmente será informado para o mês anterior fechado,
             # não para o mês atual. Corrige a chave para o campo mes_anterior_key.
@@ -2969,7 +2991,7 @@ class ColetorMercado:
         Para a antiga quando Selic ≤ 8,5%: usa série BCB 253 (TR mensal) + 0,50%.
         NÃO usa série 7814 — ela retorna taxas anuais (~CDI), não TR mensal.
         """
-        hoje    = datetime.now()
+        hoje    = agora_brasilia()
         ini_ano = datetime(hoje.year, 1, 1)
         fmt_d   = lambda d: d.strftime('%d/%m/%Y')
         acima   = selic_meta is not None and selic_meta > 8.5
@@ -3164,7 +3186,7 @@ class ColetorMercado:
         focus_data = buscar_focus(self.headers)
 
         return {
-            "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "atualizado_em": agora_brasilia().strftime("%d/%m/%Y %H:%M:%S"),
 
             "cards": {
                 "selic_meta": {
@@ -3318,7 +3340,7 @@ class ColetorMercado:
 # v640 — Utilidades de data/rentabilidade para fallback seletivo
 # ---------------------------------------------------------------------------
 def _hoje_brasilia():
-    return datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+    return agora_brasilia().date()
 
 def _formatar_data_br(data_ref):
     if not data_ref:
@@ -3982,7 +4004,7 @@ def executar_pipeline_fundos(atualizar_indicadores=True):
     df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
     salvar_excel(df_consolidado, caminho_xlsx)
 
-    data_str = datetime.now().strftime("%Y%m%d")
+    data_str = agora_brasilia().strftime("%Y%m%d")
     df_consolidado.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv",
                           index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
     salvar_excel(df_consolidado, BASE_DIR / f"sipii_caixa_{data_str}.xlsx")
