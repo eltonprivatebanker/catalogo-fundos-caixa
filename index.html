@@ -245,7 +245,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app-v767.js?v=filtros-v777"></script>
+<script defer="" src="app-v767.js?v=filtros-v778"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -3138,27 +3138,33 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 </style>
-<style id="desktop-filter-initial-v777">
-/* V777 â€” geometria final dos filtros desde o primeiro frame */
+<style id="desktop-filter-initial-v778">
+/* V778 â€” filtros desktop Â· especificidade final Â· sem layout shift */
 @media (min-width:769px){
-  /* Confirmado no DevTools: Categoria nasce 12px Ã  direita (394 vs 382). */
-  html body #sec-fundos #fundFilterShell .category-grid-v69{
+
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell .category-grid-v69{
     margin-left:-12px!important;
   }
 
-  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
-  html body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell #catalogRiskSelectV198{
     width:200px!important;
     min-width:200px!important;
     max-width:200px!important;
+
     height:28px!important;
     min-height:28px!important;
     max-height:28px!important;
+
     border-radius:8px!important;
     box-sizing:border-box!important;
   }
 
-  html body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell #catalogRiskSelectV198{
     padding:0 32px 0 12px!important;
     border:1px solid rgba(148,163,184,.20)!important;
     background:rgba(12,16,30,.86)!important;
@@ -3169,27 +3175,33 @@ html.desktop-responsive-fit-v688 body{
     line-height:1!important;
   }
 
-  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198 > span[aria-hidden="true"]{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell
+  .catalog-risk-select-wrap-v198 > span[aria-hidden="true"]{
     color:rgba(166,176,201,.82)!important;
   }
 }
 
+/* MantÃ©m a grade compacta coerente com a largura final do select. */
 @media (min-width:769px) and (max-width:1179px){
-  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:128px 200px!important;
     column-gap:12px!important;
   }
 }
 
 @media (min-width:1180px) and (max-width:1600px){
-  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:132px 200px!important;
     column-gap:10px!important;
   }
 }
 
 @media (min-width:1601px){
-  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+  html.desktop-responsive-fit-v688.desktop-filter-shell-final-v695 body
+  #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
     grid-template-columns:140px 200px!important;
     column-gap:14px!important;
   }

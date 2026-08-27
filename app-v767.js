@@ -33906,7 +33906,7 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 })();
 
 /* ============================================================================
-   V777 — FILTROS DESKTOP · COMPORTAMENTO SEM ALTERAR GEOMETRIA
+   V778 — FILTROS DESKTOP · COMPORTAMENTO SEM ALTERAR GEOMETRIA
    ---------------------------------------------------------------------------
    A geometria inicial agora pertence ao index.html (CSS V776), evitando
    layout shift. Este bloco cuida somente de semântica/estado visual:
@@ -33914,7 +33914,7 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
    - perfil específico = dourado
    - hover/focus = dourado temporário
    ============================================================================ */
-(function desktopCatalogFiltersV777(){
+(function desktopCatalogFiltersV778(){
   'use strict';
 
   const MQ = window.matchMedia('(min-width: 769px)');
@@ -33956,9 +33956,9 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 
   function bindInteraction(){
     const select = document.querySelector('#catalogRiskSelectV198');
-    if(!select || select.dataset.v777Bound === '1') return;
+    if(!select || select.dataset.v778Bound === '1') return;
 
-    select.dataset.v777Bound = '1';
+    select.dataset.v778Bound = '1';
 
     select.addEventListener('change', () => {
       applyVisualState({interactive: document.activeElement === select});
@@ -34001,7 +34001,7 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     if(MQ.addEventListener) MQ.addEventListener('change', schedule);
     else if(MQ.addListener) MQ.addListener(schedule);
 
-    console.info('[Catálogo CAIXA] Filtros desktop V777 ativos · geometria estática no HTML');
+    console.info('[Catálogo CAIXA] Filtros desktop V778 ativos · geometria estática com especificidade final');
   }
 
   if(document.readyState === 'loading'){
