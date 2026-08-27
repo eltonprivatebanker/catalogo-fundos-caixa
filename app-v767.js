@@ -28195,23 +28195,33 @@ function buildDetailPanel(r,colspan){
   }
 
   function ensureDocsStyleV768(){
-    if(document.getElementById('desktopDocsSemanticV770Style')) return;
+    if(document.getElementById('desktopDocsSemanticV771Style')) return;
 
     var style = document.createElement('style');
-    style.id = 'desktopDocsSemanticV770Style';
+    style.id = 'desktopDocsSemanticV771Style';
     style.textContent = `
       @media (min-width:769px){
-        #sec-fundos .docs-mini-wrap-v768{gap:7px !important;}
+        #sec-fundos .docs-mini-wrap-v768{gap:8px !important;}
 
         #sec-fundos .doc-mini-primary-v768{
-          min-width:64px !important;
+          min-width:70px !important;
           min-height:30px !important;
-          padding:0 9px !important;
+          padding:0 11px !important;
           white-space:nowrap !important;
           letter-spacing:0 !important;
           font-size:.61rem !important;
           line-height:1 !important;
           text-align:center !important;
+          border-color:rgba(202,161,87,.28) !important;
+          background:rgba(202,161,87,.065) !important;
+          color:#e8edf6 !important;
+        }
+
+        #sec-fundos .doc-mini-primary-v768:hover,
+        #sec-fundos .doc-mini-primary-v768:focus-visible{
+          border-color:rgba(202,161,87,.42) !important;
+          background:rgba(202,161,87,.10) !important;
+          color:#f8fafc !important;
         }
 
         #sec-fundos .doc-more-button-v768{
@@ -28371,7 +28381,7 @@ function buildDetailPanel(r,colspan){
 
   function sync(){
     ensureDocsStyleV768();
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v770');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v771');
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }

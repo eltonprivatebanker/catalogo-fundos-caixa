@@ -1,0 +1,20 @@
+CATÁLOGO DE FUNDOS CAIXA — DOCUMENTOS V771
+
+Substituir na branch Testes-da-versão-01:
+- app-v767.js
+
+Ajuste desta rodada:
+- botão “Comercial” com largura mínima de 70px;
+- mais padding horizontal;
+- espaço entre “Comercial” e “+N” aumentado para 8px;
+- leve destaque visual do botão principal;
+- hover discreto;
+- demais ajustes anteriores preservados;
+- mobile não alterado.
+
+Mantidos:
+- Data de início;
+- “Sem 12M completo”;
+- menu de documentos;
+- links neutros;
+- sem tooltip nativo.
