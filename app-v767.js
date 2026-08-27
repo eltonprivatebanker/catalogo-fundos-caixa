@@ -33906,128 +33906,75 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 })();
 
 /* ============================================================================
-   V775 — FILTROS DESKTOP · VERSÃO FINAL VALIDADA EM CONSOLE
+   V776 — FILTROS DESKTOP · COMPORTAMENTO SEM ALTERAR GEOMETRIA
    ---------------------------------------------------------------------------
-   Princípios:
-   - Categoria alinhada ao mesmo eixo de Público-alvo e Perfil de risco.
-   - Perfil de risco compacto: 200px x 28px.
-   - "Todos" é estado neutro.
-   - Dourado comunica filtro ativo (perfil específico) ou interação
-     temporária (hover/focus), não o estado padrão.
-   - Reaplica após rerenderizações do catálogo.
-   - Somente desktop.
+   A geometria inicial agora pertence ao index.html (CSS V776), evitando
+   layout shift. Este bloco cuida somente de semântica/estado visual:
+   - Todos = neutro
+   - perfil específico = dourado
+   - hover/focus = dourado temporário
    ============================================================================ */
-(function desktopCatalogFiltersV775(){
+(function desktopCatalogFiltersV776(){
   'use strict';
 
   const MQ = window.matchMedia('(min-width: 769px)');
-  const WIDTH = 200;
-  const HEIGHT = 28;
 
   function setImp(el, prop, value){
     if(el) el.style.setProperty(prop, value, 'important');
   }
 
-  function neutralPalette(){
-    const chip =
-      document.querySelector('.desktop-audience-chip-v488:not(.active)') ||
-      document.querySelector('.desktop-audience-chip-v488');
-
-    if(chip){
-      const cs = getComputedStyle(chip);
-      return {
-        bg: cs.backgroundColor || 'rgba(12,16,30,.86)',
-        border: cs.borderColor || 'rgba(148,163,184,.20)',
-        color: cs.color || '#dce5f8',
-        radius: cs.borderRadius || '8px',
-        fontSize: cs.fontSize || '.60rem',
-        fontWeight: cs.fontWeight || '800'
-      };
-    }
-
-    return {
-      bg: 'rgba(12,16,30,.86)',
-      border: 'rgba(148,163,184,.20)',
-      color: '#dce5f8',
-      radius: '8px',
-      fontSize: '.60rem',
-      fontWeight: '800'
-    };
-  }
-
   function applyVisualState({ interactive = false } = {}){
+    if(!MQ.matches) return;
+
     const select = document.querySelector('#catalogRiskSelectV198');
     const wrap = document.querySelector('.catalog-risk-select-wrap-v198');
     if(!select || !wrap) return;
 
     const arrow = wrap.querySelector('span[aria-hidden="true"]');
-    const palette = neutralPalette();
     const hasSpecificRisk = String(select.value || '').trim() !== '';
     const highlighted = hasSpecificRisk || interactive;
 
     if(highlighted){
-      // Mesmo vocabulário visual dos chips selecionados, sem exagero.
       setImp(select, 'background', 'linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075))');
       setImp(select, 'border-color', 'rgba(232,187,106,.58)');
       setImp(select, 'color', '#f2f5fb');
       if(arrow) setImp(arrow, 'color', '#e8bb6a');
     }else{
-      setImp(select, 'background', palette.bg);
-      setImp(select, 'border-color', palette.border);
-      setImp(select, 'color', palette.color);
+      setImp(select, 'background', 'rgba(12,16,30,.86)');
+      setImp(select, 'border-color', 'rgba(148,163,184,.20)');
+      setImp(select, 'color', '#dce5f8');
       if(arrow) setImp(arrow, 'color', 'rgba(166,176,201,.82)');
     }
   }
 
-  function apply(){
-    if(!MQ.matches) return;
-
-    const categoria = document.querySelector('.category-grid-v69');
-    const risk = document.querySelector('.catalog-risk-filter-v198');
-    const wrap = document.querySelector('.catalog-risk-select-wrap-v198');
+  function normalizeText(){
     const select = document.querySelector('#catalogRiskSelectV198');
-
-    // Alinhamento validado: Categoria estava 12px à direita.
-    if(categoria){
-      setImp(categoria, 'margin-left', '-12px');
-    }
-
-    if(!risk || !wrap || !select) return;
-
-    // Texto padrão sem redundância.
+    if(!select) return;
     const first = select.options && select.options[0];
-    if(first && first.textContent.trim() !== 'Todos'){
-      first.textContent = 'Todos';
-    }
+    if(first && first.textContent.trim() !== 'Todos') first.textContent = 'Todos';
+  }
 
-    const palette = neutralPalette();
+  function bindInteraction(){
+    const select = document.querySelector('#catalogRiskSelectV198');
+    if(!select || select.dataset.v776Bound === '1') return;
 
-    // Grid pai: reserva exatamente a largura aprovada.
-    setImp(risk, 'grid-template-columns', `132px ${WIDTH}px`);
-    setImp(risk, 'column-gap', '10px');
+    select.dataset.v776Bound = '1';
 
-    // Wrapper.
-    [wrap, select].forEach(el => {
-      setImp(el, 'width', `${WIDTH}px`);
-      setImp(el, 'min-width', `${WIDTH}px`);
-      setImp(el, 'max-width', `${WIDTH}px`);
-
-      setImp(el, 'height', `${HEIGHT}px`);
-      setImp(el, 'min-height', `${HEIGHT}px`);
-      setImp(el, 'max-height', `${HEIGHT}px`);
-
-      setImp(el, 'border-radius', palette.radius);
-      setImp(el, 'box-sizing', 'border-box');
+    select.addEventListener('change', () => {
+      applyVisualState({interactive: document.activeElement === select});
     });
+    select.addEventListener('focus', () => applyVisualState({interactive:true}));
+    select.addEventListener('blur', () => applyVisualState());
+    select.addEventListener('mouseenter', () => applyVisualState({interactive:true}));
+    select.addEventListener('mouseleave', () => {
+      if(document.activeElement !== select) applyVisualState();
+    });
+  }
 
-    // Select: mesma densidade dos chips.
-    setImp(select, 'padding', '0 32px 0 12px');
-    setImp(select, 'font-size', palette.fontSize);
-    setImp(select, 'font-weight', palette.fontWeight);
-    setImp(select, 'line-height', '1');
-    setImp(select, 'outline', 'none');
-
-    applyVisualState();
+  function apply(){
+    normalizeText();
+    bindInteraction();
+    applyVisualState({interactive: document.activeElement === document.querySelector('#catalogRiskSelectV198')});
   }
 
   let raf = 0;
@@ -34036,41 +33983,8 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     raf = requestAnimationFrame(apply);
   }
 
-  function bindInteraction(){
-    const select = document.querySelector('#catalogRiskSelectV198');
-    if(!select || select.dataset.v775Bound === '1') return;
-
-    select.dataset.v775Bound = '1';
-
-    select.addEventListener('change', () => {
-      apply();
-      applyVisualState();
-    });
-
-    select.addEventListener('focus', () => {
-      applyVisualState({interactive:true});
-    });
-
-    select.addEventListener('blur', () => {
-      applyVisualState();
-    });
-
-    select.addEventListener('mouseenter', () => {
-      applyVisualState({interactive:true});
-    });
-
-    select.addEventListener('mouseleave', () => {
-      if(document.activeElement !== select) applyVisualState();
-    });
-  }
-
-  function applyAndBind(){
-    apply();
-    bindInteraction();
-  }
-
   function init(){
-    applyAndBind();
+    apply();
 
     const target =
       document.getElementById('fundFilterShell') ||
@@ -34078,26 +33992,16 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
       document.body;
 
     if(target && 'MutationObserver' in window){
-      new MutationObserver(() => {
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(applyAndBind);
-      }).observe(target, {
+      new MutationObserver(schedule).observe(target, {
         childList: true,
         subtree: true
       });
     }
 
-    window.addEventListener('resize', schedule, {passive:true});
+    if(MQ.addEventListener) MQ.addEventListener('change', schedule);
+    else if(MQ.addListener) MQ.addListener(schedule);
 
-    if(MQ.addEventListener) MQ.addEventListener('change', applyAndBind);
-    else if(MQ.addListener) MQ.addListener(applyAndBind);
-
-    // Reforços curtos para renderizações assíncronas.
-    setTimeout(applyAndBind, 150);
-    setTimeout(applyAndBind, 500);
-    setTimeout(applyAndBind, 1200);
-
-    console.info('[Catálogo CAIXA] Filtros desktop V775 ativos');
+    console.info('[Catálogo CAIXA] Filtros desktop V776 ativos · geometria estática no HTML');
   }
 
   if(document.readyState === 'loading'){
