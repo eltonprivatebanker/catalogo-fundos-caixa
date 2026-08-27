@@ -28195,20 +28195,23 @@ function buildDetailPanel(r,colspan){
   }
 
   function ensureDocsStyleV768(){
-    if(document.getElementById('desktopDocsSemanticV768Style')) return;
+    if(document.getElementById('desktopDocsSemanticV769Style')) return;
 
     var style = document.createElement('style');
-    style.id = 'desktopDocsSemanticV768Style';
+    style.id = 'desktopDocsSemanticV769Style';
     style.textContent = `
       @media (min-width:769px){
         #sec-fundos .docs-mini-wrap-v768{gap:7px !important;}
 
         #sec-fundos .doc-mini-primary-v768{
-          min-width:auto !important;
+          min-width:64px !important;
           min-height:30px !important;
-          padding:0 10px !important;
+          padding:0 9px !important;
           white-space:nowrap !important;
           letter-spacing:0 !important;
+          font-size:.61rem !important;
+          line-height:1 !important;
+          text-align:center !important;
         }
 
         #sec-fundos .doc-more-button-v768{
@@ -28278,28 +28281,33 @@ function buildDetailPanel(r,colspan){
 
         body .doc-menu-portal-v559 .doc-menu-list-v768 a:hover,
         body .doc-menu-portal-v559 .doc-menu-list-v768 a:focus-visible{
-          background:rgba(96,165,250,.08) !important;
-          color:#fff !important;
+          background:rgba(148,163,184,.055) !important;
+          color:#f8fafc !important;
           outline:none !important;
         }
 
-        body .doc-menu-portal-v559 .doc-menu-label-v768{
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a .doc-menu-label-v768{
           min-width:0 !important;
           overflow:visible !important;
           text-overflow:clip !important;
           white-space:normal !important;
-          color:inherit !important;
+          color:#d7dfeb !important;
           font-family:inherit !important;
           font-size:.77rem !important;
           font-weight:650 !important;
           line-height:1.25 !important;
         }
 
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:hover .doc-menu-label-v768,
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:focus-visible .doc-menu-label-v768{
+          color:#f8fafc !important;
+        }
+
         body .doc-menu-portal-v559 .doc-menu-external-v768{
           flex:0 0 auto !important;
           min-width:auto !important;
           overflow:visible !important;
-          color:#7f8da8 !important;
+          color:#77849b !important;
           font-size:.82rem !important;
           line-height:1 !important;
           transition:transform .14s ease,color .14s ease !important;
@@ -28340,7 +28348,7 @@ function buildDetailPanel(r,colspan){
       <div class="doc-menu-list-v768">
         ${docs.map(function(d){
           var label = docMenuLabelV768(d);
-          return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="Abrir ${htmlAttr(label)}"><span class="doc-menu-label-v768">${htmlAttr(label)}</span><span class="doc-menu-external-v768" aria-hidden="true">↗</span></a>`;
+          return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" aria-label="Abrir ${htmlAttr(label)}"><span class="doc-menu-label-v768">${htmlAttr(label)}</span><span class="doc-menu-external-v768" aria-hidden="true">↗</span></a>`;
         }).join('')}
       </div>`;
 
@@ -28357,7 +28365,7 @@ function buildDetailPanel(r,colspan){
 
   function sync(){
     ensureDocsStyleV768();
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v768');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v769');
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }

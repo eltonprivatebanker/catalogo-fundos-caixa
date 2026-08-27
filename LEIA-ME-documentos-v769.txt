@@ -1,0 +1,16 @@
+CATÁLOGO DE FUNDOS CAIXA — DOCUMENTOS V769
+
+Substituir na branch Testes-da-versão-01:
+- app-v767.js
+
+Melhorias desta rodada:
+- botão “Comercial” com mais espaço interno e tipografia ajustada;
+- nomes dos documentos em tom neutro (cinza/branco), sem azul forte;
+- hover mais discreto;
+- seta ↗ permanece neutra e fica dourada no hover;
+- removido tooltip nativo branco dos links;
+- acessibilidade preservada com aria-label;
+- mobile permanece inalterado;
+- preservadas Data de início e “Sem 12M completo”.
+
+O tokens-caixa.css não precisa ser alterado neste teste.
