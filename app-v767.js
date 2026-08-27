@@ -33782,3 +33782,126 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     bind();
   }
 })();
+
+/* ============================================================================
+   V773 — DOCUMENTOS DESKTOP · LAYOUT APROVADO VIA CONSOLE
+   ---------------------------------------------------------------------------
+   Motivo:
+   A regra histórica desktop-docs-compact-v570 está no index.html com !important
+   e pode ser aplicada depois das regras injetadas pelo app. O teste no Console
+   confirmou que a solução estável é aplicar os valores diretamente nos
+   elementos com style.setProperty(..., 'important').
+
+   Escopo:
+   - somente desktop (>= 769px)
+   - somente tabela principal
+   - não altera modo card/mobile
+   ============================================================================ */
+(function docsLayoutInlineV773(){
+  'use strict';
+
+  const MQ = window.matchMedia('(min-width: 769px)');
+
+  function setImp(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function apply(){
+    if(!MQ.matches) return;
+    if(document.body && document.body.classList.contains('fund-card-mode')) return;
+
+    const table = document.getElementById('mainTable');
+    if(!table) return;
+
+    table.querySelectorAll('td.col-docs').forEach(cell => {
+      const wrap = cell.querySelector('.docs-mini-wrap-v570');
+      if(!wrap) return;
+
+      const comercial = wrap.querySelector('.doc-mini-primary-v768, .doc-mini-primary-v559');
+      const more = wrap.querySelector('.doc-more-button-v559');
+
+      // Coluna: exatamente o teste aprovado no Console.
+      setImp(cell, 'width', '116px');
+      setImp(cell, 'min-width', '116px');
+      setImp(cell, 'max-width', '116px');
+
+      // Container.
+      setImp(wrap, 'width', '104px');
+      setImp(wrap, 'max-width', '104px');
+      setImp(wrap, 'gap', '6px');
+      setImp(wrap, 'display', 'flex');
+      setImp(wrap, 'flex-wrap', 'nowrap');
+      setImp(wrap, 'align-items', 'center');
+      setImp(wrap, 'justify-content', 'flex-start');
+
+      // Ação principal.
+      if(comercial){
+        setImp(comercial, 'display', 'inline-flex');
+        setImp(comercial, 'align-items', 'center');
+        setImp(comercial, 'justify-content', 'center');
+        setImp(comercial, 'width', 'auto');
+        setImp(comercial, 'min-width', '68px');
+        setImp(comercial, 'height', '26px');
+        setImp(comercial, 'min-height', '26px');
+        setImp(comercial, 'max-height', '26px');
+        setImp(comercial, 'padding', '0 9px');
+        setImp(comercial, 'font-size', '.60rem');
+        setImp(comercial, 'line-height', '1');
+        setImp(comercial, 'box-sizing', 'border-box');
+        setImp(comercial, 'white-space', 'nowrap');
+      }
+
+      // Ação secundária.
+      if(more){
+        setImp(more, 'display', 'inline-flex');
+        setImp(more, 'align-items', 'center');
+        setImp(more, 'justify-content', 'center');
+        setImp(more, 'width', 'auto');
+        setImp(more, 'min-width', '30px');
+        setImp(more, 'height', '26px');
+        setImp(more, 'min-height', '26px');
+        setImp(more, 'max-height', '26px');
+        setImp(more, 'padding', '0 7px');
+        setImp(more, 'box-sizing', 'border-box');
+        setImp(more, 'white-space', 'nowrap');
+      }
+    });
+  }
+
+  let raf = 0;
+  function schedule(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(apply);
+  }
+
+  function init(){
+    apply();
+
+    const target = document.getElementById('mainTable') || document.body;
+    if(target && 'MutationObserver' in window){
+      new MutationObserver(schedule).observe(target, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    window.addEventListener('resize', schedule, {passive:true});
+
+    if(MQ.addEventListener) MQ.addEventListener('change', schedule);
+    else if(MQ.addListener) MQ.addListener(schedule);
+
+    // Reforços curtos para renderizações assíncronas iniciais.
+    setTimeout(apply, 150);
+    setTimeout(apply, 500);
+    setTimeout(apply, 1200);
+
+    console.info('[Catálogo CAIXA] Layout documentos desktop V773 ativo');
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  }else{
+    init();
+  }
+})();
+

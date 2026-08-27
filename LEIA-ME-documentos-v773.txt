@@ -1,0 +1,37 @@
+CATÁLOGO DE FUNDOS CAIXA — DOCUMENTOS V773
+
+Substituir na branch Testes-da-versão-01:
+- app-v767.js
+
+Por que esta versão é diferente:
+O Console comprovou que o layout correto aparece quando os valores são
+aplicados diretamente nos elementos com style.setProperty(..., 'important').
+
+A regra histórica desktop-docs-compact-v570, presente no index.html, estava
+ganhando da camada CSS injetada pelo app. O V773 aplica os valores diretamente
+no DOM, somente no desktop, e os reaplica quando a tabela é renderizada.
+
+Medidas:
+- coluna Documentos: 116px
+- container: 104px
+- Comercial: mínimo 68px x 26px
+- +N: mínimo 30px x 26px
+- gap: 6px
+
+Para confirmar no Console após publicar:
+document.querySelector('.doc-mini-primary-v768') &&
+getComputedStyle(document.querySelector('.doc-mini-primary-v768')).minWidth
+
+Esperado: "68px"
+
+Também deve aparecer no Console:
+[Catálogo CAIXA] Layout documentos desktop V773 ativo
+
+Preservado:
+- menu de documentos
+- Data de início
+- Sem 12M completo
+- mobile sem alteração
+
+Fonte GitHub utilizada:
+0d60d765b7d612e2fda7643b61fd511009fa33e9
