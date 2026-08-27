@@ -8,10 +8,17 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: catalogo-fundos-atualizacao
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
+
+    env:
+      TZ: America/Sao_Paulo
 
     steps:
       - name: Baixar codigo da branch do site
@@ -42,6 +49,17 @@ jobs:
         run: |
           git config --global user.name "actions-user"
           git config --global user.email "actions@github.com"
+
           git add .
-          git commit -m "Dados atualizados via Robô: $(date +'%d/%m/%Y %H:%M')" || echo "Sem mudanças para salvar"
+
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para salvar."
+            exit 0
+          fi
+
+          git commit -m "Dados atualizados via Robô: $(date +'%d/%m/%Y %H:%M')"
+
+          git fetch origin Testes-da-versão-01
+          git rebase origin/Testes-da-versão-01
+
           git push origin HEAD:Testes-da-versão-01
