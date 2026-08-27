@@ -33905,3 +33905,112 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
   }
 })();
 
+/* ============================================================================
+   V774 — FILTROS DESKTOP · ALINHAMENTO + PERFIL DE RISCO COMPACTO
+   ---------------------------------------------------------------------------
+   Validado previamente via Console:
+   - Público-alvo: left 382
+   - Categoria: left 394  -> corrigir -12px
+   - Perfil de risco: left 382
+
+   Perfil de risco:
+   - largura 232px
+   - altura 40px
+   - rótulo padrão "Todos"
+   - dourado discreto
+   ============================================================================ */
+(function desktopCatalogFiltersV774(){
+  'use strict';
+
+  const MQ = window.matchMedia('(min-width: 769px)');
+
+  function setImp(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function apply(){
+    if(!MQ.matches) return;
+
+    const categoria = document.querySelector('.category-grid-v69');
+    const riskWrap = document.querySelector('.catalog-risk-select-wrap-v198');
+    const riskSelect = document.querySelector('#catalogRiskSelectV198');
+
+    // 1) Categoria: alinha o início ao mesmo eixo de Público-alvo e Perfil de risco.
+    if(categoria){
+      setImp(categoria, 'margin-left', '-12px');
+    }
+
+    // 2) Perfil de risco: rótulo mais curto e controle compacto.
+    if(riskSelect){
+      const first = riskSelect.options && riskSelect.options[0];
+      if(first && first.textContent.trim() !== 'Todos'){
+        first.textContent = 'Todos';
+      }
+
+      setImp(riskSelect, 'width', '232px');
+      setImp(riskSelect, 'min-width', '232px');
+      setImp(riskSelect, 'max-width', '232px');
+
+      setImp(riskSelect, 'height', '40px');
+      setImp(riskSelect, 'min-height', '40px');
+      setImp(riskSelect, 'max-height', '40px');
+
+      setImp(riskSelect, 'padding', '0 38px 0 12px');
+      setImp(riskSelect, 'border-radius', '9px');
+      setImp(riskSelect, 'font-size', '.72rem');
+      setImp(riskSelect, 'font-weight', '700');
+
+      // Dourado mais sutil que o chip ativo.
+      setImp(riskSelect, 'background', 'rgba(202,161,87,.035)');
+      setImp(riskSelect, 'border-color', 'rgba(202,161,87,.34)');
+      setImp(riskSelect, 'color', '#e8edf6');
+    }
+
+    if(riskWrap){
+      setImp(riskWrap, 'width', '232px');
+      setImp(riskWrap, 'min-width', '232px');
+      setImp(riskWrap, 'max-width', '232px');
+    }
+  }
+
+  let raf = 0;
+  function schedule(){
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(apply);
+  }
+
+  function init(){
+    apply();
+
+    const target =
+      document.getElementById('fundFilterShell') ||
+      document.getElementById('sec-fundos') ||
+      document.body;
+
+    if(target && 'MutationObserver' in window){
+      new MutationObserver(schedule).observe(target, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    window.addEventListener('resize', schedule, {passive:true});
+
+    if(MQ.addEventListener) MQ.addEventListener('change', schedule);
+    else if(MQ.addListener) MQ.addListener(schedule);
+
+    // Reforço para renderizações assíncronas do catálogo.
+    setTimeout(apply, 150);
+    setTimeout(apply, 500);
+    setTimeout(apply, 1200);
+
+    console.info('[Catálogo CAIXA] Filtros desktop V774 ativos');
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  }else{
+    init();
+  }
+})();
+

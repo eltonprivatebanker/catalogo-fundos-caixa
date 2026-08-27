@@ -1,0 +1,43 @@
+CATÁLOGO DE FUNDOS CAIXA — FILTROS V774
+
+Substituir na branch Testes-da-versão-01:
+- app-v767.js
+
+Ajustes desta versão:
+
+1. CATEGORIA
+- corrige deslocamento de 12px à direita
+- passa a iniciar no mesmo eixo de Público-alvo e Perfil de risco
+
+2. PERFIL DE RISCO
+- "Todos os perfis" -> "Todos"
+- largura: 232px
+- altura: 40px
+- padding: 0 38px 0 12px
+- dourado discreto
+- borda dourada suave
+
+Preservado:
+- V773 do layout de Documentos
+- Data de início
+- Sem 12M completo
+- menu de documentos
+- mobile sem alteração
+
+Após publicar, deve aparecer no Console:
+[Catálogo CAIXA] Filtros desktop V774 ativos
+
+Checagem de alinhamento:
+const p=document.querySelector('.desktop-audience-chips-v488')?.getBoundingClientRect();
+const c=document.querySelector('.category-grid-v69')?.getBoundingClientRect();
+const r=document.querySelector('.catalog-risk-select-wrap-v198')?.getBoundingClientRect();
+console.table({
+  publico:{left:Math.round(p?.left||0)},
+  categoria:{left:Math.round(c?.left||0)},
+  risco:{left:Math.round(r?.left||0)}
+});
+
+Esperado: os três com o mesmo left (ou diferença máxima de 1px).
+
+Fonte GitHub:
+ce8bbce7597fb8a0e4a56306dbf7cd82cf98b600
