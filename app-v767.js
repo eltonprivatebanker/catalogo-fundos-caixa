@@ -28108,6 +28108,8 @@ function buildDetailPanel(r,colspan){
   const trib = d.tributacao && d.tributacao.texto ? d.tributacao.texto : detailValueV158(r,['Classificação Tributária','Classificacao Tributaria','Tributação','Tributacao']);
   const audience = detailAudienceSemanticV225(detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo'])));
   const audienceText = audience.length ? audience.map(item=>item.short || item.label).join(' · ') : 'Não informado';
+  const startDate = detailValueV158(r,['Data Inicio','Data Início','Data de Inicio','Data de Início']);
+  const startDateText = (startDate !== '—' && fundoSem12MCompleto(r)) ? `${startDate} · < 12M` : startDate;
   const urlFund = isFallbackUrl(r) ? '' : getFundUrl(r);
 
   const field = (label, value, cls='') => `<div class="detail-field-v559 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value || '—')}</strong></div>`;
@@ -28135,6 +28137,7 @@ function buildDetailPanel(r,colspan){
         ${field('Saldo mínimo', balanceMin)}
         ${field('Tributação', trib)}
         ${field('Público-alvo', audienceText, 'wide')}
+        ${field('Data de início', startDateText)}
       </div>
 
       <div class="detail-oper-grid-v559">
