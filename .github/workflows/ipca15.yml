@@ -11,13 +11,16 @@ permissions:
   contents: write
 
 concurrency:
-  group: ipca15-ibge
+  group: catalogo-fundos-atualizacao
   cancel-in-progress: false
 
 jobs:
   atualizar-ipca15:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    env:
+      TZ: America/Sao_Paulo
 
     steps:
       - name: Baixar branch do site
@@ -55,6 +58,11 @@ jobs:
         run: |
           git config user.name "actions-user"
           git config user.email "actions@github.com"
+
           git add ipca15.json
           git commit -m "Atualiza IPCA-15 via IBGE"
+
+          git fetch origin Testes-da-versão-01
+          git rebase origin/Testes-da-versão-01
+
           git push origin HEAD:Testes-da-versão-01
