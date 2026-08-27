@@ -28195,10 +28195,10 @@ function buildDetailPanel(r,colspan){
   }
 
   function ensureDocsStyleV768(){
-    if(document.getElementById('desktopDocsSemanticV769Style')) return;
+    if(document.getElementById('desktopDocsSemanticV770Style')) return;
 
     var style = document.createElement('style');
-    style.id = 'desktopDocsSemanticV769Style';
+    style.id = 'desktopDocsSemanticV770Style';
     style.textContent = `
       @media (min-width:769px){
         #sec-fundos .docs-mini-wrap-v768{gap:7px !important;}
@@ -28262,6 +28262,12 @@ function buildDetailPanel(r,colspan){
         body .doc-menu-portal-v559 .doc-menu-list-v768{
           display:block !important;
           padding:6px !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a,
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:link,
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:visited{
+          color:#d7dfeb !important;
         }
 
         body .doc-menu-portal-v559 .doc-menu-list-v768 a{
@@ -28348,7 +28354,7 @@ function buildDetailPanel(r,colspan){
       <div class="doc-menu-list-v768">
         ${docs.map(function(d){
           var label = docMenuLabelV768(d);
-          return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" aria-label="Abrir ${htmlAttr(label)}"><span class="doc-menu-label-v768">${htmlAttr(label)}</span><span class="doc-menu-external-v768" aria-hidden="true">↗</span></a>`;
+          return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" style="color:#d7dfeb!important;text-decoration:none!important"><span class="doc-menu-label-v768" style="color:#d7dfeb!important">${htmlAttr(label)}</span><span class="doc-menu-external-v768" aria-hidden="true">↗</span></a>`;
         }).join('')}
       </div>`;
 
@@ -28365,7 +28371,7 @@ function buildDetailPanel(r,colspan){
 
   function sync(){
     ensureDocsStyleV768();
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v769');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v770');
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }
