@@ -1,0 +1,25 @@
+CATÁLOGO DE FUNDOS CAIXA — TESTE DOCUMENTOS V768
+
+SUBSTITUIR NA BRANCH Testes-da-versão-01:
+- app-v767.js
+
+O tokens-caixa.css atual pode permanecer exatamente como está nesta rodada.
+Para tornar o teste simples e reversível, o novo acabamento visual do menu foi
+aplicado como override terminal dentro do próprio app-v767.js, somente no desktop.
+
+ALTERAÇÕES:
+- “Bol.” -> “Comercial” na tabela.
+- Tooltip/acessibilidade: “Lâmina comercial”.
+- O botão +N mostra apenas os demais documentos (não duplica a Lâmina comercial).
+- Menu: “Documentos do fundo”.
+- Subtítulo: “Documentos oficiais disponíveis”.
+- Removidas as siglas L / R / IC / C / CM / TA.
+- Nomes completos e claros.
+- Linha inteira clicável + seta ↗.
+- Popup mais largo e com hierarquia visual melhor.
+- aria-expanded / aria-controls no botão +N.
+- Mobile preservado.
+- Preservadas as correções anteriores: Data de início e Sem 12M completo.
+
+ROLLBACK:
+Basta restaurar o app-v767.js anterior.

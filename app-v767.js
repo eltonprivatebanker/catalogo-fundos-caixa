@@ -28076,19 +28076,22 @@ function buildDocsCompactos(row){
   const docs = obterDocsFundoCompactos(row);
   if(!docs.length) return '<span class="doc-mini-empty">—</span>';
 
-  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
-  const principal = boletim || docs[0];
+  // LAC = lâmina comercial. Mantemos "Boletim Comercial" na base
+  // para compatibilidade, mas usamos nomenclatura mais clara na interface.
+  const comercial = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const principal = comercial || docs[0];
   const secundarios = docs.filter(d => d.url !== principal.url);
-  const primaryLabel = boletim ? 'Bol.' : principal.curto;
-  const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
 
-  const primary = `<a class="doc-mini-primary doc-mini-primary-v558 doc-mini-primary-v559" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>`;
+  const primaryLabel = comercial ? 'Comercial' : (principal.curto || 'Doc.');
+  const primaryTitle = comercial ? 'Lâmina comercial' : (principal.label || 'Documento do fundo');
+
+  const primary = `<a class="doc-mini-primary doc-mini-primary-v558 doc-mini-primary-v559 doc-mini-primary-v768" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}" aria-label="Abrir ${htmlAttr(primaryTitle)}">${htmlAttr(primaryLabel)}</a>`;
 
   const more = secundarios.length
-    ? `<button type="button" class="doc-more-button-v559 doc-more-button-v570" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" aria-label="Ver ${secundarios.length} documentos complementares" title="Ver ${secundarios.length} documentos complementares">+${secundarios.length}</button>`
+    ? `<button type="button" class="doc-more-button-v559 doc-more-button-v570 doc-more-button-v768" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" aria-expanded="false" aria-controls="docMenuPortalV559" aria-label="Ver ${secundarios.length} outros documentos do fundo" title="Ver ${secundarios.length} outros documentos">+${secundarios.length}</button>`
     : '';
 
-  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559 docs-mini-wrap-v570">${primary}${more}</div>`;
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559 docs-mini-wrap-v570 docs-mini-wrap-v768">${primary}${more}</div>`;
 }
 
 function buildDetailPanel(r,colspan){
@@ -28172,31 +28175,189 @@ function buildDetailPanel(r,colspan){
   function closeMenu(){
     var old = document.getElementById('docMenuPortalV559');
     if(old) old.remove();
+    document.querySelectorAll('.doc-more-button-v559[aria-expanded="true"]').forEach(function(b){
+      b.setAttribute('aria-expanded','false');
+    });
+  }
+
+  function docMenuLabelV768(d){
+    var label = String((d && d.label) || '').trim();
+    var curto = String((d && d.curto) || '').trim().toUpperCase();
+
+    if(/l[âa]mina/i.test(label) || curto === 'L') return 'Lâmina';
+    if(/regulamento/i.test(label) || curto === 'R') return 'Regulamento';
+    if(/inf\.?\s*compl|informa/i.test(label) || curto === 'IC') return 'Informações complementares';
+    if(/comunicado/i.test(label) || curto === 'C') return 'Comunicado';
+    if(/carta/i.test(label) || curto === 'CM') return 'Carta mensal';
+    if(/termo|ades/i.test(label) || curto === 'TA') return 'Termo de adesão';
+
+    return label || 'Documento';
+  }
+
+  function ensureDocsStyleV768(){
+    if(document.getElementById('desktopDocsSemanticV768Style')) return;
+
+    var style = document.createElement('style');
+    style.id = 'desktopDocsSemanticV768Style';
+    style.textContent = `
+      @media (min-width:769px){
+        #sec-fundos .docs-mini-wrap-v768{gap:7px !important;}
+
+        #sec-fundos .doc-mini-primary-v768{
+          min-width:auto !important;
+          min-height:30px !important;
+          padding:0 10px !important;
+          white-space:nowrap !important;
+          letter-spacing:0 !important;
+        }
+
+        #sec-fundos .doc-more-button-v768{
+          min-width:38px !important;
+          min-height:30px !important;
+        }
+
+        body .doc-menu-portal-v559{
+          width:min(340px,calc(100vw - 24px)) !important;
+          max-width:340px !important;
+          padding:0 !important;
+          overflow:hidden !important;
+          border-radius:14px !important;
+          background:#0b1020 !important;
+          border:1px solid rgba(148,163,184,.22) !important;
+          box-shadow:0 18px 48px rgba(0,0,0,.42) !important;
+          color:#e5e7eb !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-head-v559{
+          display:flex !important;
+          flex-direction:column !important;
+          align-items:flex-start !important;
+          gap:3px !important;
+          padding:14px 16px 12px !important;
+          border-bottom:1px solid rgba(148,163,184,.14) !important;
+          text-transform:none !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-head-v559 strong{
+          color:#f0c36b !important;
+          font-family:inherit !important;
+          font-size:.72rem !important;
+          font-weight:850 !important;
+          letter-spacing:.08em !important;
+          text-transform:uppercase !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-head-v559 small{
+          color:#8fa0bc !important;
+          font-size:.64rem !important;
+          font-weight:500 !important;
+          line-height:1.3 !important;
+          letter-spacing:0 !important;
+          text-transform:none !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-list-v768{
+          display:block !important;
+          padding:6px !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a{
+          display:flex !important;
+          grid-template-columns:none !important;
+          align-items:center !important;
+          justify-content:space-between !important;
+          gap:14px !important;
+          min-height:42px !important;
+          padding:9px 10px !important;
+          border-radius:8px !important;
+          color:#dfe7f3 !important;
+          text-decoration:none !important;
+          font-size:.77rem !important;
+          transition:background .14s ease,color .14s ease !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:hover,
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:focus-visible{
+          background:rgba(96,165,250,.08) !important;
+          color:#fff !important;
+          outline:none !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-label-v768{
+          min-width:0 !important;
+          overflow:visible !important;
+          text-overflow:clip !important;
+          white-space:normal !important;
+          color:inherit !important;
+          font-family:inherit !important;
+          font-size:.77rem !important;
+          font-weight:650 !important;
+          line-height:1.25 !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-external-v768{
+          flex:0 0 auto !important;
+          min-width:auto !important;
+          overflow:visible !important;
+          color:#7f8da8 !important;
+          font-size:.82rem !important;
+          line-height:1 !important;
+          transition:transform .14s ease,color .14s ease !important;
+        }
+
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:hover .doc-menu-external-v768,
+        body .doc-menu-portal-v559 .doc-menu-list-v768 a:focus-visible .doc-menu-external-v768{
+          color:#f0c36b !important;
+          transform:translate(1px,-1px) !important;
+        }
+      }
+    `;
+
+    document.head.appendChild(style);
   }
 
   function openDocsMenu(btn){
     closeMenu();
+
     var docs = [];
-    try{ docs = JSON.parse(decodeURIComponent(btn.dataset.docsOtherV559 || '[]')); }catch(_){}
+    try{docs = JSON.parse(decodeURIComponent(btn.dataset.docsOtherV559 || '[]'));}catch(_){}
     if(!docs.length) return;
+
+    ensureDocsStyleV768();
+
     var rect = btn.getBoundingClientRect();
     var menu = document.createElement('div');
     menu.id = 'docMenuPortalV559';
-    menu.className = 'doc-menu-portal-v559';
+    menu.className = 'doc-menu-portal-v559 doc-menu-portal-v768';
     menu.setAttribute('role','menu');
-    menu.innerHTML = `<div class="doc-menu-head-v559">Documentos complementares</div>` + docs.map(function(d){
-      return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener"><strong>${htmlAttr(d.curto)}</strong><span>${htmlAttr(d.label)}</span></a>`;
-    }).join('');
+    menu.setAttribute('aria-label','Documentos do fundo');
+
+    menu.innerHTML = `
+      <div class="doc-menu-head-v559">
+        <strong>Documentos do fundo</strong>
+        <small>Documentos oficiais disponíveis</small>
+      </div>
+      <div class="doc-menu-list-v768">
+        ${docs.map(function(d){
+          var label = docMenuLabelV768(d);
+          return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="Abrir ${htmlAttr(label)}"><span class="doc-menu-label-v768">${htmlAttr(label)}</span><span class="doc-menu-external-v768" aria-hidden="true">↗</span></a>`;
+        }).join('')}
+      </div>`;
+
     document.body.appendChild(menu);
-    var width = Math.min(280, Math.max(220, menu.offsetWidth || 240));
+    btn.setAttribute('aria-expanded','true');
+
+    var width = Math.min(340, Math.max(300, menu.offsetWidth || 320));
     var left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
     var top = Math.min(window.innerHeight - menu.offsetHeight - 12, rect.bottom + 8);
+
     menu.style.left = left + 'px';
     menu.style.top = Math.max(12, top) + 'px';
   }
 
   function sync(){
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561');
+    ensureDocsStyleV768();
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v768');
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }
