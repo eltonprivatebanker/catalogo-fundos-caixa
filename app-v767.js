@@ -33906,71 +33906,128 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 })();
 
 /* ============================================================================
-   V774 — FILTROS DESKTOP · ALINHAMENTO + PERFIL DE RISCO COMPACTO
+   V775 — FILTROS DESKTOP · VERSÃO FINAL VALIDADA EM CONSOLE
    ---------------------------------------------------------------------------
-   Validado previamente via Console:
-   - Público-alvo: left 382
-   - Categoria: left 394  -> corrigir -12px
-   - Perfil de risco: left 382
-
-   Perfil de risco:
-   - largura 232px
-   - altura 40px
-   - rótulo padrão "Todos"
-   - dourado discreto
+   Princípios:
+   - Categoria alinhada ao mesmo eixo de Público-alvo e Perfil de risco.
+   - Perfil de risco compacto: 200px x 28px.
+   - "Todos" é estado neutro.
+   - Dourado comunica filtro ativo (perfil específico) ou interação
+     temporária (hover/focus), não o estado padrão.
+   - Reaplica após rerenderizações do catálogo.
+   - Somente desktop.
    ============================================================================ */
-(function desktopCatalogFiltersV774(){
+(function desktopCatalogFiltersV775(){
   'use strict';
 
   const MQ = window.matchMedia('(min-width: 769px)');
+  const WIDTH = 200;
+  const HEIGHT = 28;
 
   function setImp(el, prop, value){
     if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function neutralPalette(){
+    const chip =
+      document.querySelector('.desktop-audience-chip-v488:not(.active)') ||
+      document.querySelector('.desktop-audience-chip-v488');
+
+    if(chip){
+      const cs = getComputedStyle(chip);
+      return {
+        bg: cs.backgroundColor || 'rgba(12,16,30,.86)',
+        border: cs.borderColor || 'rgba(148,163,184,.20)',
+        color: cs.color || '#dce5f8',
+        radius: cs.borderRadius || '8px',
+        fontSize: cs.fontSize || '.60rem',
+        fontWeight: cs.fontWeight || '800'
+      };
+    }
+
+    return {
+      bg: 'rgba(12,16,30,.86)',
+      border: 'rgba(148,163,184,.20)',
+      color: '#dce5f8',
+      radius: '8px',
+      fontSize: '.60rem',
+      fontWeight: '800'
+    };
+  }
+
+  function applyVisualState({ interactive = false } = {}){
+    const select = document.querySelector('#catalogRiskSelectV198');
+    const wrap = document.querySelector('.catalog-risk-select-wrap-v198');
+    if(!select || !wrap) return;
+
+    const arrow = wrap.querySelector('span[aria-hidden="true"]');
+    const palette = neutralPalette();
+    const hasSpecificRisk = String(select.value || '').trim() !== '';
+    const highlighted = hasSpecificRisk || interactive;
+
+    if(highlighted){
+      // Mesmo vocabulário visual dos chips selecionados, sem exagero.
+      setImp(select, 'background', 'linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075))');
+      setImp(select, 'border-color', 'rgba(232,187,106,.58)');
+      setImp(select, 'color', '#f2f5fb');
+      if(arrow) setImp(arrow, 'color', '#e8bb6a');
+    }else{
+      setImp(select, 'background', palette.bg);
+      setImp(select, 'border-color', palette.border);
+      setImp(select, 'color', palette.color);
+      if(arrow) setImp(arrow, 'color', 'rgba(166,176,201,.82)');
+    }
   }
 
   function apply(){
     if(!MQ.matches) return;
 
     const categoria = document.querySelector('.category-grid-v69');
-    const riskWrap = document.querySelector('.catalog-risk-select-wrap-v198');
-    const riskSelect = document.querySelector('#catalogRiskSelectV198');
+    const risk = document.querySelector('.catalog-risk-filter-v198');
+    const wrap = document.querySelector('.catalog-risk-select-wrap-v198');
+    const select = document.querySelector('#catalogRiskSelectV198');
 
-    // 1) Categoria: alinha o início ao mesmo eixo de Público-alvo e Perfil de risco.
+    // Alinhamento validado: Categoria estava 12px à direita.
     if(categoria){
       setImp(categoria, 'margin-left', '-12px');
     }
 
-    // 2) Perfil de risco: rótulo mais curto e controle compacto.
-    if(riskSelect){
-      const first = riskSelect.options && riskSelect.options[0];
-      if(first && first.textContent.trim() !== 'Todos'){
-        first.textContent = 'Todos';
-      }
+    if(!risk || !wrap || !select) return;
 
-      setImp(riskSelect, 'width', '232px');
-      setImp(riskSelect, 'min-width', '232px');
-      setImp(riskSelect, 'max-width', '232px');
-
-      setImp(riskSelect, 'height', '40px');
-      setImp(riskSelect, 'min-height', '40px');
-      setImp(riskSelect, 'max-height', '40px');
-
-      setImp(riskSelect, 'padding', '0 38px 0 12px');
-      setImp(riskSelect, 'border-radius', '9px');
-      setImp(riskSelect, 'font-size', '.72rem');
-      setImp(riskSelect, 'font-weight', '700');
-
-      // Dourado mais sutil que o chip ativo.
-      setImp(riskSelect, 'background', 'rgba(202,161,87,.035)');
-      setImp(riskSelect, 'border-color', 'rgba(202,161,87,.34)');
-      setImp(riskSelect, 'color', '#e8edf6');
+    // Texto padrão sem redundância.
+    const first = select.options && select.options[0];
+    if(first && first.textContent.trim() !== 'Todos'){
+      first.textContent = 'Todos';
     }
 
-    if(riskWrap){
-      setImp(riskWrap, 'width', '232px');
-      setImp(riskWrap, 'min-width', '232px');
-      setImp(riskWrap, 'max-width', '232px');
-    }
+    const palette = neutralPalette();
+
+    // Grid pai: reserva exatamente a largura aprovada.
+    setImp(risk, 'grid-template-columns', `132px ${WIDTH}px`);
+    setImp(risk, 'column-gap', '10px');
+
+    // Wrapper.
+    [wrap, select].forEach(el => {
+      setImp(el, 'width', `${WIDTH}px`);
+      setImp(el, 'min-width', `${WIDTH}px`);
+      setImp(el, 'max-width', `${WIDTH}px`);
+
+      setImp(el, 'height', `${HEIGHT}px`);
+      setImp(el, 'min-height', `${HEIGHT}px`);
+      setImp(el, 'max-height', `${HEIGHT}px`);
+
+      setImp(el, 'border-radius', palette.radius);
+      setImp(el, 'box-sizing', 'border-box');
+    });
+
+    // Select: mesma densidade dos chips.
+    setImp(select, 'padding', '0 32px 0 12px');
+    setImp(select, 'font-size', palette.fontSize);
+    setImp(select, 'font-weight', palette.fontWeight);
+    setImp(select, 'line-height', '1');
+    setImp(select, 'outline', 'none');
+
+    applyVisualState();
   }
 
   let raf = 0;
@@ -33979,8 +34036,41 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     raf = requestAnimationFrame(apply);
   }
 
-  function init(){
+  function bindInteraction(){
+    const select = document.querySelector('#catalogRiskSelectV198');
+    if(!select || select.dataset.v775Bound === '1') return;
+
+    select.dataset.v775Bound = '1';
+
+    select.addEventListener('change', () => {
+      apply();
+      applyVisualState();
+    });
+
+    select.addEventListener('focus', () => {
+      applyVisualState({interactive:true});
+    });
+
+    select.addEventListener('blur', () => {
+      applyVisualState();
+    });
+
+    select.addEventListener('mouseenter', () => {
+      applyVisualState({interactive:true});
+    });
+
+    select.addEventListener('mouseleave', () => {
+      if(document.activeElement !== select) applyVisualState();
+    });
+  }
+
+  function applyAndBind(){
     apply();
+    bindInteraction();
+  }
+
+  function init(){
+    applyAndBind();
 
     const target =
       document.getElementById('fundFilterShell') ||
@@ -33988,7 +34078,10 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
       document.body;
 
     if(target && 'MutationObserver' in window){
-      new MutationObserver(schedule).observe(target, {
+      new MutationObserver(() => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(applyAndBind);
+      }).observe(target, {
         childList: true,
         subtree: true
       });
@@ -33996,15 +34089,15 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
 
     window.addEventListener('resize', schedule, {passive:true});
 
-    if(MQ.addEventListener) MQ.addEventListener('change', schedule);
-    else if(MQ.addListener) MQ.addListener(schedule);
+    if(MQ.addEventListener) MQ.addEventListener('change', applyAndBind);
+    else if(MQ.addListener) MQ.addListener(applyAndBind);
 
-    // Reforço para renderizações assíncronas do catálogo.
-    setTimeout(apply, 150);
-    setTimeout(apply, 500);
-    setTimeout(apply, 1200);
+    // Reforços curtos para renderizações assíncronas.
+    setTimeout(applyAndBind, 150);
+    setTimeout(applyAndBind, 500);
+    setTimeout(applyAndBind, 1200);
 
-    console.info('[Catálogo CAIXA] Filtros desktop V774 ativos');
+    console.info('[Catálogo CAIXA] Filtros desktop V775 ativos');
   }
 
   if(document.readyState === 'loading'){
@@ -34013,4 +34106,3 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     init();
   }
 })();
-
