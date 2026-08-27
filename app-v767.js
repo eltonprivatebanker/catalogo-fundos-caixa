@@ -3036,7 +3036,10 @@ function renderRankings(){
   if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
   const ordenaCampo = (campo, asc=false) => base
-    .filter(r=>toNum(r[campo])!==null)
+    .filter(r=>{
+      if(campo==='Acum. 12M (%)' && fundoSem12MCompleto(r)) return false;
+      return toNum(r[campo])!==null;
+    })
     .sort((a,b)=>asc ? toNum(a[campo])-toNum(b[campo]) : toNum(b[campo])-toNum(a[campo]));
 
   const campoTop = rankCampoPorPeriodo(activeRankPeriods.topFundos);
@@ -3374,6 +3377,39 @@ function parseDateBR(v){
   const t=Date.parse(s);
   return Number.isFinite(t)?t:null;
 }
+
+/* v767 — histórico de 12 meses
+   Evita interpretar 0,00 como retorno real quando o fundo ainda não
+   completou 12 meses desde a data de início. A referência preferencial
+   é a própria data da rentabilidade exibida pelo SIPII. */
+function fundoSem12MCompleto(r){
+  if(!r || typeof r !== 'object') return false;
+
+  const dataInicioRaw =
+    r['Data Inicio'] ||
+    r['Data Início'] ||
+    r['Data de Inicio'] ||
+    r['Data de Início'];
+
+  const dataRefRaw =
+    r['Data Rentabilidade Ref'] ||
+    r['Data Base Consulta'];
+
+  const inicioTs = parseDateBR(dataInicioRaw);
+  const refTs = parseDateBR(dataRefRaw) || Date.now();
+
+  // Sem data de início confiável, preserva o comportamento original.
+  if(!inicioTs || !refTs) return false;
+
+  const inicio = new Date(inicioTs);
+  const aniversario12M = new Date(
+    inicio.getFullYear() + 1,
+    inicio.getMonth(),
+    inicio.getDate()
+  );
+
+  return refTs < aniversario12M.getTime();
+}
 function compararOrdenacao(av,bv){
   if(av===null&&bv===null) return 0;
   if(av===null) return 1;
@@ -3603,7 +3639,7 @@ function updateKPIs(){
   allRows.forEach(r=>{
     const p=toNum(r['PL (milhoes R$)']);
     if(p!==null) pl+=p;
-    const m=toNum(r['Acum. 12M (%)']);
+    const m=fundoSem12MCompleto(r) ? null : toNum(r['Acum. 12M (%)']);
     if(m!==null){
       if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
       if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
@@ -3644,6 +3680,7 @@ async function carregarKPIs(){
 
 
 function getCdiRatioFromRow(row){
+  if(fundoSem12MCompleto(row)) return null;
   const rent12=toNum(row['Acum. 12M (%)']);
   return calcCdiRatio(rent12, indicState?.cdi?.m12);
 }
@@ -5831,7 +5868,7 @@ function gerarLeituraRapidaFundo(r){
   const pag = texto(r['Pagamento Resgate']);
   const rent12 = numero(r['Acum. 12M (%)']);
   const rentAno = numero(r['Acum. Ano (%)']);
-  const cdiRatio = calcCdiRatio(rent12, indicState.cdi.m12);
+  const cdiRatio = fundoSem12MCompleto(r) ? null : calcCdiRatio(rent12, indicState.cdi.m12);
 
   const base = (categoria + ' ' + nome)
     .normalize('NFD')
@@ -6393,6 +6430,7 @@ function calcCdiRatio(rent12, cdi12){
   return Math.round((r / c) * 100);
 }
 function pctCdiCell(r){
+  if(fundoSem12MCompleto(r)) return '<td class="cdi-ratio-cell"><span class="cdi-ratio-badge neutral">—</span></td>';
   const rent12 = toNum(r['Acum. 12M (%)']);
   const ratio = calcCdiRatio(rent12, indicState.cdi.m12);
   if(ratio === null) return '<td class="cdi-ratio-cell"><span class="cdi-ratio-badge neutral">—</span></td>';
@@ -6430,7 +6468,15 @@ function liquidezUnifCell(r){
 }
 
 // Acum. 12M com tipografia em destaque (Cormorant maior)
-function pct12mCell(val){
+function pct12mCell(val,r){
+  // Fundo com menos de 12 meses: não transforma ausência de histórico em 0%.
+  if(fundoSem12MCompleto(r)){
+    return `<td class="col-pct-12m"><div class="pct12m-wrap">
+      <span class="pct12m-val zero">—</span>
+      <span class="pct12m-sub">Sem 12M completo</span>
+    </div></td>`;
+  }
+
   if(!val||String(val).trim()===''||val==='-'||val==='—')
     return '<td class="col-pct-12m"><span class="dash" style="color:var(--muted2)">—</span></td>';
   const n=toNum(val);
@@ -6449,6 +6495,7 @@ function pct12mCell(val){
 
 // % CDI 12M com barra visual proporcional
 function pctCdiCell(r){
+  if(fundoSem12MCompleto(r)) return '<td class="col-cdi-bar"><span class="cdi-ratio-badge neutral">—</span></td>';
   const rent12=toNum(r['Acum. 12M (%)']);
   const ratio=calcCdiRatio(rent12,indicState?.cdi?.m12);
   if(ratio===null) return '<td class="col-cdi-bar"><span class="cdi-ratio-badge neutral">—</span></td>';
@@ -6580,7 +6627,7 @@ function buildRowHTML(r,idx){
       html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name fundo-cell-name-short-v594" title="${htmlAttr(fullFundName)}" aria-label="${htmlAttr(fullFundName)}">${htmlAttr(displayFundName)}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
-    if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
+    if(h==='Acum. 12M (%)'){html+=pct12mCell(val,r);return;}
     if(h==='% CDI 12M'){html+=pctCdiCell(r);return;}
     if(h==='Documentos'){
       html+=`<td class="col-docs">${buildDocsCompactos(r)}</td>`;return;
@@ -9533,7 +9580,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const diaInfo=fmtPctMobilePremium(r['Variacao Dia (%)']);
     const mesInfo=fmtPctMobilePremium(r['Acum. Mes (%)']);
     const anoInfo=fmtPctMobilePremium(r['Acum. Ano (%)']);
-    const m12Info=fmtPctMobilePremium(r['Acum. 12M (%)']);
+    const sem12MCompleto=fundoSem12MCompleto(r);
+    const m12Info=sem12MCompleto ? {txt:'—', cls:'zero'} : fmtPctMobilePremium(r['Acum. 12M (%)']);
     const mes=fmtDash(r['Acum. Mes (%)']);
     const ano=fmtDash(r['Acum. Ano (%)']);
     const m12=fmtDash(r['Acum. 12M (%)']);
@@ -9541,7 +9589,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const data=fmtDash(r['Data Inicio']||r['Data Início']||r['Data de Inicio']||r['Data de Início']);
     const cls=CAT_CLS[cat]||'RF';
     const url=getFundUrl(r);
-    const ratioCdi = cdiRatioInfo(m12);
+    const ratioCdi = sem12MCompleto ? {txt:'Sem 12M completo', cls:''} : cdiRatioInfo(m12);
     const conversao = getCampoPrazoMobile(r,'Conversao Resgate');
     const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
     const codigo = getCodigoFundoMobile(r);
