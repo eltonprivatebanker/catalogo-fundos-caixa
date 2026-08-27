@@ -28195,21 +28195,22 @@ function buildDetailPanel(r,colspan){
   }
 
   function ensureDocsStyleV768(){
-    if(document.getElementById('desktopDocsSemanticV771Style')) return;
+    if(document.getElementById('desktopDocsSemanticV772Style')) return;
 
     var style = document.createElement('style');
-    style.id = 'desktopDocsSemanticV771Style';
+    style.id = 'desktopDocsSemanticV772Style';
     style.textContent = `
       @media (min-width:769px){
-        #sec-fundos .docs-mini-wrap-v768{gap:8px !important;}
+        #sec-fundos .docs-mini-wrap-v768{gap:6px !important;}
 
         #sec-fundos .doc-mini-primary-v768{
-          min-width:70px !important;
-          min-height:30px !important;
-          padding:0 11px !important;
+          min-width:68px !important;
+          min-height:26px !important;
+          height:26px !important;
+          padding:0 9px !important;
           white-space:nowrap !important;
           letter-spacing:0 !important;
-          font-size:.61rem !important;
+          font-size:.60rem !important;
           line-height:1 !important;
           text-align:center !important;
           border-color:rgba(202,161,87,.28) !important;
@@ -28225,8 +28226,48 @@ function buildDetailPanel(r,colspan){
         }
 
         #sec-fundos .doc-more-button-v768{
-          min-width:38px !important;
-          min-height:30px !important;
+          min-width:30px !important;
+          min-height:26px !important;
+          height:26px !important;
+        }
+
+        /*
+          V772 — override terminal da compactação v570.
+          Estes seletores espelham a especificidade da regra histórica
+          que fixava 92/80/22px e por isso prevalecem corretamente.
+        */
+        html.desktop-docs-compact-v570 body:not(.fund-card-mode) #mainTable td.col-docs{
+          width:116px !important;
+          min-width:116px !important;
+          max-width:116px !important;
+        }
+
+        html.desktop-docs-compact-v570 body:not(.fund-card-mode) #mainTable td.col-docs .docs-mini-wrap-v570{
+          width:104px !important;
+          max-width:104px !important;
+          gap:6px !important;
+        }
+
+        html.desktop-docs-compact-v570 body:not(.fund-card-mode) #mainTable td.col-docs .doc-mini-primary-v559{
+          width:auto !important;
+          min-width:68px !important;
+          height:26px !important;
+          min-height:26px !important;
+          max-height:26px !important;
+          padding:0 9px !important;
+          font-size:.60rem !important;
+          line-height:1 !important;
+          box-sizing:border-box !important;
+        }
+
+        html.desktop-docs-compact-v570 body:not(.fund-card-mode) #mainTable td.col-docs .doc-more-button-v559{
+          width:auto !important;
+          min-width:30px !important;
+          height:26px !important;
+          min-height:26px !important;
+          max-height:26px !important;
+          padding:0 7px !important;
+          box-sizing:border-box !important;
         }
 
         body .doc-menu-portal-v559{
@@ -28381,7 +28422,7 @@ function buildDetailPanel(r,colspan){
 
   function sync(){
     ensureDocsStyleV768();
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v771');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561','desktop-docs-semantic-v772');
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }

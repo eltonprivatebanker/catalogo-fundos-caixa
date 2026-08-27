@@ -1,0 +1,28 @@
+CATÁLOGO DE FUNDOS CAIXA — DOCUMENTOS V772
+
+Substituir na branch Testes-da-versão-01:
+- app-v767.js
+
+Esta versão incorpora exatamente o layout aprovado no teste via Console:
+
+- coluna Documentos: 116px
+- container dos botões: 104px
+- Comercial: mínimo 68px × 26px
+- +N: mínimo 30px × 26px
+- gap entre os botões: 6px
+
+Correção técnica:
+A regra histórica desktop-docs-compact-v570 tinha seletor mais específico
+e sobrescrevia os ajustes anteriores. Agora o override terminal usa
+a mesma/maior especificidade e, por isso, prevalece corretamente.
+
+Preservado:
+- menu Documentos do fundo
+- nomes neutros
+- hover discreto
+- Data de início
+- Sem 12M completo
+- mobile sem alteração
+
+Fonte:
+SHA anterior do GitHub: 4ba42a94c48c37720c5410f1002fcd2e12d530da
