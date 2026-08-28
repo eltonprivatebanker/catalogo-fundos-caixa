@@ -11603,17 +11603,28 @@ function comparWorkspaceRenderV723(options={}){
   const previousScrollTop = options.preserveScroll ? list.scrollTop : 0;
 
   const rows=Array.isArray(allRows)?allRows:[];
-  const search=comparNormV721(document.getElementById('comparWorkspaceSearchV723')?.value);
+  const searchInput=document.getElementById('comparWorkspaceSearchV723');
+  const rawSearch=String(searchInput?.value||'').trim();
+  const search=comparNormV721(rawSearch);
   const category=String(document.getElementById('comparWorkspaceCategoryV723')?.value||'');
   const risk=String(document.getElementById('comparWorkspaceRiskV723')?.value||'');
 
-  let matches=rows.map((row,idx)=>({row,idx})).filter(({row})=>{
-    if(category && String(row['Categoria']||'')!==category) return false;
-    const rowRisk=String(row['Perfil de Risco']||row['Perfil']||'Sem classificação');
-    if(risk && rowRisk!==risk) return false;
-    if(!search) return true;
-    return comparSearchMatchV725(row,search);
-  });
+  // V779 — descoberta sob demanda:
+  // a lista só abre com 2+ caracteres OU com Categoria/Perfil ativos.
+  const hasFilters=!!(category || risk);
+  const hasQualifiedSearch=rawSearch.length>=2;
+  const discoveryActive=hasQualifiedSearch || hasFilters;
+  const waitingForSecondChar=rawSearch.length===1 && !hasFilters;
+
+  let matches=discoveryActive
+    ? rows.map((row,idx)=>({row,idx})).filter(({row})=>{
+        if(category && String(row['Categoria']||'')!==category) return false;
+        const rowRisk=String(row['Perfil de Risco']||row['Perfil']||'Sem classificação');
+        if(risk && rowRisk!==risk) return false;
+        if(!search) return true;
+        return comparSearchMatchV725(row,search);
+      })
+    : [];
 
   // V734: a lista permanece estável ao selecionar.
   // A seleção aparece na carteira à direita, sem puxar o item marcado para o topo.
@@ -11623,13 +11634,14 @@ function comparWorkspaceRenderV723(options={}){
   const LIMITE=220;
   const shown=matches.slice(0,LIMITE);
   list.dataset.resultCount=String(shown.length);
-  list.classList.toggle('is-short-v766',shown.length<=8);
-  list.classList.toggle('is-single-v766',shown.length===1);
+  list.classList.toggle('is-short-v766',discoveryActive && shown.length<=8);
+  list.classList.toggle('is-single-v766',discoveryActive && shown.length===1);
+  list.classList.toggle('is-discovery-idle-v779',!discoveryActive);
   const result=document.getElementById('comparWorkspaceResultV723');
   if(result){
-    const rawSearch=String(document.getElementById('comparWorkspaceSearchV723')?.value||'').trim();
-    const hasFilters=!!(category || risk);
-    if(total>LIMITE){
+    if(!discoveryActive){
+      result.textContent=waitingForSecondChar?'Digite mais 1 caractere':'Use a busca ou os filtros';
+    }else if(total>LIMITE){
       result.textContent=`${total.toLocaleString('pt-BR')} fundos · exibindo ${LIMITE}`;
     }else if(rawSearch){
       result.textContent=`${total.toLocaleString('pt-BR')} fundo${total===1?'':'s'} para “${rawSearch}”`;
@@ -11640,8 +11652,12 @@ function comparWorkspaceRenderV723(options={}){
     }
   }
 
-  if(!shown.length){
-    list.innerHTML='<div class="compar-workspace-empty-v723">Nenhum fundo encontrado com os filtros selecionados.</div>';
+  if(!discoveryActive){
+    list.innerHTML=waitingForSecondChar
+      ? '<div class="compar-workspace-empty-v723 compar-workspace-empty-v779" role="status"><strong>Continue a busca</strong><span>Digite mais 1 caractere para localizar fundos.</span></div>'
+      : '<div class="compar-workspace-empty-v723 compar-workspace-empty-v779" role="status"><strong>Localize um fundo para comparar</strong><span>Digite pelo menos 2 caracteres na busca ou utilize Categoria ou Perfil de risco.</span></div>';
+  }else if(!shown.length){
+    list.innerHTML='<div class="compar-workspace-empty-v723 compar-workspace-empty-v779 is-no-match-v779" role="status"><strong>Nenhum fundo encontrado</strong><span>Revise a busca ou os filtros selecionados.</span></div>';
   }else{
     list.innerHTML=shown.map(({row,idx})=>{
       const checked=comparSet.has(idx);
@@ -11790,6 +11806,7 @@ function initComparWorkspaceV723(){
 
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
+console.info('[Catálogo CAIXA] Comparador sob demanda V779 ativo');
 
 (function(){
   'use strict';

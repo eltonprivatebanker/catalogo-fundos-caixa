@@ -1,0 +1,40 @@
+CATÁLOGO DE FUNDOS CAIXA — V779 ALTERNATIVO
+
+OBJETIVO
+--------
+Testar o comparador com a lista de fundos fechada por padrão.
+
+REGRA
+-----
+- Busca vazia + Categoria Todas + Perfil Todos: não lista fundos.
+- 1 caractere sem filtros: pede mais 1 caractere.
+- 2+ caracteres: exibe os resultados da busca.
+- Categoria diferente de Todas: exibe resultados mesmo sem busca.
+- Perfil diferente de Todos: exibe resultados mesmo sem busca.
+- Fundos já selecionados continuam na faixa "Selecionados".
+- Limpar busca/filtros volta ao estado inicial.
+
+POR QUE EXISTE comparador-v779.css
+---------------------------------
+Esta é uma versão alternativa para teste. Para reduzir risco, o style-v767.css
+principal não foi alterado. A camada visual V779 fica em um CSS separado e é
+carregada pelo index.html gerado.
+
+COMO TESTAR
+-----------
+1. Extraia este ZIP.
+2. Execute GERAR_INDEX_V779.bat.
+3. Será criado o index.html atualizado a partir da versão atual da branch.
+4. Suba para Testes-da-versão-01 exatamente estes 3 arquivos:
+   app-v767.js
+   comparador-v779.css
+   index.html
+5. Aguarde o GitHub Pages e faça Ctrl+F5.
+
+CONSOLE ESPERADO
+----------------
+[Catálogo CAIXA] Comparador sob demanda V779 ativo
+
+BASE DO APP
+-----------
+SHA Git blob confirmado: 3a729b860545ad510e2b81431cb48859835b87d1

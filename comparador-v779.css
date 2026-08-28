@@ -1,0 +1,64 @@
+/* ============================================================
+   V779 — COMPARADOR SOB DEMANDA
+   Camada alternativa e reversível para teste.
+   ============================================================ */
+
+@media (min-width:769px){
+  #comparWorkspaceV723 .compar-workspace-list-v723.is-discovery-idle-v779{
+    overflow:hidden;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779{
+    min-height:250px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    padding:34px 24px;
+    box-sizing:border-box;
+    text-align:center;
+    color:#8290aa;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(176,132,84,.055), transparent 34%),
+      transparent;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779::before{
+    content:'⌕';
+    display:grid;
+    place-items:center;
+    width:34px;
+    height:34px;
+    margin-bottom:3px;
+    border:1px solid rgba(148,163,184,.16);
+    border-radius:10px;
+    background:rgba(12,17,30,.64);
+    color:#b8c4d9;
+    font-size:1.15rem;
+    line-height:1;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 strong{
+    color:#e2e8f3;
+    font-size:.78rem;
+    line-height:1.25;
+    font-weight:850;
+    letter-spacing:.01em;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 span{
+    display:block;
+    max-width:470px;
+    color:#8190ad;
+    font-size:.66rem;
+    line-height:1.5;
+    font-weight:600;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779.is-no-match-v779::before{
+    content:'—';
+    color:#9aa8bf;
+  }
+}
