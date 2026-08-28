@@ -11187,6 +11187,37 @@ function abrirComparador(){
     }) + '%';
   };
 
+  // V782 — histórico de 12 meses no comparador.
+  // Reutiliza a mesma regra já usada no catálogo para não tratar ausência
+  // de histórico como rentabilidade zero.
+  const sem12MComparV782 = r => (
+    typeof fundoSem12MCompleto === 'function' && fundoSem12MCompleto(r)
+  );
+
+  const fmtStartDateV782 = r => {
+    const raw = String(
+      r?.['Data Inicio'] ||
+      r?.['Data Início'] ||
+      r?.['Data de Inicio'] ||
+      r?.['Data de Início'] ||
+      ''
+    ).trim();
+    if(!raw || raw==='-' || raw==='—') return '—';
+
+    let shown = raw;
+    let m = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(m){
+      shown = `${String(m[3]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[1]}`;
+    }else{
+      m = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/);
+      if(m) shown = `${String(m[1]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[3]}`;
+    }
+
+    return sem12MComparV782(r) ? `${shown} · menos de 12M` : shown;
+  };
+
+  const sem12MCellV782 = () => '<span class="ct-12m-incomplete-v782"><strong>—</strong><small>Sem 12M completo</small></span>';
+
 
   /* V755 — resolve a lâmina antes de montar o cabeçalho.
      O nome do fundo será um <a> real, permitindo clique normal,
@@ -11241,23 +11272,32 @@ function abrirComparador(){
   const campos = [
     { group:'FUNDO', label:'Perfil de risco', key: r => r['Perfil de Risco']||r['Perfil']||'—', tipo:'txt', sectionStart:true },
     { label:'CNPJ', key: r => r['CNPJ']||'—', tipo:'txt' },
+    { label:'Data de início', key: r => fmtStartDateV782(r), tipo:'txt', help:'Data de início do fundo. Quando ainda não completou 12 meses, essa condição é indicada ao lado da data.' },
 
     { group:'CUSTOS E ACESSO', label:'Taxa de administração ↓', key: r => fmtTaxaAdmV780(r['Taxa Adm (%)']), tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', sectionStart:true, help:'Menor taxa de administração entre os fundos selecionados.' },
     { label:'Aplicação mínima ↓', key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min', help:'Menor valor mínimo exigido para aplicação.' },
 
     { group:'RENTABILIDADE', label:'Retorno no mês', key: r => fmt(r['Acum. Mes (%)']), tipo:'pct', val: r => pctNum(r['Acum. Mes (%)']), better:'max', sectionStart:true, perfKey:'Acum. Mes (%)', help:'Rentabilidade acumulada no mês corrente.' },
     { label:'Retorno no ano', key: r => fmt(r['Acum. Ano (%)']), tipo:'pct', val: r => pctNum(r['Acum. Ano (%)']), better:'max', perfKey:'Acum. Ano (%)', help:'Rentabilidade acumulada no ano corrente.' },
-    { label:'Retorno em 12 meses', key: r => fmt(r['Acum. 12M (%)']), tipo:'pct dest compare', val: r => pctNum(r['Acum. 12M (%)']), better:'max', perfKey:'Acum. 12M (%)', help:'Rentabilidade acumulada nos últimos 12 meses.' },
+    { label:'Retorno em 12 meses', key: r => {
+        if(sem12MComparV782(r)) return sem12MCellV782();
+        return fmt(r['Acum. 12M (%)']);
+      }, tipo:'pct dest compare', val: r => {
+        if(sem12MComparV782(r)) return NaN;
+        return pctNum(r['Acum. 12M (%)']);
+      }, better:'max', perfKey:'Acum. 12M (%)', help:'Rentabilidade acumulada nos últimos 12 meses. Fundos que ainda não completaram 12 meses aparecem como “Sem 12M completo” e não concorrem ao destaque.' },
     { label:'% do CDI em 12 meses', key: r => {
+        if(sem12MComparV782(r)) return sem12MCellV782();
         const rent = pctNum(r['Acum. 12M (%)']);
         const cdi  = indicState?.cdi?.m12;
         if(isNaN(rent)||!cdi) return '—';
         return Math.round((rent/cdi)*100)+' %';
       }, tipo:'cdi compare', val: r => {
+        if(sem12MComparV782(r)) return NaN;
         const rent = pctNum(r['Acum. 12M (%)']);
         const cdi  = indicState?.cdi?.m12;
         return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
-      }, better:'max', help:'Quanto o fundo rendeu em relação ao CDI no mesmo período.' },
+      }, better:'max', help:'Quanto o fundo rendeu em relação ao CDI no mesmo período. Fundos sem 12 meses completos não concorrem ao destaque.' },
 
     { group:'LIQUIDEZ', label:'Conversão da cota ↓', key: r => r['Conversao Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Conversao Resgate']), better:'min', sectionStart:true, help:'Prazo para conversão do resgate. “du” significa dias úteis.' },
     { label:'Pagamento do resgate ↓', key: r => r['Pagamento Resgate']||'—', tipo:'txt compare', val: r => parsePrazo(r['Pagamento Resgate']), better:'min', help:'Prazo de pagamento após a conversão. “du” significa dias úteis.' },
@@ -11379,9 +11419,19 @@ function abrirComparador(){
       if(isNaN(n)) return '—';
       return (sign && n>0?'+':'') + n.toFixed(2).replace('.',',') + '%';
     };
-    const idx12 = winnerIndex(r=>pctNum(r['Acum. 12M (%)']), 'max');
+    const fundosCom12MCompletoV782 = fundos.filter(r => {
+      if(sem12MComparV782(r)) return false;
+      return Number.isFinite(pctNum(r['Acum. 12M (%)']));
+    });
+    const ha12MCompletoV782 = fundosCom12MCompletoV782.length > 0;
+
+    const idx12 = winnerIndex(r=>{
+      if(sem12MComparV782(r)) return NaN;
+      return pctNum(r['Acum. 12M (%)']);
+    }, 'max');
     const idxFee = winnerIndex(r=>pctNum(r['Taxa Adm (%)']), 'min');
     const idxCdi = winnerIndex(r=>{
+      if(sem12MComparV782(r)) return NaN;
       const rent = pctNum(r['Acum. 12M (%)']);
       const cdi = indicState?.cdi?.m12;
       return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
@@ -11393,6 +11443,8 @@ function abrirComparador(){
       const cdi = indicState?.cdi?.m12;
       const ratio = (isNaN(rent)||!cdi) ? '' : `${Math.round((rent/cdi)*100)}% do CDI`;
       cards.push(`<article class="compar-kpi-v731"><span>Maior retorno em 12 meses</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small title="${shortName(idx12)}">${shortName(idx12)}</small>${ratio?`<em>${ratio}</em>`:''}</article>`);
+    }else if(!ha12MCompletoV782){
+      cards.push('<article class="compar-kpi-v731 compar-kpi-muted-v782"><span>Histórico de 12 meses</span><strong>—</strong><small>Nenhum fundo com 12M completos</small><em>Sem destaque neste critério</em></article>');
     }
     if(idxFee>=0) cards.push(`<article class="compar-kpi-v731"><span>Menor taxa de administração</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'], false)}</strong><small title="${shortName(idxFee)}">${shortName(idxFee)}</small><em>Entre os fundos selecionados</em></article>`);
     if(idxCdi>=0){
@@ -11818,7 +11870,7 @@ function initComparWorkspaceV723(){
 
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
-console.info('[Catálogo CAIXA] Comparador V781 ativo · destaques compactos · tabela preservada');
+console.info('[Catálogo CAIXA] Comparador V782 ativo · histórico 12M sem falso zero · data de início');
 
 (function(){
   'use strict';
