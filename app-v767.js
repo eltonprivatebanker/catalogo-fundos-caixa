@@ -11854,6 +11854,7 @@ document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 console.info('[Catálogo CAIXA] Rankings V784 ativo · cabeçalho compacto e metodologia no info');
+console.info('[Catálogo CAIXA] Indicadores V785 ativos · painel compacto e controles semânticos');
 
 (function(){
   'use strict';
@@ -24970,41 +24971,43 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
     renderMonthlyHeaderV446(table, activeView);
 
-    const summarySuffix = range === '12m' ? '12 meses' : 'ano atual';
+    // V785 — período e moeda ficam nos controles do painel.
+    // Os cards mostram somente o nome do indicador, evitando repetir
+    // "ano atual", "12 meses", "USD" ou "BRL" sete vezes.
     setSummaryV445(
       'monthlySummaryCdiV445',
       summaryValueForKeysV449(cdiMap, keys, range === '12m' ? [cdiCard.acum_12m] : [cdiCard.acum_ano_com_parcial, cdiCard.acum_ano, cdiCard.ano]),
-      `CDI ${summarySuffix}`
+      'CDI'
     );
     setSummaryV445(
       'monthlySummaryIpcaV445',
       summaryValueForKeysV449(ipcaMap, keys, range === '12m' ? [ipcaCard.acum_12m] : [ipcaCard.acum_ano, ipcaCard.ano]),
-      `IPCA ${summarySuffix}`
+      'IPCA'
     );
     setSummaryV445(
       'monthlySummaryIbovV445',
       summaryValueForKeysV449(ibovMap, keys, range === '12m' ? [ibovIdx.acum_12m, ibovCard.acum_12m] : [ibovIdx.acum_ano, ibovCard.acum_ano]),
-      `Ibov ${summarySuffix}`
+      'Ibovespa'
     );
     setSummaryV445(
       'monthlySummaryDolarV445',
       summaryValueForKeysV449(dolarMap, keys, range === '12m' ? [dolarIdx.acum_12m, dolarCard.acum_12m] : [dolarIdx.acum_ano, dolarCard.acum_ano]),
-      `Dólar ${summarySuffix}`
+      'Dólar'
     );
     setSummaryV445(
       'monthlySummarySp500V576',
       summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year', usCurrency)),
-      `S&P 500 ${summarySuffix} ${usCurrency.toUpperCase()}`
+      'S&P 500'
     );
     setSummaryV445(
       'monthlySummaryNasdaqV576',
       summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year', usCurrency)),
-      `Nasdaq ${summarySuffix} ${usCurrency.toUpperCase()}`
+      'Nasdaq'
     );
     setSummaryV445(
       'monthlySummaryDowV576',
       summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year', usCurrency)),
-      `Dow ${summarySuffix} ${usCurrency.toUpperCase()}`
+      'Dow Jones'
     );
 
     tbody.innerHTML = keys.map(key => {
