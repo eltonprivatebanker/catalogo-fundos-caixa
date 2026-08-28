@@ -11853,6 +11853,7 @@ setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 console.info('[Catálogo CAIXA] Rankings V788 ativo · tabela sem faixa intermediária');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
+console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
 (function(){
   'use strict';
@@ -25008,7 +25009,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       'Dow Jones'
     );
 
-    tbody.innerHTML = keys.map(key => {
+    // V789 — a tabela prioriza o dado mais recente.
+    // A ordem cronológica original de `keys` permanece intacta para o gráfico.
+    const tableKeysV789 = [...keys].reverse();
+
+    tbody.innerHTML = tableKeysV789.map(key => {
       const label = labelFromKeyV447(key);
       if(activeView !== 'all'){
         const value = maps[activeView]?.get(key);
@@ -25055,6 +25060,8 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const shell = root.querySelector('.monthly-indicators-table-shell-v445');
     if(shell){
       requestAnimationFrame(() => {
+        // V789 — com a ordem recente → antiga, o topo sempre é o mês atual/mais recente.
+        shell.scrollTop = 0;
         shell.scrollLeft = 0;
       });
     }
