@@ -11442,16 +11442,16 @@ function abrirComparador(){
       const rent = pctNum(fundos[idx12]['Acum. 12M (%)']);
       const cdi = indicState?.cdi?.m12;
       const ratio = (isNaN(rent)||!cdi) ? '' : `${Math.round((rent/cdi)*100)}% do CDI`;
-      cards.push(`<article class="compar-kpi-v731"><span>Maior retorno em 12 meses</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small title="${shortName(idx12)}">${shortName(idx12)}</small>${ratio?`<em>${ratio}</em>`:''}</article>`);
+      cards.push(`<article class="compar-kpi-v731"><span>Maior retorno · 12M</span><strong>${fmtPctPlain(fundos[idx12]['Acum. 12M (%)'])}</strong><small title="${shortName(idx12)}">${shortName(idx12)}</small>${ratio?`<em>${ratio}</em>`:''}</article>`);
     }else if(!ha12MCompletoV782){
-      cards.push('<article class="compar-kpi-v731 compar-kpi-muted-v782"><span>Histórico de 12 meses</span><strong>—</strong><small>Nenhum fundo com 12M completos</small><em>Sem destaque neste critério</em></article>');
+      cards.push('<article class="compar-kpi-v731 compar-kpi-muted-v782"><span>Histórico · 12M</span><strong>—</strong><small>Nenhum fundo com 12M completos</small><em>Sem destaque neste critério</em></article>');
     }
-    if(idxFee>=0) cards.push(`<article class="compar-kpi-v731"><span>Menor taxa de administração</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'], false)}</strong><small title="${shortName(idxFee)}">${shortName(idxFee)}</small><em>Entre os fundos selecionados</em></article>`);
+    if(idxFee>=0) cards.push(`<article class="compar-kpi-v731 compar-kpi-no-detail-v783"><span>Menor taxa adm.</span><strong>${fmtPctPlain(fundos[idxFee]['Taxa Adm (%)'], false)}</strong><small title="${shortName(idxFee)}">${shortName(idxFee)}</small></article>`);
     if(idxCdi>=0){
       const rent = pctNum(fundos[idxCdi]['Acum. 12M (%)']);
       const cdi = indicState?.cdi?.m12;
       const ratio = (isNaN(rent)||!cdi) ? '—' : Math.round((rent/cdi)*100) + '%';
-      cards.push(`<article class="compar-kpi-v731"><span>Maior % do CDI em 12 meses</span><strong>${ratio}</strong><small title="${shortName(idxCdi)}">${shortName(idxCdi)}</small><em>Desempenho relativo ao CDI</em></article>`);
+      cards.push(`<article class="compar-kpi-v731 compar-kpi-no-detail-v783"><span>Maior % do CDI · 12M</span><strong>${ratio}</strong><small title="${shortName(idxCdi)}">${shortName(idxCdi)}</small></article>`);
     }
 
     insightsBox.innerHTML = `
@@ -11870,7 +11870,7 @@ function initComparWorkspaceV723(){
 
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
-console.info('[Catálogo CAIXA] Comparador V782 ativo · histórico 12M sem falso zero · data de início');
+console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 
 (function(){
   'use strict';
