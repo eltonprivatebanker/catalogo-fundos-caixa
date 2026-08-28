@@ -4031,10 +4031,10 @@ function setCdiSort(dir){
     return ratio === null ? '—' : ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
   }
   function retornoLabel(periodo){
-    return periodo === 'mes' ? 'Retorno no mês' : periodo === 'ano' ? 'Retorno no ano' : 'Retorno em 12M';
+    return periodo === 'mes' ? 'Retorno mês' : periodo === 'ano' ? 'Retorno ano' : 'Retorno 12M';
   }
   function cdiLabel(periodo){
-    return periodo === 'mes' ? '% do CDI no mês' : periodo === 'ano' ? '% do CDI no ano' : '% do CDI em 12M';
+    return periodo === 'mes' ? '% CDI mês' : periodo === 'ano' ? '% CDI ano' : '% CDI 12M';
   }
   function riskOk(r){
     if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
@@ -4288,29 +4288,15 @@ function setCdiSort(dir){
   }
 
   function rankingBoardMetaV763(periodo, boardSource, isSingleCategory, currentCategoryLabel, excludedIncomplete){
-    const universeSelect = q('#rankingUniverseSelectV685');
-    const categorySelect = q('#rankingClassSelectV136');
-    const riskSelect = q('#rankingRiskSelectV198');
-
-    const universeLabel = universeSelect?.options?.[universeSelect.selectedIndex]?.textContent?.trim() || 'Todos os fundos';
-    const categoryLabel = isSingleCategory
-      ? currentCategoryLabel
-      : (categorySelect?.options?.[categorySelect.selectedIndex]?.textContent?.trim() || 'Todas as categorias');
-    const riskLabel = riskSelect?.options?.[riskSelect.selectedIndex]?.textContent?.trim() || 'Todos perfis';
     const eligibleLabel = isSingleCategory
       ? `${boardSource.length || 0} fundos`
       : `${boardSource.length || 0} categorias`;
 
-    const parts = [labelPeriodo(periodo), universeLabel, categoryLabel, riskLabel];
+    const methodText = 'Fundos sem histórico completo para o período selecionado não participam da classificação.';
 
-    return '<div class="ranking-board-meta-v763" aria-label="Contexto atual do ranking">' +
-      '<span class="ranking-board-meta-left-v763">' +
-        parts.map((p,i)=> (i ? '<i aria-hidden="true">·</i>' : '') + '<span>' + esc(p) + '</span>').join('') +
-      '</span>' +
-      '<span class="ranking-board-meta-right-v763">' +
-        '<strong>' + esc(eligibleLabel) + '</strong>' +
-        (excludedIncomplete ? '<span>· ' + esc(String(excludedIncomplete)) + ' sem histórico completo</span>' : '') +
-      '</span>' +
+    return '<div class="ranking-board-meta-v763 ranking-board-meta-v784" aria-label="Resumo metodológico do ranking">' +
+      '<strong>' + esc(eligibleLabel) + '</strong>' +
+      '<span class="ranking-method-info-v784" tabindex="0" role="img" aria-label="' + esc(methodText) + '" title="' + esc(methodText) + '">ⓘ</span>' +
     '</div>';
   }
 
@@ -4347,9 +4333,6 @@ function setCdiSort(dir){
     const summaryValue = String(boardSource.length || 0);
     const summaryName = isSingleCategory ? currentCategoryLabel : ('Histórico completo em ' + labelPeriodo(periodo));
     const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Líderes por categoria';
-    const boardDescription = isSingleCategory
-      ? ('Fundos com histórico completo, ordenados pelo retorno em ' + labelPeriodo(periodo) + '.')
-      : 'Melhor retorno no período selecionado em cada categoria.';
     const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Líderes por categoria';
     const displayedCount = Math.min(10, boardSource.length || 0);
     const resultText = isSingleCategory
@@ -4367,10 +4350,9 @@ function setCdiSort(dir){
         summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
       '</section>' +
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
-        '<div class="ranking-v682-board-head ranking-v763-board-head">' +
-          '<div class="ranking-v763-board-copy">' +
+        '<div class="ranking-v682-board-head ranking-v763-board-head ranking-v784-board-head">' +
+          '<div class="ranking-v763-board-copy ranking-v784-board-copy">' +
             '<h3>' + esc(boardTitle) + '</h3>' +
-            '<p>' + esc(boardDescription) + '</p>' +
             rankingBoardMetaV763(periodo, boardSource, isSingleCategory, currentCategoryLabel, excludedIncomplete) +
           '</div>' +
         '</div>' +
@@ -11871,6 +11853,7 @@ function initComparWorkspaceV723(){
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
+console.info('[Catálogo CAIXA] Rankings V784 ativo · cabeçalho compacto e metodologia no info');
 
 (function(){
   'use strict';
