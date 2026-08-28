@@ -1,0 +1,222 @@
+/* ============================================================
+   V780 — COMPARADOR SOB DEMANDA · REFINAMENTOS
+   Mantém a experiência V779 e adiciona:
+   - estado vazio mais compacto;
+   - RETORNO 12M somente quando existem resultados.
+   ============================================================ */
+
+@media (min-width:769px){
+  #comparWorkspaceV723 .compar-workspace-list-v723.is-discovery-idle-v779{
+    overflow:hidden;
+  }
+
+  /* V780: sem resultado, o cabeçalho da coluna não fica solto. */
+  #comparWorkspaceV723 .compar-workspace-return-label-v764{
+    visibility:hidden!important;
+  }
+
+  #comparWorkspaceV723.has-results-v780 .compar-workspace-return-label-v764{
+    visibility:visible!important;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779{
+    min-height:190px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:26px 24px;
+    box-sizing:border-box;
+    text-align:center;
+    color:#8290aa;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(176,132,84,.05), transparent 32%),
+      transparent;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779::before{
+    content:'⌕';
+    display:grid;
+    place-items:center;
+    width:32px;
+    height:32px;
+    margin-bottom:2px;
+    border:1px solid rgba(148,163,184,.16);
+    border-radius:10px;
+    background:rgba(12,17,30,.64);
+    color:#b8c4d9;
+    font-size:1.08rem;
+    line-height:1;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 strong{
+    color:#e2e8f3;
+    font-size:.78rem;
+    line-height:1.25;
+    font-weight:850;
+    letter-spacing:.01em;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 span{
+    display:block;
+    max-width:470px;
+    color:#8190ad;
+    font-size:.66rem;
+    line-height:1.45;
+    font-weight:600;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779.is-no-match-v779::before{
+    content:'—';
+    color:#9aa8bf;
+  }
+}
+
+/* ============================================================
+   V781 — COMPARADOR · DESTAQUES EM FAIXA COMPACTA
+   Escopo: modal de comparação aberto.
+   A tabela e sua tipografia NÃO são alteradas.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  /* Reduz o espaço vertical entre cabeçalho e tabela. */
+  #comparOverlay.open #comparInsightsV728{
+    margin-top:0!important;
+    margin-bottom:0!important;
+    padding-top:10px!important;
+    padding-bottom:8px!important;
+  }
+
+  /* Mantém a área de destaques compacta. */
+  #comparOverlay.open #comparInsightsV728 .compar-insights-v731{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* Título em uma linha baixa; a explicação longa é redundante no modal. */
+  #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731{
+    min-height:18px!important;
+    margin:0 0 6px 0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    line-height:1.1!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731 > strong{
+    margin:0!important;
+    font-size:.66rem!important;
+    line-height:1.1!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731 > span{
+    margin:0!important;
+    font-size:.60rem!important;
+    line-height:1!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731 > small{
+    display:none!important;
+  }
+
+  /* Uma única faixa horizontal. 2 ou 3 destaques ocupam a mesma altura. */
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-grid-v731{
+    display:grid!important;
+    grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  /* Mini-card: mantém todas as informações, mas elimina a altura excessiva. */
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731{
+    min-width:0!important;
+    min-height:58px!important;
+    height:58px!important;
+    max-height:58px!important;
+    margin:0!important;
+    padding:7px 11px!important;
+    box-sizing:border-box!important;
+    display:grid!important;
+    grid-template-columns:max-content minmax(0,1fr)!important;
+    grid-template-rows:12px 19px 11px!important;
+    column-gap:9px!important;
+    row-gap:1px!important;
+    align-content:center!important;
+    align-items:center!important;
+    overflow:hidden!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731 > span{
+    grid-column:1 / -1!important;
+    grid-row:1!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    font-size:.54rem!important;
+    line-height:12px!important;
+    letter-spacing:.055em!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731 > strong{
+    grid-column:1!important;
+    grid-row:2!important;
+    margin:0!important;
+    padding:0!important;
+    white-space:nowrap!important;
+    font-size:.92rem!important;
+    line-height:19px!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731 > small{
+    grid-column:2!important;
+    grid-row:2!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    align-self:center!important;
+    font-size:.54rem!important;
+    line-height:1.1!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731 > em{
+    grid-column:1 / -1!important;
+    grid-row:3!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    font-size:.49rem!important;
+    line-height:11px!important;
+  }
+
+  /* O troféu já aparece nas células vencedoras; esta legenda duplicava a mensagem. */
+  #comparOverlay.open #comparInsightsV728 .compar-legend-v757{
+    display:none!important;
+  }
+}
+
+/* Em desktop estreito, continua horizontal sem comprimir demais o conteúdo. */
+@media (min-width:769px) and (max-width:1100px){
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731{
+    padding-left:9px!important;
+    padding-right:9px!important;
+    column-gap:6px!important;
+  }
+
+  #comparOverlay.open #comparInsightsV728 .compar-kpi-v731 > small{
+    font-size:.50rem!important;
+  }
+}
+

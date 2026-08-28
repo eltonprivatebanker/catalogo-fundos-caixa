@@ -11818,7 +11818,7 @@ function initComparWorkspaceV723(){
 
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
-console.info('[Catálogo CAIXA] Comparador sob demanda V780 ativo · taxas 2 casas · vazio refinado');
+console.info('[Catálogo CAIXA] Comparador V781 ativo · destaques compactos · tabela preservada');
 
 (function(){
   'use strict';
