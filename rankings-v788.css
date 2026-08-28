@@ -1,0 +1,128 @@
+/* V784 — Rankings · cabeçalho compacto */
+@media (min-width:769px){
+  #rankingsSection .ranking-v784-board-head{
+    min-height:0!important;
+    padding:8px 14px!important;
+    margin:0!important;
+  }
+  #rankingsSection .ranking-v784-board-copy{
+    width:100%!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  #rankingsSection .ranking-v784-board-copy > h3{
+    margin:0!important;
+    padding:0!important;
+    font-size:.86rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+  #rankingsSection .ranking-board-meta-v784{
+    flex:0 0 auto!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:6px!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:none!important;
+    line-height:1!important;
+  }
+  #rankingsSection .ranking-board-meta-v784 > strong{
+    margin:0!important;
+    padding:0!important;
+    color:#d5a84f!important;
+    font-size:.60rem!important;
+    font-weight:850!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  #rankingsSection .ranking-method-info-v784{
+    display:inline-grid!important;
+    place-items:center!important;
+    width:16px!important;
+    height:16px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:50%!important;
+    color:#91a0ba!important;
+    background:transparent!important;
+    font-size:.64rem!important;
+    line-height:1!important;
+    cursor:help!important;
+    outline:none!important;
+  }
+  #rankingsSection .ranking-method-info-v784:hover,
+  #rankingsSection .ranking-method-info-v784:focus-visible{
+    color:#e2b45f!important;
+    background:rgba(226,180,95,.08)!important;
+  }
+  #rankingsSection .ranking-v685-table thead th{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+}
+@media (min-width:769px) and (max-width:980px){
+  #rankingsSection .ranking-v784-board-copy{gap:8px!important;}
+  #rankingsSection .ranking-v784-board-copy > h3{font-size:.79rem!important;}
+  #rankingsSection .ranking-board-meta-v784 > strong{font-size:.56rem!important;}
+}
+
+/* ============================================================
+   V788 — RANKINGS · SEM FAIXA INTERMEDIÁRIA
+   A metodologia migra para um info discreto no título principal.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  #rankingsSection .ranking-title-hero-v305{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:7px!important;
+  }
+
+  #rankingsSection .ranking-title-info-v788{
+    display:inline-grid!important;
+    place-items:center!important;
+    flex:0 0 auto!important;
+    width:17px!important;
+    height:17px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:50%!important;
+    background:transparent!important;
+    color:#8997ae!important;
+    font-size:.66rem!important;
+    font-weight:700!important;
+    line-height:1!important;
+    cursor:help!important;
+    outline:none!important;
+  }
+
+  #rankingsSection .ranking-title-info-v788:hover,
+  #rankingsSection .ranking-title-info-v788:focus-visible{
+    color:#e1b158!important;
+    background:rgba(225,177,88,.08)!important;
+  }
+
+  /* Sem o cabeçalho intermediário, a tabela passa a ser a primeira
+     área visual do board. Mantém os cantos limpos. */
+  #rankingsSection .ranking-v685-board{
+    overflow:hidden!important;
+  }
+
+  #rankingsSection .ranking-v685-board .ranking-v682-table-shell{
+    margin-top:0!important;
+  }
+}
+

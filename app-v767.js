@@ -4332,8 +4332,12 @@ function setCdiSort(dir){
     const summaryLabel = isSingleCategory ? 'Fundos elegíveis' : 'Categorias elegíveis';
     const summaryValue = String(boardSource.length || 0);
     const summaryName = isSingleCategory ? currentCategoryLabel : ('Histórico completo em ' + labelPeriodo(periodo));
-    const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Líderes por categoria';
-    const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Líderes por categoria';
+    const boardAria = isSingleCategory
+      ? ('Ranking de fundos em ' + currentCategoryLabel)
+      : 'Ranking com o melhor fundo elegível de cada categoria';
+    const boardCaption = isSingleCategory
+      ? ('Fundos elegíveis da categoria selecionada, ordenados pelo retorno no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.')
+      : ('Melhor fundo elegível de cada categoria, ordenado pelo retorno no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.');
     const displayedCount = Math.min(10, boardSource.length || 0);
     const resultText = isSingleCategory
       ? ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount)
@@ -4350,15 +4354,9 @@ function setCdiSort(dir){
         summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
       '</section>' +
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
-        '<div class="ranking-v682-board-head ranking-v763-board-head ranking-v784-board-head">' +
-          '<div class="ranking-v763-board-copy ranking-v784-board-copy">' +
-            '<h3>' + esc(boardTitle) + '</h3>' +
-            rankingBoardMetaV763(periodo, boardSource, isSingleCategory, currentCategoryLabel, excludedIncomplete) +
-          '</div>' +
-        '</div>' +
         '<div class="ranking-v682-table-shell">' +
           '<table class="ranking-v682-table ranking-v685-table">' +
-            '<caption>Fundos elegíveis ordenados pelo retorno no período selecionado</caption>' +
+            '<caption>' + esc(boardCaption) + '</caption>' +
             (isSingleCategory
               ? '<colgroup><col class="col-position"><col class="col-fund"><col class="col-return"><col class="col-cdi"></colgroup>'
               : '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>') +
@@ -11853,7 +11851,7 @@ function initComparWorkspaceV723(){
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
-console.info('[Catálogo CAIXA] Rankings V784 ativo · cabeçalho compacto e metodologia no info');
+console.info('[Catálogo CAIXA] Rankings V788 ativo · tabela sem faixa intermediária');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 
 (function(){
