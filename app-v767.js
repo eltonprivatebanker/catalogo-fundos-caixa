@@ -11854,7 +11854,7 @@ document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 console.info('[Catálogo CAIXA] Rankings V784 ativo · cabeçalho compacto e metodologia no info');
-console.info('[Catálogo CAIXA] Indicadores V785 ativos · painel compacto e controles semânticos');
+console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 
 (function(){
   'use strict';
