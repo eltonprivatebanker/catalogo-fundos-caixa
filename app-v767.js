@@ -11176,6 +11176,17 @@ function abrirComparador(){
     return n.toLocaleString('pt-BR',{maximumFractionDigits:2});
   };
 
+  // V780 — taxas contratuais no comparador sempre com 2 casas decimais.
+  const fmtTaxaAdmV780 = v => {
+    if(v===null || v===undefined || v==='' || v==='—') return '—';
+    const n = pctNum(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toLocaleString('pt-BR',{
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    }) + '%';
+  };
+
 
   /* V755 — resolve a lâmina antes de montar o cabeçalho.
      O nome do fundo será um <a> real, permitindo clique normal,
@@ -11231,7 +11242,7 @@ function abrirComparador(){
     { group:'FUNDO', label:'Perfil de risco', key: r => r['Perfil de Risco']||r['Perfil']||'—', tipo:'txt', sectionStart:true },
     { label:'CNPJ', key: r => r['CNPJ']||'—', tipo:'txt' },
 
-    { group:'CUSTOS E ACESSO', label:'Taxa de administração ↓', key: r => r['Taxa Adm (%)'] ? String(r['Taxa Adm (%)']).replace('.',',')+' %' : '—', tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', sectionStart:true, help:'Menor taxa de administração entre os fundos selecionados.' },
+    { group:'CUSTOS E ACESSO', label:'Taxa de administração ↓', key: r => fmtTaxaAdmV780(r['Taxa Adm (%)']), tipo:'txt compare', val: r => pctNum(r['Taxa Adm (%)']), better:'min', sectionStart:true, help:'Menor taxa de administração entre os fundos selecionados.' },
     { label:'Aplicação mínima ↓', key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt compare', val: r => num(r['Aplicacao Minima (R$)']), better:'min', help:'Menor valor mínimo exigido para aplicação.' },
 
     { group:'RENTABILIDADE', label:'Retorno no mês', key: r => fmt(r['Acum. Mes (%)']), tipo:'pct', val: r => pctNum(r['Acum. Mes (%)']), better:'max', sectionStart:true, perfKey:'Acum. Mes (%)', help:'Rentabilidade acumulada no mês corrente.' },
@@ -11637,6 +11648,7 @@ function comparWorkspaceRenderV723(options={}){
   list.classList.toggle('is-short-v766',discoveryActive && shown.length<=8);
   list.classList.toggle('is-single-v766',discoveryActive && shown.length===1);
   list.classList.toggle('is-discovery-idle-v779',!discoveryActive);
+  section.classList.toggle('has-results-v780',discoveryActive && shown.length>0);
   const result=document.getElementById('comparWorkspaceResultV723');
   if(result){
     if(!discoveryActive){
@@ -11806,7 +11818,7 @@ function initComparWorkspaceV723(){
 
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
-console.info('[Catálogo CAIXA] Comparador sob demanda V779 ativo');
+console.info('[Catálogo CAIXA] Comparador sob demanda V780 ativo · taxas 2 casas · vazio refinado');
 
 (function(){
   'use strict';

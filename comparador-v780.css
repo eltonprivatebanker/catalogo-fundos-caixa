@@ -1,0 +1,75 @@
+/* ============================================================
+   V780 — COMPARADOR SOB DEMANDA · REFINAMENTOS
+   Mantém a experiência V779 e adiciona:
+   - estado vazio mais compacto;
+   - RETORNO 12M somente quando existem resultados.
+   ============================================================ */
+
+@media (min-width:769px){
+  #comparWorkspaceV723 .compar-workspace-list-v723.is-discovery-idle-v779{
+    overflow:hidden;
+  }
+
+  /* V780: sem resultado, o cabeçalho da coluna não fica solto. */
+  #comparWorkspaceV723 .compar-workspace-return-label-v764{
+    visibility:hidden!important;
+  }
+
+  #comparWorkspaceV723.has-results-v780 .compar-workspace-return-label-v764{
+    visibility:visible!important;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779{
+    min-height:190px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    padding:26px 24px;
+    box-sizing:border-box;
+    text-align:center;
+    color:#8290aa;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(176,132,84,.05), transparent 32%),
+      transparent;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779::before{
+    content:'⌕';
+    display:grid;
+    place-items:center;
+    width:32px;
+    height:32px;
+    margin-bottom:2px;
+    border:1px solid rgba(148,163,184,.16);
+    border-radius:10px;
+    background:rgba(12,17,30,.64);
+    color:#b8c4d9;
+    font-size:1.08rem;
+    line-height:1;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 strong{
+    color:#e2e8f3;
+    font-size:.78rem;
+    line-height:1.25;
+    font-weight:850;
+    letter-spacing:.01em;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779 span{
+    display:block;
+    max-width:470px;
+    color:#8190ad;
+    font-size:.66rem;
+    line-height:1.45;
+    font-weight:600;
+  }
+
+  #comparWorkspaceV723 .compar-workspace-empty-v779.is-no-match-v779::before{
+    content:'—';
+    color:#9aa8bf;
+  }
+}
