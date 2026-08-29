@@ -1,0 +1,42 @@
+name: Aplicar Market V808
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v808.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V808
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = s
+          s = s.replace('market-v807.css?v=market-v807', 'market-v808.css?v=market-v808')
+          s = s.replace('market-v807.js?v=market-v807', 'market-v808.js?v=market-v808')
+          if s == old:
+              raise SystemExit('Referências V807 não encontradas no index.html')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V808
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V808: refinar indicadores de mercado'
+          git push origin HEAD:'Testes-da-versão-01'
