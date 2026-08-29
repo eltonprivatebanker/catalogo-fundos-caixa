@@ -1,0 +1,77 @@
+name: Aplicar Catalog Risk V813
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v813.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V813
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          # Troca referências V812 por V813.
+          s = s.replace('catalog-risk-v812.css?v=Catalog-Risk-V812', 'catalog-risk-v813.css?v=Catalog-Risk-V813')
+          s = s.replace('catalog-risk-v812.css?v=catalog-risk-v812', 'catalog-risk-v813.css?v=catalog-risk-v813')
+          s = s.replace('catalog-risk-v812.js?v=Catalog-Risk-V812', 'catalog-risk-v813.js?v=Catalog-Risk-V813')
+          s = s.replace('catalog-risk-v812.js?v=catalog-risk-v812', 'catalog-risk-v813.js?v=catalog-risk-v813')
+
+          # Localiza o wrap atual do filtro e injeta o botão definitivo no HTML.
+          pattern = re.compile(
+              r'(<div class="catalog-risk-select-wrap-v198">\s*'
+              r'<select[^>]*id="catalogRiskSelectV198"[^>]*>.*?</select>)'
+              r'(\s*<span[^>]*>.*?</span>)?'
+              r'(\s*</div>)',
+              re.S
+          )
+
+          m = pattern.search(s)
+          if not m:
+              raise SystemExit('Não foi possível localizar o seletor de perfil de risco no index.html')
+
+          select_block = m.group(1)
+          # Atualiza a classe do wrap no próprio HTML para já nascer na dimensão final.
+          select_block = select_block.replace(
+              '<div class="catalog-risk-select-wrap-v198">',
+              '<div class="catalog-risk-select-wrap-v198 catalog-risk-v813">',
+              1
+          )
+
+          button = '''\n<button class="catalog-risk-trigger-v813" type="button" aria-haspopup="listbox" aria-controls="catalogRiskMenuV813" aria-expanded="false">\n<span class="catalog-risk-trigger-label-v813">Todos os perfis</span>\n<span class="catalog-risk-chevron-v813" aria-hidden="true">⌄</span>\n</button>'''
+
+          replacement = select_block + button + '\n</div>'
+          s = s[:m.start()] + replacement + s[m.end():]
+
+          if 'catalog-risk-trigger-v813' not in s:
+              raise SystemExit('Botão V813 não foi inserido no HTML')
+          if 'catalog-risk-v813.css' not in s or 'catalog-risk-v813.js' not in s:
+              raise SystemExit('Referências V813 não foram atualizadas')
+
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V813
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V813: compactar e estabilizar perfil de risco'
+          git push origin HEAD:'Testes-da-versão-01'
