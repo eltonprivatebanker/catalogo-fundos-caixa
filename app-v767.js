@@ -4309,16 +4309,17 @@ function setCdiSort(dir){
           '</small>'
         );
 
-    return '<tr class="ranking-v682-row ' + medalClass + closedClass + (leaderView ? ' ranking-v792-leader-row' : '') + '">' +
+    return '<tr class="ranking-v682-row ranking-v793-detail-row ' + medalClass + closedClass + (leaderView ? ' ranking-v792-leader-row' : '') + '" data-ranking-row-v793="' + esc(i) + '" data-ranking-detail-v793="1">' +
       '<td class="ranking-v682-position"><span aria-label="Posição ' + esc(i + 1) + '">' + esc(i + 1) + '</span></td>' +
       '<th scope="row" class="ranking-v682-fund-cell">' +
-        '<div class="ranking-v682-fund-wrap">' +
+        '<button type="button" class="ranking-v682-fund-wrap ranking-v793-fund-button" data-ranking-open-v793="' + esc(i) + '" aria-label="Abrir detalhes de ' + esc(name) + '" title="Abrir detalhes do fundo">' +
           '<span class="ranking-v682-icon" aria-hidden="true">' + catIcon(item.cat) + '</span>' +
           '<span class="ranking-v682-fund-copy">' +
             '<strong title="' + esc(fullName) + '">' + esc(name) + '</strong>' +
             fundMetaV792 +
           '</span>' +
-        '</div>' +
+          '<span class="ranking-v793-open-cue" aria-hidden="true">Ver detalhes ›</span>' +
+        '</button>' +
       '</th>' +
       (showCategory ? '<td class="ranking-v682-category"><span>' + esc(shortCat(item.cat)) + '</span></td>' : '') +
       '<td class="ranking-v682-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></td>' +
@@ -4452,6 +4453,18 @@ function setCdiSort(dir){
        - líderes: apenas o primeiro colocado de cada categoria elegível. */
     const boardSource = isLeaderView ? winners.map(function(item){ return item.row; }) : sorted;
     const boardRows = rankingBoardRowsV790(boardSource, campo, periodo, showCategoryColumn, isLeaderView);
+
+    // V793 — estado mínimo para abrir a ficha do fundo sem duplicar a base.
+    window.__RANKING_DETAIL_STATE_V793 = {
+      rows:(boardSource || []).slice(0,10),
+      periodo,
+      campo,
+      periodoLabel:labelPeriodo(periodo),
+      isLeaderView,
+      view,
+      categoryLabel:currentCategoryLabel
+    };
+
     const best = sorted[0];
     const lowest = ascending[0];
     const alertBody = alertRows(negatives.slice(0,8), campo);
@@ -10691,7 +10704,89 @@ document.addEventListener('DOMContentLoaded', function(){
   /* ═══════════════════════════════════════════
      FUND SPOTLIGHT MODAL — lógica de abertura
   ═══════════════════════════════════════════ */
-  function openFundRow(row){
+  function rankingStartDateV793(row){
+    const raw = String(
+      row?.['Data Inicio'] || row?.['Data Início'] ||
+      row?.['Data de Inicio'] || row?.['Data de Início'] || ''
+    ).trim();
+    if(!raw || raw==='—' || raw==='-') return '—';
+
+    let shown = raw;
+    let m = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(m){
+      shown = `${String(m[3]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[1]}`;
+    }else{
+      m = raw.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/);
+      if(m) shown = `${String(m[1]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[3]}`;
+    }
+
+    const incomplete = typeof fundoSem12MCompleto==='function' && fundoSem12MCompleto(row);
+    return incomplete ? `${shown} · menos de 12M` : shown;
+  }
+
+  function buildRankingSpotlightFactsV793(row){
+    const val = (keys, fallback='—') => {
+      try{
+        if(typeof detailValueV158==='function') return detailValueV158(row,keys,fallback);
+      }catch(e){}
+      for(const k of keys){
+        const v = row?.[k];
+        if(v!==null && v!==undefined && String(v).trim()!=='') return String(v).trim();
+      }
+      return fallback;
+    };
+
+    const money = v => {
+      try{ if(typeof detailMoneyV158==='function') return detailMoneyV158(v); }catch(e){}
+      const n = numKpi(v);
+      return n===null ? '—' : 'R$ '+n.toLocaleString('pt-BR',{maximumFractionDigits:2});
+    };
+
+    const percent = v => {
+      try{ if(typeof detailPercentV158==='function') return detailPercentV158(v); }catch(e){}
+      const n = numKpi(v);
+      return n===null ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+    };
+
+    const cnpj = val(['CNPJ']);
+    const code = val(['codfundo','Código SIICO','Codigo SIICO','Código do Fundo','Codigo do Fundo']);
+    const tax = percent(val(['Taxa Adm (%)']));
+    const app = money(val(['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+    const start = rankingStartDateV793(row);
+
+    const primary = `<section class="ranking-v793-facts" aria-label="Ficha rápida do fundo">
+      <div class="ranking-v793-facts-head"><strong>Ficha do fundo</strong><small>Identificação, custos e acesso</small></div>
+      <div class="ranking-v793-facts-grid">
+        <div><span>CNPJ</span><strong>${htmlAttr(cnpj)}</strong></div>
+        <div><span>Data de início</span><strong>${htmlAttr(start)}</strong></div>
+        <div><span>Taxa de administração</span><strong>${htmlAttr(tax)}</strong></div>
+        <div><span>Aplicação mínima</span><strong>${htmlAttr(app)}</strong></div>
+        <div><span>Código do fundo</span><strong>${htmlAttr(code)}</strong></div>
+      </div>
+    </section>`;
+
+    const operational = typeof buildFundOperationalFacts==='function'
+      ? buildFundOperationalFacts(row,'spotlight ranking-v793-operational')
+      : '';
+
+    return primary + operational;
+  }
+
+  function ensureRankingContextV793(){
+    let ctx = document.getElementById('fspotRankingContextV793');
+    if(ctx) return ctx;
+    const metrics = document.getElementById('fspotMetrics');
+    if(!metrics || !metrics.parentNode) return null;
+
+    ctx = document.createElement('div');
+    ctx.id = 'fspotRankingContextV793';
+    ctx.className = 'ranking-v793-context-bar';
+    ctx.hidden = true;
+    metrics.parentNode.insertBefore(ctx,metrics);
+    return ctx;
+  }
+
+  function openFundRow(row, options={}){
     if(!row) return showToast('Fundo não localizado na base atual.');
 
     const nome  = String(row['Fundo']||'').trim();
@@ -10699,11 +10794,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const pl    = numKpi(row['PL (milhoes R$)']);
     const conv  = String(row['Conversao Resgate']||'').trim();
     const pag   = String(row['Pagamento Resgate']||'').trim();
-    const r12   = numKpi(row['Acum. 12M (%)']);
+    const rankingContextV793 = options && options.source === 'ranking' ? options : null;
+    const sem12MV793 = typeof fundoSem12MCompleto==='function' && fundoSem12MCompleto(row);
+    const r12   = sem12MV793 ? null : numKpi(row['Acum. 12M (%)']);
     const rAno  = numKpi(row['Acum. Ano (%)']);
     const rMes  = numKpi(row['Acum. Mes (%)']);
     const rDia  = numKpi(row['Variacao Dia (%)']);
-    const cdi   = calcCdiRatio(r12, indicState?.cdi?.m12);
+    const cdi   = sem12MV793 ? null : calcCdiRatio(r12, indicState?.cdi?.m12);
 
     const fmtPct = (n,forceSign=true)=>{
       if(n===null) return '—';
@@ -10722,19 +10819,23 @@ document.addEventListener('DOMContentLoaded', function(){
       'ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP-FGTS'
     };
     const catLabel = catAbrev[cat] || cat || '—';
+    const riskV793 = String(row['Perfil de Risco'] || '').trim();
     const plStr = pl ? ' · PL R$ '+(pl>=1000?(pl/1000).toFixed(1)+'bi':pl.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi') : '';
-    el('fspotMeta').textContent = catLabel + plStr;
+    el('fspotMeta').textContent = rankingContextV793
+      ? catLabel + (riskV793 ? ' · ' + riskV793 : '') + plStr
+      : catLabel + plStr;
 
     // Métricas
     el('fspotMetrics').innerHTML = [
       {label:'Mês',  val:fmtPct(rMes),  cls:clsPct(rMes)},
       {label:'Ano',  val:fmtPct(rAno),  cls:clsPct(rAno)},
-      {label:'12M',  val:fmtPct(r12),   cls:clsPct(r12)},
-      {label:'% CDI 12M', val:cdi!==null?cdi+'%':'—', cls:cdi!==null?(cdi>=100?'pos':cdi>=80?'neu':'neg'):'neu'},
+      {label:'12M',  val:fmtPct(r12),   cls:clsPct(r12), note:sem12MV793?'Sem 12M completo':''},
+      {label:'% CDI 12M', val:cdi!==null?cdi+'%':'—', cls:cdi!==null?(cdi>=100?'pos':cdi>=80?'neu':'neg'):'neu', note:sem12MV793?'Sem 12M completo':''},
     ].map(m=>`
-      <div class="fspot-metric-item">
+      <div class="fspot-metric-item ${m.note?'ranking-v793-incomplete':''}">
         <span class="fspot-metric-label">${m.label}</span>
         <span class="fspot-metric-val ${m.cls}">${m.val}</span>
+        ${m.note?`<small class="ranking-v793-metric-note">${m.note}</small>`:''}
       </div>`).join('');
 
     // Liquidez
@@ -10749,7 +10850,9 @@ document.addEventListener('DOMContentLoaded', function(){
     // Informações complementares
     const factsEl = el('fspotFacts');
     if(factsEl){
-      factsEl.innerHTML = buildFundOperationalFacts(row,'spotlight');
+      factsEl.innerHTML = rankingContextV793
+        ? buildRankingSpotlightFactsV793(row)
+        : buildFundOperationalFacts(row,'spotlight');
       factsEl.style.display = '';
     }
 
@@ -10779,7 +10882,8 @@ document.addEventListener('DOMContentLoaded', function(){
       linkEl.style.display = 'none';
     }
 
-    // Botão "Ver na tabela"
+    // Continuidade: abre a ficha completa no catálogo.
+    el('fspotVerTabela').textContent = rankingContextV793 ? 'Ver ficha no catálogo' : '🔍 Ver na tabela';
     el('fspotVerTabela').onclick = ()=>{
       closeFundSpotlight();
       // Usa o nome do fundo como busca visível e mantém compatibilidade com CNPJ formatado.
@@ -10792,14 +10896,39 @@ document.addEventListener('DOMContentLoaded', function(){
       ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')
       : '';
 
-    // Badge tipo (best/worst)
-    const kind = _spotlightKind || 'best';
+    // Contexto do ranking ou badge legado do KPI.
     const badge = el('fspotKind');
-    badge.textContent = kind==='best' ? '🏆 Melhor 12M' : '📉 Pior 12M';
-    badge.className = 'fspot-badge ' + (kind==='best' ? 'best' : 'worst');
+    const ctxV793 = ensureRankingContextV793();
+    const overlayV793 = document.getElementById('fundSpotlightOverlay');
+
+    if(rankingContextV793){
+      const posV793 = Number(rankingContextV793.position || 0);
+      const periodV793 = String(rankingContextV793.periodLabel || '').trim();
+      const leaderV793 = !!rankingContextV793.isLeaderView;
+
+      badge.textContent = posV793 > 0 ? '#' + posV793 : 'Ranking';
+      badge.className = 'fspot-badge best ranking-v793-context-badge';
+
+      if(ctxV793){
+        ctxV793.hidden = false;
+        ctxV793.innerHTML = '<strong>' +
+          (leaderV793 ? 'Líder em ' + htmlAttr(catLabel) : 'Posição no ranking geral') +
+          '</strong>' + (periodV793 ? '<span>' + htmlAttr(periodV793) + '</span>' : '');
+      }
+      overlayV793?.classList.add('ranking-v793-mode');
+    }else{
+      const kind = _spotlightKind || 'best';
+      badge.textContent = kind==='best' ? '🏆 Melhor 12M' : '📉 Pior 12M';
+      badge.className = 'fspot-badge ' + (kind==='best' ? 'best' : 'worst');
+      if(ctxV793){ ctxV793.hidden = true; ctxV793.innerHTML = ''; }
+      overlayV793?.classList.remove('ranking-v793-mode');
+    }
 
     openFundSpotlight();
   }
+
+  // V793 — Ranking reutiliza o mesmo modal e a mesma fonte de dados.
+  window.__openFundSpotlightRowV793 = openFundRow;
 
   let _spotlightKind = 'best';
 
@@ -10816,6 +10945,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const ov = document.getElementById('fundSpotlightOverlay');
     if(!ov) return;
     ov.classList.remove('open');
+    ov.classList.remove('ranking-v793-mode');
     document.body.style.overflow = '';
     ov.removeEventListener('click', _spotlightBackdropClose);
     document.removeEventListener('keydown', _spotlightEscClose);
@@ -11989,6 +12119,56 @@ setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 console.info('[Catálogo CAIXA] Rankings V791 ativo · universo e visão analítica');
 console.info('[Catálogo CAIXA] Rankings V792 ativo · categoria priorizada na visão Líder');
+/* ============================================================
+   V793 — Rankings: clique abre ficha contextual do fundo
+   ============================================================ */
+(function rankingFundDetailsV793(){
+  if(window.__RANKING_FUND_DETAILS_V793__) return;
+  window.__RANKING_FUND_DETAILS_V793__ = true;
+
+  function openIndexV793(idx){
+    const state = window.__RANKING_DETAIL_STATE_V793;
+    const row = state?.rows?.[idx];
+    if(!row) return;
+
+    const opener = window.__openFundSpotlightRowV793;
+    if(typeof opener !== 'function'){
+      console.warn('[Rankings V793] Modal de detalhes ainda não disponível.');
+      return;
+    }
+
+    opener(row,{
+      source:'ranking',
+      position:idx+1,
+      period:state.periodo,
+      periodLabel:state.periodoLabel,
+      field:state.campo,
+      isLeaderView:state.isLeaderView,
+      view:state.view
+    });
+  }
+
+  document.addEventListener('click', function(ev){
+    const target = ev.target instanceof Element ? ev.target : null;
+    if(!target) return;
+
+    const button = target.closest('[data-ranking-open-v793]');
+    const row = target.closest('#rankingGrid tr[data-ranking-row-v793]');
+    if(!button && !row) return;
+
+    if(!button && target.closest('a,button,input,select,textarea,label,summary')) return;
+
+    const holder = button || row;
+    const raw = holder.getAttribute('data-ranking-open-v793') ?? holder.getAttribute('data-ranking-row-v793');
+    const idx = Number(raw);
+    if(!Number.isInteger(idx) || idx < 0) return;
+
+    ev.preventDefault();
+    openIndexV793(idx);
+  });
+})();
+
+console.info('[Catálogo CAIXA] Rankings V793 ativo · detalhes do fundo por clique');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
