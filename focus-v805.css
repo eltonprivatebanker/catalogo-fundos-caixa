@@ -1,0 +1,282 @@
+/* ============================================================
+   V805 — BOLETIM FOCUS · BLOCO DE TENDÊNCIA ISOLADO
+   Remove a interferência visual das classes legadas V595/V802.
+   Não altera dados, cálculos ou tamanhos dos valores anuais.
+   ============================================================ */
+
+/* ---------- Tendência: estrutura nova, independente do legado ---------- */
+html #sec-focus .focus-trend-v805{
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:auto!important;
+  min-height:46px!important;
+  margin:0 0 4px!important;
+  padding:3px 0 6px!important;
+  gap:2px!important;
+  box-sizing:border-box!important;
+  border-bottom:1px solid rgba(148,163,184,.10)!important;
+  overflow:visible!important;
+  transform:none!important;
+}
+
+html #sec-focus .focus-trend-v805 > .focus-trend-kicker-v805,
+html #sec-focus .focus-trend-v805 > .focus-trend-state-v805,
+html #sec-focus .focus-trend-v805 > .focus-trend-delta-v805{
+  position:static!important;
+  inset:auto!important;
+  top:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:auto!important;
+  display:block!important;
+  float:none!important;
+  clear:none!important;
+  flex:none!important;
+  grid-area:auto!important;
+  align-self:stretch!important;
+  justify-self:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  height:auto!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  translate:none!important;
+  text-indent:0!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  box-sizing:border-box!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+html #sec-focus .focus-trend-v805 > .focus-trend-kicker-v805::before,
+html #sec-focus .focus-trend-v805 > .focus-trend-kicker-v805::after,
+html #sec-focus .focus-trend-v805 > .focus-trend-state-v805::before,
+html #sec-focus .focus-trend-v805 > .focus-trend-state-v805::after,
+html #sec-focus .focus-trend-v805 > .focus-trend-delta-v805::before,
+html #sec-focus .focus-trend-v805 > .focus-trend-delta-v805::after{
+  content:none!important;
+  display:none!important;
+}
+
+html #sec-focus .focus-trend-kicker-v805{
+  color:#748096!important;
+  font-size:.40rem!important;
+  font-weight:800!important;
+  line-height:1!important;
+  letter-spacing:.09em!important;
+  text-transform:uppercase!important;
+}
+
+html #sec-focus .focus-trend-state-v805{
+  font-size:.68rem!important;
+  font-style:normal!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+}
+
+html #sec-focus .focus-trend-state-v805.is-queda{
+  color:#63e681!important;
+}
+
+html #sec-focus .focus-trend-state-v805.is-alta{
+  color:#f0bd5b!important;
+}
+
+html #sec-focus .focus-trend-state-v805.is-oscila{
+  color:#72aef8!important;
+}
+
+html #sec-focus .focus-trend-delta-v805{
+  color:#9da8ba!important;
+  font-size:.50rem!important;
+  font-style:normal!important;
+  font-weight:600!important;
+  line-height:1.22!important;
+  letter-spacing:0!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  text-transform:none!important;
+}
+
+/* ---------- Desktop: mantém o acabamento já aprovado ---------- */
+@media (min-width:769px){
+  #sec-focus #focusRef{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+  }
+
+  #sec-focus .focus-ref-v802{
+    color:#aeb8ca!important;
+    font-size:.69rem!important;
+  }
+
+  #sec-focus .focus-ref-v802 strong{
+    color:#edf1f7!important;
+    font-weight:850!important;
+  }
+
+  #sec-focus .focus-pdf-v802{
+    padding:5px 9px!important;
+    border-radius:7px!important;
+    font-size:.61rem!important;
+    font-weight:750!important;
+  }
+
+  #sec-focus .focus-summary-v802{
+    display:grid!important;
+    grid-template-columns:40px minmax(0,1fr) auto!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    min-height:66px!important;
+    padding:10px 14px!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802{
+    min-width:0!important;
+  }
+
+  html #sec-focus .focus-summary-copy-v802 > strong{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#e0b259!important;
+    font-size:.64rem!important;
+    font-weight:850!important;
+    letter-spacing:.035em!important;
+    text-decoration:none!important;
+    text-decoration-line:none!important;
+    text-transform:uppercase!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
+
+  html #sec-focus .focus-summary-copy-v802 > strong::before,
+  html #sec-focus .focus-summary-copy-v802 > strong::after{
+    text-decoration:none!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > p{
+    margin:0!important;
+    color:#d1d7e2!important;
+    font-size:.70rem!important;
+    font-weight:550!important;
+    line-height:1.32!important;
+  }
+
+  #sec-focus .focus-horizon-v802{
+    flex:0 0 auto!important;
+    padding:7px 11px!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-focus .focus-card-v802{
+    display:flex!important;
+    flex-direction:column!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-label{
+    margin-bottom:4px!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-sub{
+    min-height:26px!important;
+    margin-bottom:3px!important;
+    line-height:1.28!important;
+  }
+
+  #sec-focus .focus-row-arrow-v595{
+    display:none!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-row{
+    min-height:39px!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-val{
+    padding-right:0!important;
+  }
+
+  #sec-focus .focus-card-v802 .focus-sparkline-v595{
+    margin-top:auto!important;
+  }
+
+  #sec-focus .focus-semantic-v802{
+    text-decoration:none!important;
+  }
+
+  html #sec-focus .section-toggle-btn{
+    min-width:104px!important;
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:.58rem!important;
+    letter-spacing:.03em!important;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width:768px){
+  #sec-focus .focus-summary-v802{
+    display:grid!important;
+    grid-template-columns:32px minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+
+  #sec-focus .focus-horizon-v802{
+    grid-column:1 / -1!important;
+    justify-self:start!important;
+    margin-top:3px!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > strong{
+    display:block!important;
+    margin-bottom:3px!important;
+    color:#dfb15a!important;
+    font-size:.68rem!important;
+    text-decoration:none!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > p{
+    margin:0!important;
+    line-height:1.35!important;
+  }
+
+  #sec-focus .focus-row-arrow-v595{
+    display:none!important;
+  }
+
+  html #sec-focus .focus-trend-v805{
+    min-height:48px!important;
+    gap:3px!important;
+  }
+
+  html #sec-focus .focus-trend-kicker-v805{
+    font-size:.46rem!important;
+  }
+
+  html #sec-focus .focus-trend-state-v805{
+    font-size:.72rem!important;
+  }
+
+  html #sec-focus .focus-trend-delta-v805{
+    font-size:.56rem!important;
+  }
+}
