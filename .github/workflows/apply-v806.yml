@@ -1,0 +1,48 @@
+name: Aplicar Focus V806
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v806.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V806
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = s
+          replacements = {
+              'focus-v805.css?v=focus-v805': 'focus-v806.css?v=focus-v806',
+              'focus-v805.js?v=focus-v805': 'focus-v806.js?v=focus-v806',
+              'focus-v804.css?v=focus-v804': 'focus-v806.css?v=focus-v806',
+              'focus-v804.js?v=focus-v804': 'focus-v806.js?v=focus-v806',
+          }
+          for a, b in replacements.items():
+              s = s.replace(a, b)
+          if s == old:
+              raise SystemExit('Nenhuma referência Focus conhecida encontrada para substituir.')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V806
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V806: carregar acabamento final do Focus'
+          git push origin HEAD:'Testes-da-versão-01'
