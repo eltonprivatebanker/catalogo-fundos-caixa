@@ -4056,10 +4056,22 @@ function setCdiSort(dir){
      Prioriza campos explícitos, caso passem a existir nos dados. Na ausência deles,
      usa uma heurística conservadora apenas para FMP e fundos de ações cujo nome
      identifica claramente uma única companhia. */
+  /* V791 — aliases/cadastros conhecidos de estratégias monoação.
+     SEGURIDADE entra como alias deliberado: no ranking o nome pode chegar
+     abreviado como "ACOES SEGURIDADE", sem a palavra CAIXA contígua. */
   const RANKING_MONOACAO_COMPANIES_V790 = [
-    'ELETROBRAS','CAIXA SEGURIDADE','BB SEGURIDADE','BANCO DO BRASIL',
+    'ELETROBRAS','SEGURIDADE','CAIXA SEGURIDADE','BB SEGURIDADE','BANCO DO BRASIL',
     'PETROBRAS','PETROBRAS BR','VALE','EMBRAER','GERDAU','USIMINAS','CSN'
   ];
+  const RANKING_MONOACAO_CNPJS_V791 = new Set([
+    '59815671000153', /* CAIXA SEGURIDADE II FIF ACOES */
+    '30068049000147'  /* CAIXA FIF ACOES CAIXA SEGURIDADE */
+  ]);
+  function rankingCnpjV791(r){
+    return String(
+      r?.CNPJ || r?.cnpj || r?.nu_cnpj || r?.['CNPJ Fundo'] || r?.['CNPJ do Fundo'] || ''
+    ).replace(/\D/g,'');
+  }
   function rankingExplicitMonoacaoV790(r){
     const raw = [
       r?.['Monoação'], r?.['Monoacao'],
@@ -4088,6 +4100,10 @@ function setCdiSort(dir){
     /* No catálogo atual, FMP é tratado como concentração de companhia para esta
        primeira validação. Sem FMP continua existindo como filtro independente. */
     if(rankingIsFmpV790(r)) return true;
+
+    /* V791 — proteção determinística para os dois fundos CAIXA Seguridade
+       conhecidos no cadastro, além da heurística nominal abaixo. */
+    if(RANKING_MONOACAO_CNPJS_V791.has(rankingCnpjV791(r))) return true;
 
     const cat = typeof rankCategoriaCanonicaV197 === 'function'
       ? rankCategoriaCanonicaV197(r?.Categoria)
@@ -11940,7 +11956,7 @@ function initComparWorkspaceV723(){
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
-console.info('[Catálogo CAIXA] Rankings V790 ativo · universo e visão analítica');
+console.info('[Catálogo CAIXA] Rankings V791 ativo · universo e visão analítica');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
