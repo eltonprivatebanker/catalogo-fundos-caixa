@@ -1,0 +1,48 @@
+name: Pacote Catalog Risk V813
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v813.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v813
+          cp index.html pacote-v813/
+          cp catalog-risk-v813.css pacote-v813/
+          cp catalog-risk-v813.js pacote-v813/
+          printf '%s\n' \
+            'V813 — Perfil de risco compacto e estável' \
+            '' \
+            'Arquivos incluídos:' \
+            '- index.html' \
+            '- catalog-risk-v813.css' \
+            '- catalog-risk-v813.js' \
+            '' \
+            'Mudanças principais:' \
+            '- botão final já existe no HTML desde o primeiro frame' \
+            '- dimensão desktop aproximada: 205 x 30 px' \
+            '- menu acompanha a largura do botão' \
+            '- filtro ativo mantém destaque dourado discreto' \
+            > pacote-v813/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Catalog-Risk-V813-arquivos-atualizados
+          path: pacote-v813/
+          retention-days: 7
