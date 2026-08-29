@@ -12414,6 +12414,7 @@ console.info('[Catálogo CAIXA] Rankings V793 ativo · detalhes do fundo por cli
 console.info('[Catálogo CAIXA] Rankings V794 ativo · hierarquia semântica do modal');
 console.info('[Catálogo CAIXA] Rankings V795 ativo · ajustes finos do modal');
 console.info('[Catálogo CAIXA] Rankings V796 ativo · extremos semânticos e alinhados');
+console.info('[Catálogo CAIXA] Indicadores V797 ativos · Evolução e Retorno no período');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
@@ -24953,6 +24954,10 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   let usCurrency = 'usd';
   const selectedChartIndicatorsV580 = new Set(['cdi','ipca','ibov','sp500']);
 
+  // V797 — duas leituras sobre a mesma série:
+  // evolution = trajetória acumulada; period = retorno final ordenado.
+  let monthlyComparisonViewV797 = 'evolution';
+
   function toNumV445(value){
     if(value === null || value === undefined || value === '') return null;
     if(typeof value === 'string'){
@@ -25299,11 +25304,70 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     });
   }
 
+  function ensureMonthlyComparisonViewToggleV797(root){
+    const chartRoot = document.getElementById('monthlyComparisonChartV580');
+    const head = chartRoot?.querySelector('.monthly-comparison-head-v580');
+    if(!root || !chartRoot || !head) return null;
+
+    let control = chartRoot.querySelector('.monthly-comparison-view-v797');
+    if(!control){
+      control = document.createElement('div');
+      control.className = 'monthly-comparison-view-v797';
+      control.setAttribute('role','group');
+      control.setAttribute('aria-label','Visualização do comparativo');
+      control.innerHTML = `
+        <span class="monthly-comparison-view-label-v797">Visão</span>
+        <button type="button" data-monthly-comparison-view-v797="evolution" aria-pressed="true">Evolução</button>
+        <button type="button" data-monthly-comparison-view-v797="period" aria-pressed="false">Retorno no período</button>
+      `;
+
+      const chips = head.querySelector('.monthly-comparison-chips-v580');
+      if(chips) head.insertBefore(control, chips);
+      else head.appendChild(control);
+    }
+
+    control.querySelectorAll('[data-monthly-comparison-view-v797]').forEach(btn => {
+      const active = btn.dataset.monthlyComparisonViewV797 === monthlyComparisonViewV797;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',active ? 'true' : 'false');
+    });
+
+    chartRoot.dataset.comparisonViewV797 = monthlyComparisonViewV797;
+    chartRoot.classList.toggle('is-evolution-v797', monthlyComparisonViewV797 === 'evolution');
+    chartRoot.classList.toggle('is-period-return-v797', monthlyComparisonViewV797 === 'period');
+
+    const subtitle = head.querySelector('p');
+    if(subtitle){
+      subtitle.textContent = monthlyComparisonViewV797 === 'period'
+        ? 'Retorno acumulado até o fim do período, do maior para o menor.'
+        : 'Trajetória acumulada ao longo do período.';
+    }
+
+    return control;
+  }
+
+  function lastFiniteChartValueV797(series){
+    for(let i=(series?.length || 0)-1; i>=0; i--){
+      const value = series[i];
+      if(value !== null && value !== undefined && Number.isFinite(Number(value))){
+        return Number(value);
+      }
+    }
+    return null;
+  }
+
+  function formatChartPctV797(value, digits=2){
+    const n = Number(value);
+    if(!Number.isFinite(n)) return '—';
+    return `${n > 0 ? '+' : ''}${n.toFixed(digits).replace('.',',')}%`;
+  }
+
   function renderMonthlyComparisonChartV580(root, maps, keys){
     const canvas = document.getElementById('monthlyComparisonCanvasV580');
     const empty = document.getElementById('monthlyComparisonEmptyV580');
     if(!root || !canvas) return;
 
+    ensureMonthlyComparisonViewToggleV797(root);
     syncChartButtonsV580(root, maps, keys);
 
     if(!window.Chart){
@@ -25314,32 +25378,155 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       return;
     }
 
-    const labels = ['Início', ...keys.map(labelFromKeyV447)];
-    const datasets = Object.keys(chartMetaV580)
+    const seriesItems = Object.keys(chartMetaV580)
       .filter(key => selectedChartIndicatorsV580.has(key))
       .filter(key => mapHasDataForKeysV447(maps[key], keys))
       .map(key => {
         const meta = chartMetaV580[key];
-        const currencySuffix = ['sp500','nasdaq','dow'].includes(key) ? ` ${usCurrency.toUpperCase()}` : '';
+        const currencySuffix = ['sp500','nasdaq','dow'].includes(key)
+          ? ` ${usCurrency.toUpperCase()}`
+          : '';
+        const series = cumulativeChartSeriesV580(maps[key], keys);
         return {
-          label: `${meta.label}${currencySuffix}`,
-          data: cumulativeChartSeriesV580(maps[key], keys),
-          borderColor: meta.color,
-          backgroundColor: meta.color,
-          borderWidth: 2,
-          pointRadius: 2,
-          pointHoverRadius: 4,
-          tension: 0.28,
-          spanGaps: true
+          key,
+          label:`${meta.label}${currencySuffix}`,
+          color:meta.color,
+          series,
+          finalValue:lastFiniteChartValueV797(series)
         };
-      });
+      })
+      .filter(item => item.finalValue !== null);
 
-    if(empty) empty.hidden = datasets.length > 0;
+    if(empty) empty.hidden = seriesItems.length > 0;
 
     const existing = window.Chart.getChart ? window.Chart.getChart(canvas) : null;
     if(existing) existing.destroy();
 
-    if(!datasets.length) return;
+    if(!seriesItems.length) return;
+
+    if(monthlyComparisonViewV797 === 'period'){
+      const barItems = [...seriesItems]
+        .sort((a,b) => Number(b.finalValue) - Number(a.finalValue));
+
+      const valueLabelsPluginV797 = {
+        id:'monthlyBarValueLabelsV797',
+        afterDatasetsDraw(chart){
+          const meta = chart.getDatasetMeta(0);
+          const values = chart.data.datasets?.[0]?.data || [];
+          const {ctx, chartArea} = chart;
+          if(!meta?.data?.length || !ctx || !chartArea) return;
+
+          ctx.save();
+          ctx.font = '700 11px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = 'rgba(226,233,244,.88)';
+
+          meta.data.forEach((bar, index) => {
+            const value = Number(values[index]);
+            if(!Number.isFinite(value)) return;
+
+            const text = formatChartPctV797(value);
+            const width = ctx.measureText(text).width;
+            let x;
+            let align;
+
+            if(value >= 0){
+              x = bar.x + 7;
+              align = 'left';
+              if(x + width > chartArea.right - 2){
+                x = chartArea.right - 3;
+                align = 'right';
+              }
+            }else{
+              x = bar.x - 7;
+              align = 'right';
+              if(x - width < chartArea.left + 2){
+                x = chartArea.left + 3;
+                align = 'left';
+              }
+            }
+
+            ctx.textAlign = align;
+            ctx.fillText(text, x, bar.y);
+          });
+
+          ctx.restore();
+        }
+      };
+
+      new window.Chart(canvas,{
+        type:'bar',
+        data:{
+          labels:barItems.map(item => item.label),
+          datasets:[{
+            label:'Retorno no período',
+            data:barItems.map(item => item.finalValue),
+            backgroundColor:barItems.map(item => item.color),
+            borderColor:barItems.map(item => item.color),
+            borderWidth:1,
+            borderRadius:5,
+            borderSkipped:false,
+            barPercentage:.72,
+            categoryPercentage:.78
+          }]
+        },
+        plugins:[valueLabelsPluginV797],
+        options:{
+          indexAxis:'y',
+          responsive:true,
+          maintainAspectRatio:false,
+          interaction:{mode:'nearest', intersect:true},
+          animation:{duration:220},
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  return `Retorno: ${formatChartPctV797(context.parsed?.x)}`;
+                }
+              }
+            }
+          },
+          scales:{
+            y:{
+              grid:{display:false},
+              ticks:{
+                color:'rgba(214,224,239,.82)',
+                font:{size:11, weight:'700'}
+              }
+            },
+            x:{
+              beginAtZero:true,
+              grace:'16%',
+              grid:{color:'rgba(148,163,184,.10)'},
+              border:{color:'rgba(148,163,184,.12)'},
+              ticks:{
+                color:'rgba(178,191,222,.72)',
+                font:{size:10, weight:'700'},
+                callback:function(value){
+                  return `${Number(value).toFixed(0).replace('.',',')}%`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      return;
+    }
+
+    const labels = ['Início', ...keys.map(labelFromKeyV447)];
+    const datasets = seriesItems.map(item => ({
+      label:item.label,
+      data:item.series,
+      borderColor:item.color,
+      backgroundColor:item.color,
+      borderWidth:2,
+      pointRadius:2,
+      pointHoverRadius:4,
+      tension:.28,
+      spanGaps:true
+    }));
 
     new window.Chart(canvas, {
       type:'line',
@@ -25348,6 +25535,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
         responsive:true,
         maintainAspectRatio:false,
         interaction:{mode:'index', intersect:false},
+        animation:{duration:220},
         plugins:{
           legend:{
             display:true,
@@ -25367,7 +25555,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
                 const value = context.parsed?.y;
                 const formatted = value === null || value === undefined
                   ? '—'
-                  : `${value > 0 ? '+' : ''}${Number(value).toFixed(2).replace('.', ',')}%`;
+                  : formatChartPctV797(value);
                 return `${context.dataset.label}: ${formatted}`;
               }
             }
@@ -25660,6 +25848,15 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       const headerCurrencyBtn = event.target.closest('[data-monthly-us-header-toggle-v593]');
       if(headerCurrencyBtn){
         usCurrency = usCurrency === 'brl' ? 'usd' : 'brl';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const comparisonViewBtnV797 = event.target.closest('[data-monthly-comparison-view-v797]');
+      if(comparisonViewBtnV797){
+        monthlyComparisonViewV797 = comparisonViewBtnV797.dataset.monthlyComparisonViewV797 === 'period'
+          ? 'period'
+          : 'evolution';
         renderMonthlyIndicatorsV445();
         return;
       }

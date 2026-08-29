@@ -1,0 +1,529 @@
+/* ============================================================
+   V785 — INDICADORES DE MERCADO · PAINEL COMPACTO
+   Escopo: desktop. Não altera cálculos nem séries.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  /* Painel principal: menos espaço morto. */
+  html body #sec-mercado #monthlyIndicatorsV445{
+    padding:10px 14px!important;
+    margin-bottom:10px!important;
+  }
+
+  /* Cabeçalho em uma faixa curta. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    align-items:center!important;
+    gap:16px!important;
+    margin:0 0 8px!important;
+    padding:0 0 8px!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445 > div:first-child{
+    min-width:0!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-kicker-v445{
+    margin:0 0 2px!important;
+    font-size:.55rem!important;
+    line-height:1!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 #monthlyIndicatorsTitleV445{
+    margin:0!important;
+    font-size:.92rem!important;
+    line-height:1.15!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445 p{
+    margin:2px 0 0!important;
+    font-size:.60rem!important;
+    line-height:1.25!important;
+  }
+
+  /* Período e Moeda EUA são duas dimensões visuais distintas. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:10px!important;
+    flex:0 0 auto!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    min-height:34px!important;
+    height:34px!important;
+    padding:3px!important;
+    border-radius:11px!important;
+    box-sizing:border-box!important;
+  }
+
+  /* "Moeda EUA" é rótulo, não terceiro botão. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span{
+    display:inline-flex!important;
+    align-items:center!important;
+    height:26px!important;
+    margin:0 4px 0 5px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:none!important;
+    box-shadow:none!important;
+    color:#8d9ab3!important;
+    font-size:.53rem!important;
+    font-weight:850!important;
+    letter-spacing:.08em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+    pointer-events:none!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    height:26px!important;
+    min-height:26px!important;
+    padding:0 11px!important;
+    border-radius:8px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+
+  /* Sete KPIs em uma única faixa quando há largura suficiente. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    gap:7px!important;
+    margin:0 0 8px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 > article{
+    min-height:54px!important;
+    height:54px!important;
+    padding:8px 10px!important;
+    box-sizing:border-box!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 > article > span{
+    margin:0 0 5px!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 > article > strong{
+    font-size:.93rem!important;
+    line-height:1!important;
+  }
+
+  /* Gráfico: título e seletores na mesma faixa, sem kicker redundante. */
+  html body #sec-mercado #monthlyComparisonChartV580{
+    margin-top:6px!important;
+    padding:10px 12px 8px!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 .monthly-comparison-head-v580{
+    align-items:center!important;
+    gap:14px!important;
+    margin:0 0 7px!important;
+    padding:0 0 7px!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 .monthly-comparison-kicker-v580{
+    display:none!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 #monthlyComparisonTitleV580{
+    margin:0!important;
+    font-size:.88rem!important;
+    line-height:1.1!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 .monthly-comparison-head-v580 p{
+    margin:2px 0 0!important;
+    font-size:.57rem!important;
+    line-height:1.2!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 .monthly-comparison-chips-v580{
+    gap:5px!important;
+    margin-left:auto!important;
+    flex:0 0 auto!important;
+  }
+
+  html body #sec-mercado #monthlyComparisonChartV580 .monthly-comparison-chips-v580 button{
+    min-height:27px!important;
+    height:27px!important;
+    padding:0 9px!important;
+    border-radius:8px!important;
+    font-size:.55rem!important;
+    line-height:1!important;
+  }
+}
+
+/* 7 cards em uma única linha no desktop largo. */
+@media (min-width:1280px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  }
+}
+
+/* Em larguras intermediárias, mantém 4 + 3 para não sacrificar leitura. */
+@media (min-width:769px) and (max-width:1279px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+
+/* ============================================================
+   V786 — INDICADORES · AJUSTES FINAIS DE DENSIDADE
+   - 7 KPIs em uma linha a partir de 1100px de viewport CSS
+   - gráfico mais baixo
+   - textos/controles com seletores fortes
+   ============================================================ */
+
+@media (min-width:769px){
+
+  /* "PERÍODO" deixa explícita a primeira dimensão dos controles. */
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-tabs-v445 > .monthly-period-label-v786{
+    display:inline-flex!important;
+    align-items:center!important;
+    height:26px!important;
+    margin:0 4px 0 5px!important;
+    padding:0!important;
+    border:0!important;
+    background:none!important;
+    color:#8d9ab3!important;
+    font-size:.53rem!important;
+    font-weight:850!important;
+    letter-spacing:.08em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+    pointer-events:none!important;
+    white-space:nowrap!important;
+  }
+
+  /* Garante a aparência semântica do rótulo MOEDA EUA. */
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-us-currency-toggle-v578 > span{
+    display:inline-flex!important;
+    align-items:center!important;
+    height:26px!important;
+    margin:0 4px 0 5px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:none!important;
+    box-shadow:none!important;
+    color:#8d9ab3!important;
+    font-size:.53rem!important;
+    font-weight:850!important;
+    letter-spacing:.08em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+    pointer-events:none!important;
+    white-space:nowrap!important;
+  }
+
+  /* Cabeçalho geral mais curto e consistente. */
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-head-v445{
+    align-items:center!important;
+    margin-bottom:7px!important;
+    padding-bottom:7px!important;
+  }
+
+  /* Cards: densidade levemente maior. */
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-summary-v445{
+    gap:6px!important;
+    margin-bottom:7px!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-summary-v445 > article{
+    height:52px!important;
+    min-height:52px!important;
+    padding:7px 9px!important;
+  }
+
+  /* Bloco do gráfico: menos altura antes do canvas. */
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580{
+    margin-top:5px!important;
+    padding:8px 10px 7px!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-head-v580{
+    align-items:center!important;
+    margin:0 0 6px!important;
+    padding:0 0 6px!important;
+    gap:12px!important;
+  }
+
+  /* O kicker COMPARATIVO é redundante com o título. */
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-kicker-v580{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  #monthlyComparisonTitleV580{
+    margin:0!important;
+    font-size:.88rem!important;
+    line-height:1.08!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-head-v580 p{
+    margin:2px 0 0!important;
+    font-size:.56rem!important;
+    line-height:1.15!important;
+  }
+
+  /* Reduz cerca de 20–25% da área do gráfico sem tocar nos dados. */
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-canvas-wrap-v580{
+    height:220px!important;
+    min-height:220px!important;
+    max-height:220px!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580.desktop-monthly-indicators-v574
+  body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  #monthlyComparisonCanvasV580{
+    height:220px!important;
+    max-height:220px!important;
+  }
+}
+
+/* A partir de 1100 CSS px: os sete indicadores cabem em uma única linha.
+   O selector inclui a classe histórica para vencer os !important do inline. */
+@media (min-width:1100px){
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  }
+}
+
+/* Abaixo disso, preserva 4 + 3 para não comprimir leitura. */
+@media (min-width:769px) and (max-width:1099px){
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+
+/* ============================================================
+   V787 — TABELA MENSAL · SCROLLBAR SEM SOBREPOR DOW
+   Reserva espaço real para a barra de rolagem vertical e
+   protege a última coluna sem esconder a indicação de scroll.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  html.desktop-monthly-indicators-v574 body
+  #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-shell-v445{
+    /* A barra passa a ter uma faixa própria, sem cobrir a tabela. */
+    scrollbar-gutter:stable!important;
+
+    /* Pequeno respiro adicional entre a última coluna e a barra. */
+    padding-right:8px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body
+  #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 th:last-child,
+  html.desktop-monthly-indicators-v574 body
+  #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 td:last-child{
+    padding-right:16px!important;
+  }
+
+  /* Mantém a barra fina, mas claramente separada do conteúdo. */
+  html.desktop-monthly-indicators-v574 body
+  #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-shell-v445{
+    scrollbar-width:thin;
+  }
+
+  html.desktop-monthly-indicators-v574 body
+  #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-shell-v445::-webkit-scrollbar{
+    width:8px;
+  }
+}
+
+/* ============================================================
+   V797 — INDICADORES · EVOLUÇÃO | RETORNO NO PERÍODO
+   A mesma seleção de ativos controla as duas visualizações.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-head-v580{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:8px!important;
+  }
+
+  /* Controle de visualização: dimensão distinta dos ativos. */
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-view-v797{
+    display:inline-flex!important;
+    align-items:center!important;
+    flex:0 0 auto!important;
+    min-height:29px!important;
+    margin-left:auto!important;
+    padding:2px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:9px!important;
+    background:rgba(8,13,24,.44)!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-view-label-v797{
+    display:inline-flex!important;
+    align-items:center!important;
+    height:23px!important;
+    margin:0 4px 0 5px!important;
+    color:#79869c!important;
+    font-size:.49rem!important;
+    font-weight:850!important;
+    letter-spacing:.07em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-view-v797 button{
+    height:23px!important;
+    min-height:23px!important;
+    margin:0!important;
+    padding:0 8px!important;
+    border:1px solid transparent!important;
+    border-radius:6px!important;
+    background:transparent!important;
+    color:#929db0!important;
+    font-size:.53rem!important;
+    font-weight:750!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-view-v797 button:hover{
+    color:#d9e0eb!important;
+    background:rgba(148,163,184,.06)!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-view-v797 button.active{
+    border-color:rgba(213,168,79,.30)!important;
+    background:rgba(213,168,79,.14)!important;
+    color:#e4b85e!important;
+  }
+
+  /* Depois da dimensão VISÃO vêm os ativos comparados. */
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-chips-v580{
+    margin-left:0!important;
+  }
+
+  /* Barras: não aumentam a altura geral do painel. */
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580.is-period-return-v797
+  .monthly-comparison-canvas-wrap-v580,
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580.is-period-return-v797
+  #monthlyComparisonCanvasV580{
+    height:220px!important;
+    min-height:220px!important;
+    max-height:220px!important;
+  }
+}
+
+/* Em notebooks, a faixa de ativos desce para uma segunda linha
+   em vez de comprimir os controles. */
+@media (min-width:769px) and (max-width:1250px){
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-head-v580{
+    flex-wrap:wrap!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body
+  #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonChartV580
+  .monthly-comparison-chips-v580{
+    flex:1 0 100%!important;
+    justify-content:flex-end!important;
+    width:100%!important;
+  }
+}
+
+/* Mobile: visualizações empilhadas de forma compacta. */
+@media (max-width:768px){
+  #monthlyComparisonChartV580 .monthly-comparison-view-v797{
+    display:flex!important;
+    align-items:center!important;
+    width:100%!important;
+    gap:4px!important;
+    margin:6px 0 0!important;
+    padding:3px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:9px!important;
+  }
+
+  #monthlyComparisonChartV580 .monthly-comparison-view-label-v797{
+    margin:0 3px!important;
+    color:#7f8ba0!important;
+    font-size:.48rem!important;
+    font-weight:800!important;
+    text-transform:uppercase!important;
+  }
+
+  #monthlyComparisonChartV580 .monthly-comparison-view-v797 button{
+    flex:1 1 0!important;
+    min-height:28px!important;
+    padding:0 7px!important;
+    border:0!important;
+    border-radius:7px!important;
+    background:transparent!important;
+    color:#949fb2!important;
+    font-size:.54rem!important;
+    font-weight:750!important;
+  }
+
+  #monthlyComparisonChartV580 .monthly-comparison-view-v797 button.active{
+    background:rgba(213,168,79,.13)!important;
+    color:#e2b35a!important;
+  }
+}
+
