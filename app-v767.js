@@ -10772,6 +10772,173 @@ document.addEventListener('DOMContentLoaded', function(){
     return primary + operational;
   }
 
+  function rankingPrettyOperationalV794(value){
+    const raw = String(value ?? '').trim();
+    if(!raw) return '—';
+    const norm = normalizarStatusOperacional(raw);
+    const map = {
+      'NAO SE APLICA':'Não se aplica',
+      'LONGO PRAZO':'Longo prazo',
+      'NAO INFORMADO':'Não informado',
+      'NAO INFORMADA':'Não informada'
+    };
+    return map[norm] || raw;
+  }
+
+  function buildRankingSpotlightFactsV794(row){
+    const val = (keys, fallback='—') => {
+      try{
+        if(typeof detailValueV158==='function') return detailValueV158(row,keys,fallback);
+      }catch(e){}
+      for(const k of keys){
+        const v = row?.[k];
+        if(v!==null && v!==undefined && String(v).trim()!=='') return String(v).trim();
+      }
+      return fallback;
+    };
+
+    const money = v => {
+      try{ if(typeof detailMoneyV158==='function') return detailMoneyV158(v); }catch(e){}
+      const n = numKpi(v);
+      return n===null ? '—' : 'R$ '+n.toLocaleString('pt-BR',{maximumFractionDigits:2});
+    };
+
+    const percent = v => {
+      try{ if(typeof detailPercentV158==='function') return detailPercentV158(v); }catch(e){}
+      const n = numKpi(v);
+      return n===null ? '—' : n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+    };
+
+    const d = typeof obterDadosOperacionaisFundo==='function'
+      ? obterDadosOperacionaisFundo(row)
+      : {
+          benchmark:{texto:'Não informado',estimado:false},
+          estrategia:{texto:'Não informada',estimada:false},
+          adiantamento:{texto:'Não informado',status:''},
+          tributacao:{texto:'Não informada'},
+          captacao:{texto:'Não informada',status:''},
+          horarios:{aplicacao:'Não informado',resgate:'Não informado',informado:false}
+        };
+
+    const conv = String(row?.['Conversao Resgate'] || '').trim() || 'Não informado';
+    const pag  = String(row?.['Pagamento Resgate'] || '').trim() || 'Não informado';
+
+    const adiCls = typeof classeStatusOperacional==='function'
+      ? classeStatusOperacional(d.adiantamento?.status,'adiantamento')
+      : 'unknown';
+    const capCls = typeof classeStatusOperacional==='function'
+      ? classeStatusOperacional(d.captacao?.status,'captacao')
+      : 'unknown';
+
+    const statusDot = cls => cls==='positive' ? '●' : cls==='negative' ? '●' : '○';
+
+    const cnpj = val(['CNPJ']);
+    const code = val(['codfundo','Código SIICO','Codigo SIICO','Código do Fundo','Codigo do Fundo']);
+    const tax = percent(val(['Taxa Adm (%)']));
+    const app = money(val(['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+    const start = rankingStartDateV793(row);
+
+    const refTxt = rankingPrettyOperationalV794(d.benchmark?.texto);
+    const strategyTxt = rankingPrettyOperationalV794(d.estrategia?.texto);
+    const taxClassTxt = rankingPrettyOperationalV794(d.tributacao?.texto);
+    const captacaoTxt = rankingPrettyOperationalV794(d.captacao?.texto);
+    const adiantamentoTxt = rankingPrettyOperationalV794(d.adiantamento?.texto);
+    const horaAplic = rankingPrettyOperationalV794(d.horarios?.aplicacao);
+    const horaResg = rankingPrettyOperationalV794(d.horarios?.resgate);
+
+    const estimated = '<small class="ranking-v794-estimated">indicativo</small>';
+
+    return `
+      <section class="ranking-v794-section ranking-v794-movement" aria-labelledby="rankingV794MovementTitle">
+        <div class="ranking-v794-section-head">
+          <div>
+            <span class="ranking-v794-kicker">OPERAÇÃO</span>
+            <strong id="rankingV794MovementTitle">Liquidez e movimentação</strong>
+          </div>
+          <small>Prazos e condições operacionais</small>
+        </div>
+        <div class="ranking-v794-grid ranking-v794-grid-movement">
+          <div class="ranking-v794-card">
+            <span>Conversão do resgate</span>
+            <strong>${htmlAttr(conv)}</strong>
+          </div>
+          <div class="ranking-v794-card">
+            <span>Pagamento do resgate</span>
+            <strong>${htmlAttr(pag)}</strong>
+          </div>
+          <div class="ranking-v794-card">
+            <span>Adiantamento</span>
+            <strong class="status-${htmlAttr(adiCls)} ranking-v794-status"><i>${statusDot(adiCls)}</i>${htmlAttr(adiantamentoTxt)}</strong>
+          </div>
+          <div class="ranking-v794-card ranking-v794-hours">
+            <span>Horário limite</span>
+            <strong><em>Aplicação ${htmlAttr(horaAplic)}</em><em>Resgate ${htmlAttr(horaResg)}</em></strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="ranking-v794-section ranking-v794-information" aria-labelledby="rankingV794InfoTitle">
+        <div class="ranking-v794-section-head">
+          <div>
+            <span class="ranking-v794-kicker">CADASTRO E CONDIÇÕES</span>
+            <strong id="rankingV794InfoTitle">Informações do fundo</strong>
+          </div>
+        </div>
+        <div class="ranking-v794-grid ranking-v794-grid-info">
+          <div class="ranking-v794-card"><span>CNPJ</span><strong>${htmlAttr(cnpj)}</strong></div>
+          <div class="ranking-v794-card"><span>Data de início</span><strong>${htmlAttr(start)}</strong></div>
+          <div class="ranking-v794-card"><span>Taxa de administração</span><strong>${htmlAttr(tax)}</strong></div>
+          <div class="ranking-v794-card"><span>Aplicação mínima</span><strong>${htmlAttr(app)}</strong></div>
+          <div class="ranking-v794-card"><span>Código do fundo</span><strong>${htmlAttr(code)}</strong></div>
+        </div>
+      </section>
+
+      <section class="ranking-v794-section ranking-v794-characteristics" aria-labelledby="rankingV794CharacteristicsTitle">
+        <div class="ranking-v794-section-head">
+          <div>
+            <span class="ranking-v794-kicker">ESTRUTURA</span>
+            <strong id="rankingV794CharacteristicsTitle">Características</strong>
+          </div>
+        </div>
+        <div class="ranking-v794-grid ranking-v794-grid-characteristics">
+          <div class="ranking-v794-card">
+            <span>Referência</span>
+            <strong>${htmlAttr(refTxt)}${d.benchmark?.estimado ? estimated : ''}</strong>
+          </div>
+          <div class="ranking-v794-card">
+            <span>Estratégia</span>
+            <strong>${htmlAttr(strategyTxt)}${d.estrategia?.estimada ? estimated : ''}</strong>
+          </div>
+          <div class="ranking-v794-card">
+            <span>Tributação</span>
+            <strong>${htmlAttr(taxClassTxt)}</strong>
+          </div>
+          <div class="ranking-v794-card">
+            <span>Captação</span>
+            <strong class="status-${htmlAttr(capCls)} ranking-v794-status"><i>${statusDot(capCls)}</i>${htmlAttr(captacaoTxt)}</strong>
+          </div>
+        </div>
+      </section>`;
+  }
+
+  function arrangeSpotlightV794(rankingMode){
+    const metrics = document.getElementById('fspotMetrics');
+    const liq = document.getElementById('fspotLiq');
+    const facts = document.getElementById('fspotFacts');
+    const note = document.getElementById('fspotNote');
+    if(!metrics || !liq || !facts || !note) return;
+
+    if(rankingMode){
+      metrics.insertAdjacentElement('afterend',note);
+      note.insertAdjacentElement('afterend',facts);
+      liq.style.display = 'none';
+    }else{
+      metrics.insertAdjacentElement('afterend',liq);
+      liq.insertAdjacentElement('afterend',facts);
+      facts.insertAdjacentElement('afterend',note);
+    }
+  }
+
   function ensureRankingContextV793(){
     let ctx = document.getElementById('fspotRankingContextV793');
     if(ctx) return ctx;
@@ -10821,22 +10988,42 @@ document.addEventListener('DOMContentLoaded', function(){
     const catLabel = catAbrev[cat] || cat || '—';
     const riskV793 = String(row['Perfil de Risco'] || '').trim();
     const plStr = pl ? ' · PL R$ '+(pl>=1000?(pl/1000).toFixed(1)+'bi':pl.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi') : '';
-    el('fspotMeta').textContent = rankingContextV793
-      ? catLabel + (riskV793 ? ' · ' + riskV793 : '') + plStr
-      : catLabel + plStr;
+    const periodHeaderV794 = String(rankingContextV793?.periodLabel || '').trim();
+    const rankingHeaderV794 = rankingContextV793
+      ? (rankingContextV793.isLeaderView ? 'Líder da categoria' : 'Ranking geral') +
+        (periodHeaderV794 ? ' · ' + periodHeaderV794 : '')
+      : '';
+
+    if(rankingContextV793){
+      el('fspotMeta').innerHTML =
+        '<span class="ranking-v794-rank-context">' + htmlAttr(rankingHeaderV794) + '</span>' +
+        '<span class="ranking-v794-fund-context">' +
+          htmlAttr(catLabel + (riskV793 ? ' · ' + riskV793 : '') + plStr) +
+        '</span>';
+    }else{
+      el('fspotMeta').textContent = catLabel + plStr;
+    }
 
     // Métricas
+    const criterionKeyV794 = rankingContextV793
+      ? (rankingContextV793.period === 'mes' ? 'mes' : rankingContextV793.period === 'ano' ? 'ano' : '12m')
+      : '';
+
     el('fspotMetrics').innerHTML = [
-      {label:'Mês',  val:fmtPct(rMes),  cls:clsPct(rMes)},
-      {label:'Ano',  val:fmtPct(rAno),  cls:clsPct(rAno)},
-      {label:'12M',  val:fmtPct(r12),   cls:clsPct(r12), note:sem12MV793?'Sem 12M completo':''},
-      {label:'% CDI 12M', val:cdi!==null?cdi+'%':'—', cls:cdi!==null?(cdi>=100?'pos':cdi>=80?'neu':'neg'):'neu', note:sem12MV793?'Sem 12M completo':''},
-    ].map(m=>`
-      <div class="fspot-metric-item ${m.note?'ranking-v793-incomplete':''}">
-        <span class="fspot-metric-label">${m.label}</span>
-        <span class="fspot-metric-val ${m.cls}">${m.val}</span>
-        ${m.note?`<small class="ranking-v793-metric-note">${m.note}</small>`:''}
-      </div>`).join('');
+      {key:'mes', label:'Mês',  val:fmtPct(rMes),  cls:clsPct(rMes)},
+      {key:'ano', label:'Ano',  val:fmtPct(rAno),  cls:clsPct(rAno)},
+      {key:'12m', label:'12M',  val:fmtPct(r12),   cls:clsPct(r12), note:sem12MV793?'Sem 12M completo':''},
+      {key:'cdi12', label:'% CDI 12M', val:cdi!==null?cdi+'%':'—', cls:cdi!==null?(cdi>=100?'pos':cdi>=80?'neu':'neg'):'neu', note:sem12MV793?'Sem 12M completo':''},
+    ].map(m=>{
+      const criterion = rankingContextV793 && m.key === criterionKeyV794;
+      return `
+        <div class="fspot-metric-item ${m.note?'ranking-v793-incomplete':''} ${criterion?'ranking-v794-criterion':''}">
+          <span class="fspot-metric-label">${m.label}</span>
+          <span class="fspot-metric-val ${m.cls}">${m.val}</span>
+          ${criterion?'<small class="ranking-v794-criterion-note">critério do ranking</small>':''}
+          ${m.note?`<small class="ranking-v793-metric-note">${m.note}</small>`:''}
+        </div>`;
+    }).join('');
 
     // Liquidez
     const liqParts = [];
@@ -10845,13 +11032,13 @@ document.addEventListener('DOMContentLoaded', function(){
     el('fspotLiq').innerHTML = liqParts.length
       ? `<span class="fspot-liq-label">Liquidez</span>${liqParts.join('')}`
       : '';
-    el('fspotLiq').style.display = liqParts.length ? '' : 'none';
+    el('fspotLiq').style.display = rankingContextV793 ? 'none' : (liqParts.length ? '' : 'none');
 
     // Informações complementares
     const factsEl = el('fspotFacts');
     if(factsEl){
       factsEl.innerHTML = rankingContextV793
-        ? buildRankingSpotlightFactsV793(row)
+        ? buildRankingSpotlightFactsV794(row)
         : buildFundOperationalFacts(row,'spotlight');
       factsEl.style.display = '';
     }
@@ -10866,24 +11053,29 @@ document.addEventListener('DOMContentLoaded', function(){
       : String(tmpDiv.textContent || '').trim();
     const safeNoteTxt = (typeof htmlAttr === 'function') ? htmlAttr(noteTxt) : noteTxt.replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`
+      ? (rankingContextV793
+          ? `<div class="fspot-note-title ranking-v794-about-title">Sobre o fundo</div><div class="ranking-v794-about-text">${safeNoteTxt}</div>`
+          : `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`)
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
+
+    // V794 — em Ranking: performance → sobre → operação → cadastro → características.
+    arrangeSpotlightV794(!!rankingContextV793);
 
     // Link CAIXA
     const urlFundo = getFundUrl(row);
     const linkEl = el('fspotLinkCaixa');
     if(urlFundo && !isFallbackUrl(row)){
       linkEl.href = urlFundo;
-      linkEl.textContent = '↗ Página do fundo';
-      linkEl.title = 'Abrir página do fundo';
+      linkEl.textContent = rankingContextV793 ? 'Página oficial ↗' : '↗ Página do fundo';
+      linkEl.title = rankingContextV793 ? 'Abrir página oficial do fundo' : 'Abrir página do fundo';
       linkEl.style.display = '';
     } else {
       linkEl.style.display = 'none';
     }
 
     // Continuidade: abre a ficha completa no catálogo.
-    el('fspotVerTabela').textContent = rankingContextV793 ? 'Ver ficha no catálogo' : '🔍 Ver na tabela';
+    el('fspotVerTabela').textContent = rankingContextV793 ? 'Localizar no catálogo' : '🔍 Ver na tabela';
     el('fspotVerTabela').onclick = ()=>{
       closeFundSpotlight();
       // Usa o nome do fundo como busca visível e mantém compatibilidade com CNPJ formatado.
@@ -10910,18 +11102,18 @@ document.addEventListener('DOMContentLoaded', function(){
       badge.className = 'fspot-badge best ranking-v793-context-badge';
 
       if(ctxV793){
-        ctxV793.hidden = false;
-        ctxV793.innerHTML = '<strong>' +
-          (leaderV793 ? 'Líder em ' + htmlAttr(catLabel) : 'Posição no ranking geral') +
-          '</strong>' + (periodV793 ? '<span>' + htmlAttr(periodV793) + '</span>' : '');
+        ctxV793.hidden = true;
+        ctxV793.innerHTML = '';
       }
       overlayV793?.classList.add('ranking-v793-mode');
+      overlayV793?.classList.add('ranking-v794-mode');
     }else{
       const kind = _spotlightKind || 'best';
       badge.textContent = kind==='best' ? '🏆 Melhor 12M' : '📉 Pior 12M';
       badge.className = 'fspot-badge ' + (kind==='best' ? 'best' : 'worst');
       if(ctxV793){ ctxV793.hidden = true; ctxV793.innerHTML = ''; }
       overlayV793?.classList.remove('ranking-v793-mode');
+      overlayV793?.classList.remove('ranking-v794-mode');
     }
 
     openFundSpotlight();
@@ -10946,6 +11138,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!ov) return;
     ov.classList.remove('open');
     ov.classList.remove('ranking-v793-mode');
+    ov.classList.remove('ranking-v794-mode');
     document.body.style.overflow = '';
     ov.removeEventListener('click', _spotlightBackdropClose);
     document.removeEventListener('keydown', _spotlightEscClose);
@@ -12169,6 +12362,7 @@ console.info('[Catálogo CAIXA] Rankings V792 ativo · categoria priorizada na v
 })();
 
 console.info('[Catálogo CAIXA] Rankings V793 ativo · detalhes do fundo por clique');
+console.info('[Catálogo CAIXA] Rankings V794 ativo · hierarquia semântica do modal');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
