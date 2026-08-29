@@ -1,0 +1,41 @@
+name: Pacote Catalog Risk V812B
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v812b.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v812
+          cp index.html pacote-v812/
+          cp catalog-risk-v812.css pacote-v812/
+          cp catalog-risk-v812.js pacote-v812/
+          printf '%s\n' \
+            'V812 — Perfil de risco' \
+            '' \
+            '- elimina o pisca/cresce/diminui no carregamento' \
+            '- mantém o menu em portal no body para evitar recorte' \
+            '- estado aberto neutro com borda dourada discreta' \
+            '- filtro aplicado com aquecimento leve' \
+            '- menu mais compacto e seleção mais sutil' \
+            > pacote-v812/LEIA-ME.txt
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Catalog-Risk-V812-arquivos-atualizados
+          path: pacote-v812/
+          retention-days: 7
