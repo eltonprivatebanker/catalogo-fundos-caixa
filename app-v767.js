@@ -4488,12 +4488,24 @@ function setCdiSort(dir){
     const resultsEl = q('#rankingResultsV682');
     if(resultsEl) resultsEl.textContent = resultText;
 
+    const summaryBestLabelV796 = isLeaderView
+      ? 'Maior retorno entre os líderes'
+      : 'Maior retorno';
+    const summaryWorstLabelV796 = isLeaderView
+      ? 'Menor retorno entre os líderes'
+      : 'Menor retorno';
+    const summaryAriaV796 = isLeaderView
+      ? 'Extremos de rentabilidade entre os líderes por categoria'
+      : 'Extremos de rentabilidade do ranking geral';
+
     grid.className = 'ranking-grid ranking-main-v136 ranking-v682-grid';
     grid.removeAttribute('data-active-rank-view');
     grid.innerHTML =
-      '<section class="ranking-v562-summary ranking-v682-summary ranking-summary-v762 ranking-summary-v763" aria-label="Extremos do ranking">' +
-        summaryCard('best','Maior retorno', best ? pct(best[campo]) : '—', best ? rankingDisplayNameV683(cleanFund(best.Fundo)) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
-        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
+      '<section class="ranking-v562-summary ranking-v682-summary ranking-summary-v762 ranking-summary-v763 ' +
+        (isLeaderView ? 'ranking-v796-leader-summary' : 'ranking-v796-general-summary') +
+        '" aria-label="' + esc(summaryAriaV796) + '">' +
+        summaryCard('best',summaryBestLabelV796, best ? pct(best[campo]) : '—', best ? rankingDisplayNameV683(cleanFund(best.Fundo)) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
+        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral',summaryWorstLabelV796, lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
       '</section>' +
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-table-shell">' +
@@ -12401,6 +12413,7 @@ console.info('[Catálogo CAIXA] Rankings V792 ativo · categoria priorizada na v
 console.info('[Catálogo CAIXA] Rankings V793 ativo · detalhes do fundo por clique');
 console.info('[Catálogo CAIXA] Rankings V794 ativo · hierarquia semântica do modal');
 console.info('[Catálogo CAIXA] Rankings V795 ativo · ajustes finos do modal');
+console.info('[Catálogo CAIXA] Rankings V796 ativo · extremos semânticos e alinhados');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
