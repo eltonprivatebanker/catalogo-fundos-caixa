@@ -1,0 +1,54 @@
+name: Aplicar Catalog Risk V812
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v812.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V812
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = s
+
+          s = s.replace('catalog-risk-v811.css?v=catalog-risk-v811', 'catalog-risk-v812.css?v=catalog-risk-v812')
+          s = s.replace('catalog-risk-v811.js?v=catalog-risk-v811', 'catalog-risk-v812.js?v=catalog-risk-v812')
+
+          if 'catalog-risk-v812.css?v=catalog-risk-v812' not in s:
+              s = s.replace('</head>', '<link rel="stylesheet" href="catalog-risk-v812.css?v=catalog-risk-v812"/>\n</head>')
+          if 'catalog-risk-v812.js?v=catalog-risk-v812' not in s:
+              s = s.replace('</body>', '<script src="catalog-risk-v812.js?v=catalog-risk-v812" defer></script>\n</body>')
+
+          # Remove referências antigas restantes.
+          for v in ('810','811'):
+              s = s.replace(f'<link rel="stylesheet" href="catalog-risk-v{v}.css?v=catalog-risk-v{v}"/>\n', '')
+              s = s.replace(f'<script src="catalog-risk-v{v}.js?v=catalog-risk-v{v}" defer></script>\n', '')
+
+          if s == old:
+              raise SystemExit('Nenhuma alteração V812 aplicada no index.')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V812
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V812: estabilizar carregamento do perfil de risco'
+          git push origin HEAD:'Testes-da-versão-01'
