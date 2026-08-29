@@ -1,0 +1,54 @@
+name: Pacote Market V808
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v808.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v808
+          cp index.html pacote-v808/
+          cp market-v808.css pacote-v808/
+          cp market-v808.js pacote-v808/
+          cp focus-v806.css pacote-v808/
+          cp focus-v806.js pacote-v808/
+          printf '%s\n' \
+            'V808 — Indicadores de mercado' \
+            '' \
+            'Ajustes desta versão:' \
+            '- Mantém a estrutura enxuta da V807.' \
+            '- Não duplica o seletor de período no comparativo.' \
+            '- Reduz a altura inicial da tabela mensal.' \
+            '- Estado inicial do gráfico: CDI, IPCA e Ibovespa.' \
+            '- Mantém os demais chips disponíveis para seleção manual.' \
+            '- Dados e cálculos preservados.' \
+            '' \
+            'Arquivos:' \
+            '- index.html' \
+            '- market-v808.css' \
+            '- market-v808.js' \
+            '- focus-v806.css' \
+            '- focus-v806.js' \
+            > pacote-v808/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Market-V808-arquivos-atualizados
+          path: pacote-v808/
+          retention-days: 7
