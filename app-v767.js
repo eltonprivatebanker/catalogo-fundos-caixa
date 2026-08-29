@@ -4044,7 +4044,66 @@ function setCdiSort(dir){
     return q('#rankingClassSelectV136')?.value || 'todos';
   }
   function rankingUniverseValueV685(){
-    return q('#rankingUniverseSelectV685')?.value || 'todos';
+    const value = String(q('#rankingUniverseSelectV685')?.value || 'todos').trim().toLowerCase();
+    return ['todos','sem-fmp','diversificados'].includes(value) ? value : 'todos';
+  }
+  function rankingViewValueV790(){
+    const value = String(q('#rankingViewSelectV790')?.value || 'lideres').trim().toLowerCase();
+    return value === 'geral' ? 'geral' : 'lideres';
+  }
+
+  /* V790 — classificação provisória e centralizada para o teste de Universo.
+     Prioriza campos explícitos, caso passem a existir nos dados. Na ausência deles,
+     usa uma heurística conservadora apenas para FMP e fundos de ações cujo nome
+     identifica claramente uma única companhia. */
+  const RANKING_MONOACAO_COMPANIES_V790 = [
+    'ELETROBRAS','CAIXA SEGURIDADE','BB SEGURIDADE','BANCO DO BRASIL',
+    'PETROBRAS','PETROBRAS BR','VALE','EMBRAER','GERDAU','USIMINAS','CSN'
+  ];
+  function rankingExplicitMonoacaoV790(r){
+    const raw = [
+      r?.['Monoação'], r?.['Monoacao'],
+      r?.['Estratégia de Concentração'], r?.['Estrategia de Concentracao'],
+      r?.['Concentração'], r?.['Concentracao']
+    ].find(function(v){ return v !== undefined && v !== null && String(v).trim() !== ''; });
+    if(raw === undefined) return null;
+    const value = norm(raw).replace(/\s+/g,' ').trim();
+    if(['SIM','MONOACAO','MONO ACAO','CONCENTRADO','CONCENTRADA','UMA ACAO','UMA EMPRESA'].includes(value)) return true;
+    if(['NAO','DIVERSIFICADO','DIVERSIFICADA'].includes(value)) return false;
+    return null;
+  }
+  function rankingIsFmpV790(r){
+    const cat = typeof rankCategoriaCanonicaV197 === 'function'
+      ? rankCategoriaCanonicaV197(r?.Categoria)
+      : norm(r?.Categoria).replace(/\s+/g,' ').trim();
+    const fmp = (typeof RANK_CATEGORY_BY_FILTER_V197 !== 'undefined')
+      ? RANK_CATEGORY_BY_FILTER_V197.fmp
+      : 'FUNDOS MUTUOS DE PRIVATIZACAO';
+    return cat === fmp;
+  }
+  function rankingIsMonoacaoV790(r){
+    const explicit = rankingExplicitMonoacaoV790(r);
+    if(explicit !== null) return explicit;
+
+    /* No catálogo atual, FMP é tratado como concentração de companhia para esta
+       primeira validação. Sem FMP continua existindo como filtro independente. */
+    if(rankingIsFmpV790(r)) return true;
+
+    const cat = typeof rankCategoriaCanonicaV197 === 'function'
+      ? rankCategoriaCanonicaV197(r?.Categoria)
+      : norm(r?.Categoria).replace(/\s+/g,' ').trim();
+    const acoes = (typeof RANK_CATEGORY_BY_FILTER_V197 !== 'undefined')
+      ? RANK_CATEGORY_BY_FILTER_V197.acoes
+      : 'ACOES';
+    if(cat !== acoes) return false;
+
+    const blob = norm([
+      r?.Fundo, r?.Nome, r?.['Nome do Fundo'], r?.['Nome Fantasia'], r?.Categoria
+    ].filter(Boolean).join(' ')).replace(/\s+/g,' ').trim().toUpperCase();
+
+    return RANKING_MONOACAO_COMPANIES_V790.some(function(company){
+      return blob.includes(company);
+    });
   }
   function categoryOkV685(r){
     const filtro = rankingCategoryValueV685();
@@ -4059,10 +4118,10 @@ function setCdiSort(dir){
     return mapa[filtro] ? cat === mapa[filtro] : true;
   }
   function universeOkV685(r){
-    if(rankingUniverseValueV685() !== 'sem-fmp') return true;
-    const cat = typeof rankCategoriaCanonicaV197 === 'function' ? rankCategoriaCanonicaV197(r?.Categoria) : norm(r?.Categoria).replace(/\s+/g,' ').trim();
-    const fmp = (typeof RANK_CATEGORY_BY_FILTER_V197 !== 'undefined') ? RANK_CATEGORY_BY_FILTER_V197.fmp : 'FUNDOS MUTUOS DE PRIVATIZACAO';
-    return cat !== fmp;
+    const universe = rankingUniverseValueV685();
+    if(universe === 'sem-fmp') return !rankingIsFmpV790(r);
+    if(universe === 'diversificados') return !rankingIsMonoacaoV790(r);
+    return true;
   }
   function parseRankingDateV685(value){
     if(value instanceof Date && !Number.isNaN(value.getTime())) return new Date(value.getFullYear(),value.getMonth(),value.getDate());
@@ -4137,8 +4196,14 @@ function setCdiSort(dir){
       clsSelect.dataset.v685Initialized = '1';
     }
     if(universeSelect && !universeSelect.dataset.v685Initialized){
-      universeSelect.value = String(typeof activeRankFilter !== 'undefined' && activeRankFilter === 'sem-fmp' ? 'sem-fmp' : 'todos');
+      const legacyUniverse = String(typeof activeRankFilter !== 'undefined' ? (activeRankFilter || 'todos') : 'todos');
+      universeSelect.value = ['sem-fmp','diversificados'].includes(legacyUniverse) ? legacyUniverse : 'todos';
       universeSelect.dataset.v685Initialized = '1';
+    }
+    const viewSelect = q('#rankingViewSelectV790');
+    if(viewSelect && !viewSelect.dataset.v790Initialized){
+      if(!['geral','lideres'].includes(viewSelect.value)) viewSelect.value = 'lideres';
+      viewSelect.dataset.v790Initialized = '1';
     }
     if(risk && typeof activeRankRisk !== 'undefined' && risk.value !== (activeRankRisk || '')) risk.value = activeRankRisk || '';
     qa('[data-rank-filter]').forEach(function(btn){
@@ -4258,6 +4323,11 @@ function setCdiSort(dir){
     });
     return (top || []).map(function(item, idx){ return categoryRow(item, idx, campo, periodo, false); }).join('');
   }
+  function rankingBoardRowsV790(rows, campo, periodo, showCategory){
+    return (rows || []).slice(0,10).map(function(r, idx){
+      return categoryRow({cat:r?.Categoria || 'Sem categoria', row:r}, idx, campo, periodo, !!showCategory);
+    }).join('');
+  }
   function rankingContextStripV762(periodo, boardSource, isSingleCategory, currentCategoryLabel, excludedIncomplete){
     const universeSelect = q('#rankingUniverseSelectV685');
     const categorySelect = q('#rankingClassSelectV136');
@@ -4321,27 +4391,39 @@ function setCdiSort(dir){
     const negatives = ascending.filter(function(r){ return finite(r[campo]) < 0; });
     const winners = categoryWinners(rows, campo, sorted);
     const isSingleCategory = rankingFilteredSingleCategoryV644();
+    const view = rankingViewValueV790();
+    const isLeaderView = view === 'lideres';
+    const showCategoryColumn = !isSingleCategory;
     document.body.classList.toggle('ranking-single-category-v684', isSingleCategory);
     document.body.classList.toggle('ranking-single-category-v685', isSingleCategory);
+    document.body.classList.toggle('ranking-leaders-view-v790', isLeaderView);
+    document.body.classList.toggle('ranking-general-view-v790', !isLeaderView);
     const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
-    const boardSource = isSingleCategory ? sorted : winners;
-    const boardRows = isSingleCategory ? topFundsBoardRowsV644(sorted, campo, periodo) : categoryBoardRowsV590(winners, campo, periodo);
+
+    /* VISÃO é independente dos demais filtros:
+       - geral: todos os fundos elegíveis, ordenados por rentabilidade;
+       - líderes: apenas o primeiro colocado de cada categoria elegível. */
+    const boardSource = isLeaderView ? winners.map(function(item){ return item.row; }) : sorted;
+    const boardRows = rankingBoardRowsV790(boardSource, campo, periodo, showCategoryColumn);
     const best = sorted[0];
     const lowest = ascending[0];
     const alertBody = alertRows(negatives.slice(0,8), campo);
-    const summaryLabel = isSingleCategory ? 'Fundos elegíveis' : 'Categorias elegíveis';
-    const summaryValue = String(boardSource.length || 0);
-    const summaryName = isSingleCategory ? currentCategoryLabel : ('Histórico completo em ' + labelPeriodo(periodo));
-    const boardAria = isSingleCategory
-      ? ('Ranking de fundos em ' + currentCategoryLabel)
-      : 'Ranking com o melhor fundo elegível de cada categoria';
-    const boardCaption = isSingleCategory
-      ? ('Fundos elegíveis da categoria selecionada, ordenados pelo retorno no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.')
-      : ('Melhor fundo elegível de cada categoria, ordenado pelo retorno no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.');
+    const boardAria = isLeaderView
+      ? (isSingleCategory
+          ? ('Líder por rentabilidade em ' + currentCategoryLabel)
+          : 'Líder de rentabilidade de cada categoria')
+      : (isSingleCategory
+          ? ('Ranking geral de fundos em ' + currentCategoryLabel)
+          : 'Ranking geral de fundos por rentabilidade');
+    const boardCaption = isLeaderView
+      ? (isSingleCategory
+          ? ('Exibe o fundo com maior rentabilidade no período selecionado na categoria escolhida. Fundos sem histórico completo para o período selecionado não participam da classificação.')
+          : ('Exibe o fundo com maior rentabilidade no período selecionado em cada categoria. Fundos sem histórico completo para o período selecionado não participam da classificação.'))
+      : ('Fundos elegíveis ordenados pela rentabilidade no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.');
     const displayedCount = Math.min(10, boardSource.length || 0);
-    const resultText = isSingleCategory
-      ? ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount)
-      : ((boardSource.length || 0) + ' categorias com dados');
+    const resultText = isLeaderView
+      ? ((boardSource.length || 0) + (isSingleCategory ? ' líder' : ' categorias com líder'))
+      : ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount);
 
     const resultsEl = q('#rankingResultsV682');
     if(resultsEl) resultsEl.textContent = resultText;
@@ -4357,13 +4439,13 @@ function setCdiSort(dir){
         '<div class="ranking-v682-table-shell">' +
           '<table class="ranking-v682-table ranking-v685-table">' +
             '<caption>' + esc(boardCaption) + '</caption>' +
-            (isSingleCategory
-              ? '<colgroup><col class="col-position"><col class="col-fund"><col class="col-return"><col class="col-cdi"></colgroup>'
-              : '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>') +
-            (isSingleCategory
-              ? '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">' + esc(retornoLabel(periodo)) + '</th><th scope="col">' + esc(cdiLabel(periodo)) + '</th></tr></thead>'
-              : '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">Categoria</th><th scope="col">' + esc(retornoLabel(periodo)) + '</th><th scope="col">' + esc(cdiLabel(periodo)) + '</th></tr></thead>') +
-            '<tbody>' + (boardRows || '<tr><td colspan="' + (isSingleCategory ? '4' : '5') + '" class="ranking-empty-v50">Nenhum fundo possui histórico completo para este filtro.</td></tr>') + '</tbody>' +
+            (showCategoryColumn
+              ? '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>'
+              : '<colgroup><col class="col-position"><col class="col-fund"><col class="col-return"><col class="col-cdi"></colgroup>') +
+            (showCategoryColumn
+              ? '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">Categoria</th><th scope="col">' + esc(retornoLabel(periodo)) + '</th><th scope="col">' + esc(cdiLabel(periodo)) + '</th></tr></thead>'
+              : '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">' + esc(retornoLabel(periodo)) + '</th><th scope="col">' + esc(cdiLabel(periodo)) + '</th></tr></thead>') +
+            '<tbody>' + (boardRows || '<tr><td colspan="' + (showCategoryColumn ? '5' : '4') + '" class="ranking-empty-v50">Nenhum fundo possui histórico completo para este filtro.</td></tr>') + '</tbody>' +
           '</table>' +
         '</div>' +
       '</section>' +
@@ -4418,6 +4500,7 @@ function setCdiSort(dir){
   function bind(){
     const clsSelect = q('#rankingClassSelectV136');
     const universeSelect = q('#rankingUniverseSelectV685');
+    const viewSelect = q('#rankingViewSelectV790');
     const period = q('#rankingPeriodSelectV136');
     const risk = q('#rankingRiskSelectV198');
 
@@ -4432,6 +4515,12 @@ function setCdiSort(dir){
       universeSelect.dataset.v685Bound = '1';
       universeSelect.addEventListener('change', function(){
         try{ activeRankFilter = clsSelect?.value && clsSelect.value !== 'todos' ? clsSelect.value : (universeSelect.value || 'todos'); }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    if(viewSelect && viewSelect.dataset.v790Bound !== '1'){
+      viewSelect.dataset.v790Bound = '1';
+      viewSelect.addEventListener('change', function(){
         setTimeout(renderRankingsV562, 0);
       });
     }
@@ -11851,7 +11940,7 @@ function initComparWorkspaceV723(){
 document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
-console.info('[Catálogo CAIXA] Rankings V788 ativo · tabela sem faixa intermediária');
+console.info('[Catálogo CAIXA] Rankings V790 ativo · universo e visão analítica');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 

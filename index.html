@@ -245,7 +245,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app-v767.js?v=indicadores-v789"></script>
+<script defer="" src="app-v767.js?v=rankings-v790"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -3209,7 +3209,7 @@ html.desktop-responsive-fit-v688 body{
 </style>
 <link rel="stylesheet" href="comparador-v783.css?v=comparador-v783"/>
 <link rel="stylesheet" href="indicadores-v787.css?v=indicadores-v787"/>
-<link rel="stylesheet" href="rankings-v788.css?v=rankings-v788"/>
+<link rel="stylesheet" href="rankings-v790.css?v=rankings-v790"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -3589,7 +3589,7 @@ html.desktop-responsive-fit-v688 body{
 <div class="section-gap section-expanded" id="rankingsSection" aria-expanded="true">
 <div class="ranking-head">
 <div class="ranking-title-group">
-<h2 class="section-title-v302 page-section-title-v302 ranking-title-hero-v305 section-hero-premium-v306"><span aria-hidden="true" class="section-title-icon-v302">🏆</span><span class="section-title-text-v302">Rankings de fundos</span><span class="ranking-title-info-v788" tabindex="0" role="img" aria-label="Com Categoria igual a Todos, o ranking exibe o fundo de maior retorno de cada categoria. Fundos sem histórico completo para o período selecionado não participam da classificação." title="Com Categoria = Todos, o ranking exibe o fundo de maior retorno de cada categoria. Fundos sem histórico completo para o período selecionado não participam da classificação.">ⓘ</span></h2>
+<h2 class="section-title-v302 page-section-title-v302 ranking-title-hero-v305 section-hero-premium-v306"><span aria-hidden="true" class="section-title-icon-v302">🏆</span><span class="section-title-text-v302">Rankings de fundos</span><span class="ranking-title-info-v790" tabindex="0" role="img" aria-label="Líder por categoria exibe o fundo com maior rentabilidade no período selecionado em cada categoria. Diversificados exclui fundos concentrados em uma única companhia ou ação." title="Líder por categoria: fundo com maior rentabilidade no período em cada categoria. Diversificados: exclui estratégias concentradas em uma única companhia ou ação.">ⓘ</span></h2>
 <p class="ranking-section-subtitle-v136">Compare os fundos por desempenho dentro de cada categoria.</p>
 </div>
 </div>
@@ -3641,10 +3641,9 @@ html.desktop-responsive-fit-v688 body{
 </div>
 <div class="ranking-control-card-v136 ranking-universe-control-v685">
 <label for="rankingUniverseSelectV685">Universo</label>
-<select aria-label="Selecionar o universo do ranking" class="ranking-select-v136" id="rankingUniverseSelectV685">
-<option value="todos">Todos os fundos</option>
+<select aria-label="Selecionar o universo do ranking" class="ranking-select-v136" id="rankingUniverseSelectV685"><option value="todos">Todos</option>
 <option title="Exclui os Fundos Mútuos de Privatização" value="sem-fmp">Sem FMP</option>
-</select>
+<option title="Exclui fundos com estratégia concentrada em uma única companhia ou ação" value="diversificados">Diversificados</option></select>
 </div>
 <div class="ranking-control-card-v136 ranking-category-control-v685">
 <label for="rankingClassSelectV136">Categoria</label>
@@ -3670,6 +3669,12 @@ html.desktop-responsive-fit-v688 body{
 <option value="Arrojado">Arrojado</option>
 <option value="Agressivo">Agressivo</option>
 <option value="Sem classificação">Sem classificação</option>
+</select>
+</div><div class="ranking-control-card-v136 ranking-view-control-v790">
+<label for="rankingViewSelectV790">Visão</label>
+<select aria-label="Selecionar a visão do ranking" class="ranking-select-v136" id="rankingViewSelectV790">
+<option value="geral">Ranking geral</option>
+<option selected value="lideres">Líder por categoria</option>
 </select>
 </div>
 <div class="ranking-control-card-v136 ranking-criterion-control-v762" aria-label="Critério do ranking">
