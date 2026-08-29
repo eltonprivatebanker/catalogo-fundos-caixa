@@ -1,0 +1,139 @@
+/* ============================================================
+   V807 — INDICADORES DE MERCADO · HIERARQUIA MAIS DIRETA
+   Remove visualmente a camada redundante "Painel consolidado" e
+   integra o seletor 12/24/36 meses ao Comparativo de desempenho.
+   Não altera dados, cálculos ou funcionamento dos filtros.
+   ============================================================ */
+
+/* O antigo invólucro deixa de se comportar como um card independente. */
+html #sec-mercado-painel.market-panel-flat-v807{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  padding:0!important;
+}
+
+/* O conteúdo passa a ser parte natural da seção de Indicadores. */
+html #sec-mercado-painel > #sec-painel-body.market-body-flat-v807{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  padding-top:0!important;
+}
+
+/* Cabeçalho do comparativo recebe título à esquerda e período à direita. */
+html #sec-mercado-painel .monthly-comparison-head-v580{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:end!important;
+  column-gap:18px!important;
+  row-gap:10px!important;
+}
+
+html #sec-mercado-painel .monthly-comparison-head-v580 > div:first-child{
+  min-width:0!important;
+}
+
+html #sec-mercado-painel .monthly-comparison-period-v807{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  min-width:0!important;
+  margin-left:auto!important;
+}
+
+html #sec-mercado-painel .monthly-comparison-period-v807 .market-period-tabs{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:9px!important;
+  width:auto!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+html #sec-mercado-painel .monthly-comparison-period-v807 .indic-tabs-label{
+  margin:0 3px 0 0!important;
+  white-space:nowrap!important;
+  color:#aeb6c7!important;
+  font-size:.64rem!important;
+  font-weight:800!important;
+  letter-spacing:.055em!important;
+  text-transform:uppercase!important;
+}
+
+html #sec-mercado-painel .monthly-comparison-period-v807 .indic-tabs{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin:0!important;
+}
+
+/* Mantém os botões compactos, agora como controle contextual do gráfico. */
+html #sec-mercado-painel .monthly-comparison-period-v807 .indic-tabs button{
+  min-width:72px!important;
+  min-height:31px!important;
+  padding:6px 11px!important;
+  border-radius:10px!important;
+  font-size:.62rem!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+
+/* Abaixo de notebooks largos, o seletor cai para a segunda linha sem apertar o título. */
+@media (max-width:1180px){
+  html #sec-mercado-painel .monthly-comparison-head-v580{
+    grid-template-columns:minmax(0,1fr)!important;
+    align-items:start!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807{
+    justify-content:flex-start!important;
+    margin-left:0!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807 .market-period-tabs{
+    justify-content:flex-start!important;
+  }
+}
+
+/* Mobile: controles roláveis em uma faixa leve, sem criar outro card. */
+@media (max-width:768px){
+  html #sec-mercado-painel .monthly-comparison-period-v807{
+    width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807 .market-period-tabs{
+    width:max-content!important;
+    min-width:max-content!important;
+    padding-bottom:2px!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807 .indic-tabs-label{
+    font-size:.60rem!important;
+  }
+
+  html #sec-mercado-painel .monthly-comparison-period-v807 .indic-tabs button{
+    min-width:68px!important;
+    min-height:30px!important;
+    padding:6px 10px!important;
+  }
+}
