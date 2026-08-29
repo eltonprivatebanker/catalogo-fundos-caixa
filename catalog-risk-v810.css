@@ -1,0 +1,229 @@
+/* ============================================================
+   V810 — CATÁLOGO · PERFIL DE RISCO
+   Camada visual/semântica para o filtro de risco do catálogo.
+   O select original continua existindo e controlando a filtragem.
+   ============================================================ */
+
+@media (min-width:769px){
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+    display:grid!important;
+    grid-template-columns:128px minmax(220px,240px)!important;
+    align-items:center!important;
+    justify-content:start!important;
+    gap:14px!important;
+    min-width:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label{
+    margin:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    color:#a9c3f2!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    line-height:1.1!important;
+    letter-spacing:.17em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198.catalog-risk-v810{
+    position:relative!important;
+    width:100%!important;
+    min-width:220px!important;
+    max-width:240px!important;
+    height:36px!important;
+    overflow:visible!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  /* Select original permanece disponível para a lógica, mas sai da camada visual. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810 > #catalogRiskSelectV198{
+    position:absolute!important;
+    width:1px!important;
+    min-width:1px!important;
+    max-width:1px!important;
+    height:1px!important;
+    min-height:1px!important;
+    margin:-1px!important;
+    padding:0!important;
+    border:0!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810 > span:not(.catalog-risk-trigger-label-v810):not(.catalog-risk-chevron-v810){
+    display:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v810{
+    position:relative!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    width:100%!important;
+    height:36px!important;
+    margin:0!important;
+    padding:0 13px 0 14px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    background:rgba(12,16,30,.88)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+    color:#e7ebf4!important;
+    cursor:pointer!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.73rem!important;
+    font-weight:750!important;
+    line-height:1!important;
+    text-align:left!important;
+    transition:border-color .16s ease, background .16s ease, box-shadow .16s ease, color .16s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v810:hover{
+    border-color:rgba(167,184,215,.40)!important;
+    background:rgba(15,20,36,.96)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v810:focus-visible{
+    outline:0!important;
+    border-color:rgba(232,187,106,.62)!important;
+    box-shadow:0 0 0 3px rgba(200,151,58,.10)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-open-v810 .catalog-risk-trigger-v810{
+    border-color:rgba(232,187,106,.56)!important;
+    background:rgba(18,21,31,.98)!important;
+    box-shadow:0 0 0 3px rgba(200,151,58,.07)!important;
+  }
+
+  /* Dourado apenas quando existe filtro específico aplicado. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-filtered-v810 .catalog-risk-trigger-v810{
+    border-color:rgba(232,187,106,.58)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.145),rgba(200,151,58,.065))!important;
+    color:#f4f1e9!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-label-v810{
+    display:block!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-chevron-v810{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    width:16px!important;
+    height:16px!important;
+    color:#8f9bb2!important;
+    font-size:.78rem!important;
+    font-weight:900!important;
+    line-height:1!important;
+    transform:rotate(0deg)!important;
+    transition:transform .16s ease,color .16s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-filtered-v810 .catalog-risk-chevron-v810,
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-open-v810 .catalog-risk-chevron-v810{
+    color:#e8bb6a!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-open-v810 .catalog-risk-chevron-v810{
+    transform:rotate(180deg)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-menu-v810{
+    position:absolute!important;
+    z-index:3000!important;
+    top:calc(100% + 7px)!important;
+    left:0!important;
+    display:none!important;
+    width:100%!important;
+    min-width:220px!important;
+    margin:0!important;
+    padding:6px!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    border-radius:11px!important;
+    box-sizing:border-box!important;
+    background:#111622!important;
+    box-shadow:0 16px 42px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.025)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v810.is-open-v810 .catalog-risk-menu-v810{
+    display:block!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810{
+    position:relative!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    width:100%!important;
+    min-height:32px!important;
+    margin:0!important;
+    padding:7px 9px 7px 10px!important;
+    border:0!important;
+    border-radius:7px!important;
+    box-sizing:border-box!important;
+    background:transparent!important;
+    color:#dce3ef!important;
+    cursor:pointer!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.69rem!important;
+    font-weight:650!important;
+    line-height:1.15!important;
+    outline:0!important;
+    user-select:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810:hover,
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810.is-active-v810{
+    background:rgba(148,163,184,.10)!important;
+    color:#f2f5fb!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810[aria-selected="true"]{
+    background:rgba(200,151,58,.12)!important;
+    color:#f0c66f!important;
+    font-weight:800!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810[data-empty="true"]{
+    color:#b8c1d2!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-check-v810{
+    visibility:hidden!important;
+    color:#e8bb6a!important;
+    font-size:.72rem!important;
+    font-weight:900!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-option-v810[aria-selected="true"] .catalog-risk-option-check-v810{
+    visibility:visible!important;
+  }
+
+  @media (max-width:1050px){
+    html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+      grid-template-columns:118px minmax(200px,220px)!important;
+      gap:10px!important;
+    }
+
+    html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198.catalog-risk-v810{
+      min-width:200px!important;
+      max-width:220px!important;
+    }
+  }
+}
