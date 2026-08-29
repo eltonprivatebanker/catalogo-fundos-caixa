@@ -1,0 +1,251 @@
+/* ============================================================
+   V813 — CATÁLOGO · PERFIL DE RISCO
+   Botão definitivo no HTML: sem troca visual no carregamento.
+   Dimensão compacta: 205 x 30 px no desktop.
+   ============================================================ */
+
+@media (min-width:769px){
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+    display:grid!important;
+    grid-template-columns:128px 205px!important;
+    align-items:center!important;
+    justify-content:start!important;
+    gap:12px!important;
+    min-width:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label{
+    margin:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    display:block!important;
+    color:#a9c3f2!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    line-height:1.1!important;
+    letter-spacing:.17em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198.catalog-risk-v813{
+    position:relative!important;
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:8px!important;
+    background:transparent!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Select original continua como fonte da lógica, mas não participa do layout. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v813 > #catalogRiskSelectV198{
+    position:absolute!important;
+    width:1px!important;
+    min-width:1px!important;
+    max-width:1px!important;
+    height:1px!important;
+    min-height:1px!important;
+    margin:-1px!important;
+    padding:0!important;
+    border:0!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v813{
+    position:absolute!important;
+    inset:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    margin:0!important;
+    padding:0 11px 0 12px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:8px!important;
+    box-sizing:border-box!important;
+    background:rgba(12,16,30,.88)!important;
+    box-shadow:none!important;
+    outline:0!important;
+    color:#e4e9f2!important;
+    cursor:pointer!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.69rem!important;
+    font-weight:700!important;
+    line-height:1!important;
+    text-align:left!important;
+    transition:border-color .14s ease,background .14s ease,color .14s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v813:hover{
+    border-color:rgba(167,184,215,.35)!important;
+    background:rgba(15,20,36,.95)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v813:focus-visible{
+    outline:1px solid rgba(159,184,234,.42)!important;
+    outline-offset:2px!important;
+    box-shadow:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v813.is-open-v813:not(.is-filtered-v813) .catalog-risk-trigger-v813{
+    border-color:rgba(200,151,58,.40)!important;
+    background:rgba(14,18,31,.96)!important;
+    box-shadow:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v813.is-filtered-v813 .catalog-risk-trigger-v813{
+    border-color:rgba(216,165,72,.50)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.095),rgba(200,151,58,.035))!important;
+    color:#f0ece3!important;
+    box-shadow:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-label-v813{
+    display:block!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-chevron-v813{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    width:12px!important;
+    height:12px!important;
+    color:#8b97ad!important;
+    font-size:.64rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    transform:rotate(0deg)!important;
+    transition:transform .14s ease,color .14s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v813.is-open-v813 .catalog-risk-chevron-v813{
+    transform:rotate(180deg)!important;
+    color:#d9ad5a!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v813.is-filtered-v813 .catalog-risk-chevron-v813{
+    color:#d9ad5a!important;
+  }
+}
+
+/* Menu em portal no body, compacto e fora de qualquer overflow do catálogo. */
+html body .catalog-risk-menu-v813{
+  position:fixed!important;
+  z-index:2147483000!important;
+  display:none!important;
+  width:205px!important;
+  min-width:205px!important;
+  max-width:205px!important;
+  margin:0!important;
+  padding:4px!important;
+  border:1px solid rgba(148,163,184,.20)!important;
+  border-radius:9px!important;
+  box-sizing:border-box!important;
+  background:#111622!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.02)!important;
+  overflow:hidden!important;
+}
+
+html body .catalog-risk-menu-v813.is-open-v813{
+  display:block!important;
+}
+
+html body .catalog-risk-option-v813{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  width:100%!important;
+  min-height:29px!important;
+  margin:0!important;
+  padding:5px 8px 5px 9px!important;
+  border:0!important;
+  border-radius:6px!important;
+  box-sizing:border-box!important;
+  background:transparent!important;
+  color:#d9e0eb!important;
+  cursor:pointer!important;
+  font-family:'Inter',sans-serif!important;
+  font-size:.67rem!important;
+  font-weight:620!important;
+  line-height:1.12!important;
+  outline:0!important;
+  user-select:none!important;
+}
+
+html body .catalog-risk-option-v813:hover,
+html body .catalog-risk-option-v813.is-active-v813{
+  background:rgba(148,163,184,.080)!important;
+  color:#f1f4f9!important;
+}
+
+html body .catalog-risk-option-v813[aria-selected="true"]{
+  background:rgba(200,151,58,.065)!important;
+  color:#e6bf71!important;
+  font-weight:730!important;
+}
+
+html body .catalog-risk-option-v813[data-empty="true"]{
+  color:#c4ccd9!important;
+}
+
+html body .catalog-risk-option-v813[data-empty="true"][aria-selected="true"]{
+  color:#e1c17d!important;
+}
+
+html body .catalog-risk-option-check-v813{
+  visibility:hidden!important;
+  color:#e2b85f!important;
+  font-size:.66rem!important;
+  font-weight:900!important;
+}
+
+html body .catalog-risk-option-v813[aria-selected="true"] .catalog-risk-option-check-v813{
+  visibility:visible!important;
+}
+
+@media (min-width:769px) and (max-width:1050px){
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+    grid-template-columns:118px 195px!important;
+    gap:10px!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198.catalog-risk-v813,
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v813,
+  html body .catalog-risk-menu-v813{
+    width:195px!important;
+    min-width:195px!important;
+    max-width:195px!important;
+  }
+}
+
+@media (max-width:768px){
+  html body .catalog-risk-menu-v813{
+    display:none!important;
+  }
+}
