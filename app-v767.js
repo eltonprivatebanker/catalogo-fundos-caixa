@@ -10785,6 +10785,36 @@ document.addEventListener('DOMContentLoaded', function(){
     return map[norm] || raw;
   }
 
+  function rankingTimeV795(value){
+    const raw = rankingPrettyOperationalV794(value);
+    if(!raw || raw==='—') return raw;
+
+    // 17:00 / 17h00 -> 17h; 17:30 / 17h30 -> 17h30
+    const m = raw.match(/^(\d{1,2})(?::|h)(\d{2})$/i);
+    if(m){
+      return m[2] === '00' ? `${Number(m[1])}h` : `${Number(m[1])}h${m[2]}`;
+    }
+    return raw;
+  }
+
+  function rankingStrategyV795(value){
+    const raw = rankingPrettyOperationalV794(value);
+    if(!raw || raw==='—') return {primary:raw, secondary:''};
+
+    // Alguns registros misturam estratégia e permissão em uma única frase,
+    // ex.: "RF Crédito Privado permite Risco Mercado".
+    const m = raw.match(/^(.*?)\s+permite\s+(.+)$/i);
+    if(!m) return {primary:raw, secondary:''};
+
+    let secondary = String(m[2] || '').trim();
+    if(/^risco\s+mercado$/i.test(secondary)) secondary = 'risco de mercado';
+
+    return {
+      primary:String(m[1] || '').trim() || raw,
+      secondary:secondary ? `Permite ${secondary}` : ''
+    };
+  }
+
   function buildRankingSpotlightFactsV794(row){
     const val = (keys, fallback='—') => {
       try{
@@ -10839,12 +10869,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const start = rankingStartDateV793(row);
 
     const refTxt = rankingPrettyOperationalV794(d.benchmark?.texto);
-    const strategyTxt = rankingPrettyOperationalV794(d.estrategia?.texto);
+    const strategyV795 = rankingStrategyV795(d.estrategia?.texto);
+    const strategyTxt = strategyV795.primary;
+    const strategySecondaryV795 = strategyV795.secondary;
     const taxClassTxt = rankingPrettyOperationalV794(d.tributacao?.texto);
     const captacaoTxt = rankingPrettyOperationalV794(d.captacao?.texto);
     const adiantamentoTxt = rankingPrettyOperationalV794(d.adiantamento?.texto);
-    const horaAplic = rankingPrettyOperationalV794(d.horarios?.aplicacao);
-    const horaResg = rankingPrettyOperationalV794(d.horarios?.resgate);
+    const horaAplic = rankingTimeV795(d.horarios?.aplicacao);
+    const horaResg = rankingTimeV795(d.horarios?.resgate);
 
     const estimated = '<small class="ranking-v794-estimated">indicativo</small>';
 
@@ -10870,9 +10902,13 @@ document.addEventListener('DOMContentLoaded', function(){
             <span>Adiantamento</span>
             <strong class="status-${htmlAttr(adiCls)} ranking-v794-status"><i>${statusDot(adiCls)}</i>${htmlAttr(adiantamentoTxt)}</strong>
           </div>
-          <div class="ranking-v794-card ranking-v794-hours">
+          <div class="ranking-v794-card ranking-v794-hours ranking-v795-hours">
             <span>Horário limite</span>
-            <strong><em>Aplicação ${htmlAttr(horaAplic)}</em><em>Resgate ${htmlAttr(horaResg)}</em></strong>
+            <strong class="ranking-v795-hours-line">
+              <span>Aplicação ${htmlAttr(horaAplic)}</span>
+              <i aria-hidden="true">·</i>
+              <span>Resgate ${htmlAttr(horaResg)}</span>
+            </strong>
           </div>
         </div>
       </section>
@@ -10905,9 +10941,12 @@ document.addEventListener('DOMContentLoaded', function(){
             <span>Referência</span>
             <strong>${htmlAttr(refTxt)}${d.benchmark?.estimado ? estimated : ''}</strong>
           </div>
-          <div class="ranking-v794-card">
+          <div class="ranking-v794-card ranking-v795-strategy-card">
             <span>Estratégia</span>
             <strong>${htmlAttr(strategyTxt)}${d.estrategia?.estimada ? estimated : ''}</strong>
+            ${strategySecondaryV795
+              ? `<small class="ranking-v795-strategy-secondary">${htmlAttr(strategySecondaryV795)}</small>`
+              : ''}
           </div>
           <div class="ranking-v794-card">
             <span>Tributação</span>
@@ -10988,16 +11027,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const catLabel = catAbrev[cat] || cat || '—';
     const riskV793 = String(row['Perfil de Risco'] || '').trim();
     const plStr = pl ? ' · PL R$ '+(pl>=1000?(pl/1000).toFixed(1)+'bi':pl.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi') : '';
-    const periodHeaderV794 = String(rankingContextV793?.periodLabel || '').trim();
-    const rankingHeaderV794 = rankingContextV793
-      ? (rankingContextV793.isLeaderView ? 'Líder da categoria' : 'Ranking geral') +
-        (periodHeaderV794 ? ' · ' + periodHeaderV794 : '')
-      : '';
-
     if(rankingContextV793){
       el('fspotMeta').innerHTML =
-        '<span class="ranking-v794-rank-context">' + htmlAttr(rankingHeaderV794) + '</span>' +
-        '<span class="ranking-v794-fund-context">' +
+        '<span class="ranking-v794-fund-context ranking-v795-fund-context">' +
           htmlAttr(catLabel + (riskV793 ? ' · ' + riskV793 : '') + plStr) +
         '</span>';
     }else{
@@ -11098,8 +11130,10 @@ document.addEventListener('DOMContentLoaded', function(){
       const periodV793 = String(rankingContextV793.periodLabel || '').trim();
       const leaderV793 = !!rankingContextV793.isLeaderView;
 
-      badge.textContent = posV793 > 0 ? '#' + posV793 : 'Ranking';
-      badge.className = 'fspot-badge best ranking-v793-context-badge';
+      const rankTypeV795 = leaderV793 ? 'Líder' : 'Ranking geral';
+      const rankPositionV795 = posV793 > 0 ? '#' + posV793 : 'Ranking';
+      badge.textContent = [rankPositionV795, rankTypeV795, periodV793].filter(Boolean).join(' · ');
+      badge.className = 'fspot-badge best ranking-v793-context-badge ranking-v795-context-badge';
 
       if(ctxV793){
         ctxV793.hidden = true;
@@ -11107,6 +11141,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }
       overlayV793?.classList.add('ranking-v793-mode');
       overlayV793?.classList.add('ranking-v794-mode');
+      overlayV793?.classList.add('ranking-v795-mode');
     }else{
       const kind = _spotlightKind || 'best';
       badge.textContent = kind==='best' ? '🏆 Melhor 12M' : '📉 Pior 12M';
@@ -11114,6 +11149,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if(ctxV793){ ctxV793.hidden = true; ctxV793.innerHTML = ''; }
       overlayV793?.classList.remove('ranking-v793-mode');
       overlayV793?.classList.remove('ranking-v794-mode');
+      overlayV793?.classList.remove('ranking-v795-mode');
     }
 
     openFundSpotlight();
@@ -11139,6 +11175,7 @@ document.addEventListener('DOMContentLoaded', function(){
     ov.classList.remove('open');
     ov.classList.remove('ranking-v793-mode');
     ov.classList.remove('ranking-v794-mode');
+    ov.classList.remove('ranking-v795-mode');
     document.body.style.overflow = '';
     ov.removeEventListener('click', _spotlightBackdropClose);
     document.removeEventListener('keydown', _spotlightEscClose);
@@ -12363,6 +12400,7 @@ console.info('[Catálogo CAIXA] Rankings V792 ativo · categoria priorizada na v
 
 console.info('[Catálogo CAIXA] Rankings V793 ativo · detalhes do fundo por clique');
 console.info('[Catálogo CAIXA] Rankings V794 ativo · hierarquia semântica do modal');
+console.info('[Catálogo CAIXA] Rankings V795 ativo · ajustes finos do modal');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
