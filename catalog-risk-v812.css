@@ -1,0 +1,301 @@
+/* ============================================================
+   V812 — CATÁLOGO · PERFIL DE RISCO
+   - elimina o layout shift no carregamento
+   - mantém menu em portal no body
+   - refina bordas, pesos, espaçamentos e estado selecionado
+   ============================================================ */
+
+@media (min-width:769px){
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+    display:grid!important;
+    grid-template-columns:128px minmax(220px,240px)!important;
+    align-items:center!important;
+    justify-content:start!important;
+    gap:14px!important;
+    min-width:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label{
+    margin:0!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    color:#a9c3f2!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    line-height:1.1!important;
+    letter-spacing:.17em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  /*
+     Reserva desde o primeiro frame exatamente a dimensão final.
+     Antes do JS, ::before/::after desenham uma réplica do botão final.
+     Assim o navegador não alterna entre select nativo e botão customizado.
+  */
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198{
+    position:relative!important;
+    width:100%!important;
+    min-width:220px!important;
+    max-width:240px!important;
+    height:36px!important;
+    min-height:36px!important;
+    overflow:visible!important;
+    border:0!important;
+    background:transparent!important;
+    box-sizing:border-box!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198:not(.catalog-risk-v812)::before{
+    content:'Todos os perfis';
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
+    display:flex!important;
+    align-items:center!important;
+    box-sizing:border-box!important;
+    padding:0 36px 0 14px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:10px!important;
+    background:rgba(12,16,30,.88)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.02)!important;
+    color:#e4e9f2!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.72rem!important;
+    font-weight:700!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198:not(.catalog-risk-v812)::after{
+    content:'⌄';
+    position:absolute!important;
+    z-index:1!important;
+    right:13px!important;
+    top:50%!important;
+    transform:translateY(-52%)!important;
+    color:#8b97ad!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.70rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    pointer-events:none!important;
+  }
+
+  /* O select fica transparente, mas clicável, até o JS concluir a melhoria. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198:not(.catalog-risk-v812) > #catalogRiskSelectV198{
+    position:absolute!important;
+    inset:0!important;
+    z-index:2!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:36px!important;
+    min-height:36px!important;
+    margin:0!important;
+    padding:0!important;
+    opacity:0!important;
+    cursor:pointer!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198:not(.catalog-risk-v812) > span{
+    display:none!important;
+  }
+
+  /* Depois do JS, o select original fica somente como fonte de estado/lógica. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812 > #catalogRiskSelectV198{
+    position:absolute!important;
+    width:1px!important;
+    min-width:1px!important;
+    max-width:1px!important;
+    height:1px!important;
+    min-height:1px!important;
+    margin:-1px!important;
+    padding:0!important;
+    border:0!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812 > span:not(.catalog-risk-trigger-label-v812):not(.catalog-risk-chevron-v812){
+    display:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v812{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    width:100%!important;
+    height:36px!important;
+    margin:0!important;
+    padding:0 13px 0 14px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    background:rgba(12,16,30,.88)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.02)!important;
+    color:#e4e9f2!important;
+    cursor:pointer!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.72rem!important;
+    font-weight:700!important;
+    line-height:1!important;
+    text-align:left!important;
+    transition:border-color .14s ease,background .14s ease,color .14s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v812:hover{
+    border-color:rgba(167,184,215,.36)!important;
+    background:rgba(15,20,36,.95)!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-v812:focus-visible{
+    outline:2px solid rgba(159,184,234,.32)!important;
+    outline-offset:2px!important;
+    box-shadow:none!important;
+  }
+
+  /* Aberto não significa filtro aplicado: apenas uma borda dourada discreta. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812.is-open-v812:not(.is-filtered-v812) .catalog-risk-trigger-v812{
+    border-color:rgba(200,151,58,.42)!important;
+    background:rgba(14,18,31,.96)!important;
+    box-shadow:none!important;
+  }
+
+  /* Filtro aplicado: aquecimento leve, sem aparência de CTA principal. */
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812.is-filtered-v812 .catalog-risk-trigger-v812{
+    border-color:rgba(216,165,72,.50)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.105),rgba(200,151,58,.040))!important;
+    color:#f0ece3!important;
+    box-shadow:none!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-trigger-label-v812{
+    display:block!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-chevron-v812{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    width:14px!important;
+    height:14px!important;
+    color:#8b97ad!important;
+    font-size:.70rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    transform:rotate(0deg)!important;
+    transition:transform .14s ease,color .14s ease!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812.is-open-v812 .catalog-risk-chevron-v812{
+    transform:rotate(180deg)!important;
+    color:#d9ad5a!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-v812.is-filtered-v812 .catalog-risk-chevron-v812{
+    color:#d9ad5a!important;
+  }
+}
+
+/* Portal no body: impossível ser recortado pelos containers do catálogo. */
+html body .catalog-risk-menu-v812{
+  position:fixed!important;
+  z-index:2147483000!important;
+  display:none!important;
+  margin:0!important;
+  padding:5px!important;
+  border:1px solid rgba(148,163,184,.20)!important;
+  border-radius:10px!important;
+  box-sizing:border-box!important;
+  background:#111622!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.44),inset 0 1px 0 rgba(255,255,255,.02)!important;
+  overflow:hidden!important;
+}
+
+html body .catalog-risk-menu-v812.is-open-v812{
+  display:block!important;
+}
+
+html body .catalog-risk-option-v812{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  width:100%!important;
+  min-height:31px!important;
+  margin:0!important;
+  padding:6px 9px 6px 10px!important;
+  border:0!important;
+  border-radius:7px!important;
+  box-sizing:border-box!important;
+  background:transparent!important;
+  color:#d9e0eb!important;
+  cursor:pointer!important;
+  font-family:'Inter',sans-serif!important;
+  font-size:.69rem!important;
+  font-weight:620!important;
+  line-height:1.12!important;
+  outline:0!important;
+  user-select:none!important;
+}
+
+html body .catalog-risk-option-v812:hover,
+html body .catalog-risk-option-v812.is-active-v812{
+  background:rgba(148,163,184,.085)!important;
+  color:#f1f4f9!important;
+}
+
+html body .catalog-risk-option-v812[aria-selected="true"]{
+  background:rgba(200,151,58,.070)!important;
+  color:#e6bf71!important;
+  font-weight:730!important;
+}
+
+html body .catalog-risk-option-v812[data-empty="true"]{
+  color:#c4ccd9!important;
+}
+
+html body .catalog-risk-option-v812[data-empty="true"][aria-selected="true"]{
+  color:#e1c17d!important;
+}
+
+html body .catalog-risk-option-check-v812{
+  visibility:hidden!important;
+  color:#e2b85f!important;
+  font-size:.69rem!important;
+  font-weight:900!important;
+}
+
+html body .catalog-risk-option-v812[aria-selected="true"] .catalog-risk-option-check-v812{
+  visibility:visible!important;
+}
+
+@media (min-width:769px) and (max-width:1050px){
+  html body #sec-fundos #fundFilterShell .catalog-risk-filter-v198.catalog-risk-inline-v203{
+    grid-template-columns:118px minmax(200px,220px)!important;
+    gap:10px!important;
+  }
+
+  html body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198{
+    min-width:200px!important;
+    max-width:220px!important;
+  }
+}
+
+@media (max-width:768px){
+  html body .catalog-risk-menu-v812{
+    display:none!important;
+  }
+}
