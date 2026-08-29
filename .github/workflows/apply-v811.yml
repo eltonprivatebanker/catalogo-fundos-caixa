@@ -1,0 +1,46 @@
+name: Aplicar Catalog Risk V811
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v811.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V811
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          old = s
+          s = s.replace('<link rel="stylesheet" href="catalog-risk-v810.css?v=catalog-risk-v810"/>', '<link rel="stylesheet" href="catalog-risk-v811.css?v=catalog-risk-v811"/>')
+          s = s.replace('<script src="catalog-risk-v810.js?v=catalog-risk-v810" defer></script>', '<script src="catalog-risk-v811.js?v=catalog-risk-v811" defer></script>')
+          if 'catalog-risk-v811.css?v=catalog-risk-v811' not in s:
+              s = s.replace('</head>', '<link rel="stylesheet" href="catalog-risk-v811.css?v=catalog-risk-v811"/>\n</head>')
+          if 'catalog-risk-v811.js?v=catalog-risk-v811' not in s:
+              s = s.replace('</body>', '<script src="catalog-risk-v811.js?v=catalog-risk-v811" defer></script>\n</body>')
+          if s == old:
+              raise SystemExit('V811 já estava carregada no index.html')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V811
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V811: corrigir dropdown de perfil de risco'
+          git push origin HEAD:'Testes-da-versão-01'
