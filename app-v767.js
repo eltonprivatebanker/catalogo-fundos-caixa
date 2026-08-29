@@ -12416,6 +12416,7 @@ console.info('[Catálogo CAIXA] Rankings V795 ativo · ajustes finos do modal');
 console.info('[Catálogo CAIXA] Rankings V796 ativo · extremos semânticos e alinhados');
 console.info('[Catálogo CAIXA] Indicadores V797 ativos · Evolução e Retorno no período');
 console.info('[Catálogo CAIXA] Indicadores V799 ativos · acumulação composta e fonte única mensal');
+console.info('[Catálogo CAIXA] Indicadores V800 ativos · tabela EUA agrupada e mês/ano explícito');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
@@ -25002,6 +25003,15 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     return base;
   }
 
+  // V800 — na tabela, mês e ano ficam sempre explícitos.
+  // Isso evita ambiguidade entre a visão 2026 e a janela móvel de 12M.
+  function tableLabelFromKeyV800(key){
+    const monthIndex = Math.max(0, Math.min(11, Number(String(key).slice(5,7)) - 1));
+    const base = monthNameV445(monthIndex);
+    const year = String(key).slice(2,4);
+    return year ? `${base}/${year}` : base;
+  }
+
   function normalizeMonthKeyV445(item){
     if(!item || typeof item !== 'object') return '';
     const raw = String(
@@ -25661,27 +25671,53 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   }
 
   function monthlyUsHeaderCellV593(labelHtml, ariaLabel, usLabel){
-    return `<th class="monthly-us-only-v576" scope="col"><button aria-label="Alternar moeda do ${ariaLabel} entre USD e BRL" class="monthly-us-header-toggle-v593" data-monthly-us-header-toggle-v593 type="button">${labelHtml} <small>${usLabel}</small></button></th>`;
+    return `<th class="monthly-us-only-v576" scope="col">${labelHtml}</th>`;
   }
 
   function renderMonthlyHeaderV446(table, activeView){
     if(!table) return;
     table.dataset.viewV446 = activeView;
-    const headRow = table.querySelector('thead tr');
-    if(!headRow) return;
+
+    const thead = table.tHead || table.querySelector('thead');
+    if(!thead) return;
+
     const usLabel = usCurrency === 'brl' ? 'BRL' : 'USD';
     const desktop = isDesktopMonthlyV576();
+
     if(activeView === 'all'){
       if(desktop){
-        const usCols = `${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}${monthlyUsHeaderCellV593('Dow Jones', 'Dow Jones', usLabel)}`;
-        headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibovespa</th><th scope="col">Dólar</th>${usCols}`;
+        thead.innerHTML = `
+          <tr class="monthly-table-group-row-v800">
+            <th scope="col" rowspan="2" class="monthly-table-rowspan-v800">Mês</th>
+            <th scope="col" rowspan="2" class="monthly-table-rowspan-v800">CDI</th>
+            <th scope="col" rowspan="2" class="monthly-table-rowspan-v800">IPCA</th>
+            <th scope="col" rowspan="2" class="monthly-table-rowspan-v800">Ibovespa</th>
+            <th scope="col" rowspan="2" class="monthly-table-rowspan-v800">Dólar</th>
+            <th scope="colgroup" colspan="3" class="monthly-us-group-v800">
+              <button
+                type="button"
+                class="monthly-us-group-toggle-v800"
+                data-monthly-us-header-toggle-v593
+                aria-label="Alternar moeda dos índices dos EUA entre USD e BRL"
+                title="Índices dos EUA em ${usLabel}. Clique para alternar USD/BRL."
+              >
+                <span>Índices EUA</span>
+                <small>${usLabel}</small>
+              </button>
+            </th>
+          </tr>
+          <tr class="monthly-table-subhead-row-v800">
+            ${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}
+            ${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}
+            ${monthlyUsHeaderCellV593('Dow Jones', 'Dow Jones', usLabel)}
+          </tr>`;
       }else{
-        headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">Indicadores</th>`;
+        thead.innerHTML = `<tr><th scope="col">Mês</th><th scope="col">Indicadores</th></tr>`;
       }
     }else{
       const baseLabel = indicatorMetaV446[activeView]?.label || 'Indicador';
       const label = ['sp500','nasdaq','dow'].includes(activeView) ? `${baseLabel} ${usLabel}` : baseLabel;
-      headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">${label}</th>`;
+      thead.innerHTML = `<tr><th scope="col">Mês</th><th scope="col">${label}</th></tr>`;
     }
   }
 
@@ -25797,6 +25833,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     root.dataset.monthlyUsCurrencyV632 = usCurrency;
     root.dataset.monthlyAccumulationV799 = 'compound';
     root.dataset.monthlyUsCurrencyLabelV799 = usCurrencyCodeV799();
+    root.dataset.monthlyTableHeaderV800 = 'grouped-us';
     root.setAttribute(
       'aria-description',
       `Retornos acumulados por composição mês a mês. Índices dos EUA: ${usCurrencyMeaningV799()}.`
@@ -25860,7 +25897,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const tableKeysV789 = [...keys].reverse();
 
     tbody.innerHTML = tableKeysV789.map(key => {
-      const label = labelFromKeyV447(key);
+      const label = tableLabelFromKeyV800(key);
       if(activeView !== 'all'){
         const value = maps[activeView]?.get(key);
         return `<tr class="monthly-single-indicator-row-v633"><td>${label}</td><td class="${clsV445(value)}">${pctV445(value)}</td></tr>`;
