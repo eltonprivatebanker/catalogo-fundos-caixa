@@ -12415,6 +12415,7 @@ console.info('[Catálogo CAIXA] Rankings V794 ativo · hierarquia semântica do 
 console.info('[Catálogo CAIXA] Rankings V795 ativo · ajustes finos do modal');
 console.info('[Catálogo CAIXA] Rankings V796 ativo · extremos semânticos e alinhados');
 console.info('[Catálogo CAIXA] Indicadores V797 ativos · Evolução e Retorno no período');
+console.info('[Catálogo CAIXA] Indicadores V799 ativos · acumulação composta e fonte única mensal');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
@@ -25243,11 +25244,44 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   }
 
   function summaryValueForKeysV449(map, keys, directCandidates){
+    // V799 — fonte principal: a própria série mensal exibida no painel.
+    // Acumulado = produto de (1 + retorno_mensal) - 1.
+    // O dado direto (acum_12m / acum_ano etc.) só entra como fallback
+    // quando não existe nenhuma observação mensal utilizável.
+    const compoundedV799 = compoundV445(keys.map(key => map?.get(key)));
+    if(compoundedV799 !== null) return compoundedV799;
+
     for(const candidate of directCandidates){
       const n = toNumV445(candidate);
       if(n !== null) return n;
     }
-    return compoundV445(keys.map(key => map.get(key)));
+    return null;
+  }
+
+  function monthlySeriesCoverageV799(map, keys){
+    const total = Array.isArray(keys) ? keys.length : 0;
+    const available = (Array.isArray(keys) ? keys : [])
+      .reduce((count,key) => count + (toNumV445(map?.get(key)) !== null ? 1 : 0), 0);
+    return {available,total,complete:total > 0 && available === total};
+  }
+
+  function setSummaryCoverageV799(id, map, keys, rangeLabel){
+    const valueEl = document.getElementById(id);
+    const article = valueEl?.closest('article');
+    if(!article) return;
+
+    const coverage = monthlySeriesCoverageV799(map, keys);
+    article.dataset.monthlyCoverageV799 = coverage.complete ? 'complete' : 'partial';
+
+    const base = coverage.total
+      ? `${coverage.available}/${coverage.total} meses com dado`
+      : 'série mensal indisponível';
+
+    article.title = `${rangeLabel}: retorno acumulado por composição mês a mês · ${base}.`;
+    article.setAttribute(
+      'aria-description',
+      `${rangeLabel}. Retorno acumulado por composição mês a mês. ${base}.`
+    );
   }
 
   function setSummaryV445(id, value, label){
@@ -25259,6 +25293,42 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     el.className = clsV445(value);
   }
 
+  function usCurrencyCodeV799(){
+    return usCurrency === 'brl' ? 'BRL' : 'USD';
+  }
+
+  function usCurrencyMeaningV799(){
+    return usCurrency === 'brl'
+      ? 'retorno convertido para reais (BRL)'
+      : 'retorno do índice expresso em dólares (USD)';
+  }
+
+  function usIndicatorNameV799(key){
+    return ({
+      sp500:'S&P 500',
+      nasdaq:'Nasdaq',
+      dow:'Dow Jones'
+    })[key] || key;
+  }
+
+  function setUsSummaryV799(id, value, key){
+    const baseLabel = usIndicatorNameV799(key);
+    const code = usCurrencyCodeV799();
+    setSummaryV445(id,value,`${baseLabel} ${code}`);
+
+    const valueEl = document.getElementById(id);
+    const article = valueEl?.closest('article');
+    const labelEl = article?.querySelector('span');
+
+    if(labelEl){
+      labelEl.innerHTML = `${baseLabel} <small class="monthly-us-unit-v799">${code}</small>`;
+    }
+
+    if(article){
+      article.dataset.monthlyUsCurrencyV799 = code;
+    }
+  }
+
   const indicatorMetaV446 = {
     all:{label:'Todos'},
     cdi:{label:'CDI'},
@@ -25267,7 +25337,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     dolar:{label:'Dólar'},
     sp500:{label:'S&P 500'},
     nasdaq:{label:'Nasdaq'},
-    dow:{label:'Dow'}
+    dow:{label:'Dow Jones'}
   };
 
   const chartMetaV580 = {
@@ -25277,7 +25347,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     dolar:{label:'Dólar', color:'#ff6f8b'},
     sp500:{label:'S&P 500', color:'#8b5cf6'},
     nasdaq:{label:'Nasdaq', color:'#c084fc'},
-    dow:{label:'Dow', color:'#f0c36b'}
+    dow:{label:'Dow Jones', color:'#f0c36b'}
   };
 
   function cumulativeChartSeriesV580(map, keys){
@@ -25296,6 +25366,15 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       const key = btn.dataset.monthlyChartIndicatorV580 || '';
       const hasData = mapHasDataForKeysV447(maps[key], keys);
       const active = selectedChartIndicatorsV580.has(key) && hasData;
+
+      if(['sp500','nasdaq','dow'].includes(key)){
+        const baseLabelV799 = usIndicatorNameV799(key);
+        const codeV799 = usCurrencyCodeV799();
+        btn.innerHTML = `${baseLabelV799}<small class="monthly-chart-us-unit-v799">${codeV799}</small>`;
+        btn.title = `${baseLabelV799} — ${usCurrencyMeaningV799()}`;
+        btn.setAttribute('aria-label', `${baseLabelV799}: ${usCurrencyMeaningV799()}`);
+      }
+
       btn.classList.toggle('active', active);
       btn.classList.toggle('is-unavailable-v580', !hasData);
       btn.disabled = !hasData;
@@ -25339,8 +25418,8 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const subtitle = head.querySelector('p');
     if(subtitle){
       subtitle.textContent = monthlyComparisonViewV797 === 'period'
-        ? 'Retorno acumulado até o fim do período, do maior para o menor.'
-        : 'Trajetória acumulada ao longo do período.';
+        ? 'Retorno composto mês a mês até o fim do período, do maior para o menor.'
+        : 'Trajetória acumulada por composição mês a mês.';
     }
 
     return control;
@@ -25594,7 +25673,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const desktop = isDesktopMonthlyV576();
     if(activeView === 'all'){
       if(desktop){
-        const usCols = `${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}${monthlyUsHeaderCellV593('Dow', 'Dow', usLabel)}`;
+        const usCols = `${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}${monthlyUsHeaderCellV593('Dow Jones', 'Dow Jones', usLabel)}`;
         headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibovespa</th><th scope="col">Dólar</th>${usCols}`;
       }else{
         headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">Indicadores</th>`;
@@ -25615,7 +25694,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       ['Dólar', values.dolar],
       [`S&P 500 ${usLabel}`, values.sp500],
       [`Nasdaq ${usLabel}`, values.nasdaq],
-      [`Dow ${usLabel}`, values.dow]
+      [`Dow Jones ${usLabel}`, values.dow]
     ];
     return `<div class="monthly-mobile-all-grid-v633">${items.map(([label, value]) => `
       <span class="monthly-mobile-all-item-v633 ${clsV445(value)}">
@@ -25716,6 +25795,12 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
     root.dataset.monthlyViewV630 = activeView;
     root.dataset.monthlyUsCurrencyV632 = usCurrency;
+    root.dataset.monthlyAccumulationV799 = 'compound';
+    root.dataset.monthlyUsCurrencyLabelV799 = usCurrencyCodeV799();
+    root.setAttribute(
+      'aria-description',
+      `Retornos acumulados por composição mês a mês. Índices dos EUA: ${usCurrencyMeaningV799()}.`
+    );
     if(table) table.dataset.monthlyViewV630 = activeView;
 
     renderMonthlyHeaderV446(table, activeView);
@@ -25743,21 +25828,32 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       summaryValueForKeysV449(dolarMap, keys, range === '12m' ? [dolarIdx.acum_12m, dolarCard.acum_12m] : [dolarIdx.acum_ano, dolarCard.acum_ano]),
       'Dólar'
     );
-    setSummaryV445(
+    setUsSummaryV799(
       'monthlySummarySp500V576',
       summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year', usCurrency)),
-      'S&P 500'
+      'sp500'
     );
-    setSummaryV445(
+    setUsSummaryV799(
       'monthlySummaryNasdaqV576',
       summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year', usCurrency)),
-      'Nasdaq'
+      'nasdaq'
     );
-    setSummaryV445(
+    setUsSummaryV799(
       'monthlySummaryDowV576',
       summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year', usCurrency)),
-      'Dow Jones'
+      'dow'
     );
+
+    const summaryRangeLabelV799 = range === '12m' ? '12 meses' : 'Ano atual';
+    [
+      ['monthlySummaryCdiV445',cdiMap],
+      ['monthlySummaryIpcaV445',ipcaMap],
+      ['monthlySummaryIbovV445',ibovMap],
+      ['monthlySummaryDolarV445',dolarMap],
+      ['monthlySummarySp500V576',sp500Map],
+      ['monthlySummaryNasdaqV576',nasdaqMap],
+      ['monthlySummaryDowV576',dowMap]
+    ].forEach(([id,map]) => setSummaryCoverageV799(id,map,keys,summaryRangeLabelV799));
 
     // V789 — a tabela prioriza o dado mais recente.
     // A ordem cronológica original de `keys` permanece intacta para o gráfico.
