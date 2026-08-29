@@ -1,0 +1,189 @@
+/* ============================================================
+   V802 — BOLETIM FOCUS · SEMÂNTICA E HIERARQUIA
+   Escopo: #sec-focus. Não altera dados nem cálculos.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  /* Cabeçalho: referência e PDF como uma única linha de contexto. */
+  #sec-focus #focusRef{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+  }
+
+  #sec-focus .focus-ref-v802{
+    color:#aeb8ca!important;
+    font-size:.69rem!important;
+  }
+
+  #sec-focus .focus-ref-v802 strong{
+    color:#edf1f7!important;
+    font-weight:850!important;
+  }
+
+  #sec-focus .focus-pdf-v802{
+    padding:5px 9px!important;
+    border-radius:7px!important;
+    font-size:.61rem!important;
+    font-weight:750!important;
+  }
+
+  /* Síntese: título sem aparência de link e texto em segundo nível. */
+  #sec-focus .focus-summary-v802{
+    display:grid!important;
+    grid-template-columns:40px minmax(0,1fr) auto!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    min-height:66px!important;
+    padding:10px 14px!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802{
+    min-width:0!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > strong{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#e0b259!important;
+    font-size:.64rem!important;
+    font-weight:850!important;
+    letter-spacing:.035em!important;
+    text-decoration:none!important;
+    text-transform:uppercase!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > p{
+    margin:0!important;
+    color:#d1d7e2!important;
+    font-size:.70rem!important;
+    font-weight:550!important;
+    line-height:1.32!important;
+  }
+
+  #sec-focus .focus-horizon-v802{
+    flex:0 0 auto!important;
+    padding:7px 11px!important;
+    white-space:nowrap!important;
+  }
+
+  /* Cards: mesma gramática visual para todos os indicadores. */
+  #sec-focus .focus-card-v802{
+    display:flex!important;
+    flex-direction:column!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-label{
+    margin-bottom:4px!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-sub{
+    min-height:30px!important;
+    margin-bottom:7px!important;
+    line-height:1.28!important;
+  }
+
+  /* Tendência vira bloco semântico: Tendência | direção | horizonte + delta. */
+  #sec-focus .focus-trend-line-v802{
+    display:grid!important;
+    grid-template-columns:auto 1fr!important;
+    grid-template-areas:
+      "caption caption"
+      "trend delta"!important;
+    align-items:baseline!important;
+    column-gap:8px!important;
+    row-gap:3px!important;
+    min-height:43px!important;
+    margin:0 0 5px!important;
+    padding:6px 0 7px!important;
+    border-bottom:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  #sec-focus .focus-trend-caption-v802{
+    grid-area:caption!important;
+    color:#7f8ba0!important;
+    font-size:.46rem!important;
+    font-weight:850!important;
+    letter-spacing:.065em!important;
+    text-transform:uppercase!important;
+  }
+
+  #sec-focus .focus-trend-line-v802 > strong{
+    grid-area:trend!important;
+    margin:0!important;
+    font-size:.63rem!important;
+    font-weight:850!important;
+  }
+
+  #sec-focus .focus-trend-line-v802 > em{
+    grid-area:delta!important;
+    justify-self:end!important;
+    margin:0!important;
+    color:#aeb8ca!important;
+    font-size:.54rem!important;
+    font-style:normal!important;
+    font-weight:650!important;
+    white-space:nowrap!important;
+  }
+
+  /* A seta por linha apenas repetia a tendência total; não é revisão semanal. */
+  #sec-focus .focus-row-arrow-v595{
+    display:none!important;
+  }
+
+  /* Valores anuais ficam limpos; sparkline comunica a direção visual. */
+  #sec-focus .focus-card-v802 .fcad-row{
+    min-height:39px!important;
+  }
+
+  #sec-focus .focus-card-v802 .fcad-val{
+    padding-right:0!important;
+  }
+
+  #sec-focus .focus-card-v802 .focus-sparkline-v595{
+    margin-top:auto!important;
+  }
+
+  /* O conteúdo educativo não compete com a síntese conjuntural. */
+  #sec-focus .focus-semantic-v802{
+    text-decoration:none!important;
+  }
+
+  /* Botão principal mais descritivo sem ganhar peso excessivo. */
+  #sec-focus .section-toggle-btn{
+    min-width:118px!important;
+  }
+}
+
+@media (max-width:768px){
+  #sec-focus .focus-summary-v802{
+    display:grid!important;
+    grid-template-columns:32px minmax(0,1fr)!important;
+    gap:8px!important;
+  }
+
+  #sec-focus .focus-horizon-v802{
+    grid-column:1 / -1!important;
+    justify-self:start!important;
+    margin-top:3px!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > strong{
+    display:block!important;
+    margin-bottom:3px!important;
+    color:#dfb15a!important;
+    font-size:.68rem!important;
+    text-decoration:none!important;
+  }
+
+  #sec-focus .focus-summary-copy-v802 > p{
+    margin:0!important;
+    line-height:1.35!important;
+  }
+
+  #sec-focus .focus-row-arrow-v595{
+    display:none!important;
+  }
+}

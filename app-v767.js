@@ -2701,18 +2701,52 @@ function focusNumberV595(value){
 
 function focusTrendMetaV595(label, series){
   const values = series.filter(item => item.value !== null && Number.isFinite(item.value));
-  if(values.length < 2) return {kind:'flat', label:'tendência', arrow:'↔', delta:'—'};
-  const first = values[0].value;
-  const last = values[values.length - 1].value;
+  if(values.length < 2) return {kind:'flat', label:'sem tendência definida', arrow:'↔', delta:'—', firstYear:2026, lastYear:2029};
+
+  const firstItem = values[0];
+  const lastItem = values[values.length - 1];
+  const first = firstItem.value;
+  const last = lastItem.value;
   const diff = last - first;
   const abs = Math.abs(diff);
   const flatLimit = label === 'Câmbio' ? 0.03 : label === 'PIB' ? 0.12 : 0.08;
-  const kind = abs <= flatLimit ? 'flat' : diff > 0 ? 'up' : 'down';
-  const trendLabel = kind === 'flat' ? 'estável' : kind === 'down' ? 'queda' : (label === 'Câmbio' ? 'alta leve' : 'alta');
-  const signal = diff > 0 ? '+' : diff < 0 ? '-' : '';
-  const deltaValue = Math.abs(diff).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-  const delta = label === 'Câmbio' ? `${signal}R$ ${deltaValue} até 2029` : `${signal}${deltaValue} p.p. até 2029`;
-  return {kind, label:trendLabel, arrow:kind === 'up' ? '↑' : kind === 'down' ? '↓' : '↔', delta};
+
+  let kind = abs <= flatLimit ? 'flat' : diff > 0 ? 'up' : 'down';
+  let trendLabel = kind === 'flat'
+    ? 'estável'
+    : kind === 'down'
+      ? 'queda'
+      : (label === 'Câmbio' ? 'leve alta' : 'alta');
+
+  // V802 — PIB pode terminar próximo do ponto inicial e ainda oscilar
+  // de forma relevante no caminho. Nesse caso, "estável" seria simplificador.
+  if(label === 'PIB' && values.length >= 3){
+    const min = Math.min(...values.map(item => item.value));
+    const max = Math.max(...values.map(item => item.value));
+    const pathAmplitude = max - min;
+    if(kind === 'flat' && pathAmplitude >= 0.25){
+      kind = 'flat';
+      trendLabel = 'oscila';
+    }
+  }
+
+  const signal = diff > 0 ? '+' : diff < 0 ? '−' : '';
+  const deltaValue = Math.abs(diff).toLocaleString('pt-BR',{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+  const delta = label === 'Câmbio'
+    ? `${signal}R$ ${deltaValue}`
+    : `${signal}${deltaValue} p.p.`;
+
+  return {
+    kind,
+    label:trendLabel,
+    arrow:kind === 'up' ? '↑' : kind === 'down' ? '↓' : '↔',
+    delta,
+    firstYear:firstItem.ano || 2026,
+    lastYear:lastItem.ano || 2029
+  };
 }
 
 function focusSparklineV595(series){
@@ -2741,14 +2775,36 @@ function focusSummaryHTMLV595(focus){
   const selic = focusTrendMetaV595('Selic', focusSeriesV595(focus?.Selic));
   const ipca = focusTrendMetaV595('IPCA', focusSeriesV595(focus?.IPCA));
   const cambio = focusTrendMetaV595('Câmbio', focusSeriesV595(focus?.Cambio));
-  const pib = focusTrendMetaV595('PIB', focusSeriesV595(focus?.PIB));
-  const jurosInflacao = selic.kind === 'down' && ipca.kind === 'down' ? 'juros e inflação em queda gradual' : 'juros e inflação em ajuste';
-  const cambioTxt = cambio.kind === 'up' ? 'dólar em leve alta' : cambio.kind === 'down' ? 'dólar em queda' : 'dólar estável';
-  const pibTxt = pib.kind === 'flat' ? 'PIB estável no médio prazo' : pib.kind === 'up' ? 'PIB em melhora gradual' : 'PIB em desaceleração';
-  return `<div class="focus-trend-summary-v595" aria-label="Leitura de tendência do Boletim Focus">
+  const pibSeries = focusSeriesV595(focus?.PIB);
+  const pib = focusTrendMetaV595('PIB', pibSeries);
+
+  const jurosInflacao = selic.kind === 'down' && ipca.kind === 'down'
+    ? 'Juros e inflação recuam no horizonte'
+    : 'Juros e inflação seguem em ajuste';
+
+  const cambioTxt = cambio.kind === 'up'
+    ? 'o câmbio apresenta leve alta'
+    : cambio.kind === 'down'
+      ? 'o câmbio apresenta queda'
+      : 'o câmbio permanece próximo do nível atual';
+
+  const pibLast = [...pibSeries].reverse().find(item => item.value !== null && Number.isFinite(item.value));
+  const pibEnd = pibLast?.value;
+  const pibTxt = pib.label === 'oscila'
+    ? `o PIB oscila${pibEnd !== null && pibEnd !== undefined ? `, encerrando próximo de ${pibEnd.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})}%` : ''}`
+    : pib.kind === 'up'
+      ? 'o PIB apresenta melhora gradual'
+      : pib.kind === 'down'
+        ? 'o PIB apresenta desaceleração'
+        : `o PIB permanece próximo de ${pibEnd !== null && pibEnd !== undefined ? pibEnd.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+'%' : '2%'}`;
+
+  return `<div class="focus-trend-summary-v595 focus-summary-v802" aria-label="Síntese do cenário do Boletim Focus">
     <span class="focus-trend-icon-v595" aria-hidden="true">↗</span>
-    <p><strong>Leitura Focus:</strong> ${jurosInflacao}; ${cambioTxt}; ${pibTxt}.</p>
-    <span class="focus-trend-pill-v595">Tendência 2026 → 2029</span>
+    <div class="focus-summary-copy-v802">
+      <strong>Síntese do cenário</strong>
+      <p>${jurosInflacao}; ${cambioTxt}; ${pibTxt}.</p>
+    </div>
+    <span class="focus-trend-pill-v595 focus-horizon-v802">Horizonte 2026–2029</span>
   </div>`;
 }
 
@@ -2756,21 +2812,33 @@ function focusCardHTML(icon, label, sub, dados){
   const anos = [2026,2027,2028,2029];
   const series = focusSeriesV595(dados);
   const trend = focusTrendMetaV595(label, series);
+
   const rows = anos.map((ano,i) => {
     const item = series[i] || {};
     const med = item.med;
     const fmtd = med!==null && med!==undefined
       ? (label==='Câmbio' ? brl(med) : fmt(med))
       : '—';
+
     return `<div class="fcad-row">
       <span class="fcad-year">${ano}</span>
-      <span class="fcad-val${i===0?' hl':''}">${fmtd}<em class="focus-row-arrow-v595 trend-${trend.kind}">${trend.arrow}</em></span>
+      <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
     </div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
   }).join('');
-  return `<div class="fcad focus-trend-card-v595 trend-${trend.kind}"><div class="fcad-label">${icon} ${label}</div>
+
+  return `<div class="fcad focus-trend-card-v595 focus-card-v802 trend-${trend.kind}">
+    <div class="fcad-label">${icon} ${label}</div>
     <div class="fcad-sub">${sub}</div>
-    <div class="focus-trend-line-v595"><strong>${trend.label}</strong><span>${trend.arrow}</span><em>${trend.delta}</em></div>
-    <div class="fcad-rows">${rows}</div>${focusSparklineV595(series)}</div>`;
+
+    <div class="focus-trend-line-v595 focus-trend-line-v802">
+      <span class="focus-trend-caption-v802">Tendência</span>
+      <strong>${trend.label}</strong>
+      <em>${trend.firstYear} → ${trend.lastYear} · ${trend.delta}</em>
+    </div>
+
+    <div class="fcad-rows">${rows}</div>
+    ${focusSparklineV595(series)}
+  </div>`;
 }
 
 function normalizarDataFocus(dataRef){
@@ -2874,15 +2942,15 @@ function carregarFocus(focus, atualizadoEm){
   const pdfUrl = pdfFocus?.url || 'https://www.bcb.gov.br/publicacoes/focus';
 
   if(refEl){
-    refEl.innerHTML = `<span class="focus-ref-label">Último boletim Focus disponível: <strong>${dataFormatada}</strong></span><a class="focus-pdf-link" href="${pdfUrl}" target="_blank" rel="noopener">Baixe aqui o último boletim Focus (PDF) ↗</a>`;
+    refEl.innerHTML = `<span class="focus-ref-label focus-ref-v802">Expectativas de mercado · atualização <strong>${dataFormatada}</strong></span><a class="focus-pdf-link focus-pdf-v802" href="${pdfUrl}" target="_blank" rel="noopener">Boletim oficial PDF ↗</a>`;
   }
 
   grid.innerHTML = focusSummaryHTMLV595(focus) + [
-    focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
-    focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
-    focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
-    focusCardHTML('📦','PIB','Crescimento do Produto Interno Bruto',focus.PIB),
-    focusCardHTML('📊','IGP-M','Índice Geral de Preços — Mercado',focus.IGPM),
+    focusCardHTML('🏦','Selic','Taxa básica de juros',focus.Selic),
+    focusCardHTML('🎯','IPCA','Inflação ao consumidor',focus.IPCA),
+    focusCardHTML('💵','Câmbio','R$/US$',focus.Cambio),
+    focusCardHTML('📦','PIB','Crescimento real do PIB',focus.PIB),
+    focusCardHTML('📊','IGP-M','Inflação medida pelo IGP-M',focus.IGPM),
   ].join('');
 }
 
@@ -2892,6 +2960,78 @@ function carregarFocusFallback(){
     text-align:center;border:1px dashed var(--border2);border-radius:10px">
     ⚠️ Indicadores de mercado temporariamente indisponíveis. Atualize a página em alguns instantes.</div>`;
 }
+
+
+/* PATCH V802 — Boletim Focus: semântica e hierarquia */
+(function focusSemanticHierarchyV802(){
+  const BUILD = 'ELTAUM_FOCUS_SEMANTIC_HIERARCHY_V802';
+
+  function normalizeText(value){
+    return String(value || '').replace(/\s+/g,' ').trim();
+  }
+
+  function syncFocusSemanticV802(){
+    try{
+      const section = document.getElementById('sec-focus');
+      if(!section) return;
+
+      document.documentElement.classList.add('focus-semantic-v802');
+
+      // "Entenda o Boletim Focus" é conteúdo educativo, não a análise corrente.
+      section.querySelectorAll('strong, b, span, div, button').forEach(el => {
+        const txt = normalizeText(el.textContent);
+        if(txt === 'Entenda o Boletim Focus'){
+          if(el.children.length === 0){
+            el.textContent = 'Como interpretar o Boletim Focus';
+          }else{
+            const leaf = [...el.childNodes].find(node => node.nodeType === Node.TEXT_NODE && normalizeText(node.textContent));
+            if(leaf) leaf.textContent = leaf.textContent.replace('Entenda o Boletim Focus','Como interpretar o Boletim Focus');
+          }
+        }
+      });
+
+      // Botão principal descreve a ação sobre a análise, não apenas "mais/menos".
+      const toggle = section.querySelector('.section-toggle-btn');
+      if(toggle){
+        toggle.dataset.labelClosed = 'Ver análise';
+        toggle.dataset.labelOpen = 'Recolher análise';
+        const isOpen =
+          section.classList.contains('section-expanded') ||
+          toggle.getAttribute('aria-expanded') === 'true';
+        const label = toggle.querySelector('.toggle-label');
+        if(label) label.textContent = isOpen ? 'Recolher análise' : 'Ver análise';
+        else if(toggle.children.length === 0) toggle.textContent = isOpen ? 'Recolher análise' : 'Ver análise';
+        toggle.setAttribute('aria-label', isOpen ? 'Recolher análise do Boletim Focus' : 'Ver análise do Boletim Focus');
+      }
+
+      // Controle educativo: "Mostrar" -> "Abrir explicação", quando for um leaf.
+      section.querySelectorAll('button, summary, [role="button"]').forEach(el => {
+        const txt = normalizeText(el.textContent);
+        if(txt === 'Mostrar' && el.children.length === 0){
+          el.textContent = 'Abrir explicação';
+        }
+      });
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFocusSemanticV802, {once:true});
+  }else{
+    syncFocusSemanticV802();
+  }
+
+  window.addEventListener('load', syncFocusSemanticV802, {once:true});
+  document.addEventListener('click', () => setTimeout(syncFocusSemanticV802, 80), true);
+  [120,350,800,1600,3200,7000,14000].forEach(ms => setTimeout(syncFocusSemanticV802, ms));
+
+  window.__ELTAUM_FOCUS_SEMANTIC_HIERARCHY_V802__ = {
+    build:BUILD,
+    sync:syncFocusSemanticV802
+  };
+})();
 
 /* ════════════════════════════════════════════════════
    RANKINGS
@@ -34976,3 +35116,5 @@ console.info('[Catálogo CAIXA] Selic oficial v720 ativo');
     init();
   }
 })();
+
+console.info('[Catálogo CAIXA] Focus V802 ativo · semântica e hierarquia refinadas');
