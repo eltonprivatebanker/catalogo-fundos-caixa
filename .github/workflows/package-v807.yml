@@ -1,0 +1,55 @@
+name: Pacote Market V807
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v807.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v807
+          cp index.html pacote-v807/
+          cp market-v807.css pacote-v807/
+          cp market-v807.js pacote-v807/
+          cp focus-v806.css pacote-v807/
+          cp focus-v806.js pacote-v807/
+          printf '%s\n' \
+            'V807 — Indicadores de mercado' \
+            '' \
+            'Alterações:' \
+            '- Remove visualmente o card redundante Painel consolidado de indicadores.' \
+            '- Mantém o conteúdo do painel sempre visível.' \
+            '- Move o seletor 12/24/36 meses para o cabeçalho do Comparativo de desempenho.' \
+            '- Remove o botão Ver mais dessa camada intermediária.' \
+            '- Preserva dados, cálculos, gráficos e a V806 do Boletim Focus.' \
+            '' \
+            'Arquivos principais:' \
+            '- index.html' \
+            '- market-v807.css' \
+            '- market-v807.js' \
+            '' \
+            'Incluídos também para manter o conjunto atual:' \
+            '- focus-v806.css' \
+            '- focus-v806.js' \
+            > pacote-v807/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Market-V807-arquivos-atualizados
+          path: pacote-v807/
+          retention-days: 7
