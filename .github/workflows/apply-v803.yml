@@ -26,121 +26,157 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          # 1) Texto educativo: corrige na fonte, sem depender do patch de runtime da V802.
           index_path = Path('index.html')
           index = index_path.read_text(encoding='utf-8')
-          old_title = 'ℹ️ Entenda o Boletim Focus'
-          new_title = 'ℹ️ Como interpretar o Boletim Focus'
-          if old_title not in index and new_title not in index:
-              raise SystemExit('Título educativo do Focus não localizado no index.html')
-          index = index.replace(old_title, new_title)
 
+          # Corrige o título educativo diretamente na fonte.
+          index = index.replace(
+              'ℹ️ Entenda o Boletim Focus',
+              'ℹ️ Como interpretar o Boletim Focus'
+          )
+
+          # Promove o CSS V802 para V803.
           old_css = '<link rel="stylesheet" href="focus-v802.css?v=focus-v802"/>'
           new_css = '<link rel="stylesheet" href="focus-v803.css?v=focus-v803"/>'
-          if old_css not in index and new_css not in index:
-              raise SystemExit('Link do CSS Focus V802 não localizado no index.html')
-          index = index.replace(old_css, new_css)
+          if old_css in index:
+              index = index.replace(old_css, new_css)
+          elif new_css not in index:
+              raise SystemExit('Link do CSS Focus não localizado no index.html')
+
+          # JS pequeno e isolado para acabamento sem tocar no app.js base.
+          js_tag = '<script src="focus-v803.js?v=focus-v803" defer></script>'
+          if js_tag not in index:
+              if '</body>' not in index:
+                  raise SystemExit('Fechamento </body> não localizado no index.html')
+              index = index.replace('</body>', js_tag + '\n</body>')
+
           index_path.write_text(index, encoding='utf-8')
 
-          # 2) Tendência: remove a repetição 2026 → 2029 dos cinco cards.
-          app_path = Path('app.js')
-          app = app_path.read_text(encoding='utf-8')
-          old_trend = '<em>${trend.firstYear} → ${trend.lastYear} · ${trend.delta}</em>'
-          new_trend = '<em>Variação no horizonte · ${trend.delta}</em>'
-          if old_trend not in app and new_trend not in app:
-              raise SystemExit('Markup da tendência V802 não localizado no app.js')
-          app = app.replace(old_trend, new_trend)
-          app_path.write_text(app, encoding='utf-8')
-
-          # 3) CSS V803: parte da V802 e aplica apenas acabamento visual.
           css_base = Path('focus-v802.css').read_text(encoding='utf-8').rstrip()
           overrides = r'''
 
-          /* ============================================================
-             V803 — BOLETIM FOCUS · ACABAMENTO FINAL
-             Mantém a estrutura V802 e não altera dados, cálculos ou
-             tamanho dos valores anuais.
-             ============================================================ */
+/* ============================================================
+   V803 — BOLETIM FOCUS · ACABAMENTO FINAL
+   Mantém a estrutura V802 e não altera dados, cálculos ou
+   tamanho dos valores anuais.
+   ============================================================ */
 
-          @media (min-width:769px){
-            /* Síntese: remove qualquer resíduo visual de link/sublinhado. */
-            html #sec-focus .focus-summary-copy-v802 > strong{
-              text-decoration:none!important;
-              text-decoration-line:none!important;
-              border-bottom:0!important;
-              box-shadow:none!important;
-              background-image:none!important;
-            }
+@media (min-width:769px){
+  /* Síntese sem qualquer aparência de link ou sublinhado. */
+  html #sec-focus .focus-summary-copy-v802 > strong{
+    text-decoration:none!important;
+    text-decoration-line:none!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
 
-            html #sec-focus .focus-summary-copy-v802 > strong::before,
-            html #sec-focus .focus-summary-copy-v802 > strong::after{
-              text-decoration:none!important;
-              border-bottom:0!important;
-              box-shadow:none!important;
-              background-image:none!important;
-            }
+  html #sec-focus .focus-summary-copy-v802 > strong::before,
+  html #sec-focus .focus-summary-copy-v802 > strong::after{
+    text-decoration:none!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
 
-            /* Cards mais compactos entre subtítulo e leitura de tendência. */
-            html #sec-focus .focus-card-v802 .fcad-sub{
-              min-height:26px!important;
-              margin-bottom:3px!important;
-            }
+  /* Menos espaço entre subtítulo e tendência. */
+  html #sec-focus .focus-card-v802 .fcad-sub{
+    min-height:26px!important;
+    margin-bottom:3px!important;
+  }
 
-            html #sec-focus .focus-trend-line-v802{
-              min-height:38px!important;
-              margin:0 0 4px!important;
-              padding:3px 0 5px!important;
-              row-gap:2px!important;
-            }
+  html #sec-focus .focus-trend-line-v802{
+    min-height:38px!important;
+    margin:0 0 4px!important;
+    padding:3px 0 5px!important;
+    row-gap:2px!important;
+  }
 
-            /* “TENDÊNCIA” vira kicker discreto; a direção passa a dominar. */
-            html #sec-focus .focus-trend-line-v802 .focus-trend-caption-v802{
-              color:#748096!important;
-              font-size:.40rem!important;
-              font-weight:800!important;
-              line-height:1!important;
-              letter-spacing:.09em!important;
-              text-transform:uppercase!important;
-            }
+  /* TENDÊNCIA como kicker discreto; direção em primeiro plano. */
+  html #sec-focus .focus-trend-line-v802 .focus-trend-caption-v802{
+    color:#748096!important;
+    font-size:.40rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:.09em!important;
+    text-transform:uppercase!important;
+  }
 
-            html #sec-focus .focus-trend-line-v802 > strong{
-              font-size:.66rem!important;
-              font-weight:900!important;
-              line-height:1.12!important;
-            }
+  html #sec-focus .focus-trend-line-v802 > strong{
+    font-size:.66rem!important;
+    font-weight:900!important;
+    line-height:1.12!important;
+  }
 
-            html #sec-focus .focus-trend-line-v802 > em{
-              color:#9da8ba!important;
-              font-size:.50rem!important;
-              font-weight:600!important;
-              line-height:1.15!important;
-            }
+  html #sec-focus .focus-trend-line-v802 > em{
+    color:#9da8ba!important;
+    font-size:.50rem!important;
+    font-weight:600!important;
+    line-height:1.15!important;
+  }
 
-            /* Ação secundária: menor e menos competitiva com o título. */
-            html #sec-focus .section-toggle-btn{
-              min-width:104px!important;
-              min-height:28px!important;
-              padding:5px 9px!important;
-              font-size:.58rem!important;
-              letter-spacing:.03em!important;
-            }
-          }
-          '''
+  /* RECOLHER ANÁLISE como ação secundária. */
+  html #sec-focus .section-toggle-btn{
+    min-width:104px!important;
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:.58rem!important;
+    letter-spacing:.03em!important;
+  }
+}
+'''
           Path('focus-v803.css').write_text(css_base + overrides + '\n', encoding='utf-8')
+
+          js = r'''/* V803 — acabamento semântico do Boletim Focus */
+(function focusFinishV803(){
+  function cleanTrendDelta(root){
+    (root || document).querySelectorAll('#sec-focus .focus-trend-line-v802 > em').forEach(function(el){
+      var text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if(!text || text.indexOf('Variação no horizonte') === 0) return;
+      var parts = text.split('·');
+      var delta = parts.length > 1 ? parts.slice(1).join('·').trim() : text.replace(/^\d{4}\s*[→–-]\s*\d{4}\s*/, '').trim();
+      if(delta) el.textContent = 'Variação no horizonte · ' + delta;
+    });
+  }
+
+  function fixEducationalTitle(root){
+    (root || document).querySelectorAll('#sec-focus .focus-explain-header span').forEach(function(el){
+      if((el.textContent || '').includes('Entenda o Boletim Focus')){
+        el.textContent = (el.textContent || '').replace('Entenda o Boletim Focus', 'Como interpretar o Boletim Focus');
+      }
+    });
+  }
+
+  function apply(){
+    cleanTrendDelta(document);
+    fixEducationalTitle(document);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+
+  var section = document.getElementById('sec-focus');
+  if(section && window.MutationObserver){
+    new MutationObserver(function(){ apply(); }).observe(section, {childList:true, subtree:true});
+  }
+})();
+'''
+          Path('focus-v803.js').write_text(js, encoding='utf-8')
 
           note = '''V803 — Boletim Focus · acabamento final
 
-          Alterações:
-          - “Entenda o Boletim Focus” → “Como interpretar o Boletim Focus”.
-          - Remove qualquer aparência de sublinhado em “Síntese do cenário”.
-          - Reduz o peso visual do kicker “TENDÊNCIA” e reforça a direção do indicador.
-          - Substitui “2026 → 2029 · …” por “Variação no horizonte · …” nos cinco cards.
-          - Mantém “oscila” no PIB.
-          - Torna “Recolher análise” mais compacto.
-          - Compacta o espaço entre subtítulo e tendência.
-          - Não altera o tamanho dos valores anuais, os dados ou os cálculos do Focus.
-          '''
-          Path('LEIA-ME-V803.txt').write_text(note.strip() + '\n', encoding='utf-8')
+Alterações:
+- “Entenda o Boletim Focus” → “Como interpretar o Boletim Focus”.
+- Remove aparência de sublinhado em “Síntese do cenário”.
+- Reduz o peso visual do kicker “TENDÊNCIA” e reforça queda / leve alta / oscila.
+- Troca “2026 → 2029 · …” por “Variação no horizonte · …” nos cinco cards.
+- Mantém “oscila” no PIB exatamente como na V802.
+- Torna “Recolher análise” menor e menos destacado.
+- Compacta o espaço entre subtítulo e tendência.
+- Mantém o tamanho dos valores anuais e não altera dados ou cálculos do Focus.
+'''
+          Path('LEIA-ME-V803.txt').write_text(note, encoding='utf-8')
           PY
 
       - name: Commit V803
@@ -148,7 +184,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add app.js index.html focus-v803.css LEIA-ME-V803.txt
+          git add index.html focus-v803.css focus-v803.js LEIA-ME-V803.txt
           if git diff --cached --quiet; then
             echo "Nenhuma alteração necessária."
             exit 0
