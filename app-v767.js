@@ -12417,6 +12417,7 @@ console.info('[Catálogo CAIXA] Rankings V796 ativo · extremos semânticos e al
 console.info('[Catálogo CAIXA] Indicadores V797 ativos · Evolução e Retorno no período');
 console.info('[Catálogo CAIXA] Indicadores V799 ativos · acumulação composta e fonte única mensal');
 console.info('[Catálogo CAIXA] Indicadores V800 ativos · tabela EUA agrupada e mês/ano explícito');
+console.info('[Catálogo CAIXA] Indicadores V801 ativos · tabela compacta e hierarquia preservada');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
@@ -25834,6 +25835,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     root.dataset.monthlyAccumulationV799 = 'compound';
     root.dataset.monthlyUsCurrencyLabelV799 = usCurrencyCodeV799();
     root.dataset.monthlyTableHeaderV800 = 'grouped-us';
+    root.dataset.monthlyTableDensityV801 = 'compact';
     root.setAttribute(
       'aria-description',
       `Retornos acumulados por composição mês a mês. Índices dos EUA: ${usCurrencyMeaningV799()}.`
