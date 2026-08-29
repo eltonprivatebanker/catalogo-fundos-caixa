@@ -1,0 +1,41 @@
+name: Pacote Focus V804
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v804.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v804
+          cp index.html pacote-v804/
+          cp focus-v804.css pacote-v804/
+          cp focus-v804.js pacote-v804/
+          printf '%s\n' \
+            'V804 — Boletim Focus' \
+            '' \
+            'Correção:' \
+            '- Tendência em três linhas: rótulo, direção e variação.' \
+            '- Sem sobreposição em resoluções intermediárias.' \
+            '- Cache atualizado para V804.' \
+            '- Valores anuais preservados.' \
+            > pacote-v804/LEIA-ME.txt
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Focus-V804-arquivos-atualizados
+          path: pacote-v804/
+          retention-days: 7
