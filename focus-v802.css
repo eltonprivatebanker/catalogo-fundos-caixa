@@ -187,3 +187,66 @@
     display:none!important;
   }
 }
+
+/* ============================================================
+   V803 — BOLETIM FOCUS · ACABAMENTO FINAL
+   Mantém dados, cálculos e tamanho dos valores anuais.
+   ============================================================ */
+@media (min-width:769px){
+  html #sec-focus .focus-summary-copy-v802 > strong{
+    text-decoration:none!important;
+    text-decoration-line:none!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
+
+  html #sec-focus .focus-summary-copy-v802 > strong::before,
+  html #sec-focus .focus-summary-copy-v802 > strong::after{
+    text-decoration:none!important;
+    border-bottom:0!important;
+    box-shadow:none!important;
+    background-image:none!important;
+  }
+
+  html #sec-focus .focus-card-v802 .fcad-sub{
+    min-height:26px!important;
+    margin-bottom:3px!important;
+  }
+
+  html #sec-focus .focus-trend-line-v802{
+    min-height:38px!important;
+    margin:0 0 4px!important;
+    padding:3px 0 5px!important;
+    row-gap:2px!important;
+  }
+
+  html #sec-focus .focus-trend-line-v802 .focus-trend-caption-v802{
+    color:#748096!important;
+    font-size:.40rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:.09em!important;
+  }
+
+  html #sec-focus .focus-trend-line-v802 > strong{
+    font-size:.66rem!important;
+    font-weight:900!important;
+    line-height:1.12!important;
+  }
+
+  html #sec-focus .focus-trend-line-v802 > em{
+    color:#9da8ba!important;
+    font-size:.50rem!important;
+    font-weight:600!important;
+    line-height:1.15!important;
+  }
+
+  html #sec-focus .section-toggle-btn{
+    min-width:104px!important;
+    min-height:28px!important;
+    padding:5px 9px!important;
+    font-size:.58rem!important;
+    letter-spacing:.03em!important;
+  }
+}
