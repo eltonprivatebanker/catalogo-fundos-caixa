@@ -1,0 +1,70 @@
+/* ============================================================
+   V808 — INDICADORES DE MERCADO · REFINAMENTO FINAL
+   Mantém a hierarquia aprovada da V807, sem duplicar seletor de período.
+   Ajustes: tabela mais baixa e área de comparação mais leve.
+   ============================================================ */
+
+/* O antigo invólucro continua visualmente neutro. */
+html #sec-mercado-painel.market-panel-flat-v808{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  padding:0!important;
+}
+
+/* Conteúdo sempre integrado à seção principal. */
+html #sec-mercado-painel > #sec-painel-body.market-body-flat-v808{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  height:auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  border:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  padding-top:0!important;
+}
+
+/* Não cria uma segunda faixa de período no comparativo. */
+html #sec-mercado-painel .monthly-comparison-period-v807,
+html #sec-mercado-painel .monthly-comparison-period-v808{
+  display:none!important;
+}
+
+/* Cabeçalho do comparativo permanece enxuto. */
+html #sec-mercado-painel .monthly-comparison-head-v580{
+  align-items:center!important;
+  gap:12px!important;
+}
+
+/* Tabela mensal menos dominante na primeira dobra da tela. */
+@media (min-width:769px){
+  html #sec-mercado-painel .monthly-indicators-table-shell-v445{
+    max-height:205px!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable!important;
+  }
+
+  html #sec-mercado-painel .monthly-indicators-table-v445 thead{
+    position:sticky!important;
+    top:0!important;
+    z-index:3!important;
+  }
+}
+
+/* Em notebooks menores, preserva leitura sem voltar à altura anterior. */
+@media (min-width:769px) and (max-height:780px){
+  html #sec-mercado-painel .monthly-indicators-table-shell-v445{
+    max-height:180px!important;
+  }
+}
+
+/* Mobile continua confortável e rolável. */
+@media (max-width:768px){
+  html #sec-mercado-painel .monthly-indicators-table-shell-v445{
+    max-height:230px!important;
+    overflow:auto!important;
+  }
+}
