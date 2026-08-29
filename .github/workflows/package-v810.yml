@@ -1,0 +1,48 @@
+name: Pacote Catalog Risk V810
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v810.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v810
+          cp index.html pacote-v810/
+          cp catalog-risk-v810.css pacote-v810/
+          cp catalog-risk-v810.js pacote-v810/
+          cp focus-v806.css pacote-v810/
+          cp focus-v806.js pacote-v810/
+          printf '%s\n' \
+            'V810 — Filtro Perfil de Risco' \
+            '' \
+            'Arquivos principais:' \
+            '- index.html' \
+            '- catalog-risk-v810.css' \
+            '- catalog-risk-v810.js' \
+            '' \
+            'O select original permanece como fonte da lógica de filtro.' \
+            'A camada V810 cria o dropdown customizado no desktop.' \
+            'Todos os perfis = estado neutro; perfil específico = estado dourado.' \
+            > pacote-v810/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Catalog-Risk-V810-arquivos-atualizados
+          path: pacote-v810/
+          retention-days: 7
