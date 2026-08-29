@@ -4236,7 +4236,7 @@ function setCdiSort(dir){
       '<span>' + esc(label) + '</span>' +
       '<strong class="' + esc(kind === 'worst' ? 'neg' : kind === 'neutral' ? 'zero' : 'pos') + '">' + esc(value || '—') + '</strong>' +
       '<small title="' + esc(name || '') + '">' + esc(name || '—') + '</small>' +
-      (meta ? '<em>' + esc(meta) + '</em>' : '') +
+      (meta ? '<em class="ranking-v792-summary-category">' + esc(meta) + '</em>' : '') +
     '</article>';
   }
   function periodTabs(){
@@ -4278,7 +4278,7 @@ function setCdiSort(dir){
       .trim();
     return name || String(rawName || '').trim();
   }
-  function categoryRow(item, i, campo, periodo, showCategory){
+  function categoryRow(item, i, campo, periodo, showCategory, leaderView){
     const r = item.row;
     const ratio = cdiRatioNumber(r, periodo);
     const ratioClass = ratio === null ? 'is-neutral' : ratio >= 100 ? 'is-above' : ratio >= 80 ? 'is-near' : 'is-below';
@@ -4288,14 +4288,35 @@ function setCdiSort(dir){
     const closedBadge = rankingClosedBadgeV646(r);
     const closedClass = closedBadge ? ' is-closed-captacao-v646' : '';
     const riskText = String(r['Perfil de Risco'] || 'Risco não informado').trim();
-    return '<tr class="ranking-v682-row ' + medalClass + closedClass + '">' +
+    const categoryTextV792 = shortCat(item.cat || r.Categoria || 'Sem categoria');
+    const fundMetaV792 = leaderView
+      ? (
+          '<small class="ranking-v683-fund-meta ranking-v792-leader-meta">' +
+            '<span class="ranking-v792-category-inline">' + esc(categoryTextV792) + '</span>' +
+            '<span class="ranking-v683-meta-separator ranking-v792-meta-separator" aria-hidden="true">·</span>' +
+            '<span class="ranking-v682-risk ranking-v792-risk-secondary">' + esc(riskText) + '</span>' +
+            (closedBadge
+              ? '<span class="ranking-v683-meta-separator" aria-hidden="true">·</span>' + closedBadge
+              : '') +
+          '</small>'
+        )
+      : (
+          '<small class="ranking-v683-fund-meta">' +
+            '<span class="ranking-v682-risk">' + esc(riskText) + '</span>' +
+            (closedBadge
+              ? '<span class="ranking-v683-meta-separator" aria-hidden="true">·</span>' + closedBadge
+              : '') +
+          '</small>'
+        );
+
+    return '<tr class="ranking-v682-row ' + medalClass + closedClass + (leaderView ? ' ranking-v792-leader-row' : '') + '">' +
       '<td class="ranking-v682-position"><span aria-label="Posição ' + esc(i + 1) + '">' + esc(i + 1) + '</span></td>' +
       '<th scope="row" class="ranking-v682-fund-cell">' +
         '<div class="ranking-v682-fund-wrap">' +
           '<span class="ranking-v682-icon" aria-hidden="true">' + catIcon(item.cat) + '</span>' +
           '<span class="ranking-v682-fund-copy">' +
             '<strong title="' + esc(fullName) + '">' + esc(name) + '</strong>' +
-            '<small class="ranking-v683-fund-meta"><span class="ranking-v682-risk">' + esc(riskText) + '</span>' + (closedBadge ? '<span class="ranking-v683-meta-separator" aria-hidden="true">·</span>' + closedBadge : '') + '</small>' +
+            fundMetaV792 +
           '</span>' +
         '</div>' +
       '</th>' +
@@ -4339,9 +4360,16 @@ function setCdiSort(dir){
     });
     return (top || []).map(function(item, idx){ return categoryRow(item, idx, campo, periodo, false); }).join('');
   }
-  function rankingBoardRowsV790(rows, campo, periodo, showCategory){
+  function rankingBoardRowsV790(rows, campo, periodo, showCategory, leaderView){
     return (rows || []).slice(0,10).map(function(r, idx){
-      return categoryRow({cat:r?.Categoria || 'Sem categoria', row:r}, idx, campo, periodo, !!showCategory);
+      return categoryRow(
+        {cat:r?.Categoria || 'Sem categoria', row:r},
+        idx,
+        campo,
+        periodo,
+        !!showCategory,
+        !!leaderView
+      );
     }).join('');
   }
   function rankingContextStripV762(periodo, boardSource, isSingleCategory, currentCategoryLabel, excludedIncomplete){
@@ -4409,18 +4437,21 @@ function setCdiSort(dir){
     const isSingleCategory = rankingFilteredSingleCategoryV644();
     const view = rankingViewValueV790();
     const isLeaderView = view === 'lideres';
-    const showCategoryColumn = !isSingleCategory;
+    // V792 — em "Líder por categoria", a categoria passa a fazer parte
+    // da identidade visual da linha e deixa de ocupar uma coluna distante.
+    const showCategoryColumn = !isSingleCategory && !isLeaderView;
     document.body.classList.toggle('ranking-single-category-v684', isSingleCategory);
     document.body.classList.toggle('ranking-single-category-v685', isSingleCategory);
     document.body.classList.toggle('ranking-leaders-view-v790', isLeaderView);
     document.body.classList.toggle('ranking-general-view-v790', !isLeaderView);
+    document.body.classList.toggle('ranking-category-priority-v792', isLeaderView);
     const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
 
     /* VISÃO é independente dos demais filtros:
        - geral: todos os fundos elegíveis, ordenados por rentabilidade;
        - líderes: apenas o primeiro colocado de cada categoria elegível. */
     const boardSource = isLeaderView ? winners.map(function(item){ return item.row; }) : sorted;
-    const boardRows = rankingBoardRowsV790(boardSource, campo, periodo, showCategoryColumn);
+    const boardRows = rankingBoardRowsV790(boardSource, campo, periodo, showCategoryColumn, isLeaderView);
     const best = sorted[0];
     const lowest = ascending[0];
     const alertBody = alertRows(negatives.slice(0,8), campo);
@@ -4434,7 +4465,7 @@ function setCdiSort(dir){
     const boardCaption = isLeaderView
       ? (isSingleCategory
           ? ('Exibe o fundo com maior rentabilidade no período selecionado na categoria escolhida. Fundos sem histórico completo para o período selecionado não participam da classificação.')
-          : ('Exibe o fundo com maior rentabilidade no período selecionado em cada categoria. Fundos sem histórico completo para o período selecionado não participam da classificação.'))
+          : ('Exibe o fundo de maior rentabilidade em cada categoria no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.'))
       : ('Fundos elegíveis ordenados pela rentabilidade no período selecionado. Fundos sem histórico completo para o período selecionado não participam da classificação.');
     const displayedCount = Math.min(10, boardSource.length || 0);
     const resultText = isLeaderView
@@ -4453,7 +4484,7 @@ function setCdiSort(dir){
       '</section>' +
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-table-shell">' +
-          '<table class="ranking-v682-table ranking-v685-table">' +
+          '<table class="ranking-v682-table ranking-v685-table ' + (isLeaderView ? 'ranking-v792-leader-table' : 'ranking-v792-general-table') + '">' +
             '<caption>' + esc(boardCaption) + '</caption>' +
             (showCategoryColumn
               ? '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>'
@@ -11957,6 +11988,7 @@ document.addEventListener('DOMContentLoaded',initComparWorkspaceV723);
 setTimeout(initComparWorkspaceV723,700);
 console.info('[Catálogo CAIXA] Comparador V783 ativo · destaques sem redundância');
 console.info('[Catálogo CAIXA] Rankings V791 ativo · universo e visão analítica');
+console.info('[Catálogo CAIXA] Rankings V792 ativo · categoria priorizada na visão Líder');
 console.info('[Catálogo CAIXA] Indicadores V786 ativos · 7 KPIs · gráfico compacto · textos consolidados');
 console.info('[Catálogo CAIXA] Indicadores V789 ativos · tabela mensal do mais recente ao mais antigo');
 
