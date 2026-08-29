@@ -1,0 +1,48 @@
+name: Pacote Focus V805
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v805.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v805
+          cp index.html pacote-v805/
+          cp focus-v805.css pacote-v805/
+          cp focus-v805.js pacote-v805/
+          printf '%s\n' \
+            'V805 — Boletim Focus' \
+            '' \
+            'Correção principal:' \
+            '- O bloco de tendência foi reconstruído com classes próprias V805.' \
+            '- TENDÊNCIA, direção e variação ficam em linhas independentes.' \
+            '- As classes legadas V595/V802 deixam de controlar essa área.' \
+            '- Dados, cálculos e tamanhos dos valores anuais foram preservados.' \
+            '' \
+            'Arquivos para substituir/adicionar:' \
+            '- index.html' \
+            '- focus-v805.css' \
+            '- focus-v805.js' \
+            > pacote-v805/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Focus-V805-arquivos-atualizados
+          path: pacote-v805/
+          retention-days: 7
