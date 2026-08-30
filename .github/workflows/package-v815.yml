@@ -1,0 +1,46 @@
+name: Pacote Market Month Detail V815
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v815.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v815
+          cp index.html pacote-v815/
+          cp indicadores-v801.css pacote-v815/
+          cp market-table-v814.css pacote-v815/
+          cp market-table-v814.js pacote-v815/
+          cp market-month-detail-v815.css pacote-v815/
+          cp market-month-detail-v815.js pacote-v815/
+          cp catalog-risk-v813.css pacote-v815/
+          cp catalog-risk-v813.js pacote-v815/
+          cp focus-v806.css pacote-v815/
+          cp focus-v806.js pacote-v815/
+          printf '%s\n' \
+            'V815 — Detalhe mensal interativo' \
+            '' \
+            'Clique em uma linha da tabela mensal para abrir o gráfico daquele mês.' \
+            'Clique novamente na mesma linha ou em Fechar para recolher.' \
+            'Os valores são lidos da própria tabela renderizada e respeitam USD/BRL.' \
+            > pacote-v815/LEIA-ME.txt
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Market-Month-Detail-V815-arquivos-atualizados
+          path: pacote-v815/
+          retention-days: 7
