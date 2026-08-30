@@ -1,0 +1,53 @@
+name: Aplicar Market Table V814
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v814.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V814
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          css = '<link rel="stylesheet" href="market-table-v814.css?v=market-table-v814"/>\n'
+          js = '<script src="market-table-v814.js?v=market-table-v814" defer></script>\n'
+
+          if css not in s:
+              marker = '</head>'
+              if marker not in s:
+                  raise SystemExit('Não foi possível localizar </head>.')
+              s = s.replace(marker, css + marker, 1)
+
+          if js not in s:
+              marker = '</body>'
+              if marker not in s:
+                  raise SystemExit('Não foi possível localizar </body>.')
+              s = s.replace(marker, js + marker, 1)
+
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V814
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V814: aplicar tabela mensal analítica'
+          git push origin HEAD:'Testes-da-versão-01'
