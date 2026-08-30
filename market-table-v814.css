@@ -1,0 +1,218 @@
+/* ============================================================
+   V814 — INDICADORES DE MERCADO · TABELA MENSAL ANALÍTICA
+   - mesma área útil, mais densidade e leitura
+   - colunas equilibradas
+   - Brasil x EUA separados por divisor sutil
+   - leitura recente marcada sem ocupar nova linha
+   - heatmap muito leve, preservando as cores dos números
+   ============================================================ */
+
+@media (min-width:769px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    position:relative!important;
+    width:100%!important;
+    max-height:250px!important;
+    margin-top:6px!important;
+    padding:0 7px 0 0!important;
+    overflow:auto!important;
+    scrollbar-gutter:stable!important;
+    box-sizing:border-box!important;
+    border:1px solid rgba(148,163,184,.09)!important;
+    border-radius:9px!important;
+    background:rgba(5,10,20,.16)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    width:100%!important;
+    min-width:0!important;
+    table-layout:fixed!important;
+    border-collapse:separate!important;
+    border-spacing:0!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  /* Mês ocupa menos largura; os sete indicadores dividem o restante. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    width:8.5%!important;
+    min-width:0!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:not(:first-child),
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:not(:first-child){
+    width:13.07%!important;
+    min-width:0!important;
+  }
+
+  /* Cabeçalho agrupado: compacto, sem desperdício vertical. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 thead{
+    position:sticky!important;
+    top:0!important;
+    z-index:6!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 thead .monthly-table-group-row-v800 th{
+    height:15px!important;
+    min-height:15px!important;
+    padding:2px 10px 1px!important;
+    background:#0d1322!important;
+    border-bottom:0!important;
+    color:#8f9bb0!important;
+    font-size:.48rem!important;
+    line-height:1!important;
+    letter-spacing:.055em!important;
+    vertical-align:middle!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 thead .monthly-table-subhead-row-v800 th{
+    height:15px!important;
+    min-height:15px!important;
+    padding:1px 12px 4px!important;
+    background:#0d1322!important;
+    border-top:1px solid rgba(148,163,184,.025)!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    color:#9eabc0!important;
+    font-size:.48rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:.035em!important;
+    vertical-align:middle!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .monthly-table-rowspan-v800{
+    padding:3px 12px!important;
+    background:#0d1322!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    color:#929fb5!important;
+    font-size:.58rem!important;
+    font-weight:850!important;
+    line-height:1!important;
+    letter-spacing:.04em!important;
+    text-align:right!important;
+    vertical-align:middle!important;
+    white-space:nowrap!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .monthly-table-rowspan-v800:first-child{
+    padding-left:10px!important;
+    text-align:left!important;
+  }
+
+  /* Grupo EUA reduzido semanticamente para EUA + moeda. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .monthly-us-group-v800{
+    padding:0!important;
+    text-align:center!important;
+    border-left:1px solid rgba(197,156,77,.16)!important;
+    background:#0d1322!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-group-toggle-v800{
+    min-height:14px!important;
+    height:14px!important;
+    gap:5px!important;
+    padding:0 5px!important;
+    border-radius:4px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-group-toggle-v800 > span{
+    font-size:.44rem!important;
+    letter-spacing:.07em!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-us-group-toggle-v800 > small{
+    padding:1px 4px!important;
+    font-size:.39rem!important;
+    border-color:rgba(197,156,77,.22)!important;
+    background:rgba(197,156,77,.07)!important;
+  }
+
+  /* Linha mensal: curta, numérica e com alinhamento comparável. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody tr{
+    height:26px!important;
+    min-height:26px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td{
+    position:relative!important;
+    height:26px!important;
+    min-height:26px!important;
+    padding:4px 12px!important;
+    box-sizing:border-box!important;
+    border-bottom:1px solid rgba(148,163,184,.045)!important;
+    background-clip:padding-box!important;
+    color:#d9e0eb!important;
+    font-size:.59rem!important;
+    font-weight:690!important;
+    line-height:1!important;
+    text-align:right!important;
+    vertical-align:middle!important;
+    white-space:nowrap!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td:first-child{
+    padding-left:10px!important;
+    color:#cdd5e2!important;
+    font-size:.58rem!important;
+    font-weight:780!important;
+    text-align:left!important;
+  }
+
+  /* Início dos índices americanos. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td:nth-child(6),
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .monthly-table-subhead-row-v800 th:first-child{
+    border-left:1px solid rgba(197,156,77,.11)!important;
+  }
+
+  /* Última coluna não briga com a scrollbar. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:last-child,
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:last-child{
+    padding-right:14px!important;
+  }
+
+  /* Mês mais recente: sinal discreto, sem criar badge/altura extra. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody tr:first-child td:first-child{
+    box-shadow:inset 2px 0 0 rgba(111,158,231,.42)!important;
+    color:#eef3fb!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody tr:hover td{
+    background-color:rgba(148,163,184,.035)!important;
+  }
+
+  /* Heatmap deliberadamente sutil: ajuda a varrer a tabela sem virar gráfico. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td.v814-pos{
+    background-image:linear-gradient(90deg,transparent 0%,rgba(30,214,147,var(--v814-heat,.035)) 100%)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td.v814-neg{
+    background-image:linear-gradient(90deg,transparent 0%,rgba(255,87,121,var(--v814-heat,.035)) 100%)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td.v814-neutral{
+    background-image:none!important;
+  }
+
+  /* Scrollbar discreta. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    scrollbar-width:thin!important;
+    scrollbar-color:rgba(148,163,184,.48) transparent!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445::-webkit-scrollbar{
+    width:7px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445::-webkit-scrollbar-thumb{
+    border-radius:8px!important;
+    background:rgba(148,163,184,.42)!important;
+  }
+}
+
+/* Notebook: mantém as oito colunas, reduzindo apenas paddings. */
+@media (min-width:769px) and (max-width:1100px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 tbody td,
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .monthly-table-rowspan-v800{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+}
