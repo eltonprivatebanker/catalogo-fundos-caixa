@@ -1,0 +1,246 @@
+/* ============================================================
+   V815 — INDICADORES · DETALHE DO MÊS POR CLIQUE
+   Clicar em uma linha da tabela abre um gráfico divergente
+   logo abaixo, usando os valores já exibidos na própria tabela.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* A linha passa a comunicar que é interativa sem parecer um botão. */
+  html body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 tbody tr[data-month-detail-v815="1"]{
+    cursor:pointer!important;
+    outline:0!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 tbody tr[data-month-detail-v815="1"]:focus-visible td{
+    box-shadow:inset 0 1px 0 rgba(113,158,230,.40),inset 0 -1px 0 rgba(113,158,230,.40)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 tbody tr.is-selected-v815 td{
+    background-color:rgba(105,147,215,.075)!important;
+    border-bottom-color:rgba(105,147,215,.16)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445
+  .monthly-indicators-table-v445 tbody tr.is-selected-v815 td:first-child{
+    box-shadow:inset 2px 0 0 rgba(108,159,238,.72)!important;
+    color:#f2f6fd!important;
+  }
+
+  /* Painel aberto abaixo da tabela. */
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-v815{
+    display:none!important;
+    width:100%!important;
+    margin:8px 0 2px!important;
+    padding:11px 13px 12px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    background:linear-gradient(180deg,rgba(13,19,34,.82),rgba(7,12,23,.70))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.018)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-v815.is-open-v815{
+    display:block!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-head-v815{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 9px!important;
+    padding:0 0 8px!important;
+    border-bottom:1px solid rgba(148,163,184,.085)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-copy-v815{
+    min-width:0!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-kicker-v815{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#c69c4d!important;
+    font-size:.48rem!important;
+    font-weight:850!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-title-v815{
+    margin:0!important;
+    color:#edf2fa!important;
+    font-size:.82rem!important;
+    font-weight:820!important;
+    line-height:1.1!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-sub-v815{
+    display:block!important;
+    margin:3px 0 0!important;
+    color:#8793a8!important;
+    font-size:.53rem!important;
+    font-weight:600!important;
+    line-height:1.2!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-close-v815{
+    flex:0 0 auto!important;
+    min-height:25px!important;
+    margin:0!important;
+    padding:0 8px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:7px!important;
+    background:rgba(10,15,27,.56)!important;
+    color:#99a5b9!important;
+    cursor:pointer!important;
+    font:700 .50rem/1 'Inter',sans-serif!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-close-v815:hover{
+    border-color:rgba(197,156,77,.26)!important;
+    color:#d8dee9!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-groups-v815{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,.78fr)!important;
+    gap:18px!important;
+    align-items:start!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-group-v815{
+    min-width:0!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-group-title-v815{
+    display:flex!important;
+    align-items:center!important;
+    gap:5px!important;
+    margin:0 0 5px!important;
+    color:#8996aa!important;
+    font-size:.47rem!important;
+    font-weight:850!important;
+    letter-spacing:.07em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-group-title-v815 small{
+    display:inline-flex!important;
+    padding:1px 4px!important;
+    border:1px solid rgba(197,156,77,.20)!important;
+    border-radius:4px!important;
+    color:#cfa958!important;
+    font-size:.39rem!important;
+    letter-spacing:.035em!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-row-v815{
+    display:grid!important;
+    grid-template-columns:70px minmax(0,1fr) 58px!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-height:27px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-label-v815{
+    min-width:0!important;
+    color:#aeb8c9!important;
+    font-size:.54rem!important;
+    font-weight:720!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-track-v815{
+    position:relative!important;
+    height:11px!important;
+    min-width:0!important;
+    border:1px solid rgba(148,163,184,.075)!important;
+    border-radius:999px!important;
+    background:rgba(4,9,18,.52)!important;
+    overflow:hidden!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-zero-v815{
+    position:absolute!important;
+    z-index:2!important;
+    top:0!important;
+    bottom:0!important;
+    left:50%!important;
+    width:1px!important;
+    background:rgba(177,188,207,.24)!important;
+    transform:translateX(-.5px)!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-fill-v815{
+    position:absolute!important;
+    z-index:1!important;
+    top:2px!important;
+    bottom:2px!important;
+    width:var(--month-bar-width-v815,0%)!important;
+    min-width:0!important;
+    border-radius:999px!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-fill-v815.is-pos-v815{
+    left:50%!important;
+    background:linear-gradient(90deg,rgba(34,197,139,.52),rgba(37,225,159,.90))!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-fill-v815.is-neg-v815{
+    right:50%!important;
+    background:linear-gradient(270deg,rgba(255,88,122,.52),rgba(255,93,128,.90))!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-value-v815{
+    color:#cfd7e5!important;
+    font-size:.55rem!important;
+    font-weight:790!important;
+    line-height:1!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-value-v815.is-pos-v815{color:#28daa0!important;}
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-value-v815.is-neg-v815{color:#ff6d8b!important;}
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-value-v815.is-na-v815{color:#778398!important;}
+
+  html body #sec-mercado #monthlyIndicatorsV445 .month-bar-row-v815.is-na-v815 .month-bar-track-v815{
+    opacity:.42!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-scale-v815{
+    display:grid!important;
+    grid-template-columns:1fr auto 1fr!important;
+    align-items:center!important;
+    margin:5px 58px 0 78px!important;
+    color:#657186!important;
+    font-size:.42rem!important;
+    font-weight:650!important;
+  }
+
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-scale-v815 span:nth-child(2){text-align:center!important;}
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-scale-v815 span:last-child{text-align:right!important;}
+}
+
+@media (min-width:769px) and (max-width:1050px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-groups-v815{
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+  }
+}
+
+@media (max-width:768px){
+  html body #sec-mercado #monthlyIndicatorsV445 .monthly-month-detail-v815{
+    display:none!important;
+  }
+}
