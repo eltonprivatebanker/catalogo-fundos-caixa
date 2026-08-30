@@ -1,0 +1,43 @@
+name: Aplicar Market Month Detail V815
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/apply-v815.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  aplicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+          fetch-depth: 0
+
+      - name: Atualizar index para V815
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          css = '<link rel="stylesheet" href="market-month-detail-v815.css?v=market-month-detail-v815"/>'
+          js = '<script src="market-month-detail-v815.js?v=market-month-detail-v815" defer></script>'
+          if css not in s:
+              s = s.replace('</head>', css + '\n</head>')
+          if js not in s:
+              s = s.replace('</body>', js + '\n</body>')
+          p.write_text(s, encoding='utf-8')
+
+      - name: Commit V815
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git diff --cached --quiet || git commit -m 'V815: ativar gráfico mensal por linha'
+          git push origin HEAD:'Testes-da-versão-01'
