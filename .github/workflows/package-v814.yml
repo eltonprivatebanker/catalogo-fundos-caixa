@@ -1,0 +1,50 @@
+name: Pacote Market Table V814
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v814.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v814
+          cp index.html pacote-v814/
+          cp market-table-v814.css pacote-v814/
+          cp market-table-v814.js pacote-v814/
+          cp catalog-risk-v813.css pacote-v814/
+          cp catalog-risk-v813.js pacote-v814/
+          cp focus-v806.css pacote-v814/
+          cp focus-v806.js pacote-v814/
+          printf '%s\n' \
+            'V814 — Tabela mensal analítica' \
+            '' \
+            'Arquivos principais:' \
+            '- index.html' \
+            '- market-table-v814.css' \
+            '- market-table-v814.js' \
+            '' \
+            'Também incluídos para preservar o estado atual:' \
+            '- catalog-risk-v813.css / .js' \
+            '- focus-v806.css / .js' \
+            > pacote-v814/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Market-Table-V814-arquivos-atualizados
+          path: pacote-v814/
+          retention-days: 7
