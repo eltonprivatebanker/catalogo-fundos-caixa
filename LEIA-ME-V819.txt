@@ -1,0 +1,16 @@
+V819 — Comparador de fundos
+
+Principais ajustes:
+- modo foco real: overlay movido diretamente para o body e painel quase full-screen
+- Esc fecha o comparador; se a busca rápida estiver aberta, fecha a busca primeiro
+- altura adaptativa e largura dinâmica para 2 a 6 fundos
+- PDF corrigido: gera documento de impressão próprio em A4 paisagem
+- Excel profissional: abas Resumo e Comparação, textos limpos, estilos, freeze panes e impressão paisagem
+- fallback para XLSX simples/CSV se ExcelJS não puder ser carregado
+
+Arquivos principais para substituir:
+- index.html
+- comparador-v783.css
+- comparador-v819.js
+
+Os demais arquivos do pacote são mantidos para preservar o conjunto atual.

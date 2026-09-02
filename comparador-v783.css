@@ -813,3 +813,170 @@
     font-size:8pt!important;
   }
 }
+
+
+/* ============================================================
+   V819 — COMPARADOR · MODO FOCO REAL + EXPORTAÇÃO REFINADA
+   - força overlay/painel a usar a viewport inteira no desktop
+   - painel quase full-screen, cobrindo a navegação lateral
+   - altura adaptativa com limite na viewport
+   - PDF passa a usar documento de impressão dedicado via JS
+   ============================================================ */
+@media (min-width:769px){
+  html.compar-v819-open,
+  body.compar-v819-open{
+    overflow:hidden!important;
+  }
+
+  html body > #comparOverlay.compar-overlay.open{
+    position:fixed!important;
+    top:0!important;
+    right:0!important;
+    bottom:0!important;
+    left:0!important;
+    inset:0!important;
+    z-index:2147483640!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100vw!important;
+    min-width:100vw!important;
+    max-width:100vw!important;
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:100dvh!important;
+    margin:0!important;
+    padding:10px!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    background:rgba(2,5,11,.985)!important;
+    backdrop-filter:blur(14px)!important;
+    -webkit-backdrop-filter:blur(14px)!important;
+  }
+
+  html body > #comparOverlay.open > .compar-panel{
+    position:relative!important;
+    top:auto!important;
+    right:auto!important;
+    bottom:auto!important;
+    left:auto!important;
+    transform:none!important;
+    display:flex!important;
+    flex-direction:column!important;
+    width:calc(100vw - 20px)!important;
+    min-width:0!important;
+    max-width:calc(100vw - 20px)!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:calc(100dvh - 20px)!important;
+    margin:0 auto!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    border-radius:14px!important;
+    background:#080e19!important;
+    box-shadow:0 28px 100px rgba(0,0,0,.60)!important;
+  }
+
+  html body > #comparOverlay.open .compar-scroll{
+    flex:0 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    width:100%!important;
+    max-height:calc(100dvh - 224px)!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+  }
+
+  /* Quando a busca de Adicionar fundo abre, preserva espaço para a tabela. */
+  html body > #comparOverlay.open:has(#comparQuickAddV724:not([hidden])) .compar-scroll{
+    max-height:calc(100dvh - 320px)!important;
+  }
+
+  /* A largura de 2 e 3 fundos fica contida, sem esticar excessivamente. */
+  html body > #comparOverlay.open[data-fund-count="2"] .compar-table{
+    width:min(1120px,100%)!important;
+    min-width:900px!important;
+    max-width:1120px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html body > #comparOverlay.open[data-fund-count="3"] .compar-table{
+    width:min(1450px,100%)!important;
+    min-width:1120px!important;
+    max-width:1450px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html body > #comparOverlay.open[data-fund-count="4"] .compar-table{
+    width:100%!important;
+    min-width:1280px!important;
+    max-width:none!important;
+  }
+
+  html body > #comparOverlay.open[data-fund-count="5"] .compar-table{
+    width:100%!important;
+    min-width:1510px!important;
+    max-width:none!important;
+  }
+
+  html body > #comparOverlay.open[data-fund-count="6"] .compar-table{
+    width:100%!important;
+    min-width:1740px!important;
+    max-width:none!important;
+  }
+
+  html body > #comparOverlay.open .compar-export-btn-v819{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    min-width:58px!important;
+    height:34px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    border-radius:9px!important;
+    background:rgba(13,19,31,.82)!important;
+    color:#c9d2e1!important;
+    font:800 .60rem/1 'Inter',sans-serif!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+    transition:border-color .15s ease,background .15s ease,color .15s ease!important;
+  }
+
+  html body > #comparOverlay.open .compar-export-btn-v819:hover{
+    border-color:rgba(220,174,85,.42)!important;
+    background:rgba(200,151,58,.08)!important;
+    color:#efc66f!important;
+  }
+
+  html body > #comparOverlay.open .compar-export-btn-v819:disabled{
+    opacity:.55!important;
+    cursor:wait!important;
+  }
+
+  html body > #comparOverlay.open .compar-export-actions-v819{
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+  }
+}
+
+@media (min-width:769px) and (max-height:820px){
+  html body > #comparOverlay.compar-overlay.open{
+    padding:6px!important;
+  }
+  html body > #comparOverlay.open > .compar-panel{
+    width:calc(100vw - 12px)!important;
+    max-width:calc(100vw - 12px)!important;
+    max-height:calc(100dvh - 12px)!important;
+    border-radius:11px!important;
+  }
+  html body > #comparOverlay.open .compar-scroll{
+    max-height:calc(100dvh - 196px)!important;
+  }
+}
