@@ -1,0 +1,17 @@
+V822 — Comparador: centralização real e scroll inicial
+
+Ajustes desta versão:
+- overlay ancorado diretamente à viewport com margens uniformes;
+- neutralização de offsets/transformações herdadas da antiga área com sidebar;
+- painel usa a largura útil da tela sem deslocamento para a direita;
+- com 4, 5 ou 6 fundos, apenas a tabela interna ganha scroll horizontal;
+- ao abrir o comparador ou alterar a quantidade de fundos, o scroll horizontal volta para 0;
+- INDICADOR + primeiro fundo aparecem completos no início;
+- com 2–3 fundos, a tabela continua contida e centralizada;
+- destaque dourado de vencedor ficou um pouco mais discreto;
+- dados, cálculos, PDF e Excel da V821 foram preservados.
+
+Arquivos principais:
+- index.html
+- comparador-v783.css
+- comparador-v822.js
