@@ -1,0 +1,32 @@
+V826 — Troféu único em imagem
+
+Objetivo:
+Corrigir definitivamente a inconsistência entre tela, PDF e Excel.
+
+TELA
+- Não usa mais ::before e não cria <span>.
+- A célula vencedora recebe somente data-winner-v826="1".
+- O troféu é PNG usado como background-image da célula.
+- data-attributes não são observados pelo MutationObserver atual (ele filtra class).
+- Resultado: ícone estável, sem loop de refresh.
+
+PDF
+- Removida a taça desenhada por linhas vetoriais.
+- Usa o mesmo PNG do site.
+- O texto recebe espaço explícito antes do valor.
+- Ícone e número ficam em áreas separadas.
+
+EXCEL
+- Valor vencedor permanece NUMÉRICO e com o formato original.
+- O troféu é inserido como imagem ancorada dentro da célula.
+- Não há emoji em numFmt e não há conversão do valor para texto.
+- Nota da célula continua indicando o melhor valor/empate.
+
+Métricas com troféu:
+- Taxa de administração (menor)
+- Retorno no mês (maior)
+- Retorno no ano (maior)
+- Retorno em 12 meses (maior)
+- % do CDI em 12 meses (maior)
+
+Centralização/geometria da V823 preservadas.

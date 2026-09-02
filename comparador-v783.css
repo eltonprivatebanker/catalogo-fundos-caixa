@@ -1415,3 +1415,58 @@
     border-left:2px solid rgba(218,169,78,.56)!important;
   }
 }
+
+
+/* ============================================================
+   V825 — TROFÉU ESTÁVEL NA TELA
+   Não cria/remover nós no DOM: usa pseudo-elemento CSS.
+   ============================================================ */
+@media (min-width:769px){
+  html body #comparOverlay.open .compar-winner-trophy-v825::before{
+    content:"🏆";
+    display:inline-block!important;
+    width:14px!important;
+    margin-right:5px!important;
+    color:#d6a54d!important;
+    font-size:.63rem!important;
+    line-height:1!important;
+    vertical-align:-1px!important;
+    filter:saturate(.82)!important;
+  }
+
+  html body #comparOverlay.open .compar-winner-trophy-v825{
+    background:rgba(200,151,58,.030)!important;
+    border-left:2px solid rgba(218,169,78,.56)!important;
+  }
+
+  /* V824 não deve mais interferir visualmente. */
+  html body #comparOverlay.open .compar-trophy-v824{
+    display:none!important;
+  }
+}
+
+
+/* ============================================================
+   V826 — TROFÉU ÚNICO EM IMAGEM
+   A célula vencedora usa data-attribute, sem classe/DOM novo.
+   Isso evita o refresh recursivo do MutationObserver.
+   ============================================================ */
+@media (min-width:769px){
+  html body #comparOverlay.open td[data-winner-v826="1"],
+  html body #comparOverlay.open th[data-winner-v826="1"]{
+    background-color:rgba(200,151,58,.030)!important;
+    background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAACUElEQVR42u2awUoDMRCG02HfordCxSo+iuDdZ/Hks/Qu+CjFKgrefA49FZbFbrPZyc4k+T7oqaWZmX/+ZDdJCAAAAAAAAAAAAAAAUDsrD0G8PN3+Wo398Py2alYAy8J7EUIovm08q6US6nfY8Lur641Z4T8/vkNsnDlcIjkKP9ZNnor/3/iXYtd2SmdpYevi9+MYOiEmVw1HyJLF7//uXPHX293h9LFyQko+ZgJoWnJY9KVFsMi/yzn4FIueK/Z6uzv8fL3fWT+aXlobUqejLnfgtXDKSXsRFu3ur7H4MfmlCiN0vm2eotn9rZNSF6H7bfMV+tYW0bBZa90/lvfUaQgHlOYAQAAEgAoFOLffY7UP1KQDhsWuvfghZNqMy+EEHKD47FsLGu9ELMK1rAExLuh3x5Qz2CXoxxPTxVquTxJAa+vBiwhacaTURXUKmuoCDyKM3QvK3f0hzLyYNedULDWJmKssqaLOiTt1VsiyCMdcYPK2g3opnhyXsmY7YEonjyUY+x9TLnLFukAjrjnN1Gl0ztzOiE3guN/8av+nxcKrPgVxIONgKyLXvZlaC68uQAtC5HB6UVPHcX8fLerN42sRubEXhAAIAAiAAIAACAAIgACAAAgACIAAgAAI4I7YLeZStqJDcHQeYHGA4+EoVVotvuW4rgSwLoL1+NJy8h7i4CmINQABoFUBvNyos4xDWk7ew/iLDj7lYlUpb93FOKCk4i8Zr1B827iF4tvGz2Mo7wEIADULUNLhiEX8UkMSJcctNSVD0wAAAAAAAAB45w/kcjTdpu9w+AAAAABJRU5ErkJggg==")!important;
+    background-repeat:no-repeat!important;
+    background-position:8px 50%!important;
+    background-size:13px 13px!important;
+    padding-left:28px!important;
+    border-left:2px solid rgba(218,169,78,.56)!important;
+  }
+
+  /* Desliga as tentativas anteriores de pseudo-elemento. */
+  html body #comparOverlay.open .compar-winner-trophy-v825::before,
+  html body #comparOverlay.open .compar-winner-trophy-v824::before{
+    content:none!important;
+    display:none!important;
+  }
+}
