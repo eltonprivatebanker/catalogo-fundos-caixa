@@ -1,0 +1,19 @@
+V820 — Comparador de fundos · acabamento premium
+
+Arquivos principais para substituir:
+- index.html
+- comparador-v783.css
+- comparador-v820.js
+
+Principais mudanças:
+1. Modo foco real: a navegação da página desaparece enquanto o comparador está aberto.
+2. Três KPIs fixos: maior retorno 12M, menor taxa de administração e maior % CDI 12M.
+3. Troféus repetidos são removidos das células; permanece o destaque visual do vencedor.
+4. Coluna INDICADOR mais compacta e colunas dos fundos mais equilibradas.
+5. PDF passa a ser baixado diretamente (jsPDF + AutoTable), A4 paisagem, sem cabeçalho/rodapé do navegador.
+6. Excel com abas Resumo e Comparação, observações, congelamento, filtros, impressão paisagem e células vencedoras destacadas.
+7. Esc continua fechando busca rápida primeiro e depois o comparador.
+
+Fallbacks:
+- se jsPDF não puder carregar, o PDF recorre ao modo de impressão dedicado da V819;
+- se ExcelJS não puder carregar, mantém os fallbacks XLSX/CSV.
