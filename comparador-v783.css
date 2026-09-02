@@ -1524,3 +1524,13 @@ body{
 #comparWorkspaceV723{
   scroll-behavior: auto !important;
 }
+
+/* ════════════════════════════════════════════
+   V829 — Posicionamento ao abrir o Comparador
+   O clique lateral passa a levar diretamente ao workspace.
+   Mantém rolagem instantânea para preservar a correção do Edge.
+════════════════════════════════════════════ */
+#comparWorkspaceV723{
+  scroll-margin-top: 18px;
+  scroll-behavior: auto !important;
+}

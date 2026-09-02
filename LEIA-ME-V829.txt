@@ -1,0 +1,15 @@
+V829 — Navegação direta para o Comparador
+
+Alterações desta versão:
+1. Mantida integralmente a correção V828 contra o tremor de rolagem no Microsoft Edge.
+2. Ao clicar em "Comparador" no menu lateral, o workspace é revelado antes da navegação por âncora.
+3. A tela passa a ser posicionada automaticamente no início do comparador, sem exigir rolagem manual.
+4. O posicionamento usa behavior:auto; não reativa smooth scroll.
+5. Acesso/reload direto com #comparWorkspaceV723 também revela e posiciona o comparador.
+6. Adicionado scroll-margin-top de 18px para dar pequeno respiro visual no topo.
+
+Arquivos alterados/adicionados:
+- index.html
+- comparador-v783.css
+- comparador-v829-nav.js (novo)
+- LEIA-ME-V829.txt
