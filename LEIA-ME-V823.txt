@@ -1,0 +1,18 @@
+V823 — Correção absoluta da centralização do Comparador
+
+Esta versão mexe SOMENTE na geometria do workspace.
+
+O que mudou:
+- overlay recebe dimensões reais da viewport por JavaScript;
+- largura e altura deixam de depender de qualquer container/sidebar;
+- propriedades são aplicadas inline com !important;
+- o código mede getBoundingClientRect() e compensa qualquer offset residual em pixels;
+- painel recebe largura = viewport - margens laterais;
+- resize do navegador reaplica a geometria;
+- ao abrir continua iniciando em INDICADOR + primeiro fundo;
+- PDF, Excel, KPIs, tabela e cálculos permanecem iguais à V822/V821.
+
+Arquivos principais:
+- index.html
+- comparador-v783.css
+- comparador-v823.js
