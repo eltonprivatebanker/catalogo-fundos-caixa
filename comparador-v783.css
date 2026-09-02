@@ -10,7 +10,6 @@
     overflow:hidden;
   }
 
-  /* V780: sem resultado, o cabeçalho da coluna não fica solto. */
   #comparWorkspaceV723 .compar-workspace-return-label-v764{
     visibility:hidden!important;
   }
@@ -76,13 +75,9 @@
 
 /* ============================================================
    V781 — COMPARADOR · DESTAQUES EM FAIXA COMPACTA
-   Escopo: modal de comparação aberto.
-   A tabela e sua tipografia NÃO são alteradas.
    ============================================================ */
 
 @media (min-width:769px){
-
-  /* Reduz o espaço vertical entre cabeçalho e tabela. */
   #comparOverlay.open #comparInsightsV728{
     margin-top:0!important;
     margin-bottom:0!important;
@@ -90,13 +85,11 @@
     padding-bottom:8px!important;
   }
 
-  /* Mantém a área de destaques compacta. */
   #comparOverlay.open #comparInsightsV728 .compar-insights-v731{
     margin:0!important;
     padding:0!important;
   }
 
-  /* Título em uma linha baixa; a explicação longa é redundante no modal. */
   #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731{
     min-height:18px!important;
     margin:0 0 6px 0!important;
@@ -123,7 +116,6 @@
     display:none!important;
   }
 
-  /* Uma única faixa horizontal. 2 ou 3 destaques ocupam a mesma altura. */
   #comparOverlay.open #comparInsightsV728 .compar-kpi-grid-v731{
     display:grid!important;
     grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important;
@@ -133,7 +125,6 @@
     padding:0!important;
   }
 
-  /* Mini-card: mantém todas as informações, mas elimina a altura excessiva. */
   #comparOverlay.open #comparInsightsV728 .compar-kpi-v731{
     min-width:0!important;
     min-height:58px!important;
@@ -201,13 +192,11 @@
     line-height:11px!important;
   }
 
-  /* O troféu já aparece nas células vencedoras; esta legenda duplicava a mensagem. */
   #comparOverlay.open #comparInsightsV728 .compar-legend-v757{
     display:none!important;
   }
 }
 
-/* Em desktop estreito, continua horizontal sem comprimir demais o conteúdo. */
 @media (min-width:769px) and (max-width:1100px){
   #comparOverlay.open #comparInsightsV728 .compar-kpi-v731{
     padding-left:9px!important;
@@ -289,3 +278,216 @@
   }
 }
 
+
+/* ============================================================
+   V817 — COMPARADOR · WORKSPACE FOCADO EM TELA CHEIA
+   Mantém conteúdo, dados e tipografia. Ajusta apenas viewport,
+   responsividade e rolagem para o comparador caber em zoom 100%.
+   ============================================================ */
+
+@media (min-width:769px){
+
+  html body #comparOverlay.compar-overlay.open{
+    position:fixed!important;
+    inset:0!important;
+    z-index:2147482000!important;
+    display:flex!important;
+    align-items:stretch!important;
+    justify-content:stretch!important;
+    width:100vw!important;
+    height:100dvh!important;
+    max-width:none!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:14px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    background:rgba(2,5,11,.80)!important;
+    backdrop-filter:blur(10px)!important;
+    -webkit-backdrop-filter:blur(10px)!important;
+  }
+
+  html body #comparOverlay.open > .compar-panel{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    border-radius:15px!important;
+    background:#080e19!important;
+    box-shadow:0 26px 90px rgba(0,0,0,.52)!important;
+  }
+
+  html body #comparOverlay.open .compar-header{
+    position:relative!important;
+    z-index:20!important;
+    flex:0 0 auto!important;
+    min-width:0!important;
+    min-height:60px!important;
+    padding:9px 14px 9px 16px!important;
+    box-sizing:border-box!important;
+    background:#09101c!important;
+    border-bottom:1px solid rgba(148,163,184,.14)!important;
+  }
+
+  html body #comparOverlay.open .compar-title{
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html body #comparOverlay.open .compar-header-actions-v724{
+    flex:0 0 auto!important;
+    min-width:0!important;
+    gap:8px!important;
+    margin-left:14px!important;
+  }
+
+  html body #comparOverlay.open .compar-close{
+    flex:0 0 auto!important;
+    width:34px!important;
+    min-width:34px!important;
+    height:34px!important;
+    min-height:34px!important;
+    border-radius:9px!important;
+  }
+
+  html body #comparOverlay.open .compar-quick-add-v724{
+    flex:0 0 auto!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  html body #comparOverlay.open #comparInsightsV728{
+    position:relative!important;
+    z-index:15!important;
+    flex:0 0 auto!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+    background:#080e19!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll{
+    position:relative!important;
+    flex:1 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+    overflow:auto!important;
+    overscroll-behavior:contain!important;
+    scrollbar-gutter:stable!important;
+    background:#070d18!important;
+    scrollbar-width:thin!important;
+    scrollbar-color:rgba(148,163,184,.46) transparent!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll::-webkit-scrollbar{
+    width:8px!important;
+    height:8px!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll::-webkit-scrollbar-thumb{
+    border-radius:999px!important;
+    background:rgba(148,163,184,.42)!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll::-webkit-scrollbar-corner{
+    background:transparent!important;
+  }
+
+  html body #comparOverlay.open .compar-table{
+    width:100%!important;
+    min-width:1120px!important;
+    max-width:none!important;
+    margin:0!important;
+    table-layout:auto!important;
+    border-collapse:separate!important;
+    border-spacing:0!important;
+  }
+
+  /* A primeira coluna permanece visível quando houver 5/6 fundos. */
+  html body #comparOverlay.open .compar-table tr > :first-child{
+    position:sticky!important;
+    left:0!important;
+    z-index:8!important;
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+    box-sizing:border-box!important;
+    background:#0b1424!important;
+    box-shadow:1px 0 0 rgba(148,163,184,.13)!important;
+  }
+
+  html body #comparOverlay.open .compar-table tr > :not(:first-child){
+    min-width:210px!important;
+  }
+
+  /* Cabeçalho dos fundos acompanha o scroll vertical da tabela. */
+  html body #comparOverlay.open .compar-table thead th{
+    position:sticky!important;
+    top:0!important;
+    z-index:7!important;
+    background:#09111f!important;
+  }
+
+  html body #comparOverlay.open .compar-table thead th:first-child{
+    z-index:12!important;
+    background:#0b1424!important;
+  }
+}
+
+/* Ganho extra de altura em notebooks/monitores baixos. */
+@media (min-width:769px) and (max-height:820px){
+  html body #comparOverlay.compar-overlay.open{
+    padding:8px!important;
+  }
+
+  html body #comparOverlay.open > .compar-panel{
+    border-radius:12px!important;
+  }
+
+  html body #comparOverlay.open .compar-header{
+    min-height:52px!important;
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+  }
+
+  html body #comparOverlay.open #comparInsightsV728{
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+  }
+}
+
+/* Em desktop estreito, a página não corta: só a tabela ganha scroll interno. */
+@media (min-width:769px) and (max-width:1180px){
+  html body #comparOverlay.compar-overlay.open{
+    padding:7px!important;
+  }
+
+  html body #comparOverlay.open .compar-table{
+    min-width:1060px!important;
+  }
+
+  html body #comparOverlay.open .compar-table tr > :first-child{
+    width:180px!important;
+    min-width:180px!important;
+    max-width:180px!important;
+  }
+
+  html body #comparOverlay.open .compar-table tr > :not(:first-child){
+    min-width:200px!important;
+  }
+}
