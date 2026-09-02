@@ -1,0 +1,5 @@
+V827 — Busca do comparador com lista compacta
+
+- A lista de resultados do workspace agora fica com altura limitada.
+- Durante a digitação, a área não cresce demais e mantém foco no restante da página.
+- Os primeiros resultados ficam visíveis; os demais podem ser vistos por rolagem interna.

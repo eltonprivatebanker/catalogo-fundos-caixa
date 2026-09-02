@@ -1470,3 +1470,40 @@
     display:none!important;
   }
 }
+
+
+/* ════════════════════════════════════════════
+   V827 — Workspace de busca mais compacto
+   Mantém a janela curta durante a digitação
+════════════════════════════════════════════ */
+#comparWorkspaceV723 .compar-workspace-list-v723{
+  max-height: min(34vh, 248px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+#comparWorkspaceV723 .compar-workspace-list-v723::-webkit-scrollbar{
+  width: 10px;
+}
+#comparWorkspaceV723 .compar-workspace-list-v723::-webkit-scrollbar-track{
+  background: rgba(255,255,255,0.03);
+  border-radius: 999px;
+}
+#comparWorkspaceV723 .compar-workspace-list-v723::-webkit-scrollbar-thumb{
+  background: rgba(232,187,106,0.26);
+  border-radius: 999px;
+  border: 2px solid rgba(7,12,24,0.85);
+}
+#comparWorkspaceV723 .compar-workspace-list-v723::-webkit-scrollbar-thumb:hover{
+  background: rgba(232,187,106,0.40);
+}
+#comparWorkspaceV723 .compar-workspace-status-v764{
+  margin-bottom: 8px;
+}
+#comparWorkspaceV723 .compar-workspace-primary-action-v767{
+  margin-top: 14px;
+}
