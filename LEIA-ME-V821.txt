@@ -1,0 +1,18 @@
+V821 — Comparador · refinamento executivo final
+
+Principais arquivos:
+- index.html
+- comparador-v783.css
+- comparador-v821.js
+
+O que muda:
+- workspace abre no topo da viewport, mantendo altura adaptativa;
+- Destaques do comparativo vira uma faixa horizontal acima dos 3 KPIs;
+- troféus e estilos de vencedor legados são removidos da tabela;
+- destaque de vencedor existe somente em Taxa de administração, Retorno no mês, Retorno no ano, Retorno em 12 meses e % do CDI em 12 meses;
+- Aplicação mínima e Liquidez deixam de ser tratadas como vencedor;
+- coluna Indicador fica um pouco mais compacta;
+- PDF recebe rodapé institucional refinado;
+- Excel usa destaque dourado discreto apenas nas métricas comparáveis e mantém Resumo + Comparação.
+
+Dados e cálculos do comparador não foram alterados.

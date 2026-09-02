@@ -1071,3 +1071,114 @@
   html body > #comparOverlay.open > .compar-panel{width:calc(100vw - 10px)!important;max-width:calc(100vw - 10px)!important;max-height:calc(100dvh - 10px)!important;}
   html body > #comparOverlay.open .compar-scroll{max-height:calc(100dvh - 188px)!important;}
 }
+
+
+/* ============================================================
+   V821 — COMPARADOR · REFINAMENTO EXECUTIVO FINAL
+   ============================================================ */
+@media (min-width:769px){
+  /* Painel começa próximo ao topo: elimina o vazio vertical causado pelo
+     alinhamento central, mas continua com altura adaptativa ao conteúdo. */
+  html body > #comparOverlay.compar-overlay.open{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding:8px!important;
+  }
+
+  html body > #comparOverlay.open > .compar-panel{
+    width:calc(100vw - 16px)!important;
+    max-width:calc(100vw - 16px)!important;
+    max-height:calc(100dvh - 16px)!important;
+    margin:0 auto!important;
+    border-radius:12px!important;
+  }
+
+  /* Título dos destaques vira uma faixa horizontal acima dos cards. */
+  html body > #comparOverlay.open #comparInsightsV728 .compar-insights-v820{
+    display:block!important;
+    grid-template-columns:none!important;
+    width:100%!important;
+  }
+  html body > #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:6px!important;
+    width:100%!important;
+    min-height:auto!important;
+    margin:0 0 6px!important;
+    padding:0!important;
+  }
+  html body > #comparOverlay.open #comparInsightsV728 .compar-insights-title-v731 > strong{
+    font-size:.56rem!important;
+    line-height:1!important;
+    letter-spacing:.065em!important;
+    text-transform:uppercase!important;
+    color:#9ca9bd!important;
+  }
+  html body > #comparOverlay.open #comparInsightsV728 .compar-kpi-grid-v820{
+    width:100%!important;
+  }
+
+  /* Neutraliza qualquer estilo de vencedor legado. O destaque volta apenas
+     para as cinco métricas comparáveis definidas pela V821. */
+  html body > #comparOverlay.open .compar-table tbody tr:not(.compar-section-row-v820) > :not(:first-child){
+    border-left-color:transparent!important;
+    box-shadow:none!important;
+  }
+  html body > #comparOverlay.open .compar-table .compar-winner-soft-v820{
+    background:transparent!important;
+    border-left-color:transparent!important;
+    box-shadow:none!important;
+  }
+  html body > #comparOverlay.open .compar-table .compar-winner-valid-v821{
+    background:rgba(200,151,58,.032)!important;
+    border-left:2px solid rgba(218,169,78,.64)!important;
+    box-shadow:none!important;
+  }
+
+  /* Se algum troféu legado existir como elemento dedicado, não participa da
+     leitura visual. O JS também remove os emojis textuais. */
+  html body > #comparOverlay.open .compar-table [class*="trophy"],
+  html body > #comparOverlay.open .compar-table [class*="winner-icon"],
+  html body > #comparOverlay.open .compar-table [class*="best-icon"]{
+    display:none!important;
+  }
+
+  /* Coluna de rótulos ganha alguns pixels extras úteis para os fundos. */
+  html body > #comparOverlay.open .compar-table tr > :first-child{
+    width:166px!important;
+    min-width:166px!important;
+    max-width:166px!important;
+  }
+
+  /* Com poucos fundos, a tabela é contida e centralizada; o workspace em si
+     continua ocupando a viewport inteira. */
+  html body > #comparOverlay.open[data-fund-count="2"] .compar-table{
+    width:min(940px,100%)!important;
+    min-width:860px!important;
+    max-width:940px!important;
+  }
+  html body > #comparOverlay.open[data-fund-count="3"] .compar-table{
+    width:min(1320px,100%)!important;
+    min-width:1050px!important;
+    max-width:1320px!important;
+  }
+
+  html body > #comparOverlay.open .compar-scroll{
+    max-height:calc(100dvh - 190px)!important;
+  }
+  html body > #comparOverlay.open:has(#comparQuickAddV724:not([hidden])) .compar-scroll{
+    max-height:calc(100dvh - 285px)!important;
+  }
+}
+
+@media (min-width:769px) and (max-height:820px){
+  html body > #comparOverlay.compar-overlay.open{padding:5px!important;}
+  html body > #comparOverlay.open > .compar-panel{
+    width:calc(100vw - 10px)!important;
+    max-width:calc(100vw - 10px)!important;
+    max-height:calc(100dvh - 10px)!important;
+  }
+  html body > #comparOverlay.open .compar-scroll{max-height:calc(100dvh - 174px)!important;}
+}
