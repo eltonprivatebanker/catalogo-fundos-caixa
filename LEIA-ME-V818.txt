@@ -1,0 +1,28 @@
+V818 — Comparador de fundos · workspace focado + PDF + Excel
+
+Arquivos principais para substituir/adicionar:
+1. index.html
+2. comparador-v783.css  (mantém o nome por compatibilidade; agora inclui V817 + V818)
+3. comparador-v818.js   (novo)
+
+O que muda:
+- comparador vira uma área de trabalho realmente focada e cobre a navegação ao fundo;
+- Esc fecha o comparador (se a busca “Adicionar fundo” estiver aberta, Esc fecha a busca primeiro);
+- altura passa a ser adaptativa ao conteúdo, com limite na viewport;
+- 2 e 3 fundos usam colunas mais contidas; 4 usam a largura; 5/6 usam scroll horizontal interno;
+- botão PDF abre a impressão otimizada em A4 paisagem; escolha “Salvar como PDF” ou uma impressora;
+- botão Excel gera .xlsx no navegador via SheetJS carregado somente quando solicitado;
+- se SheetJS não puder carregar, há fallback automático para CSV;
+- a coluna INDICADOR continua fixa quando houver scroll horizontal;
+- dados e cálculos do comparador não foram alterados.
+
+PDF:
+O layout de impressão troca o tema escuro por fundo branco para economizar tinta e melhorar a leitura impressa.
+Inclui nota: “Dados para fins informativos e comparativos. Consulte os documentos oficiais do fundo antes da contratação.”
+
+Teste recomendado:
+- zoom do navegador em 100%;
+- 2 fundos, 4 fundos e 6 fundos;
+- Esc;
+- PDF / Salvar como PDF;
+- Excel.

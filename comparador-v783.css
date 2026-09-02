@@ -491,3 +491,325 @@
     min-width:200px!important;
   }
 }
+
+/* ============================================================
+   V818 — COMPARADOR · WORKSPACE FOCADO, ADAPTATIVO E EXPORTÁVEL
+   ============================================================ */
+@media (min-width:769px){
+  html.compar-v818-open,
+  body.compar-v818-open{
+    overflow:hidden!important;
+  }
+
+  html body #comparOverlay.compar-overlay.open{
+    position:fixed!important;
+    inset:0!important;
+    z-index:2147483000!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100vw!important;
+    height:100dvh!important;
+    margin:0!important;
+    padding:12px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    background:rgba(2,5,11,.965)!important;
+    backdrop-filter:blur(12px)!important;
+    -webkit-backdrop-filter:blur(12px)!important;
+  }
+
+  html body #comparOverlay.open > .compar-panel{
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:calc(100dvh - 24px)!important;
+    margin:0!important;
+    overflow:hidden!important;
+    border-radius:14px!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll{
+    flex:0 1 auto!important;
+    min-height:0!important;
+    max-height:calc(100dvh - 228px)!important;
+    overflow:auto!important;
+  }
+
+  html body #comparOverlay.open .compar-header{
+    min-height:58px!important;
+  }
+
+  html body #comparOverlay.open .compar-header-actions-v724{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:nowrap!important;
+    gap:7px!important;
+  }
+
+  html body #comparOverlay.open .compar-export-actions-v818{
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+  }
+
+  html body #comparOverlay.open .compar-export-btn-v818{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    min-width:58px!important;
+    height:34px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    border-radius:9px!important;
+    background:rgba(13,19,31,.82)!important;
+    color:#c9d2e1!important;
+    font:800 .60rem/1 'Inter',sans-serif!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+    transition:border-color .15s ease,background .15s ease,color .15s ease!important;
+  }
+
+  html body #comparOverlay.open .compar-export-btn-v818:hover{
+    border-color:rgba(220,174,85,.42)!important;
+    background:rgba(200,151,58,.08)!important;
+    color:#efc66f!important;
+  }
+
+  html body #comparOverlay.open .compar-export-btn-v818:disabled{
+    opacity:.55!important;
+    cursor:wait!important;
+  }
+
+  html body #comparOverlay.open .compar-export-note-v818{
+    display:none!important;
+  }
+
+  /* 2 fundos: evita colunas excessivamente esticadas. */
+  html body #comparOverlay.open[data-fund-count="2"] .compar-table{
+    width:min(100%,1100px)!important;
+    min-width:900px!important;
+    max-width:1100px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    table-layout:fixed!important;
+  }
+
+  html body #comparOverlay.open[data-fund-count="2"] .compar-table tr > :first-child{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+  }
+
+  html body #comparOverlay.open[data-fund-count="2"] .compar-table tr > :not(:first-child){
+    width:calc((100% - 205px) / 2)!important;
+    min-width:330px!important;
+    max-width:445px!important;
+  }
+
+  /* 3 fundos: ainda contido, mas aproveita mais a viewport. */
+  html body #comparOverlay.open[data-fund-count="3"] .compar-table{
+    width:min(100%,1400px)!important;
+    min-width:1120px!important;
+    max-width:1400px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+    table-layout:fixed!important;
+  }
+
+  html body #comparOverlay.open[data-fund-count="3"] .compar-table tr > :not(:first-child){
+    min-width:290px!important;
+  }
+
+  /* 4 fundos aproveitam toda a largura; 5/6 ganham scroll apenas interno. */
+  html body #comparOverlay.open[data-fund-count="4"] .compar-table{
+    width:100%!important;
+    min-width:1320px!important;
+  }
+
+  html body #comparOverlay.open[data-fund-count="5"] .compar-table{
+    width:100%!important;
+    min-width:1540px!important;
+  }
+
+  html body #comparOverlay.open[data-fund-count="6"] .compar-table{
+    width:100%!important;
+    min-width:1760px!important;
+  }
+}
+
+@media (min-width:769px) and (max-height:820px){
+  html body #comparOverlay.compar-overlay.open{
+    padding:8px!important;
+  }
+
+  html body #comparOverlay.open > .compar-panel{
+    max-height:calc(100dvh - 16px)!important;
+  }
+
+  html body #comparOverlay.open .compar-scroll{
+    max-height:calc(100dvh - 202px)!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html body #comparOverlay.open .compar-header-actions-v724{
+    gap:5px!important;
+  }
+
+  html body #comparOverlay.open .compar-export-btn-v818{
+    min-width:52px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+    font-size:.56rem!important;
+  }
+}
+
+/* ============================================================
+   V818 — IMPRESSÃO / SALVAR COMO PDF
+   ============================================================ */
+@media print{
+  @page{
+    size:A4 landscape;
+    margin:8mm;
+  }
+
+  html,
+  body{
+    width:auto!important;
+    height:auto!important;
+    overflow:visible!important;
+    background:#fff!important;
+  }
+
+  body.compar-v818-printing > *:not(#comparOverlay){
+    display:none!important;
+  }
+
+  body.compar-v818-printing #comparOverlay{
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    background:#fff!important;
+    backdrop-filter:none!important;
+  }
+
+  body.compar-v818-printing #comparOverlay > .compar-panel{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    overflow:visible!important;
+    border:0!important;
+    border-radius:0!important;
+    background:#fff!important;
+    box-shadow:none!important;
+    color:#111827!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-header{
+    position:static!important;
+    min-height:0!important;
+    padding:0 0 5mm!important;
+    background:#fff!important;
+    border-bottom:1px solid #d1d5db!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-title,
+  body.compar-v818-printing #comparOverlay .compar-title *{
+    color:#111827!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-header-actions-v724,
+  body.compar-v818-printing #comparOverlay .compar-quick-add-v724,
+  body.compar-v818-printing #comparOverlay .compar-close{
+    display:none!important;
+  }
+
+  body.compar-v818-printing #comparOverlay #comparInsightsV728{
+    position:static!important;
+    padding:4mm 0!important;
+    background:#fff!important;
+    color:#111827!important;
+  }
+
+  body.compar-v818-printing #comparOverlay #comparInsightsV728 .compar-kpi-v731{
+    border:1px solid #d1d5db!important;
+    background:#f8fafc!important;
+    color:#111827!important;
+    break-inside:avoid!important;
+  }
+
+  body.compar-v818-printing #comparOverlay #comparInsightsV728 .compar-kpi-v731 *{
+    color:#111827!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-scroll{
+    display:block!important;
+    width:100%!important;
+    max-height:none!important;
+    overflow:visible!important;
+    background:#fff!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-table{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    table-layout:fixed!important;
+    border-collapse:collapse!important;
+    background:#fff!important;
+    color:#111827!important;
+    font-size:7.2pt!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-table tr > *{
+    position:static!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding:2.2mm 2mm!important;
+    border:1px solid #d1d5db!important;
+    background:#fff!important;
+    color:#111827!important;
+    box-shadow:none!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-table tr > :first-child{
+    width:18%!important;
+    background:#f3f4f6!important;
+    font-weight:700!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-table .pos{
+    color:#047857!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-table .neg{
+    color:#be123c!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-export-note-v818{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:1mm!important;
+    margin-top:4mm!important;
+    padding-top:3mm!important;
+    border-top:1px solid #d1d5db!important;
+    color:#4b5563!important;
+    font:7pt/1.35 Arial,sans-serif!important;
+  }
+
+  body.compar-v818-printing #comparOverlay .compar-export-note-v818 strong{
+    color:#111827!important;
+    font-size:8pt!important;
+  }
+}
