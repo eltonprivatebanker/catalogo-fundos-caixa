@@ -1,0 +1,27 @@
+V824 — Troféus seletivos no Comparador
+
+Troféu aparece somente em:
+- Taxa de administração: menor valor
+- Retorno no mês: maior valor
+- Retorno no ano: maior valor
+- Retorno em 12 meses: maior valor
+- % do CDI em 12 meses: maior valor
+
+Não aparece em:
+- Perfil de risco
+- CNPJ
+- Data de início
+- Aplicação mínima
+- Conversão da cota
+- Pagamento do resgate
+
+Onde aparece:
+- Tela: 🏆 pequeno antes do valor, com tooltip
+- PDF: troféu vetorial dourado desenhado na célula
+- Excel: 🏆 no formato do valor, preservando o número e a formatação; também há nota explicativa
+
+Empates:
+- todos os fundos empatados recebem o troféu
+- tooltip/nota indica empate
+
+A geometria e centralização da V823 foram preservadas.

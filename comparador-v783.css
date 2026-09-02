@@ -1388,3 +1388,30 @@
     max-height:calc(100dvh - 10px)!important;
   }
 }
+
+
+/* ============================================================
+   V824 — TROFÉUS SELETIVOS
+   Somente métricas com direção objetiva de "melhor".
+   ============================================================ */
+@media (min-width:769px){
+  html body #comparOverlay.open .compar-trophy-v824{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:14px!important;
+    margin-right:5px!important;
+    color:#d6a54d!important;
+    font-size:.63rem!important;
+    line-height:1!important;
+    vertical-align:-1px!important;
+    filter:saturate(.85)!important;
+    user-select:none!important;
+    pointer-events:auto!important;
+  }
+
+  html body #comparOverlay.open .compar-winner-trophy-v824{
+    background:rgba(200,151,58,.030)!important;
+    border-left:2px solid rgba(218,169,78,.56)!important;
+  }
+}
