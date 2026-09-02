@@ -1507,3 +1507,20 @@
 #comparWorkspaceV723 .compar-workspace-primary-action-v767{
   margin-top: 14px;
 }
+
+/* ════════════════════════════════════════════
+   V828 — Edge: estabilização da rolagem do comparador
+   Diagnóstico confirmado em teste de console:
+   scroll-behavior:auto + scrollbar reservada eliminam o tremor.
+════════════════════════════════════════════ */
+html{
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable !important;
+  scroll-behavior: auto !important;
+}
+body{
+  scroll-behavior: auto !important;
+}
+#comparWorkspaceV723{
+  scroll-behavior: auto !important;
+}

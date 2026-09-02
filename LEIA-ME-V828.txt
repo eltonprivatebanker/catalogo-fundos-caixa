@@ -1,0 +1,12 @@
+V828 — Correção do tremor de rolagem no Microsoft Edge
+
+Alterações desta versão:
+- mantém a scrollbar vertical reservada no documento com scrollbar-gutter: stable;
+- força overflow-y: scroll no elemento raiz para evitar alternância da largura útil da página;
+- desativa smooth scroll no documento, body e workspace do comparador com scroll-behavior: auto;
+- preserva a V827 e todas as alterações anteriores;
+- atualiza o cache-busting do CSS no index.html para comparador-v828.
+
+Diagnóstico:
+Nos testes de console no Microsoft Edge, scroll-behavior:auto sozinho não resolveu e overflow-anchor:none sozinho também não resolveu.
+A combinação de scroll-behavior:auto + scrollbar-gutter:stable + overflow-y:scroll eliminou o tremor.
