@@ -1,0 +1,59 @@
+name: Pacote Market Month Focus V816
+
+on:
+  push:
+    branches:
+      - 'Testes-da-versão-01'
+    paths:
+      - '.github/workflows/package-v816.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pacote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'Testes-da-versão-01'
+
+      - name: Montar pacote
+        shell: bash
+        run: |
+          mkdir -p pacote-v816
+          cp index.html pacote-v816/
+          cp market-month-focus-v816.css pacote-v816/
+          cp market-month-focus-v816.js pacote-v816/
+          cp market-table-v814.css pacote-v816/
+          cp market-table-v814.js pacote-v816/
+          cp catalog-risk-v813.css pacote-v816/
+          cp catalog-risk-v813.js pacote-v816/
+          cp focus-v806.css pacote-v816/
+          cp focus-v806.js pacote-v816/
+          printf '%s\n' \
+            'V816 — Mês da tabela controla o gráfico principal' \
+            '' \
+            'Arquivos principais desta versão:' \
+            '- index.html' \
+            '- market-month-focus-v816.css' \
+            '- market-month-focus-v816.js' \
+            '' \
+            'Comportamento:' \
+            '- Clique em um mês da tabela para mostrar o retorno daquele mês no Comparativo de desempenho.' \
+            '- O gráfico adicional da V815 não é mais carregado.' \
+            '- Clique novamente no mês ou em Limpar para voltar ao retorno do período.' \
+            '- USD/BRL e chips de indicadores continuam sendo respeitados.' \
+            '' \
+            'Também incluídos para preservar o conjunto atual:' \
+            '- V814 tabela mensal' \
+            '- V813 perfil de risco' \
+            '- V806 Focus' \
+            > pacote-v816/LEIA-ME.txt
+
+      - name: Publicar artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: Market-Month-Focus-V816-arquivos-atualizados
+          path: pacote-v816/
+          retention-days: 7
