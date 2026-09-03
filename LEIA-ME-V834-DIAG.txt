@@ -1,0 +1,25 @@
+V834-DIAG — rastreador de layout para Microsoft Edge
+
+OBJETIVO
+Capturar os saltos de ~27 px desde o primeiro frame da página, antes que seja possível colar comandos no Console.
+
+IMPORTANTE
+- Esta versão NÃO tenta corrigir o layout.
+- Mantém a V832 e adiciona apenas telemetria local no index.html.
+- Nenhum dado é enviado para fora. O relatório fica no Console/window.__V834_DIAG__/localStorage.
+
+COMO TESTAR
+1. Abrir a página no Microsoft Edge.
+2. Abrir DevTools > Console.
+3. Fazer Ctrl+F5.
+4. Não clicar nem rolar por cerca de 7 segundos.
+5. Procurar por: [V834-DIAG] RESULTADO.
+6. No Console, executar:
+   copy(JSON.stringify(window.__V834_DIAG__, null, 2))
+7. Colar o resultado no ChatGPT.
+
+O QUE O DIAGNÓSTICO CAPTURA
+- LayoutShift do Chromium desde o início.
+- Geometria do header, navegação, bloco mobile anterior, #sec-fundos, filhos diretos, tabela, paginação e comparador em cada frame.
+- Alterações de class/style/hidden/aria-hidden no período inicial.
+- Correlação de mudanças ocorridas até 160 ms antes/depois dos layout shifts.
