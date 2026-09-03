@@ -1,0 +1,25 @@
+V831 — Estabilização do primeiro carregamento do Catálogo no Microsoft Edge
+
+OBJETIVO
+Eliminar o movimento vertical percebido no primeiro carregamento da tabela de fundos no Edge, sem alterar dados, filtros, paginação ou comportamento posterior do catálogo.
+
+DIAGNÓSTICO TRATADO
+- A V692 reservava 386px no .table-wrap e 384px diretamente no #loadMsg.
+- A tabela real com 5 fundos possui geometria menor que o placeholder.
+- A .pagination-row nasce vazia e ganha conteúdo depois do render.
+- No Edge esses estados intermediários podem ser pintados na tela, produzindo a sensação de o bloco descer e depois subir.
+
+ALTERAÇÕES V831
+1. O .table-wrap passa a reservar 350px no primeiro carregamento.
+2. O #loadMsg deixa de determinar a altura do bloco e funciona como camada absoluta dentro do espaço reservado.
+3. A .pagination-row reserva 72px antes de receber Resultado + botões.
+4. Transições/animações são desativadas na troca inicial do Catálogo.
+5. Depois da primeira interação continua valendo a geometria normal do catálogo.
+6. V828, V829 e V830 são preservadas.
+
+IMPLEMENTAÇÃO PARA TESTE
+A correção V831 foi anexada ao final de catalog-risk-v813.css, arquivo que já é carregado pelo index.html. Isso evita alterar o index ou o motor principal nesta etapa de diagnóstico e permite testar a correção de forma isolada.
+
+ARQUIVOS ALTERADOS/CRIADOS
+- catalog-risk-v813.css
+- LEIA-ME-V831.txt
