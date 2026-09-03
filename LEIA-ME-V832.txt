@@ -1,0 +1,28 @@
+V832 — Estabilização do primeiro carregamento do Catálogo no Microsoft Edge
+
+DIAGNÓSTICO CONFIRMADO NO EDGE
+- table-wrap final medido: ~353 px
+- tabela real: ~332 px
+- paginação com V831: 72 px
+- paginação natural: 32 px
+- catálogo com V831: 717 px
+- catálogo sem a reserva artificial de 72 px: 677 px
+
+O QUE MUDOU
+1. Removida integralmente a reserva de 72 px da V831.
+2. Removido o patch V831 do CSS externo catalog-risk-v813.css.
+3. A geometria inicial passa a existir no CSS crítico do próprio index.html, antes do primeiro paint.
+4. table-wrap reserva 353 px, igual à geometria final medida no Edge.
+5. paginação reserva apenas 32 px, igual à altura natural medida.
+6. loader ocupa o espaço já reservado como camada absoluta; não altera a altura do bloco.
+7. Não há smooth scroll nem alteração nas correções V828/V829/V830.
+8. Nenhuma alteração em dados, filtros, tabela, comparador ou rankings.
+
+ARQUIVOS ALTERADOS
+- index.html
+- catalog-risk-v813.css
+- LEIA-ME-V832.txt
+
+TESTE RECOMENDADO
+No Edge: Ctrl+F5 e observar Carregando catálogo -> 5 fundos -> Resultado/paginação.
+No Firefox: confirmar que o comportamento permanece estável.

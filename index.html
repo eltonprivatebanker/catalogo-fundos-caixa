@@ -91,13 +91,18 @@ document.documentElement.classList.add(
   html.app-booting{background:#07080f;color-scheme:dark;}
   html.app-booting body{background:#07080f;}
   html.app-booting .page{opacity:0;transform:translateY(6px);}
-  /* v692 — um único contrato para o primeiro carregamento de Fundos.
-     Substitui visualmente os locks v591/v592, evitando estados concorrentes. */
+  /* V832 — contrato único para o primeiro carregamento do Catálogo.
+     Medição no Edge: table-wrap final ≈353px e paginação natural ≈32px.
+     A geometria já nasce no CSS crítico; nenhum CSS externo a corrige depois. */
   html.desktop-funds-load-stable-v692.app-booting .page{opacity:1!important;transform:none!important;}
   @media (min-width:769px){
     html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos{opacity:1!important;visibility:visible!important;transform:none!important;transition:none!important;overflow-anchor:none!important;}
-    html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{min-height:386px!important;overflow-anchor:none!important;}
-    html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{box-sizing:border-box!important;min-height:384px!important;height:384px!important;margin:0!important;padding:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;}
+    html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{position:relative!important;min-height:353px!important;overflow-anchor:none!important;transition:none!important;animation:none!important;}
+    html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{position:absolute!important;inset:0!important;box-sizing:border-box!important;width:100%!important;min-height:0!important;height:auto!important;margin:0!important;padding:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;transition:none!important;animation:none!important;}
+    html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .pagination-row{box-sizing:border-box!important;min-height:32px!important;overflow-anchor:none!important;transition:none!important;animation:none!important;}
+    html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #mainTable,
+    html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #resultInfo,
+    html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #pageBtns{transition:none!important;animation:none!important;}
   }
   html.app-ready .page{opacity:1;transform:none;transition:opacity .22s ease,transform .22s ease;}
   #appBootScreen{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(200,151,58,.12),transparent 60%),#07080f;color:#edf1fb;transition:opacity .22s ease,visibility .22s ease;}
@@ -3211,7 +3216,7 @@ html.desktop-responsive-fit-v688 body{
 <link rel="stylesheet" href="rankings-v796.css?v=rankings-v796"/>
 <link rel="stylesheet" href="indicadores-v801.css?v=indicadores-v801"/>
 <link rel="stylesheet" href="focus-v806.css?v=focus-v806"/>
-<link rel="stylesheet" href="catalog-risk-v813.css?v=catalog-risk-v831"/>
+<link rel="stylesheet" href="catalog-risk-v813.css?v=catalog-risk-v832"/>
 <link rel="stylesheet" href="market-table-v814.css?v=market-table-v814"/>
 <link rel="stylesheet" href="market-month-focus-v816.css?v=market-month-focus-v816"/>
 </head>
