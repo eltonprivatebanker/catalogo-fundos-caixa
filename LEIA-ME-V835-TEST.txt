@@ -1,0 +1,21 @@
+V835-TEST — Bloqueio do modo Cards transitório no desktop
+
+DIAGNÓSTICO
+A V834 registrou que, durante a inicialização no Edge, o body recebe a classe fund-card-mode e a remove aproximadamente 1 ms depois. Nesse intervalo a aplicação executa rotinas dos cards mobile e produz milhares de mutações antes de voltar à tabela desktop.
+
+OBJETIVO DESTA VERSÃO
+Testar causalidade. Em telas desktop (>=769px), impedir que fund-card-mode seja aplicado ao body durante o boot. No mobile, nada é bloqueado.
+
+IMPORTANTE
+Esta é uma versão de teste, não a correção final. Se o salto desaparecer/reduzir claramente, a correção definitiva será feita na rotina que escolhe Tabela/Cards, eliminando a inicialização mobile indevida em desktop.
+
+TESTE
+1. Abrir no Microsoft Edge.
+2. Ctrl+F5.
+3. Não interagir por 5 segundos.
+4. Observar o primeiro carregamento do Catálogo.
+5. Confirmar se o movimento desce/sobe desapareceu ou reduziu.
+
+ARQUIVOS ALTERADOS
+- index.html
+- LEIA-ME-V835-TEST.txt
