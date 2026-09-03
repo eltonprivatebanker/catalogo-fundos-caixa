@@ -1,0 +1,17 @@
+V830 — Comparador permanente no fluxo da página
+
+ALTERAÇÕES
+- O comparador não depende mais de clique no menu lateral para aparecer.
+- A seção #comparWorkspaceV723 fica visível no fluxo normal da página.
+- Ao rolar a página, o usuário encontra o Comparador antes de Rankings.
+- O item lateral "Comparador" agora apenas navega até a seção.
+- O botão X do workspace foi ocultado, pois a seção passa a ser permanente.
+- Foi mantida a correção V828 para o Microsoft Edge:
+  scroll-behavior:auto + scrollbar-gutter:stable + overflow-y:scroll.
+- Um pequeno guard em JS impede que código legado volte a aplicar hidden ao workspace.
+
+ARQUIVOS ALTERADOS/CRIADOS
+- index.html
+- comparador-v783.css
+- comparador-v830-nav.js
+- LEIA-ME-V830.txt

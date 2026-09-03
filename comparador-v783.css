@@ -1534,3 +1534,22 @@ body{
   scroll-margin-top: 18px;
   scroll-behavior: auto !important;
 }
+
+
+/* ════════════════════════════════════════════
+   V830 — Comparador permanente no fluxo da página
+   A seção fica sempre disponível durante a rolagem normal.
+   O menu lateral passa a ser apenas um atalho para a seção.
+════════════════════════════════════════════ */
+#comparWorkspaceV723{
+  display: block;
+  scroll-margin-top: 18px;
+  scroll-behavior: auto !important;
+}
+
+/* O workspace agora é uma seção permanente, portanto o botão de
+   "fechar área de comparação" deixa de ser necessário visualmente.
+   O elemento permanece no HTML para compatibilidade com código legado. */
+#comparWorkspaceCloseV723{
+  display: none !important;
+}
