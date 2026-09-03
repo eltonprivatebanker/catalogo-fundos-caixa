@@ -1,0 +1,22 @@
+V837-DIAG — rastreamento de rolagem no Microsoft Edge
+
+OBJETIVO
+Identificar a rotina exata que altera o scrollY durante o primeiro carregamento do Catálogo.
+
+O QUE É CAPTURADO
+- window.scrollTo / window.scroll / window.scrollBy
+- Element.scrollIntoView / scrollIntoViewIfNeeded
+- HTMLElement.focus
+- frames reais de scroll
+- DOMContentLoaded, load, pageshow, popstate e hashchange
+- stack trace da chamada que pediu a rolagem
+
+TESTE
+1. Abra no Edge com o Console aberto.
+2. Ctrl+F5.
+3. Não clique nem role por 4 segundos.
+4. Procure por: [V837-DIAG] QUEM MANDOU ROLAR
+5. Rode: copy(JSON.stringify(window.__V837_SCROLL_DIAG__, null, 2))
+6. Cole o resultado no ChatGPT.
+
+A V837-DIAG não corrige o comportamento; apenas identifica o chamador.
