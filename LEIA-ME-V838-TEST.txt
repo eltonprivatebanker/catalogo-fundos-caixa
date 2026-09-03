@@ -1,0 +1,22 @@
+V838-TEST — Edge · rolagem nativa durante o boot
+
+OBJETIVO
+Testar a hipótese indicada pela V837: a viewport se move sem nenhuma chamada JavaScript a scrollTo/scrollBy/scrollIntoView/focus.
+
+O QUE MUDA NO DESKTOP (>=769px)
+1. history.scrollRestoration = manual é definido no início do <head>.
+2. scroll anchoring nativo é desativado em html/body e nos blocos principais.
+3. scroll-behavior permanece auto, preservando a correção V828.
+4. Nenhuma altura da tabela, paginação ou comparador é alterada por este teste.
+5. Mobile não é afetado.
+
+COMO TESTAR
+- Abra no Microsoft Edge.
+- Posicione no topo da página.
+- Pressione Ctrl+F5.
+- Não clique nem role até o catálogo terminar de carregar.
+- Observe a região da tabela.
+
+INTERPRETAÇÃO
+- Se o sobe/desce sumir ou reduzir muito: a causa é rolagem/restauração/anchoring nativo do Chromium durante o boot.
+- Se ficar igual: o próximo alvo é mudança estrutural acima do viewport, não chamadas explícitas de scroll.
