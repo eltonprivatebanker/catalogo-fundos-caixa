@@ -1,0 +1,29 @@
+V838 — ESTABILIDADE DE ROLAGEM NO DESKTOP / EDGE
+
+STATUS
+Versão confirmada em teste no Microsoft Edge: eliminou o movimento visual de “sobe e desce” observado na região da tabela do Catálogo durante o primeiro carregamento.
+
+DIAGNÓSTICO CONSOLIDADO
+- A geometria interna da tabela permaneceu estável durante o fenômeno.
+- O navegador alterava a posição da viewport durante o boot.
+- O rastreamento V837 registrou frames de rolagem sem chamadas JavaScript a scrollTo, scrollBy, scrollIntoView ou focus.
+- A correção efetiva foi impedir a restauração automática de rolagem e o scroll anchoring nativo no desktop.
+
+CORREÇÃO V838
+No início do <head>, em desktop (>= 769 px):
+1. history.scrollRestoration = 'manual'
+2. Classe desktop-scroll-stable-v838 no <html>
+3. overflow-anchor: none para html/body e áreas críticas
+4. scroll-behavior: auto preservado
+
+IMPORTANTE PARA PRÓXIMAS VERSÕES
+Não remover ou substituir essa proteção sem um teste específico no Microsoft Edge.
+Não reintroduzir scroll-behavior:smooth global no desktop.
+As tentativas V831/V832 de compensar o problema com alturas artificiais não são a solução padrão para esse caso.
+
+ARQUIVO FUNCIONAL ALTERADO
+- index.html
+
+DOCUMENTAÇÃO
+- LEIA-ME-V838.txt
+- PADRAO-TECNICO.md

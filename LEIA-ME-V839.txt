@@ -1,0 +1,24 @@
+V839 — Comparador: estado inicial limpo e categorias estáveis
+
+BASE
+V838 FINAL — estabilidade do Microsoft Edge preservada integralmente.
+
+CORREÇÕES
+1. O texto "Carregando fundos..." não aparece mais no estado inicial do Comparador quando o usuário ainda não digitou nem aplicou filtros.
+2. O seletor Categoria deixa de depender exclusivamente da inicialização assíncrona do core.
+3. Se o select nascer somente com "Todas", a V839 usa primeiro a taxonomia já carregada pelo Comparador legado/modal; se ela ainda não estiver disponível, usa a taxonomia oficial já presente no Catálogo mobile.
+4. Se o core posteriormente preencher a lista normalmente, a V839 não substitui uma lista válida.
+5. Nenhuma chamada de scroll é adicionada.
+
+ARQUIVOS ALTERADOS
+- index.html
+- comparador-v839-init.js (novo)
+- LEIA-ME-V839.txt (novo)
+
+TESTE SUGERIDO
+1. Abrir/recarregar a página no Edge.
+2. Ir ao Comparador sem digitar nada: não deve aparecer "Carregando fundos...".
+3. Abrir Categoria: deve haver as categorias, não apenas "Todas".
+4. Selecionar, por exemplo, Ações ou Multimercado e confirmar que a lista filtra.
+5. Digitar na busca e confirmar que os estados/contagens normais continuam aparecendo.
+6. Recarregar no Edge e confirmar que a estabilidade V838 (sem sobe/desce) permanece.
