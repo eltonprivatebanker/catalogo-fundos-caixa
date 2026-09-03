@@ -1,0 +1,38 @@
+V836-DIAG — Monitor cirúrgico da região Catálogo → Tabela no Microsoft Edge
+
+OBJETIVO
+Medir quadro a quadro a região em que o movimento vertical é percebido, sem tentar corrigir o layout.
+
+BASE
+- Parte da V832 (sem o bloqueio experimental V835).
+- Mantém V828/V829/V830 do comparador.
+
+O QUE É MEDIDO POR 5 SEGUNDOS
+- #sec-fundos
+- título do Catálogo
+- #fundFilterShell
+- controles mobile/engine ocultos entre filtros e tabela
+- .table-wrap
+- #loadMsg e #mainTable
+- #mobileFundCards
+- .pagination-row
+- #comparWorkspaceV723
+- scrollY
+- gaps derivados: filtro→tabela, título→filtro, tabela→paginação e posição da tabela dentro de #sec-fundos
+- LayoutShift do Chromium
+- mudanças de class/style/hidden/aria-hidden apenas nos elementos relevantes
+
+TESTE
+1. Abrir no Edge com DevTools > Console.
+2. Ctrl+F5.
+3. Não clicar nem rolar por 5–6 segundos.
+4. Procurar: [V836-DIAG] TABELA — RESULTADO
+5. Executar:
+   copy(JSON.stringify(window.__V836_DIAG__, null, 2))
+6. Colar o texto no ChatGPT.
+
+INTERPRETAÇÃO
+- Se filterToTableGap variar ~27 px e o filtro não mudar de altura: o espaço/regra entre filtros e tabela é o culpado.
+- Se filters.h variar ~27 px: o bloco de filtros é o culpado.
+- Se tableRelativeToSec variar ~27 px enquanto #sec-fundos permanece estável: o problema é interno ao catálogo.
+- Se #sec-fundos inteiro mudar de Y: algum bloco acima do catálogo está empurrando a região.
