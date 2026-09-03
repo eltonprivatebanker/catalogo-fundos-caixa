@@ -1,0 +1,146 @@
+name: Apply V831 catalog initial layout stability
+
+on:
+  push:
+    branches:
+      - "Testes-da-versão-01"
+    paths:
+      - ".github/workflows/apply-v831.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply-v831:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout test branch
+        uses: actions/checkout@v4
+        with:
+          ref: "Testes-da-versão-01"
+          fetch-depth: 0
+
+      - name: Apply V831 files
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          css = r'''/* ============================================================
+             V831 — CATÁLOGO · PRIMEIRO CARREGAMENTO SEM LAYOUT SHIFT
+             Objetivo: impedir o movimento vertical visível no Edge quando
+             o placeholder é trocado pela tabela real e a paginação é montada.
+             Mantém V828/V829/V830 intactas.
+             ============================================================ */
+
+          @media (min-width:769px){
+            /*
+             * A geometria inicial passa a ser reservada pelo contêiner,
+             * não pelo #loadMsg. Assim o placeholder e a tabela pronta
+             * ocupam o mesmo espaço no primeiro paint.
+             */
+            html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692)
+            body:not(.fund-card-mode) #sec-fundos .table-wrap{
+              position:relative!important;
+              min-height:350px!important;
+              overflow-anchor:none!important;
+              transition:none!important;
+              animation:none!important;
+            }
+
+            /*
+             * O loader vira uma camada interna e deixa de determinar a
+             * altura do bloco (a V692 antiga fixava 384px no loader).
+             */
+            html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591)
+            body:not(.fund-card-mode) #sec-fundos #loadMsg{
+              position:absolute!important;
+              inset:0!important;
+              box-sizing:border-box!important;
+              width:100%!important;
+              min-height:0!important;
+              height:auto!important;
+              margin:0!important;
+              padding:34px!important;
+              display:flex!important;
+              align-items:center!important;
+              justify-content:center!important;
+              flex-direction:column!important;
+              transition:none!important;
+              animation:none!important;
+            }
+
+            /*
+             * A paginação nasce vazia no HTML e recebe conteúdo depois.
+             * Reservar sua altura evita o segundo deslocamento vertical.
+             */
+            html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692)
+            body:not(.fund-card-mode) #sec-fundos .pagination-row{
+              box-sizing:border-box!important;
+              min-height:72px!important;
+              overflow-anchor:none!important;
+              transition:none!important;
+              animation:none!important;
+            }
+
+            /* A troca loader → tabela não deve ser animada. */
+            html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #mainTable,
+            html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #resultInfo,
+            html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #pageBtns{
+              transition:none!important;
+              animation:none!important;
+            }
+          }
+          '''
+
+          Path('catalog-load-v831.css').write_text(css, encoding='utf-8')
+
+          index_path = Path('index.html')
+          index = index_path.read_text(encoding='utf-8')
+          marker = '<link rel="stylesheet" href="comparador-v783.css?v=comparador-v830"/>'
+          link = '<link rel="stylesheet" href="catalog-load-v831.css?v=catalog-load-v831"/>'
+          if link not in index:
+              if marker not in index:
+                  raise SystemExit('Marcador do CSS V830 não encontrado em index.html')
+              index = index.replace(marker, marker + '\n' + link, 1)
+          index_path.write_text(index, encoding='utf-8')
+
+          readme = '''V831 — Estabilização do primeiro carregamento do Catálogo no Microsoft Edge
+
+OBJETIVO
+Eliminar o movimento vertical percebido no primeiro carregamento da tabela de fundos no Edge, sem alterar dados, filtros, paginação ou comportamento posterior do catálogo.
+
+DIAGNÓSTICO TRATADO
+- A V692 reservava 386px no .table-wrap e 384px diretamente no #loadMsg.
+- A tabela real com 5 fundos possui geometria menor que o placeholder.
+- A .pagination-row nasce vazia e ganha conteúdo depois do render.
+- No Edge esses estados intermediários podem ser pintados na tela, produzindo a sensação de o bloco descer e depois subir.
+
+ALTERAÇÕES V831
+1. O .table-wrap reserva 350px no primeiro carregamento.
+2. O #loadMsg deixa de definir a altura e passa a funcionar como camada absoluta dentro do espaço já reservado.
+3. A .pagination-row reserva 72px antes de receber Resultado + botões.
+4. Transições/animações são desativadas apenas na troca inicial do Catálogo.
+5. Depois da primeira interação continua valendo a geometria normal do catálogo.
+6. V828, V829 e V830 são preservadas integralmente.
+
+ARQUIVOS
+- index.html
+- catalog-load-v831.css (novo)
+- LEIA-ME-V831.txt
+'''
+          Path('LEIA-ME-V831.txt').write_text(readme, encoding='utf-8')
+          PY
+
+      - name: Commit V831
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html catalog-load-v831.css LEIA-ME-V831.txt
+          if git diff --cached --quiet; then
+            echo "No V831 changes to commit."
+            exit 0
+          fi
+          git commit -m "V831: estabilizar primeiro carregamento do catálogo no Edge"
+          git push origin HEAD:"Testes-da-versão-01"
