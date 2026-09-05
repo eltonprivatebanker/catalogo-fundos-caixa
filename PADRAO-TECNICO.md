@@ -40,3 +40,16 @@ No Microsoft Edge/Chromium foi observado movimento vertical perceptível na regi
 - Não usar `scroll-behavior: smooth` global no desktop.
 - Alterações em `history.scrollRestoration`, `overflow-anchor`, `scroll-behavior` ou geometria inicial do Catálogo devem ser retestadas no Edge.
 - Novas funcionalidades devem ser adicionadas sobre a base V838, sem substituir essa proteção.
+
+
+## V842 — regra obrigatória para rolagem horizontal do Comparador
+
+A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualização interna do modal deve disputar a rolagem horizontal com o usuário.
+
+### Regras
+
+- `scrollLeft = 0` somente na transição real de fechado → aberto.
+- `MutationObserver` com `subtree:true` não pode tratar mudança de classe de descendentes como mudança de estado do overlay.
+- Alterações de conteúdo, classe, destaques, tooltips ou linhas/colunas internas não podem reposicionar horizontalmente a comparação.
+- Resize da viewport preserva a posição horizontal escolhida pelo usuário.
+- Retestar no Edge com 5–6 fundos sempre que o código do overlay/comparador for alterado.

@@ -1,4 +1,10 @@
 /* ============================================================
+   V842 — COMPARADOR · ROLAGEM HORIZONTAL ESTÁVEL
+   Base funcional V826 preservada.
+   - reset horizontal somente na abertura efetiva do comparador
+   - mudanças internas/MutationObserver não devolvem scrollLeft para 0
+   - resize preserva a posição horizontal escolhida pelo usuário
+
    V826 — COMPARADOR · TROFÉU ÚNICO EM IMAGEM
    - move o overlay diretamente para <body> e reforça o portal ao abrir
    - Esc fecha o comparador (ou fecha primeiro a busca rápida)
@@ -25,6 +31,7 @@
   var portalObserver = null;
   var lastFundCountV822 = -1;
   var viewportResizeBoundV823 = false;
+  var lastOpenStateV842 = null;
 
   function cleanText(value){
     return String(value == null ? '' : value)
@@ -129,8 +136,9 @@
     viewportResizeBoundV823=true;
     window.addEventListener('resize',function(){
       if(isOpen()){
+        /* V842: redimensionar a janela não deve devolver o usuário
+           para o início horizontal da comparação. */
         enforceViewportV823();
-        resetHorizontalScrollV822(false);
       }
     },{passive:true});
   }
@@ -162,9 +170,11 @@
     }
     count=Math.max(0,Math.min(6,count));
     overlay.setAttribute('data-fund-count',String(count));
+
+    /* V842: atualizar/adicionar/remover colunas não força scrollLeft=0.
+       O reset horizontal acontece somente quando o comparador é aberto. */
     if(lastFundCountV822!==count){
       lastFundCountV822=count;
-      if(isOpen()) resetHorizontalScrollV822(true);
     }
   }
 
@@ -186,12 +196,20 @@
 
   function syncOpenState(){
     if(!overlay) return;
-    if(isOpen()){
+
+    var open=isOpen();
+    var justOpened=(open && lastOpenStateV842!==true);
+
+    if(open){
       portalOverlay();
       setBodyState(true);
       enforceViewportV823();
       syncFundCount();
-      resetHorizontalScrollV822(true);
+
+      /* V842: uma nova comparação começa à esquerda uma única vez.
+         Depois disso, a rolagem horizontal pertence ao usuário. */
+      if(justOpened) resetHorizontalScrollV822(true);
+
       if(document.activeElement && !overlay.contains(document.activeElement)) lastFocused=document.activeElement;
     }else{
       setBodyState(false);
@@ -200,6 +218,8 @@
       }
       lastFocused=null;
     }
+
+    lastOpenStateV842=open;
   }
 
   function removeOldExportUI(){
@@ -796,7 +816,16 @@
   function bindObservers(){
     if(!overlay) return;
     overlayObserver=new MutationObserver(function(mutations){
-      if(mutations.some(function(m){return m.type==='attributes'&&m.attributeName==='class';})) syncOpenState();
+      /* V842: com subtree:true, mudanças de classe nos filhos também chegavam
+         aqui e chamavam syncOpenState(), que zerava a rolagem horizontal.
+         Agora somente uma mudança de classe do próprio overlay sincroniza
+         o estado de abertura/fechamento. */
+      var overlayClassChanged=mutations.some(function(m){
+        return m.type==='attributes' &&
+               m.attributeName==='class' &&
+               m.target===overlay;
+      });
+      if(overlayClassChanged) syncOpenState();
       syncFundCount();
       queueRefresh();
     });
@@ -811,8 +840,8 @@
         portalOverlay();
         var result=originalOpen.apply(this,arguments);
         portalOverlay();
-        requestAnimationFrame(function(){portalOverlay();enforceViewportV823();syncOpenState();resetHorizontalScrollV822(true);queueRefresh();});
-        setTimeout(function(){portalOverlay();enforceViewportV823();syncOpenState();resetHorizontalScrollV822(true);queueRefresh();},30);
+        requestAnimationFrame(function(){portalOverlay();enforceViewportV823();syncOpenState();queueRefresh();});
+        setTimeout(function(){portalOverlay();enforceViewportV823();syncOpenState();queueRefresh();},30);
         setTimeout(function(){enforceViewportV823();},120);
         return result;
       };

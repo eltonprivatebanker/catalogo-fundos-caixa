@@ -1,0 +1,28 @@
+V842 — Comparador · rolagem horizontal estável
+
+OBJETIVO
+Eliminar o tremor/travamento ao rolar horizontalmente a comparação com muitos fundos no desktop.
+
+DIAGNÓSTICO CONFIRMADO
+O comparador possuía uma rotina que podia executar scrollLeft = 0 novamente enquanto o usuário já estava rolando para a direita. Como o MutationObserver observava o overlay com subtree:true, mudanças de classe em elementos internos disparavam syncOpenState() e o reset horizontal. O teste pelo Console que bloqueou esses resets confirmou a causa.
+
+ALTERAÇÕES V842
+1. O reset horizontal ocorre somente quando o comparador passa efetivamente de fechado para aberto.
+2. Mudanças de classe em elementos internos do overlay não chamam mais syncOpenState().
+3. Mudanças internas/atualizações da tabela não forçam scrollLeft = 0.
+4. Redimensionar a janela preserva a posição horizontal atual.
+5. Ao fechar e abrir uma nova comparação, ela continua começando normalmente pela esquerda.
+6. V838/V839/V841 permanecem preservadas.
+
+ARQUIVOS ALTERADOS
+- index.html (cache-busting comparador-v842)
+- comparador-v826.js (correção na origem; nome legado preservado)
+- PADRAO-TECNICO.md
+- LEIA-ME-V842.txt
+
+TESTE SUGERIDO
+1. Abrir uma comparação com 5 ou 6 fundos.
+2. Arrastar a barra horizontal inferior para a direita.
+3. Confirmar que o conteúdo acompanha o movimento sem tremer e sem voltar sozinho para a esquerda.
+4. Permanecer alguns segundos na posição deslocada e verificar que atualizações internas não reposicionam a tabela.
+5. Fechar e abrir novamente: a nova comparação deve iniciar à esquerda.
