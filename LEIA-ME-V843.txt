@@ -1,0 +1,34 @@
+V843 — Comparador mais compacto por estado
+
+BASE
+- V838: estabilidade vertical no Edge preservada.
+- V841: seleção/Barra de ação do Catálogo preservada.
+- V842: rolagem horizontal do comparador final preservada.
+
+OBJETIVO
+Reduzir o grande espaço vazio do segundo Comparador quando não há resultados de busca para exibir.
+
+COMPORTAMENTO
+1. 0 fundos selecionados, sem busca/filtros:
+   - estado vazio compacto (116 px na lista).
+2. 1 fundo selecionado, sem busca/filtros:
+   - estado compacto (104 px na lista).
+3. 2 a 6 fundos selecionados, sem busca/filtros:
+   - "Seleção pronta" compacta (88 px na lista);
+   - botão Comparar permanece próximo da mensagem.
+4. Busca, Categoria ou Perfil de risco ativos, ou resultados disponíveis:
+   - geometria normal do Comparador é restaurada para exibir a lista.
+
+ARQUIVOS V843
+- index.html
+- comparador-v843-compact.css
+- comparador-v843-compact.js
+- LEIA-ME-V843.txt
+- PADRAO-TECNICO.md
+
+TESTE SUGERIDO
+- Abrir o Comparador sem seleção: conferir estado vazio mais curto.
+- Selecionar 1 fundo: conferir estado intermediário compacto.
+- Selecionar 2 fundos no Catálogo e descer ao Comparador: conferir "Seleção pronta" compacta.
+- Digitar na busca ou escolher Categoria/Perfil: conferir expansão normal.
+- Abrir comparação com 5/6 fundos e testar scroll horizontal: V842 deve permanecer estável.

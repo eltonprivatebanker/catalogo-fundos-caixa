@@ -1,0 +1,145 @@
+/* ============================================================
+   V843 — COMPARADOR · ESTADOS OCIOSOS MAIS COMPACTOS
+   ------------------------------------------------------------
+   Objetivo:
+   - reduzir espaço vertical quando não há resultados para listar;
+   - preservar espaço normal durante busca/filtros/resultados;
+   - estado vazio: compacto;
+   - 1 selecionado: compacto;
+   - 2–6 selecionados, sem busca ativa: "Seleção pronta" compacta;
+   - não interfere no overlay de comparação nem na V842 horizontal.
+   ============================================================ */
+
+@media (min-width:769px){
+  #comparWorkspaceV723.v843-idle-empty,
+  #comparWorkspaceV723.v843-idle-one,
+  #comparWorkspaceV723.v843-selection-ready{
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-grid-v723,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-grid-v723,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-grid-v723,
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-browser-v723,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-browser-v723,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-browser-v723{
+    min-height:0 !important;
+    height:auto !important;
+    max-height:none !important;
+  }
+
+  /* 0 selecionados: mensagem de descoberta curta, ainda confortável. */
+  #comparWorkspaceV723.v843-idle-empty #comparWorkspaceListV723{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex:none !important;
+    height:116px !important;
+    min-height:116px !important;
+    max-height:116px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  /* 1 selecionado: pede apenas mais um fundo, então pode ser menor. */
+  #comparWorkspaceV723.v843-idle-one #comparWorkspaceListV723{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex:none !important;
+    height:104px !important;
+    min-height:104px !important;
+    max-height:104px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  /* 2–6 selecionados: estado aprovado no teste de console. */
+  #comparWorkspaceV723.v843-selection-ready #comparWorkspaceListV723{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex:none !important;
+    height:88px !important;
+    min-height:88px !important;
+    max-height:88px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty #comparWorkspaceListV723 .compar-workspace-empty-v723,
+  #comparWorkspaceV723.v843-idle-one #comparWorkspaceListV723 .compar-workspace-empty-v723,
+  #comparWorkspaceV723.v843-selection-ready #comparWorkspaceListV723 .compar-workspace-empty-v723,
+  #comparWorkspaceV723.v843-idle-empty #comparWorkspaceListV723 .compar-workspace-empty-v779,
+  #comparWorkspaceV723.v843-idle-one #comparWorkspaceListV723 .compar-workspace-empty-v779,
+  #comparWorkspaceV723.v843-selection-ready #comparWorkspaceListV723 .compar-workspace-empty-v779{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    height:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:4px 12px !important;
+    gap:3px !important;
+    box-sizing:border-box !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-empty-v779::before,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-empty-v779::before,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-empty-v779::before{
+    width:27px !important;
+    height:27px !important;
+    min-width:27px !important;
+    min-height:27px !important;
+    margin:0 0 2px !important;
+    font-size:.9rem !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-empty-v723 strong,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-empty-v723 strong,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-empty-v723 strong{
+    margin:0 !important;
+    line-height:1.15 !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-empty-v723 span,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-empty-v723 span,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-empty-v723 span{
+    margin:0 !important;
+    line-height:1.25 !important;
+  }
+
+  /* Botão principal faz parte do estado pronto, mas não precisa de um grande vão. */
+  #comparWorkspaceV723.v843-selection-ready #comparWorkspacePrimaryActionV767{
+    position:static !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    min-height:0 !important;
+    height:auto !important;
+    margin:7px 0 9px !important;
+    padding:0 !important;
+  }
+
+  #comparWorkspaceV723.v843-selection-ready #comparWorkspaceCompareV723{
+    min-height:38px !important;
+    height:38px !important;
+    margin:0 !important;
+    padding:0 28px !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-empty .compar-workspace-status-v723,
+  #comparWorkspaceV723.v843-idle-one .compar-workspace-status-v723,
+  #comparWorkspaceV723.v843-selection-ready .compar-workspace-status-v723{
+    margin-bottom:3px !important;
+  }
+}

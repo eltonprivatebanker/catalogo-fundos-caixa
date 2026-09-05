@@ -53,3 +53,10 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Alterações de conteúdo, classe, destaques, tooltips ou linhas/colunas internas não podem reposicionar horizontalmente a comparação.
 - Resize da viewport preserva a posição horizontal escolhida pelo usuário.
 - Retestar no Edge com 5–6 fundos sempre que o código do overlay/comparador for alterado.
+
+## V843 — Comparador: geometria por estado
+- O workspace do Comparador não deve reservar uma grande área vazia quando não há resultados para listar.
+- Sem busca/filtros ativos: 0 selecionados = vazio compacto; 1 = compacto; 2–6 = "Seleção pronta" compacta.
+- Ao iniciar busca ou aplicar Categoria/Perfil, remover o modo compacto e permitir a geometria normal da lista.
+- Não usar scroll automático para implementar essa compactação.
+- Preservar V838 (Edge), V841 (barra do Catálogo) e V842 (scroll horizontal do overlay).
