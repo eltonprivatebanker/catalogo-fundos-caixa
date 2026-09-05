@@ -1,0 +1,144 @@
+/* ============================================================
+   V840 — COMPARAÇÃO · DESCOBERTA + AÇÃO DIRETA NO CATÁLOGO
+   ------------------------------------------------------------
+   - Explicita a função do checkbox de comparação.
+   - Exibe uma barra compacta apenas enquanto o Catálogo está visível.
+   - A barra oferece Revisar seleção e Comparar agora.
+   - Não altera a correção V838 de rolagem/Edge.
+   ============================================================ */
+
+@media (min-width:769px){
+  #mainTable th.v840-compare-header{
+    text-align:center !important;
+    vertical-align:middle !important;
+    white-space:nowrap !important;
+  }
+
+  #mainTable .v840-compare-label{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    color:#e5b550;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+
+  #mainTable input.v840-compare-check{
+    width:18px !important;
+    height:18px !important;
+    cursor:pointer !important;
+    accent-color:#d7a63d;
+    outline:1px solid rgba(215,166,61,.25);
+    outline-offset:2px;
+    border-radius:3px;
+    transition:outline-color .15s ease, filter .15s ease;
+  }
+
+  #mainTable input.v840-compare-check:hover{
+    outline-color:rgba(229,181,80,.70);
+  }
+
+  #mainTable input.v840-compare-check:checked{
+    outline-color:rgba(229,181,80,.78);
+    filter:drop-shadow(0 0 3px rgba(229,181,80,.20));
+  }
+
+  #v840CompareActionBar{
+    position:fixed;
+    right:max(28px, calc((100vw - 1760px) / 2 + 28px));
+    bottom:28px;
+    z-index:9998;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    max-width:calc(100vw - 56px);
+    padding:10px 12px;
+    background:#111722;
+    border:1px solid rgba(229,181,80,.42);
+    border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.34);
+    color:#dce3f0;
+    font-family:inherit;
+    font-size:13px;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease;
+  }
+
+  #v840CompareActionBar.v840-show{
+    opacity:1;
+    transform:none;
+    pointer-events:auto;
+  }
+
+  #v840CompareActionBar .v840-action-count{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+
+  #v840CompareActionBar .v840-action-count strong{
+    color:#f2bf54;
+    font-weight:800;
+  }
+
+  #v840CompareActionBar button{
+    font:inherit;
+    cursor:pointer;
+    border-radius:8px;
+    padding:8px 11px;
+    transition:border-color .15s ease, background .15s ease, transform .15s ease;
+  }
+
+  #v840CompareActionBar button:hover{
+    transform:translateY(-1px);
+  }
+
+  #v840CompareReview{
+    color:#c9d2e3;
+    background:#151c28;
+    border:1px solid #2a3547;
+  }
+
+  #v840CompareReview:hover{
+    border-color:#46546b;
+  }
+
+  #v840CompareNow{
+    color:#f4c45e;
+    background:rgba(177,121,27,.14);
+    border:1px solid rgba(229,181,80,.52);
+    font-weight:800;
+  }
+
+  #v840CompareNow:hover{
+    background:rgba(177,121,27,.22);
+  }
+
+  #v840CompareNow:disabled{
+    opacity:.45;
+    cursor:default;
+    transform:none;
+  }
+
+  #comparWorkspaceV723 .v840-ready-title{
+    color:#f3f6fb !important;
+  }
+
+  #comparWorkspaceV723 .v840-ready-button{
+    border-color:rgba(229,181,80,.65) !important;
+    box-shadow:0 0 0 1px rgba(229,181,80,.08);
+  }
+}
+
+@media (max-width:768px){
+  #v840CompareActionBar{
+    display:none !important;
+  }
+}
