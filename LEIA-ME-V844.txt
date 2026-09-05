@@ -1,0 +1,42 @@
+V844 — Comparador: orientação intuitiva nos estados ociosos
+
+BASE PRESERVADA
+- V838: estabilidade vertical no Edge.
+- V841: barra de seleção/ação do Catálogo.
+- V842: rolagem horizontal estável da comparação final.
+- V843: geometria compacta por estado do segundo Comparador.
+
+OBJETIVO
+Evitar que o estado compacto do Comparador pareça um espaço vazio sem função.
+
+COMPORTAMENTO
+1. 0 fundos selecionados, sem busca/filtros:
+   - mostra "Monte sua comparação";
+   - orientação curta;
+   - link "Selecionar fundos no Catálogo →";
+   - altura compacta de 108 px na área de lista.
+2. 1 fundo selecionado, sem busca/filtros:
+   - mostra "Falta só 1 fundo";
+   - orienta a escolher mais um fundo;
+   - link para retornar ao Catálogo;
+   - altura compacta de 96 px.
+3. 2 a 6 selecionados:
+   - preserva o estado V843 "Seleção pronta" e o botão Comparar.
+4. Busca, Categoria, Perfil de risco ou resultados ativos:
+   - remove a orientação V844;
+   - lista volta ao comportamento normal para descoberta.
+
+ARQUIVOS NOVOS
+- comparador-v844-guidance.css
+- comparador-v844-guidance.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+TESTE SUGERIDO
+- Abrir Comparador com 0 selecionados: conferir CTA "Monte sua comparação".
+- Clicar no link para o Catálogo: retorno deve ser imediato, sem smooth scroll.
+- Selecionar 1 fundo e voltar ao Comparador: conferir "Falta só 1 fundo".
+- Selecionar 2 fundos: conferir "Seleção pronta" compacta da V843.
+- Usar busca/categoria/risco: orientação deve sumir e resultados devem expandir normalmente.

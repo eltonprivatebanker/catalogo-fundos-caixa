@@ -1,0 +1,105 @@
+/* ============================================================
+   V844 — COMPARADOR · ORIENTAÇÃO INTUITIVA NOS ESTADOS OCIOSOS
+   ------------------------------------------------------------
+   Base V843 preservada.
+   - 0 selecionados: CTA compacto "Monte sua comparação";
+   - 1 selecionado: CTA compacto "Falta só 1 fundo";
+   - 2–6 selecionados: V843/V841 mantêm "Seleção pronta";
+   - busca/filtros/resultados: orientação some e a lista normal assume;
+   - sem scroll automático e sem interferir no overlay final.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* V844 reduz discretamente o estado vazio aprovado no teste. */
+  #comparWorkspaceV723.v843-idle-empty.v844-guidance-active
+  #comparWorkspaceListV723{
+    height:108px !important;
+    min-height:108px !important;
+    max-height:108px !important;
+  }
+
+  #comparWorkspaceV723.v843-idle-one.v844-guidance-active
+  #comparWorkspaceListV723{
+    height:96px !important;
+    min-height:96px !important;
+    max-height:96px !important;
+  }
+
+  /* Se o core mantiver um empty-state legado no DOM, ele não compete
+     visualmente com o conteúdo orientativo da V844. */
+  #comparWorkspaceV723.v844-guidance-active
+  #comparWorkspaceListV723 > .compar-workspace-empty-v723,
+  #comparWorkspaceV723.v844-guidance-active
+  #comparWorkspaceListV723 > .compar-workspace-empty-v779{
+    display:none !important;
+  }
+
+  #v844IdleGuidance{
+    width:100%;
+    min-width:0;
+    height:100%;
+    box-sizing:border-box;
+    padding:8px 18px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+
+    text-align:center;
+  }
+
+  #v844IdleGuidance .v844-guidance-icon{
+    width:32px;
+    height:32px;
+    min-width:32px;
+    min-height:32px;
+    margin:0 0 2px;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid rgba(128,151,195,.20);
+    border-radius:10px;
+    background:rgba(17,23,34,.48);
+
+    color:#e5b550;
+    font-size:17px;
+    line-height:1;
+  }
+
+  #v844IdleGuidance strong{
+    margin:0;
+    color:#f2f4f8;
+    font-size:.93rem;
+    line-height:1.18;
+    font-weight:820;
+    letter-spacing:-.012em;
+  }
+
+  #v844IdleGuidance p{
+    margin:0;
+    color:#96a3bf;
+    font-size:.70rem;
+    line-height:1.35;
+    font-weight:520;
+  }
+
+  #v844IdleGuidance .v844-guidance-link{
+    margin-top:3px;
+    color:#86a9ff;
+    font-size:.68rem;
+    line-height:1.2;
+    font-weight:800;
+    text-decoration:none;
+    cursor:pointer;
+  }
+
+  #v844IdleGuidance .v844-guidance-link:hover,
+  #v844IdleGuidance .v844-guidance-link:focus-visible{
+    color:#a9c0ff;
+    text-decoration:underline;
+  }
+}

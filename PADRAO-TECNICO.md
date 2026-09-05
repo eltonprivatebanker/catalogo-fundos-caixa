@@ -60,3 +60,11 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Ao iniciar busca ou aplicar Categoria/Perfil, remover o modo compacto e permitir a geometria normal da lista.
 - Não usar scroll automático para implementar essa compactação.
 - Preservar V838 (Edge), V841 (barra do Catálogo) e V842 (scroll horizontal do overlay).
+
+## V844 — Comparador: estado ocioso deve orientar, não parecer vazio
+- Compactação não pode remover a orientação de primeiro uso.
+- Com 0 selecionados e sem descoberta ativa, exibir CTA curto "Monte sua comparação" com acesso ao Catálogo.
+- Com 1 selecionado e sem descoberta ativa, informar que falta apenas mais 1 fundo.
+- Com 2–6 selecionados, preservar o estado compacto "Seleção pronta" da V843.
+- Busca, Categoria, Perfil ou resultados ativos removem o CTA ocioso e devolvem a área à lista normal.
+- Links internos acionados pelo usuário usam `behavior:auto`; não reintroduzir smooth scroll global.
