@@ -1,0 +1,29 @@
+V841 — Barra de comparação centralizada e acionamento imediato
+
+BASE
+- V838: estabilidade do Edge preservada.
+- V839: inicialização do Comparador preservada.
+- V840: descoberta da seleção e ações Revisar/Comparar preservadas.
+
+AJUSTES DA V841
+1. A barra flutuante é centralizada pela área útil real da tabela do Catálogo.
+2. A barra aparece imediatamente após a seleção, sem depender de o usuário rolar a página.
+3. A barra permanece disponível enquanto o usuário ainda estiver na região do Catálogo.
+4. Ela desaparece somente quando o workspace do Comparador passa a ocupar de fato a região principal da tela.
+5. Revisar seleção continua levando ao workspace com behavior:auto.
+6. Comparar agora continua abrindo diretamente a comparação final quando houver 2 a 6 fundos.
+7. Nenhuma rotina de smooth scroll foi adicionada.
+
+ARQUIVOS ALTERADOS
+- index.html
+- comparador-v841-ux.css
+- comparador-v841-ux.js
+- LEIA-ME-V841.txt
+
+TESTE SUGERIDO
+- Abrir no Edge com Ctrl+F5.
+- Marcar 1 fundo: barra deve aparecer imediatamente com "marque mais 1".
+- Marcar 2 fundos: barra deve permanecer centralizada abaixo da área útil do Catálogo.
+- Clicar em "Revisar seleção": deve ir ao workspace sem animação suave.
+- Clicar em "Comparar 2 agora": deve abrir diretamente a comparação final.
+- Rolar para dentro do Comparador: a barra deve desaparecer.
