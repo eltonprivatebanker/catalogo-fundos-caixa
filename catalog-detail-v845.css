@@ -1,0 +1,168 @@
+/* ============================================================
+   V845 — CATÁLOGO · DETALHE OPERACIONAL MAIS ENXUTO
+   - compacta o detalhe expandido sem retirar informação
+   - aproxima Aplicação e Resgate e reduz "cards dentro de cards"
+   - melhora descoberta dos documentos (+N / popover)
+   - preserva mobile e toda a base V838–V844
+   ============================================================ */
+
+@media (min-width:769px){
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-fund-detail-panel{
+    box-sizing:border-box!important;
+    padding:16px 18px 14px!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-head{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 10px!important;
+    padding:0 0 10px!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-head h2,
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-head h3,
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-head h4,
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-head strong{
+    margin-top:0!important;
+    margin-bottom:0!important;
+  }
+
+  /* fatos principais: mais informação por linha e menos altura */
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-facts-grid{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-card{
+    min-width:0!important;
+    min-height:0!important;
+    padding:9px 11px!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-card .v845-label,
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-card [class*="label"],
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-detail-card > small:first-child{
+    margin:0 0 4px!important;
+    line-height:1!important;
+  }
+
+  /* Aplicação / Resgate: dois blocos irmãos, mais planos e compactos */
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-wrap{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:10px!important;
+    margin-top:8px!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-section{
+    min-width:0!important;
+    min-height:0!important;
+    padding:10px 12px!important;
+    border-radius:11px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-section .v845-flow-title{
+    display:block!important;
+    margin:0 0 7px!important;
+    line-height:1.1!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-section .v845-flow-grid{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-section .v845-detail-card{
+    padding:8px 9px!important;
+    border-radius:9px!important;
+  }
+
+  /* Ações secundárias menos pesadas */
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-page-link{
+    min-height:32px!important;
+    height:32px!important;
+    padding:0 14px!important;
+    border-radius:9px!important;
+  }
+
+  /* Copiar passa a ser explicitamente ação de CNPJ, mas sem aumentar a coluna */
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) #mainTable .v845-copy-cnpj{
+    cursor:pointer!important;
+  }
+
+  /* botão compacto de documentos */
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) #mainTable .doc-more-button-v559.v845-doc-more{
+    min-width:30px!important;
+    padding:0 7px!important;
+    border-color:rgba(229,181,80,.28)!important;
+  }
+
+  /* Popover de documentos: mais curto, mais legível e conectado ao gatilho */
+  html.desktop-catalog-detail-v845 .v845-doc-popover{
+    width:min(370px,calc(100vw - 34px))!important;
+    max-width:370px!important;
+    padding:16px 18px!important;
+    border-radius:14px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-head{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-count{
+    display:inline-flex!important;
+    align-items:center!important;
+    min-height:22px!important;
+    padding:0 8px!important;
+    border:1px solid rgba(229,181,80,.24)!important;
+    border-radius:999px!important;
+    background:rgba(229,181,80,.07)!important;
+    color:#d9b45e!important;
+    font-size:.63rem!important;
+    font-weight:800!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover a,
+  html.desktop-catalog-detail-v845 .v845-doc-popover button:not(.v845-doc-count){
+    min-height:38px!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-item{
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-icon{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:18px!important;
+    min-width:18px!important;
+    opacity:.78!important;
+    font-size:.82rem!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-facts-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+  html.desktop-catalog-detail-v845 body:not(.fund-card-mode) .v845-flow-section .v845-flow-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}

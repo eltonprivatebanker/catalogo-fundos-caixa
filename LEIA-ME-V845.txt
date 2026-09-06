@@ -1,0 +1,27 @@
+V845 — Catálogo · detalhe operacional mais enxuto
+
+OBJETIVO
+Melhorar a leitura do fundo expandido no desktop sem alterar dados ou a lógica do Catálogo.
+
+ALTERAÇÕES
+- compactação do bloco "Dados operacionais do fundo";
+- fatos principais organizados com menos altura;
+- Aplicação e Resgate tratados como dois blocos irmãos mais enxutos;
+- cartões internos com menos padding e menor sensação de "card dentro de card";
+- botão Copiar passa a ter tooltip/aria-label "Copiar CNPJ";
+- botão +N de documentos recebe descrição explícita;
+- popover "Documentos do fundo" fica mais compacto e ganha contagem de documentos;
+- documentos recebem pequenos marcadores visuais por tipo.
+
+PRESERVADO
+- V838: estabilidade vertical no Edge;
+- V841: barra de seleção do Catálogo;
+- V842: rolagem horizontal estável do Comparador;
+- V843/V844: estados compactos e orientações do segundo Comparador;
+- comportamento mobile não é alterado pela V845.
+
+TESTE SUGERIDO
+1. Expandir um fundo no Catálogo.
+2. Conferir se Dados operacionais / Aplicação / Resgate ficaram mais compactos.
+3. Passar o mouse sobre "Copiar" e confirmar "Copiar CNPJ".
+4. Abrir +N documentos e conferir o popover compacto e a contagem.

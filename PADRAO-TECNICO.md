@@ -68,3 +68,10 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Com 2–6 selecionados, preservar o estado compacto "Seleção pronta" da V843.
 - Busca, Categoria, Perfil ou resultados ativos removem o CTA ocioso e devolvem a área à lista normal.
 - Links internos acionados pelo usuário usam `behavior:auto`; não reintroduzir smooth scroll global.
+
+## V845 — detalhe operacional do Catálogo
+- O detalhe expandido deve permanecer informativo, mas compacto no desktop.
+- Aplicação e Resgate devem ser apresentados como blocos irmãos, sem ampliar desnecessariamente a altura da linha.
+- A V845 é uma camada progressiva: não altera os dados do fundo nem a lógica de abertura/fechamento.
+- O botão "Copiar" no Catálogo deve ser descrito como "Copiar CNPJ".
+- O popover de documentos deve manter todos os documentos, em layout compacto, com contagem explícita.
