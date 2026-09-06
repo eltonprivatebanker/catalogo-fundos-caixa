@@ -1,0 +1,20 @@
+/* ============================================================
+   V852 — JUROS DE REFERÊNCIA · AJUSTE FINAL DESKTOP
+   Escopo: somente desktop (>= 769px).
+   Objetivos:
+   - reduzir levemente o espaço entre KPIs e Agenda Copom;
+   - preservar integralmente mobile, dados, cálculos e interações;
+   - complementar a semântica aprovada na V851.
+   ============================================================ */
+
+@media (min-width: 769px){
+  /* Aproxima a Agenda Copom dos KPIs sem alterar a grade. */
+  #ratesDesktopCleanV745 .rates-clean-groups-v745{
+    margin-bottom: 0 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-groups-v745 + .rates-clean-copom-v745,
+  #ratesDesktopCleanV745 .rates-clean-copom-v745{
+    margin-top: 6px !important;
+  }
+}

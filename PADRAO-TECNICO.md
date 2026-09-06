@@ -110,3 +110,13 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - CDI recente é apresentado como `CDI mensal`; os próprios cards indicam `parcial` e `fechado`.
 - O patch não altera valores, datas, cálculos, chamadas de API ou a fonte dos dados.
 - O JS guarda os textos originais e os restaura ao sair do breakpoint desktop.
+
+
+## V852 — Juros de referência: acabamento final desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- O subtítulo aprovado é `Selic, CDI e agenda do Copom.`.
+- A V852 deve impedir que scripts legados restaurem a frase longa após o carregamento.
+- A aproximação entre KPIs e Agenda Copom é apenas visual e leve; não alterar a grade nem a lógica do bloco.
+- Não alterar valores, datas, cálculos, APIs, fontes ou estados do Copom.
+- V852 é uma camada incremental sobre V851 e deve preservar V838–V849.

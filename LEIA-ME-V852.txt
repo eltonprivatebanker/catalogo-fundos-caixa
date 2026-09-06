@@ -1,0 +1,29 @@
+V852 — Juros de referência · ajuste final desktop
+
+ESCOPO
+Somente desktop (largura mínima de 769 px). O mobile permanece inalterado.
+
+BASE
+V851 preservada. A V852 é uma camada final e pequena sobre a semântica aprovada.
+
+AJUSTES
+1. Garante o subtítulo curto:
+   "Selic, CDI e agenda do Copom."
+   Um MutationObserver impede que scripts legados restaurem o texto antigo após o carregamento.
+
+2. Reduz levemente o espaço vertical entre os quatro KPIs principais e a Agenda Copom.
+
+NÃO ALTERA
+- Selic, CDI ou acumulados;
+- datas e decisões do Copom;
+- fontes ou APIs;
+- comportamento do mobile;
+- Comparador, Catálogo, Rankings ou demais blocos.
+
+ARQUIVOS NOVOS
+- rates-reference-v852-final.css
+- rates-reference-v852-final.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
