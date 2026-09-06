@@ -1,0 +1,60 @@
+/* ============================================================
+   V846 — CATÁLOGO · CABEÇALHO DE COMPARAÇÃO POR ÍCONE
+   ------------------------------------------------------------
+   - Mantém a coluna estreita do checkbox sem empurrar a tabela.
+   - Substitui o texto "Comparar" por um único ícone ⚖️.
+   - Preserva tooltip/aria-label para explicar a ação.
+   - Não altera checkboxes, seleção, barra V841 ou Comparador.
+   ============================================================ */
+
+@media (min-width:769px){
+  #mainTable th.v841-compare-header{
+    padding-left:0 !important;
+    padding-right:0 !important;
+    text-align:center !important;
+    vertical-align:middle !important;
+    overflow:visible !important;
+    white-space:nowrap !important;
+  }
+
+  #mainTable .v841-compare-label.v846-compare-icon-only{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    width:100% !important;
+    max-width:100% !important;
+    height:100% !important;
+
+    margin:0 !important;
+    padding:0 !important;
+
+    color:#e5b550 !important;
+    font-family:"Segoe UI Emoji","Segoe UI Symbol",Arial,sans-serif !important;
+    font-size:15px !important;
+    font-weight:400 !important;
+    font-style:normal !important;
+
+    line-height:1 !important;
+    letter-spacing:0 !important;
+    word-spacing:0 !important;
+    text-transform:none !important;
+
+    white-space:nowrap !important;
+    overflow:visible !important;
+
+    text-shadow:none !important;
+    -webkit-text-stroke:0 !important;
+    filter:none !important;
+    transform:none !important;
+    opacity:1 !important;
+
+    cursor:help !important;
+  }
+
+  #mainTable .v841-compare-label.v846-compare-icon-only::before,
+  #mainTable .v841-compare-label.v846-compare-icon-only::after{
+    content:none !important;
+    display:none !important;
+  }
+}

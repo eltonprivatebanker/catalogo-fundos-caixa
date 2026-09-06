@@ -75,3 +75,11 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - A V845 é uma camada progressiva: não altera os dados do fundo nem a lógica de abertura/fechamento.
 - O botão "Copiar" no Catálogo deve ser descrito como "Copiar CNPJ".
 - O popover de documentos deve manter todos os documentos, em layout compacto, com contagem explícita.
+
+
+## V846 — cabeçalho da seleção no Catálogo
+- A coluna do checkbox permanece estreita; não ampliar sua largura apenas para acomodar texto.
+- O cabeçalho da coluna de comparação usa somente o ícone ⚖️, centralizado sobre os checkboxes.
+- A explicação da função permanece disponível por `title` e `aria-label`: "Selecione de 2 a 6 fundos para comparar".
+- Preservar a classe `.v841-compare-label`, pois a V841 a utiliza para reconhecer que o cabeçalho já foi instalado.
+- Não reintroduzir texto longo nessa coluna nem alterar a geometria das colunas FUNDO, CONV/PAG, rentabilidades e DOCUMENTOS.

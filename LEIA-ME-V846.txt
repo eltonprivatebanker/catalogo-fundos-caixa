@@ -1,0 +1,36 @@
+V846 — Cabeçalho da coluna de comparação por ícone
+
+OBJETIVO
+Eliminar a baixa legibilidade/sobreposição do texto "Comparar" no cabeçalho da coluna estreita dos checkboxes do Catálogo.
+
+DIAGNÓSTICO
+A coluna foi dimensionada para o checkbox. O texto "Comparar" ultrapassava a largura disponível e visualmente invadia o cabeçalho FUNDO. Reduzir a fonte ou aplicar overflow apenas cortava o texto.
+
+SOLUÇÃO V846
+- Mantém a coluna com a largura atual.
+- Mantém a classe .v841-compare-label esperada pela V841.
+- Exibe apenas o ícone ⚖️ no cabeçalho.
+- Tooltip/aria-label: "Selecione de 2 a 6 fundos para comparar".
+- Não altera checkboxes, seleção, barra de ação, dados ou demais colunas.
+
+ARQUIVOS NOVOS
+- comparador-v846-header.css
+- comparador-v846-header.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+REGRESSÕES A PRESERVAR
+- V838: estabilidade vertical no Edge.
+- V841: seleção e barra de ação do Catálogo.
+- V842: rolagem horizontal do Comparador.
+- V843/V844: estados compactos e orientação do workspace.
+- V845: detalhe operacional do fundo.
+
+TESTE
+1. Recarregar a página.
+2. Confirmar que o cabeçalho da coluna de checkbox mostra somente ⚖️.
+3. Passar o mouse sobre o ícone e verificar o tooltip.
+4. Marcar 1, 2 e mais fundos e confirmar que seleção/barra continuam normais.
+5. Expandir fundos e abrir documentos para garantir que a V845 segue intacta.
