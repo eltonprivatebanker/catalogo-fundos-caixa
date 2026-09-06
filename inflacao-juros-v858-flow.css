@@ -1,0 +1,161 @@
+/* ============================================================
+   V858 — Inflação e juros · fluxo final desktop
+   - IPCA mensal + IPCA em 12 meses como dois blocos principais.
+   - IPCA-15 em faixa própria abaixo dos dois blocos.
+   - Selic sem flash de nomenclatura antiga nas trocas de período.
+   - Somente desktop; dados, cálculos, SVGs e mobile preservados.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* ----------------------------------------------------------
+     IPCA mensal — remove redundâncias já aprovadas na V857
+     ---------------------------------------------------------- */
+  #mobileIpcaMensalV400 #evoCardIpcaNote,
+  #mobileIpcaMensalV400 .ipca15-why-v712,
+  #mobileIpcaMensalV400 .ipca15-compare-label-v712,
+  #mobileIpcaMensalV400 .ipca-accum-card-v420{
+    display:none !important;
+  }
+
+  #mobileIpcaMensalV400 .ipca-kpis-v378{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* Antes de o JS mover o IPCA-15, ele não aparece no lugar antigo. */
+  #mobileIpcaMensalV400 > #ipca15PreviewV712{
+    display:none !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA em 12 meses — resumo Atual / Meta / Situação
+     ---------------------------------------------------------- */
+  #mobileIpcaMetaV400 .ipca-meta-range-label-v680,
+  #mobileIpcaMetaV400 #evoCardMetaNote,
+  #mobileIpcaMetaV400 .econ-meta-band-v378{
+    display:none !important;
+  }
+
+  #v858IpcaMetaSummary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin:14px 0 12px;
+    border-top:1px solid rgba(148,163,184,.16);
+    border-bottom:1px solid rgba(148,163,184,.16);
+  }
+
+  #v858IpcaMetaSummary > div{
+    min-width:0;
+    padding:12px 16px;
+  }
+
+  #v858IpcaMetaSummary > div + div{
+    border-left:1px solid rgba(148,163,184,.16);
+  }
+
+  #v858IpcaMetaSummary small{
+    display:block;
+    margin:0 0 6px;
+    color:#9eabc1;
+    font-size:.66rem;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  #v858IpcaMetaSummary strong{
+    display:block;
+    margin:0;
+    color:#f8fafc;
+    font-size:1rem;
+    line-height:1.1;
+    font-weight:800;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-current-v680{
+    display:none !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA-15 — faixa própria em toda a largura
+     ---------------------------------------------------------- */
+  #v858Ipca15Row{
+    grid-column:1 / -1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+  }
+
+  #v858Ipca15Row #ipca15PreviewV712{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  #v858Ipca15Row .ipca15-metrics-v712{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* ----------------------------------------------------------
+     Selic — faixa redundante removida
+     ---------------------------------------------------------- */
+  #mobileSelicV400 #evoCardSelicNote{
+    display:none !important;
+  }
+
+  /*
+     A nomenclatura visual não depende do texto que o renderer legado
+     possa escrever durante a troca de período. Assim não há flash de
+     “Selic vigente / Máxima no recorte / Mínima no recorte”.
+  */
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span,
+  #mobileSelicV400 #selicMaxLabelV381,
+  #mobileSelicV400 #selicMinLabelV381{
+    display:block !important;
+    height:11px !important;
+    min-height:11px !important;
+    max-height:11px !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    color:transparent !important;
+    font-size:0 !important;
+    line-height:0 !important;
+    white-space:nowrap !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span::before,
+  #mobileSelicV400 #selicMaxLabelV381::before,
+  #mobileSelicV400 #selicMinLabelV381::before{
+    content:none !important;
+    display:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span::after,
+  #mobileSelicV400 #selicMaxLabelV381::after,
+  #mobileSelicV400 #selicMinLabelV381::after{
+    display:block !important;
+    color:#9eabc1 !important;
+    font-size:.66rem !important;
+    line-height:11px !important;
+    font-weight:800 !important;
+    letter-spacing:.08em !important;
+    text-transform:uppercase !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span::after{
+    content:"ATUAL" !important;
+  }
+
+  #mobileSelicV400 #selicMaxLabelV381::after{
+    content:"MÁXIMA NO PERÍODO" !important;
+  }
+
+  #mobileSelicV400 #selicMinLabelV381::after{
+    content:"MÍNIMA NO PERÍODO" !important;
+  }
+}

@@ -165,3 +165,16 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Selic usa título curto `Selic`, subtítulo `Trajetória da taxa meta.` e KPIs `Atual`, `Máxima no período`, `Mínima no período`.
 - Não usar `MutationObserver` nesta camada; reaplicações devem ocorrer apenas após carregamento/trocas de período.
 - Não alterar dados, cálculos, SVGs, APIs, datas, scroll ou comportamento mobile.
+
+## V858 — Inflação e juros: fluxo lógico final no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece com a estrutura original.
+- A narrativa principal deve seguir `IPCA mensal → IPCA em 12 meses → IPCA-15 → Selic`.
+- `IPCA mensal` contém o gráfico realizado e apenas `Último mês / Maior mês / Menor mês`; não repetir o acumulado de 12 meses nesse card.
+- `IPCA em 12 meses` usa `Atual / Meta / Situação` e legenda curta `IPCA 12M / Meta / Faixa de tolerância`.
+- No desktop, `#ipca15PreviewV712` deve sair do card mensal e ocupar uma faixa própria de largura total antes da Selic; no mobile, manter a posição original.
+- O IPCA-15 preserva métricas, comparação, fonte e calendário; a mudança é de hierarquia e fluxo, não de conteúdo econômico.
+- Selic usa `Atual / Máxima no período / Mínima no período`.
+- A troca de período da Selic não pode exibir temporariamente nomenclatura legada. A apresentação visual dos três rótulos deve ser estável desde o primeiro frame e o JS deve sincronizar o texto real do DOM após o renderer.
+- Não usar `MutationObserver` nem timers contínuos para estabilizar a Selic; reaplicações curtas e finitas após interação são permitidas apenas para sincronização semântica.
+- Não alterar valores, cálculos, SVGs, APIs, datas, `scrollY`, `scrollLeft` ou proteções anteriores.

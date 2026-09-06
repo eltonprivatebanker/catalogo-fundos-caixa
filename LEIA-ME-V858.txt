@@ -1,0 +1,43 @@
+V858 — Inflação e juros: fluxo lógico final no desktop
+
+OBJETIVO
+Consolidar a arquitetura aprovada nos testes via Console, preservando dados, gráficos, cálculos, APIs e comportamento mobile.
+
+ALTERAÇÕES NO DESKTOP
+1. IPCA mensal
+   - Título: “IPCA mensal”.
+   - Subtítulo: “Resultado oficial divulgado pelo IBGE.”.
+   - Mantém gráfico mensal e os três KPIs: Último mês / Maior mês / Menor mês.
+   - Não repete o acumulado 12M, pois ele pertence ao bloco dedicado à meta.
+
+2. IPCA em 12 meses
+   - Mantém o resumo compacto Atual / Meta / Situação.
+   - Remove as repetições visuais da faixa de alerta e dos três parâmetros de meta.
+   - Legenda curta: IPCA 12M / Meta / Faixa de tolerância.
+
+3. IPCA-15
+   - Sai de dentro do card de IPCA mensal no desktop.
+   - Passa a ocupar faixa própria, em toda a largura, abaixo dos dois blocos de inflação e antes da Selic.
+   - Preserva métricas, comparação, fonte e próximas divulgações.
+   - A posição mobile original é preservada.
+
+4. Selic
+   - Título: “Selic”.
+   - Subtítulo: “Trajetória da taxa meta.”.
+   - KPIs: Atual / Máxima no período / Mínima no período.
+   - Corrige o flash da nomenclatura antiga na troca de período: o texto visual aprovado fica estável por CSS desde o primeiro frame, enquanto o JS reaplica o texto semântico real do DOM após o renderer legado.
+   - Não usa MutationObserver nem timer contínuo.
+
+SEGURANÇA
+- Escopo visual: somente desktop (min-width: 769px).
+- Não altera valores, séries, SVGs, datas, APIs, scroll ou lógica dos botões.
+- Mobile restaura a posição e os textos originais.
+- V858 substitui V857 no index.html; as duas camadas não são carregadas simultaneamente.
+
+ARQUIVOS NOVOS
+- inflacao-juros-v858-flow.css
+- inflacao-juros-v858-flow.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
