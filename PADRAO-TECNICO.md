@@ -99,3 +99,14 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Ao voltar ao Catálogo, remover o estado e permitir que a própria V841 decida se a barra deve reaparecer.
 - V849 não pode escrever em `scrollY`, `scrollLeft`, `history.scrollRestoration` nem introduzir `scroll-behavior:smooth`.
 - Preservar integralmente V838 e V842.
+
+## V851 — Juros de referência: semântica somente no desktop
+
+- Escopo responsivo: `min-width: 769px`.
+- Mobile deve permanecer visual e semanticamente igual à base V849.
+- Kicker do bloco: `Mercado monetário`; título permanece `Juros de referência`.
+- Evitar repetição entre nome do grupo e texto auxiliar dos KPIs.
+- Agenda Copom: status futuro já é suficiente; não repetir `Aguardando decisão`/`Sem decisão`.
+- CDI recente é apresentado como `CDI mensal`; os próprios cards indicam `parcial` e `fechado`.
+- O patch não altera valores, datas, cálculos, chamadas de API ou a fonte dos dados.
+- O JS guarda os textos originais e os restaura ao sair do breakpoint desktop.

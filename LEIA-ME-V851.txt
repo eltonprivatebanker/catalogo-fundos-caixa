@@ -1,0 +1,34 @@
+V851 — Juros de referência · semântica desktop
+
+ESCOPO
+Somente desktop (largura mínima de 769 px). O mobile permanece com os textos e o layout anteriores.
+
+OBJETIVO
+Reduzir redundâncias e tornar a leitura do bloco de juros mais direta, sem alterar nenhum dado, cálculo, calendário ou fonte de informação.
+
+ALTERAÇÕES VISÍVEIS NO DESKTOP
+- "Referências de juros" passa a "Mercado monetário".
+- Mantém o título principal "Juros de referência".
+- Subtítulo reduzido para "Selic, CDI e agenda do Copom.".
+- "Nível atual" passa a "Taxas atuais".
+- No grupo "CDI acumulado":
+  - "CDI em 2026" passa a "2026";
+  - "CDI em 12 meses" passa a "12 meses";
+  - remove a repetição "Acumulado no ano / Acumulado em 12 meses".
+- "Calendário Copom 2026" passa a "Agenda Copom 2026".
+- Descrição do Copom reduzida para "Decisões e próximas reuniões.".
+- Reuniões futuras deixam de repetir "Aguardando decisão / Sem decisão" quando o status já informa "Próxima reunião / Prevista".
+- "CDI recente" passa a "CDI mensal".
+- Remove a frase redundante "Mês atual e último mês fechado", pois os cards já mostram PARCIAL e FECHADO.
+- Pequenos ajustes de densidade vertical exclusivamente no desktop.
+
+ARQUIVOS NOVOS
+- rates-reference-v851-desktop.css
+- rates-reference-v851-desktop.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+BASE
+V849 preservada integralmente.

@@ -1,0 +1,78 @@
+/* ============================================================
+   V851 — JUROS DE REFERÊNCIA · SEMÂNTICA DESKTOP
+   Escopo: somente desktop (>= 769px).
+   Objetivos:
+   - reduzir redundância textual;
+   - melhorar hierarquia e leitura operacional;
+   - preservar integralmente o layout/conteúdo mobile;
+   - não alterar valores, cálculos, calendário ou fontes de dados.
+   ============================================================ */
+
+@media (min-width: 769px){
+  /* Cabeçalho: kicker complementar em vez de repetir o título. */
+  .rates-reference-v167 .market-reference-head-v167{
+    padding-bottom: 8px !important;
+  }
+
+  .rates-reference-v167 .market-reference-head-v167 p{
+    margin-top: 2px !important;
+    max-width: 720px !important;
+  }
+
+  /* Grupos executivos: ligeiro ganho de densidade sem mudar a grade. */
+  #ratesDesktopCleanV745 .rates-clean-groups-v745{
+    margin-top: 8px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-group-v745 > span{
+    margin-bottom: 5px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745{
+    min-height: 72px !important;
+    padding-top: 11px !important;
+    padding-bottom: 10px !important;
+  }
+
+  /* O grupo já informa que são acumulados; evita repetir a ideia. */
+  #ratesDesktopCleanV745 .rates-clean-group-v745:nth-child(2)
+  .rates-clean-kpi-v745 em{
+    display: none !important;
+  }
+
+  /* Agenda do Copom: descrição curta e sem duplicação nos eventos futuros. */
+  #ratesDesktopCleanV745 .rates-clean-copom-v745{
+    margin-top: 10px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-copom-v745 > header{
+    padding-bottom: 8px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-meeting-v745.is-next small,
+  #ratesDesktopCleanV745 .rates-clean-meeting-v745.is-future small{
+    display: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-meeting-v745.is-next,
+  #ratesDesktopCleanV745 .rates-clean-meeting-v745.is-future{
+    min-height: 58px !important;
+  }
+
+  /* CDI mensal: os próprios cards já sinalizam parcial/fechado. */
+  #ratesDesktopCleanV745 .rates-clean-recent-v745{
+    margin-top: 10px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-v745 > header > small{
+    display: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-v745 > header{
+    padding-bottom: 8px !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745 article{
+    min-height: 56px !important;
+  }
+}
