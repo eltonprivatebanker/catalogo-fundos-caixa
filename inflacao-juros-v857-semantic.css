@@ -1,0 +1,75 @@
+/* ============================================================
+   V857 — Inflação e juros · hierarquia semântica no desktop
+   - IPCA oficial mais direto, sem duplicar último resultado/12M.
+   - IPCA 12M: resumo Atual / Meta / Situação substitui faixas repetidas.
+   - Selic: cabeçalho e KPIs com nomenclatura mais direta.
+   - Somente desktop. Não altera dados, cálculos ou gráficos.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* IPCA oficial: redundâncias removidas */
+  #mobileIpcaMensalV400 #evoCardIpcaNote,
+  #mobileIpcaMensalV400 .ipca15-why-v712,
+  #mobileIpcaMensalV400 .ipca15-compare-label-v712,
+  #mobileIpcaMensalV400 .ipca-accum-card-v420{
+    display:none !important;
+  }
+
+  #mobileIpcaMensalV400 .ipca-kpis-v378{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* IPCA em 12 meses: remove repetição de período/faixa/alerta */
+  #mobileIpcaMetaV400 .ipca-meta-range-label-v680,
+  #mobileIpcaMetaV400 #evoCardMetaNote,
+  #mobileIpcaMetaV400 .econ-meta-band-v378{
+    display:none !important;
+  }
+
+  #v857IpcaMetaSummary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin:14px 0 12px;
+    border-top:1px solid rgba(148,163,184,.16);
+    border-bottom:1px solid rgba(148,163,184,.16);
+  }
+
+  #v857IpcaMetaSummary > div{
+    min-width:0;
+    padding:12px 16px;
+  }
+
+  #v857IpcaMetaSummary > div + div{
+    border-left:1px solid rgba(148,163,184,.16);
+  }
+
+  #v857IpcaMetaSummary small{
+    display:block;
+    margin:0 0 6px;
+    color:#9eabc1;
+    font-size:.66rem;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  #v857IpcaMetaSummary strong{
+    display:block;
+    margin:0;
+    color:#f8fafc;
+    font-size:1rem;
+    line-height:1.1;
+    font-weight:800;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-current-v680{
+    display:none !important;
+  }
+
+  /* Selic: faixa de leitura duplicada removida */
+  #mobileSelicV400 #evoCardSelicNote{
+    display:none !important;
+  }
+}

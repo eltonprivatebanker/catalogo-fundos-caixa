@@ -153,3 +153,15 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - O JS deve resistir a atualizações tardias do bloco e restaurar os rótulos originais ao sair do breakpoint desktop.
 - O `index.html` não deve carregar V855 e V856 simultaneamente; V856 substitui V855 como camada visual final deste bloco.
 - Não alterar Agenda Copom, CDI mensal, dados, cálculos, datas, APIs, estados do Copom, `scrollY`, `scrollLeft` ou proteções anteriores.
+
+## V857 — Inflação e juros: hierarquia semântica no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- `IPCA oficial` representa inflação mensal realizada; evitar repetir o último resultado em faixa e KPI simultaneamente.
+- O card de IPCA oficial mantém apenas `Último mês`, `Maior mês` e `Menor mês`; o acumulado em 12 meses pertence ao card dedicado de meta.
+- IPCA-15 deve preservar métricas, comparação e calendário, mas sem rótulos explicativos redundantes quando o contexto já é claro.
+- O card de 12 meses usa a sequência `Atual / Meta / Situação`; não repetir limite inferior, meta e limite superior em uma segunda faixa quando o próprio gráfico já representa a tolerância.
+- A legenda do gráfico deve usar nomes curtos: `IPCA 12M`, `Meta` e `Faixa de tolerância`.
+- Selic usa título curto `Selic`, subtítulo `Trajetória da taxa meta.` e KPIs `Atual`, `Máxima no período`, `Mínima no período`.
+- Não usar `MutationObserver` nesta camada; reaplicações devem ocorrer apenas após carregamento/trocas de período.
+- Não alterar dados, cálculos, SVGs, APIs, datas, scroll ou comportamento mobile.
