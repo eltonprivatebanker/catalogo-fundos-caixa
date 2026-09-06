@@ -120,3 +120,12 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - A aproximação entre KPIs e Agenda Copom é apenas visual e leve; não alterar a grade nem a lógica do bloco.
 - Não alterar valores, datas, cálculos, APIs, fontes ou estados do Copom.
 - V852 é uma camada incremental sobre V851 e deve preservar V838–V849.
+
+## V853 — Juros de referência: unidade anual e CDI mensal no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- Selic meta e CDI são taxas anuais e exibem a unidade visual `a.a.` fora do valor dinâmico.
+- `2026` e `12 meses` são acumulados de período e não recebem `a.a.`.
+- O bloco `CDI mensal` usa duas colunas equivalentes para os estados `parcial` e `fechado`, evitando área vazia que sugira conteúdo ausente.
+- A V853 não modifica valores, cálculos, datas, APIs, estados do Copom ou fontes de dados.
+- Preservar V851/V852 como camadas semânticas anteriores.

@@ -1,0 +1,41 @@
+/* ============================================================
+   V853 — JUROS DE REFERÊNCIA · FECHAMENTO DESKTOP
+   Escopo: somente desktop (>= 769px).
+   Objetivos:
+   - explicitar a unidade anual em Selic meta e CDI;
+   - usar melhor a largura disponível no bloco CDI mensal;
+   - preservar integralmente mobile, dados, cálculos e interações;
+   - complementar V851/V852 sem alterar a lógica do painel.
+   ============================================================ */
+
+@media (min-width: 769px){
+  /* Unidade anual: discreta, mas semanticamente inequívoca. */
+  #ratesDesktopCleanV745 .rates-clean-group-v745:first-child
+  .rates-clean-kpi-v745 .rates-v853-aa{
+    display: inline-block !important;
+    margin-left: 4px !important;
+    color: rgba(210,220,240,.72) !important;
+    font-size: .58rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    letter-spacing: .01em !important;
+    vertical-align: baseline !important;
+  }
+
+  /* CDI mensal: os dois estados formam um par e ocupam a faixa inteira. */
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745 article{
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}

@@ -1,0 +1,24 @@
+V853 — Juros de referência · fechamento desktop
+
+ESCOPO
+Somente desktop (min-width: 769px). Mobile permanece inalterado.
+
+AJUSTES
+1. Selic meta e CDI passam a exibir a unidade "a.a." de forma discreta ao lado do valor.
+2. A unidade é um elemento separado do valor dinâmico; os números/cálculos permanecem intactos.
+3. O bloco "CDI mensal" passa a usar duas colunas iguais, ocupando melhor a largura disponível.
+4. Mantidos os textos e a hierarquia semântica aprovados na V851/V852.
+5. Nenhuma alteração em APIs, datas, dados, calendário Copom ou regras de negócio.
+
+ARQUIVOS NOVOS/ALTERADOS
+- index.html
+- rates-reference-v853-final.css
+- rates-reference-v853-final.js
+- LEIA-ME-V853.txt
+- PADRAO-TECNICO.md
+
+TESTE SUGERIDO
+- Desktop: conferir "14,00% a.a." e "13,90% a.a." nos cards atuais.
+- Conferir que 2026 e 12 meses continuam sem "a.a." por serem acumulados.
+- Conferir que SET · PARCIAL e AGO · FECHADO dividem toda a largura do CDI mensal.
+- Reduzir a viewport abaixo de 769px e confirmar que o mobile continua sem a camada V853.
