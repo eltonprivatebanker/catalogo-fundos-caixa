@@ -1,0 +1,15 @@
+/* ============================================================
+   V849 — COMPARADOR · CTA FLUTUANTE SOMENTE NO CATÁLOGO
+   ------------------------------------------------------------
+   - A barra V841 continua disponível durante a seleção no Catálogo.
+   - Quando o workspace do Comparador passa a ser a área principal
+     da viewport, a barra flutuante some para evitar CTA duplicado.
+   - Ao voltar ao Catálogo, a barra pode reaparecer normalmente.
+   - Não altera scrollY, scrollLeft, seleção ou lógica do comparador.
+   ============================================================ */
+
+@media (min-width:769px){
+  html.v849-comparator-primary #v841CompareActionBar{
+    display:none !important;
+  }
+}

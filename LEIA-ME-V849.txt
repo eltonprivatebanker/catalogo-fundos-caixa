@@ -1,0 +1,38 @@
+V849 — Barra flutuante somente no Catálogo
+
+OBJETIVO
+Eliminar a duplicidade de ações quando o usuário já chegou ao workspace do Comparador.
+
+COMPORTAMENTO
+1. Enquanto o usuário está no Catálogo, a barra V841 permanece disponível após selecionar fundos.
+2. Quando o Comparador entra suficientemente na viewport e passa a ser a área principal, a barra flutuante é ocultada.
+3. Dentro do Comparador permanece somente o botão nativo "Comparar X fundos".
+4. Ao voltar para cima, ao Catálogo, a barra pode reaparecer normalmente.
+5. A regra não altera seleção, filtros, scrollY, scrollLeft nem abertura do comparador final.
+
+CRITÉRIO VISUAL VALIDADO
+- Comparador principal quando:
+  rect.top < 72% da altura da viewport
+  e rect.bottom > 120 px.
+
+ARQUIVOS NOVOS
+- comparador-v849-bar-visibility.css
+- comparador-v849-bar-visibility.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+PRESERVADO
+- V838: estabilidade vertical no Edge.
+- V841: seleção e barra de ação no Catálogo.
+- V842: rolagem horizontal estável do comparador final.
+- V843/V844: estados compactos e orientação do workspace.
+- V845/V848: detalhe operacional e documentos.
+- V846: cabeçalho da coluna de comparação por ícone.
+
+TESTE
+1. Selecione 2 fundos no Catálogo: a barra flutuante deve aparecer.
+2. Role até o Comparador: a barra deve desaparecer quando o Comparador se tornar a área principal da tela.
+3. Role de volta ao Catálogo: a barra deve reaparecer.
+4. Clique em "Comparar X fundos" no workspace e confirme que a comparação final continua normal.

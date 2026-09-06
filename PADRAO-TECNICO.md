@@ -91,3 +91,11 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Manter todos os links, URLs e documentos originais; V848 é somente uma camada de apresentação/semântica.
 - Links recebem `title` e `aria-label` descritivos para abertura do documento.
 - Preservar a V845 como base do detalhe operacional e a V846 no cabeçalho de comparação.
+
+## V849 — barra flutuante restrita ao contexto do Catálogo
+- A barra V841 é um atalho contextual de seleção no Catálogo; não deve competir com o CTA nativo do workspace do Comparador.
+- Quando o workspace `#comparWorkspaceV723` já entrou suficientemente na viewport e passa a ser a área principal, aplicar `html.v849-comparator-primary` e ocultar `#v841CompareActionBar`.
+- Critério aprovado: `rect.top < 72% da altura da viewport` e `rect.bottom > 120px`.
+- Ao voltar ao Catálogo, remover o estado e permitir que a própria V841 decida se a barra deve reaparecer.
+- V849 não pode escrever em `scrollY`, `scrollLeft`, `history.scrollRestoration` nem introduzir `scroll-behavior:smooth`.
+- Preservar integralmente V838 e V842.
