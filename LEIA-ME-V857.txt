@@ -1,0 +1,40 @@
+V857 — Inflação e juros: hierarquia semântica no desktop
+
+OBJETIVO
+Consolidar no arquivo os ajustes aprovados via Console para reduzir redundância e melhorar o encadeamento lógico do bloco “Inflação e juros”, sem alterar dados, cálculos, APIs ou gráficos.
+
+ALTERAÇÕES NO DESKTOP
+1. IPCA oficial
+   - Título: “IPCA oficial”.
+   - Subtítulo: “Inflação mensal medida pelo IBGE.”.
+   - Oculta a faixa redundante “Último resultado oficial”.
+   - Oculta o KPI “Acumulado 12M”, pois o card da direita é dedicado a 12 meses/meta.
+   - “Último IPCA” passa a “Último mês”.
+   - IPCA-15 mantém métricas, comparação e próximas divulgações, removendo apenas os rótulos explicativos redundantes “LEITURA” e “Entenda”.
+
+2. IPCA em 12 meses
+   - Título: “IPCA em 12 meses”.
+   - Subtítulo: “Evolução frente à meta de inflação.”.
+   - Remove “Período exibido”, faixa de alerta repetitiva e o bloco grande Limite inferior/Meta/Limite superior.
+   - Adiciona resumo compacto: Atual / Meta / Situação.
+   - Legenda do gráfico simplificada para “IPCA 12M / Meta / Faixa de tolerância”.
+
+3. Selic
+   - Título: “Selic”.
+   - Subtítulo: “Trajetória da taxa meta.”.
+   - Remove a faixa redundante de leitura do gráfico.
+   - KPIs: “Atual / Máxima no período / Mínima no período”.
+
+SEGURANÇA
+- Escopo visual: somente desktop (min-width: 769px).
+- Não usa MutationObserver.
+- Reaplica textos apenas em momentos controlados após carregamento e troca de período.
+- Não altera valores, séries, gráficos, chamadas de API, scroll ou comportamento mobile.
+
+ARQUIVOS NOVOS
+- inflacao-juros-v857-semantic.css
+- inflacao-juros-v857-semantic.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
