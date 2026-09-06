@@ -1,0 +1,37 @@
+V848 — Documentos oficiais: hierarquia sem redundância
+
+OBJETIVO
+Refinar o popover de documentos do Catálogo sem alterar dados, links ou lógica de abertura.
+
+ALTERAÇÕES
+1. Título simplificado para "Documentos oficiais".
+2. Removidos o subtítulo "Documentos oficiais disponíveis" e a contagem "6 documentos", por redundância visual.
+3. Lista alinhada à esquerda no padrão ícone → documento → seta.
+4. Popover reduzido para até 350 px no desktop.
+5. Linhas compactas de 38 px, mantendo legibilidade e área de clique.
+6. Links recebem title/aria-label no formato "Abrir <documento> em nova aba".
+7. Nenhum documento, URL ou comportamento funcional foi removido.
+
+PRESERVADO
+- V838 estabilidade vertical no Edge.
+- V841 seleção/comparação no Catálogo.
+- V842 rolagem horizontal do Comparador.
+- V843/V844 estados compactos e orientação do Comparador.
+- V845 detalhe operacional compacto.
+- V846 cabeçalho da coluna de comparação por ícone ⚖️.
+
+ARQUIVOS NOVOS
+- catalog-detail-v848-docs.css
+- catalog-detail-v848-docs.js
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+TESTE
+Abra o botão +N em DOCUMENTOS no Catálogo e confirme:
+- apenas "DOCUMENTOS OFICIAIS" no cabeçalho;
+- sem subtítulo e sem contagem redundante;
+- lista alinhada à esquerda;
+- seta à direita;
+- todos os links continuam abrindo normalmente.

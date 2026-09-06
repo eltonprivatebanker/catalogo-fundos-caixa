@@ -1,0 +1,81 @@
+/* ============================================================
+   V848 — DOCUMENTOS OFICIAIS · HIERARQUIA SEM REDUNDÂNCIA
+   ------------------------------------------------------------
+   - remove subtítulo e contagem redundantes do popover;
+   - mantém um único título: "Documentos oficiais";
+   - transforma a lista em leitura documental: ícone → nome → seta;
+   - reduz largura/altura sem retirar nenhum documento;
+   - preserva a base V845 e toda a estabilidade V838–V846.
+   ============================================================ */
+
+@media (min-width:769px){
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover{
+    width:min(350px,calc(100vw - 28px))!important;
+    max-width:350px!important;
+    padding:15px 18px 16px!important;
+    border-radius:13px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-head{
+    display:block!important;
+    margin:0 0 10px!important;
+    padding:0 0 11px!important;
+    border-bottom:1px solid rgba(148,163,184,.16)!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v848-doc-title{
+    margin:0!important;
+    color:#f2bd55!important;
+    font-weight:800!important;
+    letter-spacing:.045em!important;
+    line-height:1.15!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v848-doc-subtitle,
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-count{
+    display:none!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-item{
+    display:grid!important;
+    grid-template-columns:20px minmax(0,1fr) 18px!important;
+    align-items:center!important;
+    column-gap:9px!important;
+    width:100%!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:0 4px!important;
+    box-sizing:border-box!important;
+    text-align:left!important;
+    justify-content:stretch!important;
+    justify-items:stretch!important;
+    white-space:nowrap!important;
+    line-height:1.2!important;
+    font-weight:650!important;
+    color:#edf2fb!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-icon{
+    grid-column:1!important;
+    width:20px!important;
+    min-width:20px!important;
+    justify-self:start!important;
+    color:#8ea9da!important;
+    opacity:.85!important;
+    font-size:.78rem!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-item::after{
+    grid-column:3!important;
+    justify-self:end!important;
+    margin:0!important;
+    opacity:.65!important;
+  }
+
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-item:hover::after,
+  html.desktop-catalog-detail-v845 .v845-doc-popover.v848-doc-popover .v845-doc-item:focus-visible::after{
+    opacity:1!important;
+  }
+}

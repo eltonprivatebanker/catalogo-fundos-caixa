@@ -83,3 +83,11 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - A explicação da função permanece disponível por `title` e `aria-label`: "Selecione de 2 a 6 fundos para comparar".
 - Preservar a classe `.v841-compare-label`, pois a V841 a utiliza para reconhecer que o cabeçalho já foi instalado.
 - Não reintroduzir texto longo nessa coluna nem alterar a geometria das colunas FUNDO, CONV/PAG, rentabilidades e DOCUMENTOS.
+
+## V848 — documentos oficiais sem redundância
+- O popover usa um único título visível: `Documentos oficiais`.
+- Não repetir subtítulo do tipo "Documentos oficiais disponíveis" nem contador visual quando a própria lista já mostra os itens.
+- A lista deve seguir leitura documental: ícone à esquerda, nome alinhado à esquerda e seta externa à direita.
+- Manter todos os links, URLs e documentos originais; V848 é somente uma camada de apresentação/semântica.
+- Links recebem `title` e `aria-label` descritivos para abertura do documento.
+- Preservar a V845 como base do detalhe operacional e a V846 no cabeçalho de comparação.
