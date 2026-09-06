@@ -1,0 +1,98 @@
+/* ============================================================
+   V855 — JUROS DE REFERÊNCIA · FAIXA EXECUTIVA DESKTOP
+   Escopo: somente desktop (>= 769px).
+   Objetivos:
+   - remover o efeito de "card dentro de card" nos quatro KPIs;
+   - manter quatro áreas equivalentes, com 62px de altura;
+   - usar divisores verticais discretos no lugar de caixas internas;
+   - manter A.A. no rótulo de Selic/CDI, sem criar linha extra;
+   - preservar a semântica V851/V852 e o CDI mensal em duas colunas;
+   - não alterar mobile, dados, cálculos, datas, APIs ou Copom.
+   ============================================================ */
+
+@media (min-width: 769px){
+  /* Dois grupos executivos, próximos o suficiente para formar uma faixa única. */
+  #ratesDesktopCleanV745 .rates-clean-groups-v745{
+    gap: 14px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-cards-v745{
+    gap: 0 !important;
+    align-items: stretch !important;
+  }
+
+  /* KPIs planos: o bloco externo já exerce o papel de container/card. */
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745{
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+
+    box-sizing: border-box !important;
+    height: 62px !important;
+    min-height: 62px !important;
+    max-height: 62px !important;
+
+    padding: 7px 14px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Primeiro indicador de cada grupo encosta no alinhamento do próprio grupo. */
+  #ratesDesktopCleanV745 .rates-clean-cards-v745
+  > .rates-clean-kpi-v745:first-child{
+    padding-left: 0 !important;
+  }
+
+  /* Divisor interno substitui a borda completa dos cards. */
+  #ratesDesktopCleanV745 .rates-clean-cards-v745
+  > .rates-clean-kpi-v745 + .rates-clean-kpi-v745{
+    border-left: 1px solid rgba(148,163,184,.17) !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > small{
+    margin: 0 0 7px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > strong{
+    display: block !important;
+    margin: 0 0 5px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > em{
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Aproxima a Agenda Copom da faixa de KPIs sem sobreposição. */
+  #ratesDesktopCleanV745 .rates-clean-copom-v745{
+    margin-top: 12px !important;
+  }
+
+  /* CDI mensal: mantém o ganho aprovado na V853, agora incorporado à V855. */
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745 article{
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}

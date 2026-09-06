@@ -1,0 +1,34 @@
+V855 — Juros de referência · faixa executiva desktop
+
+ESCOPO
+Somente desktop (min-width: 769px). Mobile permanece inalterado.
+
+AJUSTES APROVADOS
+1. Remove os quatro cards internos dos KPIs e mantém o container externo como estrutura visual principal.
+2. Selic, CDI, 2026 e 12 meses passam a formar uma única faixa executiva, com áreas equivalentes de 62px de altura.
+3. Os pares internos usam apenas divisores verticais discretos, reduzindo peso visual e espaço desperdiçado.
+4. A unidade anual passa para o rótulo: "SELIC META · A.A." e "CDI · A.A.".
+5. 2026 e 12 meses permanecem sem A.A., pois representam acumulados de período.
+6. O espaço entre os dois grandes grupos fica em 14px e a Agenda Copom permanece próxima, sem sobreposição.
+7. O CDI mensal mantém duas colunas equivalentes em toda a largura, incorporando o ganho aprovado anteriormente na V853.
+8. V851/V852 continuam responsáveis pela semântica do cabeçalho e dos demais subtítulos.
+9. Nenhuma alteração em valores, cálculos, datas, APIs, estados do Copom ou regras de negócio.
+
+ARQUIVOS NOVOS/ALTERADOS
+- index.html
+- rates-reference-v855-final.css
+- rates-reference-v855-final.js
+- LEIA-ME-V855.txt
+- PADRAO-TECNICO.md
+
+IMPORTANTE
+- O index.html deixa de carregar rates-reference-v853-final.css/js, porque os ajustes úteis da V853 foram incorporados à V855.
+- Os arquivos V853 podem permanecer no servidor; ficam apenas sem referência e não interferem na página.
+
+TESTE SUGERIDO
+- Desktop: confirmar que Selic, CDI, 2026 e 12 meses aparecem sem caixas internas.
+- Conferir "SELIC META · A.A." e "CDI · A.A." nos rótulos.
+- Conferir que os quatro indicadores mantêm a mesma altura visual e os divisores são discretos.
+- Conferir que Agenda Copom não sobrepõe as observações de Selic/CDI.
+- Conferir que CDI mensal continua com SET · PARCIAL e AGO · FECHADO dividindo toda a largura.
+- Reduzir a viewport abaixo de 769px e confirmar que o mobile volta aos rótulos/estrutura originais.

@@ -129,3 +129,16 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - O bloco `CDI mensal` usa duas colunas equivalentes para os estados `parcial` e `fechado`, evitando área vazia que sugira conteúdo ausente.
 - A V853 não modifica valores, cálculos, datas, APIs, estados do Copom ou fontes de dados.
 - Preservar V851/V852 como camadas semânticas anteriores.
+
+## V855 — Juros de referência: faixa executiva plana no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- O container externo de `Juros de referência` já cumpre o papel de card; os quatro KPIs internos não devem repetir borda, fundo, raio ou sombra.
+- Selic, CDI, 2026 e 12 meses formam uma faixa executiva com `62px` de altura por indicador.
+- Entre os dois indicadores de cada grupo, usar apenas divisor vertical discreto; não reintroduzir quatro caixas internas.
+- O espaço aprovado entre os grandes grupos é `14px`; a Agenda Copom deve permanecer próxima sem encostar nas observações dos KPIs.
+- Selic e CDI usam os rótulos `SELIC META · A.A.` e `CDI · A.A.`. A unidade anual não deve virar linha própria nem ser anexada ao valor dinâmico.
+- `2026` e `12 meses` são acumulados de período e permanecem sem `A.A.`.
+- O CDI mensal conserva duas colunas equivalentes em toda a largura.
+- V855 incorpora o ganho visual útil da V853; o `index.html` não deve carregar simultaneamente V853 e V855.
+- Não alterar valores, cálculos, datas, APIs, estados do Copom, `scrollY`, `scrollLeft` ou as proteções V838/V842.
