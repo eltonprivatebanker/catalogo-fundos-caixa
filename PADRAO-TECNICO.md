@@ -142,3 +142,14 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - O CDI mensal conserva duas colunas equivalentes em toda a largura.
 - V855 incorpora o ganho visual útil da V853; o `index.html` não deve carregar simultaneamente V853 e V855.
 - Não alterar valores, cálculos, datas, APIs, estados do Copom, `scrollY`, `scrollLeft` ou as proteções V838/V842.
+
+## V856 — Juros de referência: KPIs autoexplicativos no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- Remover visualmente os subtítulos de grupo `Taxas atuais` e `CDI acumulado` no desktop; eles não acrescentam informação após a faixa plana da V855.
+- Cada KPI deve se explicar sozinho: `SELIC META · A.A.`, `CDI · A.A.`, `CDI · <ano>` e `CDI · 12 MESES`.
+- Preservar a faixa sem cards internos, altura de `62px` por indicador, divisores verticais discretos e `14px` entre os dois pares.
+- Os rótulos de acumulados devem acompanhar o conteúdo original quando re-renderizados; não alterar os valores dinâmicos.
+- O JS deve resistir a atualizações tardias do bloco e restaurar os rótulos originais ao sair do breakpoint desktop.
+- O `index.html` não deve carregar V855 e V856 simultaneamente; V856 substitui V855 como camada visual final deste bloco.
+- Não alterar Agenda Copom, CDI mensal, dados, cálculos, datas, APIs, estados do Copom, `scrollY`, `scrollLeft` ou proteções anteriores.

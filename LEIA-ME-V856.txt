@@ -1,0 +1,38 @@
+V856 — Juros de referência · faixa executiva final sem subtítulos redundantes
+
+ESCOPO
+Somente desktop (min-width: 769px). Mobile permanece inalterado.
+
+AJUSTES APROVADOS
+1. Mantém a faixa executiva plana da V855, sem os quatro cards internos.
+2. Remove no desktop os subtítulos redundantes "Taxas atuais" e "CDI acumulado".
+3. Cada KPI passa a ser autoexplicativo:
+   - SELIC META · A.A.
+   - CDI · A.A.
+   - CDI · 2026
+   - CDI · 12 MESES
+4. Os quatro indicadores mantêm 62px de altura e divisores verticais discretos.
+5. O espaço entre os dois pares permanece em 14px.
+6. A Agenda Copom continua próxima, sem colisão com Selic/CDI.
+7. O CDI mensal continua em duas colunas equivalentes em toda a largura.
+8. O JS protege os rótulos contra re-renderizações tardias e restaura os textos originais no mobile.
+9. Nenhuma alteração em valores, cálculos, datas, APIs, estados do Copom ou regras de negócio.
+
+ARQUIVOS NOVOS/ALTERADOS
+- index.html
+- rates-reference-v856-final.css
+- rates-reference-v856-final.js
+- LEIA-ME-V856.txt
+- PADRAO-TECNICO.md
+
+IMPORTANTE
+- O index.html deixa de carregar rates-reference-v855-final.css/js e passa a carregar somente V856 para esta camada final.
+- Os arquivos V855 podem permanecer no servidor, sem referência, como histórico/rollback.
+- V851 e V852 continuam responsáveis pelo cabeçalho e textos semânticos anteriores.
+
+TESTE SUGERIDO
+- Desktop: confirmar que "Taxas atuais" e "CDI acumulado" não aparecem.
+- Confirmar os quatro rótulos autoexplicativos acima.
+- Confirmar que os quatro KPIs seguem planos, sem caixas internas.
+- Confirmar que Agenda Copom e CDI mensal permanecem corretos.
+- Reduzir a viewport abaixo de 769px e confirmar restauração do mobile original.

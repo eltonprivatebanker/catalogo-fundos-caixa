@@ -1,0 +1,110 @@
+/* ============================================================
+   V856 — JUROS DE REFERÊNCIA · FAIXA EXECUTIVA FINAL DESKTOP
+   Escopo: somente desktop (>= 769px).
+   Objetivos:
+   - preservar a faixa plana aprovada na V855;
+   - eliminar os subtítulos redundantes "Taxas atuais" e
+     "CDI acumulado";
+   - tornar cada KPI autoexplicativo: SELIC META · A.A.,
+     CDI · A.A., CDI · 2026 e CDI · 12 MESES;
+   - manter quatro áreas equivalentes de 62px, com divisores
+     verticais discretos e sem cards internos;
+   - preservar Agenda Copom, CDI mensal, mobile e toda a lógica.
+   ============================================================ */
+
+@media (min-width: 769px){
+  /* Remove uma camada redundante de hierarquia no desktop. */
+  #ratesDesktopCleanV745 .rates-clean-group-v745 > span{
+    display: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-groups-v745{
+    gap: 14px !important;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-group-v745{
+    padding-top: 0 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-cards-v745{
+    gap: 0 !important;
+    margin-top: 0 !important;
+    align-items: stretch !important;
+  }
+
+  /* KPIs planos: o container externo já exerce o papel de card. */
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745{
+    background: transparent !important;
+    border: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+
+    box-sizing: border-box !important;
+    height: 62px !important;
+    min-height: 62px !important;
+    max-height: 62px !important;
+
+    padding: 7px 14px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Primeiro indicador de cada grupo alinha com o início do grupo. */
+  #ratesDesktopCleanV745 .rates-clean-cards-v745
+  > .rates-clean-kpi-v745:first-child{
+    padding-left: 0 !important;
+  }
+
+  /* Divisor sutil entre indicadores do mesmo par. */
+  #ratesDesktopCleanV745 .rates-clean-cards-v745
+  > .rates-clean-kpi-v745 + .rates-clean-kpi-v745{
+    border-left: 1px solid rgba(148,163,184,.17) !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > small{
+    margin: 0 0 7px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > strong{
+    display: block !important;
+    margin: 0 0 5px !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-kpi-v745 > em{
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Mantém a Agenda próxima, mas sem colisão com as observações. */
+  #ratesDesktopCleanV745 .rates-clean-copom-v745{
+    margin-top: 12px !important;
+  }
+
+  /* CDI mensal continua ocupando toda a largura em duas colunas. */
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #ratesDesktopCleanV745 .rates-clean-recent-grid-v745 article{
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
