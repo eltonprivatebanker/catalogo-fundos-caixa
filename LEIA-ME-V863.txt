@@ -1,0 +1,47 @@
+V863 — IPCA-15 · semântica, hierarquia e fonte oficial (desktop)
+
+OBJETIVO
+Refinar o bloco IPCA-15 aprovado na V862 sem alterar cálculos, séries, datas ou gráficos.
+
+ALTERAÇÕES
+1. Cabeçalho do IPCA-15 simplificado:
+   - mantém IPCA-15 + badge PRÉVIA;
+   - subtítulo dinâmico passa para “Referência: ago/2026”.
+
+2. Fonte oficial clicável:
+   - “Fonte: IBGE/SIDRA ↗” abre a página oficial do IPCA-15 no IBGE em nova guia;
+   - link possui rel="noopener noreferrer" e rótulo acessível.
+
+3. Interpretação mais semântica:
+   - “LEITURA” passa a “COMPARAÇÃO COM O IPCA”;
+   - mantém o comparativo em p.p. e a observação de tendência.
+
+4. Próximas divulgações em ordem cronológica:
+   - IPCA oficial primeiro;
+   - IPCA-15 depois.
+
+5. Redundância removida:
+   - excluído o parágrafo final “Entenda...”, pois repetia o conceito já comunicado por PRÉVIA + comparação.
+
+6. Hierarquia visual:
+   - preserva a tipografia maior aprovada na V862;
+   - melhora o encaixe do rótulo “COMPARAÇÃO COM O IPCA” e do link de fonte.
+
+ESCOPO
+Desktop (min-width: 769px). Mobile preservado pela lógica visual V863; a estrutura HTML semântica também permanece válida no mobile.
+
+TESTE SUGERIDO
+1. Ctrl+F5 no Edge.
+2. Confirmar o cabeçalho: IPCA-15 · PRÉVIA / Referência: ago/2026.
+3. Clicar “Fonte: IBGE/SIDRA ↗” e confirmar abertura da página oficial do IBGE em nova guia.
+4. Confirmar “COMPARAÇÃO COM O IPCA”.
+5. Confirmar ordem das próximas divulgações: IPCA oficial → IPCA-15.
+6. Confirmar ausência da linha redundante “Entenda...”.
+7. Alternar períodos dos gráficos vizinhos e verificar que o bloco IPCA-15 permanece estável.
+
+ARQUIVOS ALTERADOS
+- index.html
+- inflacao-juros-v863-origin.css
+- inflacao-juros-v863-origin.js
+- LEIA-ME-V863.txt
+- PADRAO-TECNICO.md

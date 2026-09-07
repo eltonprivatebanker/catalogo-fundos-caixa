@@ -218,3 +218,14 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - O valor corrente, o gráfico, os pontos, datas, cálculos e a situação frente à meta continuam dinâmicos.
 - Mobile permanece inalterado.
 
+
+## V863 — IPCA-15: semântica e fonte oficial
+
+- O IPCA-15 permanece em faixa própria no desktop, após os dois cards principais de inflação.
+- O cabeçalho usa `IPCA-15` + badge `PRÉVIA`; o período dinâmico é normalizado para `Referência: mmm/aaaa`.
+- A fonte é apresentada como link explícito `Fonte: IBGE/SIDRA ↗`, abrindo a página oficial do IPCA-15 no IBGE em nova guia.
+- O rótulo genérico `LEITURA` foi substituído por `COMPARAÇÃO COM O IPCA`.
+- O parágrafo final `Entenda...` foi removido por redundância semântica.
+- As próximas divulgações aparecem em ordem cronológica: IPCA oficial e, depois, IPCA-15.
+- Não há `MutationObserver` novo para o IPCA-15; a normalização do período usa reaplicações limitadas após o carregamento assíncrono.
+- Os cálculos, IDs de dados, datas, séries e gráficos permanecem intactos.
