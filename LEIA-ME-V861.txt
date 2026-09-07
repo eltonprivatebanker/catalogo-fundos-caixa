@@ -1,0 +1,41 @@
+V861 — Inflação e juros · legenda do IPCA fixa sem piscar
+
+ESCOPO
+A V861 parte da V860 aprovada e altera somente o comportamento visual/semântico da legenda do gráfico IPCA em 12 meses.
+
+PROBLEMA OBSERVADO
+Ao alternar 12M / 24M, o renderer legado reescrevia os textos internos da legenda e a V860 os corrigia em seguida. No Edge isso podia aparecer como um pequeno piscar do título da legenda.
+
+SOLUÇÃO V861
+1. Os três nomes da legenda passam a ser visualmente imutáveis:
+   - IPCA 12M
+   - Meta
+   - Faixa de tolerância
+2. Esses nomes são nomes das séries/linhas do gráfico e não dependem do recorte 12M ou 24M.
+3. A V861 deixa de reescrever esses três textos por JavaScript após cada clique.
+4. Os spans legados continuam no DOM para compatibilidade, mas ficam visualmente ocultos.
+5. O texto visível da legenda é fornecido de forma estável pelo CSS no mesmo elemento da legenda, evitando a disputa renderer → correção → renderer.
+6. O valor dinâmico "Atual · ..." continua sob responsabilidade do renderer; no desktop ele permanece oculto conforme o layout executivo já aprovado.
+
+PRESERVADO DA V860
+- Cabeçalho e nomenclatura final da Selic.
+- Cards ATUAL / MÁXIMA NO PERÍODO / MÍNIMA NO PERÍODO centralizados.
+- Sincronização inicial do IPCA em 12 meses.
+- Resumo Atual / Meta / Situação.
+- IPCA-15 em faixa própria e tipografia ampliada.
+- Layout mobile preservado.
+
+ARQUIVOS DA V861
+- index.html
+- inflacao-juros-v861-origin.css
+- inflacao-juros-v861-origin.js
+- LEIA-ME-V861.txt
+- PADRAO-TECNICO.md
+
+TESTE RECOMENDADO — EDGE
+1. Fazer Ctrl+F5.
+2. Ir ao card IPCA em 12 meses.
+3. Alternar repetidamente 12M ↔ 24M.
+4. Confirmar que gráfico/dados mudam normalmente.
+5. Confirmar que a legenda permanece visualmente estável: IPCA 12M | Meta | Faixa de tolerância.
+6. Confirmar que não há piscar/troca momentânea nos três nomes.

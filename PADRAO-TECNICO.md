@@ -200,3 +200,11 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Os três KPIs da Selic usam três colunas iguais e conteúdo centralizado no desktop.
 - O resumo do IPCA 12M deve ter estrutura estável no HTML e ser sincronizado após os dados oficiais ficarem disponíveis.
 - O IPCA-15 permanece em faixa própria abaixo dos dois cards principais de IPCA, com tipografia proporcional à largura total.
+
+
+## V861 — legenda fixa do IPCA 12M
+
+- `IPCA 12M`, `Meta` e `Faixa de tolerância` são nomes semânticos das séries e permanecem fixos ao alternar o recorte 12M/24M.
+- Evitar rotinas que reescrevam esses três textos após a interação.
+- O renderer pode continuar atualizando dados e o valor corrente; a nomenclatura visual da legenda não deve disputar escrita com o renderer legado.
+- No desktop, a V861 oculta os spans legados de texto e apresenta os três nomes fixos via CSS no próprio item da legenda, eliminando flicker sem alterar os cálculos/gráfico.

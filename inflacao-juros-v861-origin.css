@@ -1,0 +1,279 @@
+/* ============================================================
+   V861 — Inflação e juros · legenda IPCA fixa na origem (desktop)
+   - Os títulos finais da Selic já nascem no HTML.
+   - Os três KPIs da Selic ocupam toda a largura, em colunas iguais.
+   - Conteúdo centralizado vertical e horizontalmente dentro dos cards.
+   - Sem pseudo-elementos para substituir textos.
+   - IPCA 12M mantém sincronização inicial e resumo executivo.
+   - A legenda IPCA 12M / Meta / Faixa de tolerância é visualmente fixa.
+   - IPCA-15 mantém faixa própria com tipografia reforçada.
+   - Layout mobile preservado.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* ----------------------------------------------------------
+     IPCA mensal
+     ---------------------------------------------------------- */
+  #mobileIpcaMensalV400 #evoCardIpcaNote,
+  #mobileIpcaMensalV400 .ipca-accum-card-v420{
+    display:none !important;
+  }
+
+  #mobileIpcaMensalV400 .ipca-kpis-v378{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* Enquanto o JS ainda não levou o IPCA-15 para a faixa própria. */
+  #mobileIpcaMensalV400 > #ipca15PreviewV712{
+    display:none !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA em 12 meses — Atual / Meta / Situação
+     ---------------------------------------------------------- */
+  #mobileIpcaMetaV400 .ipca-meta-range-label-v680,
+  #mobileIpcaMetaV400 #evoCardMetaNote,
+  #mobileIpcaMetaV400 .econ-meta-band-v378{
+    display:none !important;
+  }
+
+  #v860IpcaMetaSummary{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:0 !important;
+    margin:14px 0 12px !important;
+    border-top:1px solid rgba(148,163,184,.16) !important;
+    border-bottom:1px solid rgba(148,163,184,.16) !important;
+  }
+
+  #v860IpcaMetaSummary > div{
+    min-width:0 !important;
+    padding:12px 16px !important;
+  }
+
+  #v860IpcaMetaSummary > div + div{
+    border-left:1px solid rgba(148,163,184,.16) !important;
+  }
+
+  #v860IpcaMetaSummary small{
+    display:block !important;
+    margin:0 0 6px !important;
+    color:#9eabc1 !important;
+    font-size:.66rem !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    letter-spacing:.08em !important;
+    text-transform:uppercase !important;
+  }
+
+  #v860IpcaMetaSummary strong{
+    display:block !important;
+    margin:0 !important;
+    color:#f8fafc !important;
+    font-size:1rem !important;
+    line-height:1.1 !important;
+    font-weight:800 !important;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-current-v680{
+    display:none !important;
+  }
+
+  /* V861 — legenda semântica fixa.
+     O renderer legado pode atualizar os spans internos, mas eles ficam
+     ocultos: o texto visível nasce do CSS e não pisca entre 12M/24M. */
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span
+    .ipca-meta-legend-default-v680,
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span
+    .ipca-meta-legend-desktop-v680{
+    display:none !important;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span{
+    white-space:nowrap !important;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span:nth-of-type(1)::after{
+    content:"IPCA 12M" !important;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span:nth-of-type(2)::after{
+    content:"Meta" !important;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-v379 > span:nth-of-type(3)::after{
+    content:"Faixa de tolerância" !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA-15 — faixa própria em toda a largura
+     ---------------------------------------------------------- */
+  #v860Ipca15Row{
+    grid-column:1 / -1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+  }
+
+  #v860Ipca15Row #ipca15PreviewV712{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  #v860Ipca15Row #ipca15TitleV712{
+    font-size:1.05rem !important;
+    line-height:1.15 !important;
+  }
+
+  #v860Ipca15Row .ipca15-badge-v712{
+    font-size:.64rem !important;
+    padding:4px 8px !important;
+  }
+
+  #v860Ipca15Row #ipca15PeriodoV712,
+  #v860Ipca15Row .ipca15-source-v712{
+    font-size:.70rem !important;
+    line-height:1.3 !important;
+  }
+
+  #v860Ipca15Row .ipca15-metrics-v712{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  #v860Ipca15Row .ipca15-metrics-v712 > div{
+    padding:11px 14px !important;
+  }
+
+  #v860Ipca15Row .ipca15-metrics-v712 dt{
+    font-size:.65rem !important;
+    letter-spacing:.08em !important;
+  }
+
+  #v860Ipca15Row .ipca15-metrics-v712 dd{
+    font-size:1.05rem !important;
+    line-height:1.05 !important;
+    font-weight:800 !important;
+  }
+
+  #v860Ipca15Row #ipca15CompareTextV712{
+    font-size:.80rem !important;
+    line-height:1.35 !important;
+  }
+
+  #v860Ipca15Row .ipca15-compare-copy-v712 small{
+    font-size:.70rem !important;
+    line-height:1.35 !important;
+  }
+
+  #v860Ipca15Row .ipca15-compare-label-v712{
+    font-size:.62rem !important;
+  }
+
+  #v860Ipca15Row .ipca15-calendar-v712{
+    font-size:.69rem !important;
+  }
+
+  #v860Ipca15Row .ipca15-calendar-v712 strong{
+    font-size:.72rem !important;
+  }
+
+  #v860Ipca15Row .ipca15-why-v712{
+    font-size:.71rem !important;
+    line-height:1.35 !important;
+  }
+
+  /* ----------------------------------------------------------
+     SELIC — três cards iguais e conteúdo realmente centralizado
+     ---------------------------------------------------------- */
+  #mobileSelicV400 #evoCardSelicNote{
+    display:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpis-focus-v415{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    width:100% !important;
+    max-width:none !important;
+    gap:12px !important;
+    align-items:stretch !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415{
+    position:relative !important;
+    box-sizing:border-box !important;
+    min-width:0 !important;
+    min-height:82px !important;
+    height:auto !important;
+    padding:11px 16px !important;
+
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    text-align:center !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > i{
+    display:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > span,
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > strong,
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > small{
+    box-sizing:border-box !important;
+    width:100% !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    text-align:center !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > span{
+    display:block !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    margin-top:0 !important;
+    margin-bottom:7px !important;
+    overflow:visible !important;
+
+    color:#9eabc1 !important;
+    font-size:.66rem !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    letter-spacing:.075em !important;
+    text-transform:uppercase !important;
+    white-space:nowrap !important;
+
+    text-decoration:none !important;
+    text-shadow:none !important;
+    border:0 !important;
+    background:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > span::before,
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > span::after{
+    content:none !important;
+    display:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > strong{
+    display:block !important;
+    margin-top:0 !important;
+    margin-bottom:7px !important;
+    line-height:1 !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > small{
+    display:block !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+    line-height:1 !important;
+  }
+}
