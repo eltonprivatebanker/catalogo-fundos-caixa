@@ -1,0 +1,43 @@
+V859 — Inflação e juros: correção da Selic + sincronização inicial do IPCA 12M
+
+OBJETIVO
+Corrigir os dois pontos ainda pendentes observados no Edge após a V858, preservando o fluxo visual já aprovado.
+
+1. SELIC
+- Remove totalmente a estratégia da V858 que escondia o texto real e criava outro texto por ::after.
+- Os três KPIs passam a mostrar somente o texto real do DOM:
+  ATUAL / MÁXIMA NO PERÍODO / MÍNIMA NO PERÍODO.
+- Também zera text-shadow nesses rótulos para evitar resíduos visuais no Edge.
+- Ao trocar o período, somente os rótulos ficam invisíveis por poucos frames enquanto o renderer legado atualiza os dados.
+- O JS reaplica a nomenclatura final em uma sequência curta e finita e então libera os rótulos.
+- Não usa MutationObserver nem timer contínuo.
+
+2. IPCA EM 12 MESES
+- Mantém o resumo Atual / Meta / Situação.
+- Na abertura, faz uma sincronização inicial finita.
+- Se os dados-base do IPCA já chegaram mas o renderer do card de meta ainda não rodou, aciona uma única vez o botão 12M já ativo para produzir a mesma atualização que funcionou no teste manual.
+- Depois apenas lê os valores já renderizados; não altera cálculos nem série.
+
+3. IPCA-15
+- Continua em faixa própria de largura total antes da Selic.
+- Reforça a tipografia dos três números principais para aproveitar melhor a largura disponível.
+
+ARQUIVOS NOVOS
+- inflacao-juros-v859-sync.css
+- inflacao-juros-v859-sync.js
+- LEIA-ME-V859.txt
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+TESTE SUGERIDO
+1. Abrir a página no Edge com F12/Console já aberto.
+2. Recarregar com Ctrl+F5.
+3. Confirmar que a Selic abre sem linhas/resíduos acima dos rótulos.
+4. Alternar Ano atual / 3 anos / 5 anos / 10 anos / Histórico e observar os três KPIs.
+5. Confirmar que IPCA em 12 meses já abre com Atual / Meta / Situação preenchidos, sem precisar clicar em 12M.
+6. Conferir o IPCA-15 em faixa larga.
+
+IMPORTANTE
+V859 substitui a V858 no index.html. Os arquivos V858 podem permanecer no repositório como histórico, mas não devem ser carregados pela página.

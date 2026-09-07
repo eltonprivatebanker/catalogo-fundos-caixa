@@ -1,0 +1,161 @@
+/* ============================================================
+   V859 — Inflação e juros · sincronização final desktop
+   - Remove a duplicação visual dos rótulos da Selic da V858.
+   - Usa somente o texto real do DOM nos KPIs da Selic.
+   - Sincroniza o resumo Atual / Meta / Situação do IPCA 12M.
+   - Mantém o IPCA-15 em faixa própria, com tipografia reforçada.
+   - Somente desktop; dados, cálculos, SVGs e mobile preservados.
+   ============================================================ */
+
+@media (min-width:769px){
+  /* ----------------------------------------------------------
+     IPCA mensal
+     ---------------------------------------------------------- */
+  #mobileIpcaMensalV400 #evoCardIpcaNote,
+  #mobileIpcaMensalV400 .ipca15-why-v712,
+  #mobileIpcaMensalV400 .ipca15-compare-label-v712,
+  #mobileIpcaMensalV400 .ipca-accum-card-v420{
+    display:none !important;
+  }
+
+  #mobileIpcaMensalV400 .ipca-kpis-v378{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* Enquanto o JS não reposicionou o IPCA-15, não o exibe no card antigo. */
+  #mobileIpcaMensalV400 > #ipca15PreviewV712{
+    display:none !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA em 12 meses — Atual / Meta / Situação
+     ---------------------------------------------------------- */
+  #mobileIpcaMetaV400 .ipca-meta-range-label-v680,
+  #mobileIpcaMetaV400 #evoCardMetaNote,
+  #mobileIpcaMetaV400 .econ-meta-band-v378{
+    display:none !important;
+  }
+
+  #v859IpcaMetaSummary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:0;
+    margin:14px 0 12px;
+    border-top:1px solid rgba(148,163,184,.16);
+    border-bottom:1px solid rgba(148,163,184,.16);
+  }
+
+  #v859IpcaMetaSummary > div{
+    min-width:0;
+    padding:12px 16px;
+  }
+
+  #v859IpcaMetaSummary > div + div{
+    border-left:1px solid rgba(148,163,184,.16);
+  }
+
+  #v859IpcaMetaSummary small{
+    display:block;
+    margin:0 0 6px;
+    color:#9eabc1;
+    font-size:.66rem;
+    line-height:1;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  #v859IpcaMetaSummary strong{
+    display:block;
+    margin:0;
+    color:#f8fafc;
+    font-size:1rem;
+    line-height:1.1;
+    font-weight:800;
+  }
+
+  #mobileIpcaMetaV400 .econ-meta-legend-current-v680{
+    display:none !important;
+  }
+
+  /* ----------------------------------------------------------
+     IPCA-15 — faixa própria em toda a largura
+     ---------------------------------------------------------- */
+  #v859Ipca15Row{
+    grid-column:1 / -1 !important;
+    width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box !important;
+    margin:0 !important;
+  }
+
+  #v859Ipca15Row #ipca15PreviewV712{
+    display:block !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    box-sizing:border-box !important;
+  }
+
+  #v859Ipca15Row .ipca15-metrics-v712{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  /* Faixa larga: reforça a legibilidade dos números sem mudar a estrutura. */
+  #v859Ipca15Row .ipca15-metrics-v712 dt{
+    font-size:.72rem !important;
+    letter-spacing:.06em !important;
+  }
+
+  #v859Ipca15Row .ipca15-metrics-v712 dd{
+    font-size:1.16rem !important;
+    line-height:1.15 !important;
+    font-weight:800 !important;
+  }
+
+  /* ----------------------------------------------------------
+     Selic — usa somente os rótulos reais do DOM
+     ---------------------------------------------------------- */
+  #mobileSelicV400 #evoCardSelicNote{
+    display:none !important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span,
+  #mobileSelicV400 #selicMaxLabelV381,
+  #mobileSelicV400 #selicMinLabelV381{
+    display:block !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:visible !important;
+    color:#9eabc1 !important;
+    font-size:.66rem !important;
+    line-height:1.1 !important;
+    font-weight:800 !important;
+    letter-spacing:.08em !important;
+    text-transform:uppercase !important;
+    white-space:nowrap !important;
+    text-shadow:none !important;
+  }
+
+  /* A V858 gerava um segundo texto com pseudo-elemento. Na V859 isso é proibido. */
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span::before,
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current > span::after,
+  #mobileSelicV400 #selicMaxLabelV381::before,
+  #mobileSelicV400 #selicMaxLabelV381::after,
+  #mobileSelicV400 #selicMinLabelV381::before,
+  #mobileSelicV400 #selicMinLabelV381::after{
+    content:none !important;
+    display:none !important;
+  }
+
+  /* Durante uma troca de período, só os rótulos somem por alguns frames.
+     Os valores e o restante do card continuam estáveis. */
+  #mobileSelicV400.v859-selic-syncing .selic-kpi-focus-card-v415.is-current > span,
+  #mobileSelicV400.v859-selic-syncing #selicMaxLabelV381,
+  #mobileSelicV400.v859-selic-syncing #selicMinLabelV381{
+    visibility:hidden !important;
+  }
+}

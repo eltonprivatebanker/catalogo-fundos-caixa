@@ -178,3 +178,15 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - A troca de período da Selic não pode exibir temporariamente nomenclatura legada. A apresentação visual dos três rótulos deve ser estável desde o primeiro frame e o JS deve sincronizar o texto real do DOM após o renderer.
 - Não usar `MutationObserver` nem timers contínuos para estabilizar a Selic; reaplicações curtas e finitas após interação são permitidas apenas para sincronização semântica.
 - Não alterar valores, cálculos, SVGs, APIs, datas, `scrollY`, `scrollLeft` ou proteções anteriores.
+
+## V859 — Inflação e juros: sincronização final sem rótulo duplicado
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece com a estrutura original.
+- A Selic deve usar exclusivamente o texto real dos três rótulos do DOM: `Atual`, `Máxima no período`, `Mínima no período`.
+- Não gerar os rótulos da Selic com `::before`/`::after`, `color: transparent` ou `font-size: 0`; isso pode deixar resíduos de `text-shadow`/renderização no Edge.
+- Durante a troca de período, a V859 pode ocultar temporariamente somente os rótulos dos KPIs, reaplicar o texto real após o renderer legado e mostrá-los novamente em sequência finita.
+- Não usar `MutationObserver` nem timers contínuos para essa sincronização.
+- O resumo do IPCA em 12 meses deve aparecer já na abertura com `Atual / Meta / Situação`. Se o renderer legado ainda não tiver populado o card, a V859 pode acionar uma única vez o botão ativo de 12M quando os dados-base do IPCA estiverem disponíveis e fazer leituras finitas de confirmação.
+- O IPCA-15 permanece em faixa própria de largura total antes da Selic e recebe apenas reforço tipográfico nos três valores principais.
+- Não alterar valores, cálculos, SVGs, APIs, datas, `scrollY`, `scrollLeft` ou proteções anteriores.
+- O `index.html` deve carregar V859 no lugar da V858; as duas camadas não devem ficar ativas simultaneamente.
