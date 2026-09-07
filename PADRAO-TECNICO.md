@@ -190,3 +190,13 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - O IPCA-15 permanece em faixa própria de largura total antes da Selic e recebe apenas reforço tipográfico nos três valores principais.
 - Não alterar valores, cálculos, SVGs, APIs, datas, `scrollY`, `scrollLeft` ou proteções anteriores.
 - O `index.html` deve carregar V859 no lugar da V858; as duas camadas não devem ficar ativas simultaneamente.
+
+## V860 — Selic semântica na origem e KPIs centralizados
+
+- O HTML da Selic deve nascer com a nomenclatura final: `Selic`, `Trajetória da taxa meta.`, `ATUAL`, `MÁXIMA NO PERÍODO` e `MÍNIMA NO PERÍODO`.
+- Não criar rótulos equivalentes por `::before`/`::after`.
+- No desktop, a função legado `econAtualizarSelicKpiLabelsV381` é interceptada para impedir a reintrodução de `Selic vigente`, `Máxima no recorte` e `Mínima no recorte`.
+- O renderer original continua responsável pelos valores e datas; a V860 altera somente a nomenclatura e apresentação.
+- Os três KPIs da Selic usam três colunas iguais e conteúdo centralizado no desktop.
+- O resumo do IPCA 12M deve ter estrutura estável no HTML e ser sincronizado após os dados oficiais ficarem disponíveis.
+- O IPCA-15 permanece em faixa própria abaixo dos dois cards principais de IPCA, com tipografia proporcional à largura total.

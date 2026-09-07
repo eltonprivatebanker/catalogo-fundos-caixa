@@ -1,0 +1,42 @@
+V860 — Inflação e juros · Selic na origem + KPIs centralizados
+
+ESCOPO
+Ajustes visuais e semânticos direcionados ao desktop. Valores, séries, cálculos, APIs e gráficos permanecem sob responsabilidade dos renderers existentes.
+
+SELIC — CORREÇÃO PRINCIPAL
+1. O HTML já nasce com a nomenclatura final:
+   - Selic
+   - Trajetória da taxa meta.
+   - ATUAL
+   - MÁXIMA NO PERÍODO
+   - MÍNIMA NO PERÍODO
+2. A V860 intercepta econAtualizarSelicKpiLabelsV381, a função legado que voltava a escrever "Máxima no recorte" / "Mínima no recorte".
+3. Valores e datas continuam sendo calculados pelo renderer original para cada período.
+4. Não há pseudo-elementos para criar um segundo texto sobre o texto real.
+5. Os três KPIs passam a ocupar toda a largura em três colunas iguais.
+6. Rótulo, valor e data ficam centralizados horizontal e verticalmente dentro de cada card.
+
+IPCA EM 12 MESES
+- O resumo Atual / Meta / Situação já possui estrutura no HTML.
+- A sincronização inicial aguarda os dados do IPCA e, se necessário, aciona uma única vez o renderer de 12M.
+- Objetivo: abrir a página já com Atual e Situação preenchidos, sem depender de clique manual.
+
+IPCA-15
+- Mantido em faixa própria abaixo dos dois cards principais de IPCA.
+- Tipografia ampliada para a nova largura: título, métricas, leitura, calendário e explicação.
+
+ARQUIVOS DA V860
+- index.html
+- inflacao-juros-v860-origin.css
+- inflacao-juros-v860-origin.js
+- LEIA-ME-V860.txt
+- PADRAO-TECNICO.md
+
+TESTE RECOMENDADO — EDGE
+1. Fazer Ctrl+F5.
+2. Confirmar que o cabeçalho já abre como "Selic".
+3. Confirmar os cards: ATUAL / MÁXIMA NO PERÍODO / MÍNIMA NO PERÍODO.
+4. Alternar: Ano atual → 3 anos → 5 anos → 10 anos → Histórico → Ano atual.
+5. Verificar se valores e datas mudam sem os rótulos antigos aparecerem ou piscarem.
+6. Confirmar que os três cards ocupam a largura disponível e que conteúdo está centralizado.
+7. Recarregar e confirmar que IPCA 12M já abre com Atual / Meta / Situação preenchidos.
