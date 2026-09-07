@@ -1,0 +1,45 @@
+V862 — Inflação e juros · legenda fixa com meta e banda de tolerância
+
+ESCOPO
+A V862 parte da V861 aprovada e altera somente a legenda fixa do gráfico IPCA em 12 meses no desktop.
+
+AJUSTE APROVADO
+A legenda passa a exibir de forma estável e autoexplicativa:
+- IPCA 12M
+- Meta 3,00%
+- Faixa de tolerância 1,50%–4,50%
+
+MOTIVO
+Os valores de 3,00%, 1,50% e 4,50% representam parâmetros institucionais da meta e da banda de tolerância. Eles não dependem do seletor de recorte 12M/24M. Por isso permanecem fixos enquanto apenas o período visualizado no gráfico muda.
+
+IMPLEMENTAÇÃO
+1. Mantém a estratégia V861 que evita flicker no Edge.
+2. Os spans legados continuam ocultos no desktop para impedir disputa com o renderer.
+3. O texto visível continua sendo fornecido pelo CSS no próprio item da legenda.
+4. A V862 apenas completa semanticamente os dois rótulos:
+   - Meta → Meta 3,00%
+   - Faixa de tolerância → Faixa de tolerância 1,50%–4,50%
+5. O gráfico, valores, datas, seletor 12M/24M e cálculos permanecem intactos.
+6. Mobile permanece preservado.
+
+PRESERVADO
+- IPCA mensal e KPIs Último/Maior/Menor mês.
+- Resumo Atual / Meta / Situação do IPCA em 12 meses.
+- Sincronização inicial do IPCA 12M.
+- IPCA-15 em faixa própria e tipografia ampliada.
+- Selic com semântica final na origem e KPIs centralizados.
+
+ARQUIVOS DA V862
+- index.html
+- inflacao-juros-v862-origin.css
+- inflacao-juros-v862-origin.js
+- LEIA-ME-V862.txt
+- PADRAO-TECNICO.md
+
+TESTE RECOMENDADO — EDGE
+1. Fazer Ctrl+F5.
+2. Abrir o card IPCA em 12 meses.
+3. Confirmar a legenda: IPCA 12M | Meta 3,00% | Faixa de tolerância 1,50%–4,50%.
+4. Alternar 12M → 24M → 12M repetidamente.
+5. Confirmar que a legenda permanece fixa e sem piscar.
+6. Confirmar que gráfico e dados continuam mudando normalmente conforme o recorte.

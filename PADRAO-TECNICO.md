@@ -208,3 +208,13 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - Evitar rotinas que reescrevam esses três textos após a interação.
 - O renderer pode continuar atualizando dados e o valor corrente; a nomenclatura visual da legenda não deve disputar escrita com o renderer legado.
 - No desktop, a V861 oculta os spans legados de texto e apresenta os três nomes fixos via CSS no próprio item da legenda, eliminando flicker sem alterar os cálculos/gráfico.
+
+## V862 — legenda do IPCA com parâmetros explícitos
+
+- `IPCA 12M`, `Meta 3,00%` e `Faixa de tolerância 1,50%–4,50%` permanecem fixos ao alternar o recorte 12M/24M.
+- O seletor 12M/24M muda apenas a janela temporal visualizada; não muda a definição da série, a meta central nem os limites da banda.
+- No desktop, preservar a estratégia V861 de ocultar os spans legados e fornecer a nomenclatura visual fixa pelo próprio item da legenda, evitando flicker no Edge.
+- Não reintroduzir reescrita desses três rótulos por JavaScript após cliques.
+- O valor corrente, o gráfico, os pontos, datas, cálculos e a situação frente à meta continuam dinâmicos.
+- Mobile permanece inalterado.
+
