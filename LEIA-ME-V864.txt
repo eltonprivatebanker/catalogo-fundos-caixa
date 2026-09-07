@@ -1,0 +1,30 @@
+V864 — Boletim Focus · leitura executiva no desktop
+
+OBJETIVO
+Reduzir redundâncias e melhorar hierarquia/encadeamento do bloco Focus sem alterar dados, valores, anos, cálculos ou sparklines.
+
+ALTERAÇÕES
+1. Cabeçalho compacto: "Atualização DD/MM/AAAA · Boletim oficial PDF ↗ · ⓘ Entenda o Focus".
+2. A faixa larga "Como interpretar o Boletim Focus" é substituída por um botão compacto no cabeçalho; o conteúdo explicativo continua disponível.
+3. "SÍNTESE DO CENÁRIO" + chip de horizonte viram um único título dinâmico "CENÁRIO 2026–2029".
+4. O subtítulo explicativo de cada card (ex.: "Taxa básica de juros") fica oculto no desktop e preservado como tooltip do título.
+5. "TENDÊNCIA" deixa de ocupar uma linha própria; direção e variação passam para uma linha executiva, por exemplo "↓ Queda   -3,75 p.p.".
+6. 2026 continua como primeiro ponto visual; anos, valores e sparklines permanecem intactos.
+7. Escopo exclusivamente desktop (>=769px). Mobile preservado.
+
+ARQUIVOS NOVOS
+- focus-v864-executive.css
+- focus-v864-executive.js
+- LEIA-ME-V864.txt
+
+ARQUIVOS ATUALIZADOS
+- index.html
+- PADRAO-TECNICO.md
+
+TESTE SUGERIDO
+Abrir o Boletim Focus no desktop/Edge e conferir:
+- linha do cabeçalho mais compacta;
+- botão "Entenda o Focus" abrindo/fechando o conteúdo explicativo;
+- síntese com "CENÁRIO 2026–2029" sem chip redundante;
+- cinco cards mais enxutos, com direção + variação na mesma linha;
+- dados e valores anuais exatamente iguais à versão anterior.

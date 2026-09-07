@@ -229,3 +229,13 @@ A comparação deve iniciar à esquerda quando for aberta, mas nenhuma atualiza�
 - As próximas divulgações aparecem em ordem cronológica: IPCA oficial e, depois, IPCA-15.
 - Não há `MutationObserver` novo para o IPCA-15; a normalização do período usa reaplicações limitadas após o carregamento assíncrono.
 - Os cálculos, IDs de dados, datas, séries e gráficos permanecem intactos.
+
+## V864 — Boletim Focus: leitura executiva no desktop
+
+- Escopo responsivo: `min-width: 769px`; mobile permanece inalterado.
+- O cabeçalho deve concentrar atualização, link do PDF oficial e o acesso compacto `ⓘ Entenda o Focus`; não manter uma segunda faixa larga apenas para abrir a explicação.
+- A síntese usa um único título `CENÁRIO AAAA–AAAA`, derivado dos anos exibidos nos cards; o chip separado de horizonte é redundante e fica oculto no desktop.
+- Nos cards, o nome do indicador é suficiente como rótulo primário. A descrição (`Taxa básica de juros`, `Inflação ao consumidor` etc.) pode ser ocultada visualmente no desktop e preservada como `title` para consulta.
+- A leitura de tendência deve ser compacta: direção semântica (`↓ Queda`, `↑ Leve alta`, `↕ Oscila`) e variação do horizonte na mesma linha; não repetir o kicker `TENDÊNCIA`.
+- Não alterar anos, valores, cálculos, cores semânticas, sparklines, PDF, fonte de dados ou conteúdo da explicação do Focus.
+- A camada V864 deve ser idempotente diante do renderer assíncrono do Focus e não pode provocar loops de `MutationObserver`.
