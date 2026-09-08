@@ -1,68 +1,57 @@
-CATÁLOGO DE FUNDOS — TAXA DE ADMINISTRAÇÃO V865
-================================================
+CATÁLOGO DE FUNDOS — TAXA ADM V866
+=================================
 
-DIAGNÓSTICO
+OBJETIVO
+--------
+Eliminar o micro-piscar da Taxa de Administração observado na V865.
+
+O QUE MUDOU
 -----------
-O site NÃO carrega app.js.
-Ele carrega:
-    app-v767.js?v=focus-v802
+- MutationObserver agora observa preferencialmente #sec-fundos.
+- Atualização usa debounce de 140 ms.
+- Cada mutação reinicia o relógio; a taxa só entra quando a tabela estabiliza.
+- Removida a sequência agressiva de atualizações da V865.
+- Badge não usa transition nem animation.
+- Badge é inserido invisível e revelado somente depois de o layout estar pronto.
+- Badge existente não é removido/reinserido sem necessidade.
 
-Por isso as tentativas anteriores em app.js não executavam.
+VISUAL
+------
+O visual permanece igual ao aprovado:
 
-Porém o index.html JÁ carrega:
-    catalog-detail-v845.js?v=catalog-detail-v845
-
-Então esta versão altera somente esse arquivo que já participa da página.
+Categoria · CNPJ · Adm. X,XX% a.a. · Copiar
 
 COMO TESTAR
 -----------
-1. No branch Testes-da-versão-01, substitua:
+1. No branch Testes-da-versão-01, substitua somente:
        catalog-detail-v845.js
 
-   pelo arquivo deste ZIP, mantendo exatamente o mesmo nome.
+2. Não altere:
+       index.html
+       app-v767.js
+       dados_atuais.csv
 
-2. Não altere app.js.
-3. Não altere app-v767.js.
-4. Não altere index.html.
+3. Aguarde o GitHub Pages publicar.
+4. Faça Ctrl + F5.
 
-5. Aguarde o GitHub Pages terminar o deployment.
-6. Faça Ctrl + F5.
+CONSOLE
+-------
+Você deverá ver:
+    [Taxa Adm V866] módulo inicializado.
+    [Taxa Adm V866] base carregada: N CNPJs com taxa.
 
-RESULTADO ESPERADO
-------------------
-Categoria · CNPJ · Adm. X,XX% a.a. · Copiar
+Na primeira inserção:
+    [Taxa Adm V866] linhas com taxa: N · inseridas: N
 
-A taxa vem do campo real:
-    Taxa Adm (%)
-
-do arquivo:
-    dados_atuais.csv
-
-PROTEÇÃO DA FUNCIONALIDADE EXISTENTE
-------------------------------------
-O catalog-detail-v845.js original é carregado de forma fixa a partir do commit:
-    dab771a588e5d2b4b0cbf08a572d2691446db78e
-
-Depois a V865 adiciona somente a Taxa de Administração.
-
-DIAGNÓSTICO NO CONSOLE
-----------------------
-Depois do Ctrl + F5, procure:
-
-    [Taxa Adm V865] módulo inicializado.
-    [Taxa Adm V865] base carregada: N CNPJs com taxa.
-    [Taxa Adm V865] linhas com taxa: N · novas: N
-
-Comandos rápidos:
-
-    !!window.__CATALOG_ADMIN_FEE_V865__
-
-    document.querySelectorAll('.fundo-adm-sub-v865').length
-
-    [...document.querySelectorAll('.fundo-adm-sub-v865')]
-      .slice(0,10)
-      .map(x => x.textContent.trim())
+Teste:
+    document.querySelectorAll('.fundo-adm-sub-v866').length
 
 REVERTER
 --------
-Basta recolocar o catalog-detail-v845.js anterior.
+Basta recolocar o catalog-detail-v845.js da V865/anterior.
+
+BASE ORIGINAL PRESERVADA
+------------------------
+A funcionalidade original do catalog-detail-v845.js continua sendo carregada
+do commit fixo:
+    dab771a588e5d2b4b0cbf08a572d2691446db78e

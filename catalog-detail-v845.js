@@ -1,13 +1,13 @@
 /*
  * CATÁLOGO DE FUNDOS CAIXA
- * catalog-detail-v845.js — V865
+ * catalog-detail-v845.js — V866
  *
- * Esta versão preserva o catalog-detail-v845.js original,
- * carregando-o do commit dab771a588e5d2b4b0cbf08a572d2691446db78e,
- * e acrescenta a Taxa de Administração na linha principal do Catálogo.
- *
- * Ordem visual:
- * Categoria → CNPJ → Adm. X,XX% a.a. → Copiar
+ * V866:
+ * - mantém o visual aprovado da Taxa Adm.;
+ * - elimina o "piscar" no carregamento;
+ * - usa debounce de estabilidade do DOM;
+ * - evita reinserções desnecessárias;
+ * - observa preferencialmente #sec-fundos, não a página inteira.
  */
 
 (() => {
@@ -34,19 +34,24 @@
     });
   }
 
-  const FEE_MARKER = '__CATALOG_ADMIN_FEE_V865__';
+  const MARKER = '__CATALOG_ADMIN_FEE_V866__';
 
-  function installAdminFeeV865() {
-    if (window[FEE_MARKER]) return;
-    window[FEE_MARKER] = true;
+  function installAdminFeeV866() {
+    if (window[MARKER]) return;
+    window[MARKER] = true;
 
     const DESKTOP_QUERY = '(min-width:769px)';
     const CSV_URL = './dados_atuais.csv';
 
+    // Aguarda esse tempo sem mutações antes de atualizar a linha.
+    const DOM_SETTLE_MS = 140;
+
     const feeByCnpj = new Map();
+
     let csvReady = false;
-    let scheduled = false;
-    let observer = null;
+    let updateTimer = null;
+    let catalogObserver = null;
+    let rootObserver = null;
 
     const normalizeCnpj = value =>
       String(value || '').replace(/\D/g, '');
@@ -93,10 +98,6 @@
       }) + '% a.a.';
     }
 
-    /*
-     * Parser CSV independente.
-     * Suporta vírgulas, aspas escapadas e quebras de linha dentro de campos.
-     */
     function parseCsv(text) {
       text = String(text || '').replace(/^\uFEFF/, '');
 
@@ -203,14 +204,14 @@
       csvReady = true;
 
       console.info(
-        `[Taxa Adm V865] base carregada: ${feeByCnpj.size} CNPJs com taxa.`
+        `[Taxa Adm V866] base carregada: ${feeByCnpj.size} CNPJs com taxa.`
       );
     }
 
     async function loadFees() {
       try {
         const response = await fetch(
-          CSV_URL + '?taxa-adm-v865=' + Date.now(),
+          CSV_URL + '?taxa-adm-v866=' + Date.now(),
           { cache: 'no-store' }
         );
 
@@ -220,20 +221,22 @@
 
         const text = await response.text();
         buildFeeMap(text);
-        scheduleUpdate(0);
+
+        // CSV chegou: aguarda o DOM estabilizar antes de inserir.
+        scheduleUpdate(DOM_SETTLE_MS);
       } catch (error) {
-        console.error('[Taxa Adm V865] erro ao carregar a base:', error);
+        console.error('[Taxa Adm V866] erro ao carregar a base:', error);
       }
     }
 
     function installStyle() {
-      if (document.getElementById('catalog-admin-fee-v865-style')) return;
+      if (document.getElementById('catalog-admin-fee-v866-style')) return;
 
       const style = document.createElement('style');
-      style.id = 'catalog-admin-fee-v865-style';
+      style.id = 'catalog-admin-fee-v866-style';
       style.textContent = `
         @media (min-width:769px) {
-          #sec-fundos .fundo-adm-sub-v865 {
+          #sec-fundos .fundo-adm-sub-v866 {
             display:inline-flex !important;
             align-items:baseline;
             gap:4px;
@@ -246,25 +249,40 @@
             line-height:1.15;
             vertical-align:middle;
             cursor:default;
+
+            /* evita qualquer animação/transition herdada */
+            animation:none !important;
+            transition:none !important;
+
+            /* entra invisível e só é revelada após posicionar */
+            visibility:hidden;
           }
 
-          #sec-fundos .fundo-adm-label-v865 {
+          #sec-fundos .fundo-adm-sub-v866.is-ready {
+            visibility:visible;
+          }
+
+          #sec-fundos .fundo-adm-label-v866 {
             color:#7f8da5 !important;
             font-size:.70rem !important;
             font-weight:600 !important;
             letter-spacing:0;
+            animation:none !important;
+            transition:none !important;
           }
 
-          #sec-fundos .fundo-adm-value-v865 {
+          #sec-fundos .fundo-adm-value-v866 {
             color:#d8e0ec !important;
             font-size:.70rem !important;
             font-weight:700 !important;
             letter-spacing:0;
+            animation:none !important;
+            transition:none !important;
           }
         }
 
         @media (max-width:768px) {
-          .fundo-adm-sub-v865 {
+          .fundo-adm-sub-v866 {
             display:none !important;
           }
         }
@@ -275,15 +293,15 @@
 
     function createBadge(fee) {
       const badge = document.createElement('span');
-      badge.className = 'fundo-adm-sub-v865';
-      badge.dataset.catalogAdminFeeV865 = '1';
+      badge.className = 'fundo-adm-sub-v866';
+      badge.dataset.catalogAdminFeeV866 = '1';
 
       const label = document.createElement('span');
-      label.className = 'fundo-adm-label-v865';
+      label.className = 'fundo-adm-label-v866';
       label.textContent = 'Adm.';
 
       const value = document.createElement('span');
-      value.className = 'fundo-adm-value-v865';
+      value.className = 'fundo-adm-value-v866';
       value.textContent = fee;
 
       badge.append(label, value);
@@ -310,15 +328,12 @@
 
       if (direct) {
         const cnpj = normalizeCnpj(direct.textContent);
+
         if (cnpj.length === 14) {
           return { cnpj, element: direct };
         }
       }
 
-      /*
-       * Fallback para eventual alteração futura de classe:
-       * encontra um elemento-folha contendo um CNPJ.
-       */
       const leaves = [...tr.querySelectorAll(
         'span,small,div,p,a,button'
       )].filter(el => !el.children.length);
@@ -356,11 +371,32 @@
         );
 
       if (copyButton) {
-        meta.insertBefore(badge, copyButton);
+        if (copyButton.previousElementSibling !== badge) {
+          meta.insertBefore(badge, copyButton);
+        }
         return;
       }
 
-      meta.appendChild(badge);
+      if (badge.parentElement !== meta) {
+        meta.appendChild(badge);
+      }
+    }
+
+    function revealBadge(badge) {
+      if (!badge || badge.classList.contains('is-ready')) return;
+
+      /*
+       * Duplo requestAnimationFrame:
+       * garante que o navegador tenha concluído o layout da linha
+       * antes da taxa se tornar visível.
+       */
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (badge.isConnected) {
+            badge.classList.add('is-ready');
+          }
+        });
+      });
     }
 
     function updateRows() {
@@ -385,74 +421,113 @@
 
         if (!meta) return;
 
-        let badge = meta.querySelector('.fundo-adm-sub-v865');
+        let badge = meta.querySelector('.fundo-adm-sub-v866');
 
         if (!badge) {
           badge = createBadge(fee);
+          placeBadge(meta, info.element, badge);
           inserted++;
-        } else {
-          const value = badge.querySelector('.fundo-adm-value-v865');
-          if (value && value.textContent !== fee) {
-            value.textContent = fee;
-          }
+          revealBadge(badge);
+          return;
         }
 
+        const value = badge.querySelector('.fundo-adm-value-v866');
+
+        if (value && value.textContent !== fee) {
+          value.textContent = fee;
+        }
+
+        /*
+         * Reposiciona apenas se necessário.
+         * Evita remove/append repetidos que causavam microflicker.
+         */
         placeBadge(meta, info.element, badge);
+
+        if (!badge.classList.contains('is-ready')) {
+          revealBadge(badge);
+        }
       });
 
-      if (matched) {
+      if (inserted > 0) {
         console.info(
-          `[Taxa Adm V865] linhas com taxa: ${matched} · novas: ${inserted}`
+          `[Taxa Adm V866] linhas com taxa: ${matched} · inseridas: ${inserted}`
         );
       }
     }
 
-    function scheduleUpdate(delay = 40) {
-      if (scheduled) return;
-      scheduled = true;
+    function scheduleUpdate(delay = DOM_SETTLE_MS) {
+      clearTimeout(updateTimer);
 
-      setTimeout(() => {
-        scheduled = false;
+      /*
+       * Debounce real:
+       * cada nova mutação reinicia o relógio.
+       * A taxa só é atualizada quando a tabela fica quieta.
+       */
+      updateTimer = setTimeout(() => {
+        updateTimer = null;
         updateRows();
       }, delay);
     }
 
-    function observeCatalog() {
-      if (observer) return;
+    function connectCatalogObserver() {
+      const root = document.getElementById('sec-fundos');
+      if (!root) return false;
 
-      observer = new MutationObserver(() => scheduleUpdate(40));
+      if (catalogObserver) {
+        catalogObserver.disconnect();
+      }
 
-      observer.observe(document.documentElement, {
-        childList: true,
-        subtree: true
+      catalogObserver = new MutationObserver(() => {
+        scheduleUpdate(DOM_SETTLE_MS);
+      });
+
+      catalogObserver.observe(root, {
+        childList:true,
+        subtree:true
+      });
+
+      return true;
+    }
+
+    function watchForCatalogRoot() {
+      if (connectCatalogObserver()) return;
+
+      rootObserver = new MutationObserver(() => {
+        if (connectCatalogObserver()) {
+          rootObserver.disconnect();
+          rootObserver = null;
+          scheduleUpdate(DOM_SETTLE_MS);
+        }
+      });
+
+      rootObserver.observe(document.documentElement, {
+        childList:true,
+        subtree:true
       });
     }
 
     installStyle();
-    observeCatalog();
+    watchForCatalogRoot();
     loadFees();
 
-    [100, 300, 700, 1500, 3000, 6000].forEach(delay => {
-      setTimeout(updateRows, delay);
-    });
+    /*
+     * Apenas uma verificação tardia de segurança.
+     * Não usamos mais a sequência agressiva 100/300/700/1500/...
+     */
+    setTimeout(() => scheduleUpdate(0), 1800);
 
     window.addEventListener(
       'resize',
-      () => scheduleUpdate(80),
-      { passive: true }
+      () => scheduleUpdate(DOM_SETTLE_MS),
+      { passive:true }
     );
 
-    console.info('[Taxa Adm V865] módulo inicializado.');
+    console.info('[Taxa Adm V866] módulo inicializado.');
   }
 
   loadOriginalV845()
     .catch(error => {
-      /*
-       * Se o CDN falhar, ainda instalamos a Taxa Adm.
-       * A melhoria operacional original pode ficar ausente,
-       * mas o Catálogo principal continua pertencendo ao app-v767.js.
-       */
       console.warn('[Catalog Detail V845] original não carregado:', error);
     })
-    .finally(installAdminFeeV865);
+    .finally(installAdminFeeV866);
 })();
