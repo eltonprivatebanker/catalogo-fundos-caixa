@@ -1,187 +1,187 @@
 {
-  "data_coleta": "07/09/2026 15:39",
+  "data_coleta": "08/09/2026 14:40",
   "fonte": "odata",
   "IPCA": {
     "2026": {
-      "mediana": 5.0062,
-      "media": 5.0012,
-      "minimo": 4.3,
+      "mediana": 5.0,
+      "media": 4.9967,
+      "minimo": 4.2656,
       "maximo": 5.8146,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2027": {
-      "mediana": 4.28,
-      "media": 4.2927,
+      "mediana": 4.288,
+      "media": 4.3012,
       "minimo": 3.17,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
       "mediana": 3.8,
-      "media": 3.8307,
+      "media": 3.8285,
       "minimo": 3.0,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2029": {
       "mediana": 3.5,
-      "media": 3.6935,
+      "media": 3.6994,
       "minimo": 3.0,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     }
   },
   "Selic": {
     "2026": {
       "mediana": 13.75,
-      "media": 13.6652,
+      "media": 13.642,
       "minimo": 12.75,
       "maximo": 14.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2027": {
       "mediana": 12.0,
-      "media": 12.0571,
+      "media": 12.054,
       "minimo": 9.75,
       "maximo": 14.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
       "mediana": 10.5,
-      "media": 10.562,
+      "media": 10.5587,
       "minimo": 8.0,
-      "maximo": 14.0,
-      "data_ref": "2026-08-28"
+      "maximo": 13.75,
+      "data_ref": "2026-09-04"
     },
     "2029": {
       "mediana": 10.0,
-      "media": 10.2177,
+      "media": 10.2127,
       "minimo": 8.0,
-      "maximo": 14.0,
-      "data_ref": "2026-08-28"
+      "maximo": 13.75,
+      "data_ref": "2026-09-04"
     }
   },
   "PIB": {
     "2026": {
-      "mediana": 1.9233,
-      "media": 1.9214,
-      "minimo": 1.333,
-      "maximo": 2.4,
-      "data_ref": "2026-08-28"
+      "mediana": 1.9301,
+      "media": 1.9267,
+      "minimo": 1.6025,
+      "maximo": 2.2825,
+      "data_ref": "2026-09-04"
     },
     "2027": {
       "mediana": 1.5,
-      "media": 1.5022,
+      "media": 1.499,
       "minimo": 0.6738,
       "maximo": 2.5,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
-      "mediana": 1.98,
-      "media": 1.8706,
+      "mediana": 1.96,
+      "media": 1.8595,
       "minimo": 0.5,
       "maximo": 2.8001,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2029": {
       "mediana": 2.0,
-      "media": 1.9656,
+      "media": 1.9516,
       "minimo": 1.0,
       "maximo": 2.8,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     }
   },
   "Cambio": {
     "2026": {
       "mediana": 5.2,
-      "media": 5.2103,
+      "media": 5.2051,
       "minimo": 4.8,
-      "maximo": 5.6,
-      "data_ref": "2026-08-28"
+      "maximo": 5.45,
+      "data_ref": "2026-09-04"
     },
     "2027": {
       "mediana": 5.3,
-      "media": 5.2706,
+      "media": 5.2619,
       "minimo": 4.7,
       "maximo": 5.68,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
       "mediana": 5.3,
-      "media": 5.3013,
-      "minimo": 4.45,
+      "media": 5.3011,
+      "minimo": 4.5,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2029": {
-      "mediana": 5.363,
-      "media": 5.3648,
+      "mediana": 5.3508,
+      "media": 5.3532,
       "minimo": 4.5,
       "maximo": 6.2,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     }
   },
   "IGPM": {
     "2026": {
-      "mediana": 4.3752,
-      "media": 4.2363,
-      "minimo": 2.3641,
+      "mediana": 4.3412,
+      "media": 4.2143,
+      "minimo": 0.7617,
       "maximo": 5.5105,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2027": {
-      "mediana": 4.1,
-      "media": 4.1386,
+      "mediana": 4.105,
+      "media": 4.1138,
       "minimo": 1.7778,
       "maximo": 7.0853,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
-      "mediana": 3.915,
-      "media": 3.9905,
+      "mediana": 3.9075,
+      "media": 3.9796,
       "minimo": 1.5,
       "maximo": 6.97,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2029": {
-      "mediana": 3.825,
-      "media": 3.872,
+      "mediana": 3.8125,
+      "media": 3.8687,
       "minimo": 2.56,
       "maximo": 5.9,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     }
   },
   "IPCA_Modal": {
     "2026": {
-      "mediana": 5.0062,
-      "media": 5.0012,
-      "minimo": 4.3,
+      "mediana": 5.0,
+      "media": 4.9967,
+      "minimo": 4.2656,
       "maximo": 5.8146,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2027": {
-      "mediana": 4.28,
-      "media": 4.2927,
+      "mediana": 4.288,
+      "media": 4.3012,
       "minimo": 3.17,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2028": {
       "mediana": 3.8,
-      "media": 3.8307,
+      "media": 3.8285,
       "minimo": 3.0,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     },
     "2029": {
       "mediana": 3.5,
-      "media": 3.6935,
+      "media": 3.6994,
       "minimo": 3.0,
       "maximo": 6.0,
-      "data_ref": "2026-08-28"
+      "data_ref": "2026-09-04"
     }
   },
-  "data_pdf": "20260828",
-  "data_pdf_br": "28/08/2026",
-  "pdf_url": "https://www.bcb.gov.br/content/focus/focus/R20260828.pdf"
+  "data_pdf": "20260904",
+  "data_pdf_br": "04/09/2026",
+  "pdf_url": "https://www.bcb.gov.br/content/focus/focus/R20260904.pdf"
 }
