@@ -1,17 +1,68 @@
-V816 — Mês da tabela controla o gráfico principal
+CATÁLOGO DE FUNDOS — TAXA DE ADMINISTRAÇÃO V865
+================================================
 
-Arquivos principais desta versão:
-- index.html
-- market-month-focus-v816.css
-- market-month-focus-v816.js
+DIAGNÓSTICO
+-----------
+O site NÃO carrega app.js.
+Ele carrega:
+    app-v767.js?v=focus-v802
 
-Comportamento:
-- Clique em um mês da tabela para mostrar o retorno daquele mês no Comparativo de desempenho.
-- O gráfico adicional da V815 não é mais carregado.
-- Clique novamente no mês ou em Limpar para voltar ao retorno do período.
-- USD/BRL e chips de indicadores continuam sendo respeitados.
+Por isso as tentativas anteriores em app.js não executavam.
 
-Também incluídos para preservar o conjunto atual:
-- V814 tabela mensal
-- V813 perfil de risco
-- V806 Focus
+Porém o index.html JÁ carrega:
+    catalog-detail-v845.js?v=catalog-detail-v845
+
+Então esta versão altera somente esse arquivo que já participa da página.
+
+COMO TESTAR
+-----------
+1. No branch Testes-da-versão-01, substitua:
+       catalog-detail-v845.js
+
+   pelo arquivo deste ZIP, mantendo exatamente o mesmo nome.
+
+2. Não altere app.js.
+3. Não altere app-v767.js.
+4. Não altere index.html.
+
+5. Aguarde o GitHub Pages terminar o deployment.
+6. Faça Ctrl + F5.
+
+RESULTADO ESPERADO
+------------------
+Categoria · CNPJ · Adm. X,XX% a.a. · Copiar
+
+A taxa vem do campo real:
+    Taxa Adm (%)
+
+do arquivo:
+    dados_atuais.csv
+
+PROTEÇÃO DA FUNCIONALIDADE EXISTENTE
+------------------------------------
+O catalog-detail-v845.js original é carregado de forma fixa a partir do commit:
+    dab771a588e5d2b4b0cbf08a572d2691446db78e
+
+Depois a V865 adiciona somente a Taxa de Administração.
+
+DIAGNÓSTICO NO CONSOLE
+----------------------
+Depois do Ctrl + F5, procure:
+
+    [Taxa Adm V865] módulo inicializado.
+    [Taxa Adm V865] base carregada: N CNPJs com taxa.
+    [Taxa Adm V865] linhas com taxa: N · novas: N
+
+Comandos rápidos:
+
+    !!window.__CATALOG_ADMIN_FEE_V865__
+
+    document.querySelectorAll('.fundo-adm-sub-v865').length
+
+    [...document.querySelectorAll('.fundo-adm-sub-v865')]
+      .slice(0,10)
+      .map(x => x.textContent.trim())
+
+REVERTER
+--------
+Basta recolocar o catalog-detail-v845.js anterior.
