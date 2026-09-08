@@ -1,29 +1,46 @@
-CATÁLOGO DE FUNDOS — TAXA ADM V866
-=================================
+CATÁLOGO DE FUNDOS — TAXA ADM V867 NATIVA
+==========================================
 
-OBJETIVO
---------
-Eliminar o micro-piscar da Taxa de Administração observado na V865.
+POR QUE ESTA VERSÃO É DIFERENTE
+-------------------------------
+V865/V866 acrescentavam a taxa depois que a linha já existia no DOM.
+Por isso ainda podia haver um pequeno piscar.
 
-O QUE MUDOU
------------
-- MutationObserver agora observa preferencialmente #sec-fundos.
-- Atualização usa debounce de 140 ms.
-- Cada mutação reinicia o relógio; a taxa só entra quando a tabela estabiliza.
-- Removida a sequência agressiva de atualizações da V865.
-- Badge não usa transition nem animation.
-- Badge é inserido invisível e revelado somente depois de o layout estar pronto.
-- Badge existente não é removido/reinserido sem necessidade.
+A V867 não faz isso.
 
-VISUAL
-------
-O visual permanece igual ao aprovado:
+O app-v767.js já possui:
+    function buildRowHTML(r, idx)
 
-Categoria · CNPJ · Adm. X,XX% a.a. · Copiar
+e o render principal usa:
+    tbody.innerHTML = rowEntries
+        .map(item => buildRowHTML(item.r, item.idx))
+        .join('')
+
+A V867 intercepta buildRowHTML e acrescenta:
+    Adm. X,XX% a.a.
+
+NA STRING HTML, antes de tbody.innerHTML receber a linha.
+
+Portanto a taxa nasce junto com:
+    Categoria
+    CNPJ
+    Rentabilidades
+    demais elementos nativos da linha.
+
+DADOS
+-----
+Não há nova consulta ao dados_atuais.csv.
+
+A própria linha já recebe o objeto r, que contém:
+    r['Taxa Adm (%)']
+
+A taxa usada é exatamente a mesma base do restante do aplicativo.
 
 COMO TESTAR
 -----------
-1. No branch Testes-da-versão-01, substitua somente:
+No branch Testes-da-versão-01:
+
+1. Substitua SOMENTE:
        catalog-detail-v845.js
 
 2. Não altere:
@@ -36,22 +53,29 @@ COMO TESTAR
 
 CONSOLE
 -------
-Você deverá ver:
-    [Taxa Adm V866] módulo inicializado.
-    [Taxa Adm V866] base carregada: N CNPJs com taxa.
+O esperado é:
 
-Na primeira inserção:
-    [Taxa Adm V866] linhas com taxa: N · inseridas: N
+[Taxa Adm V867] buildRowHTML interceptado — render nativo ativo.
+[Taxa Adm V867] módulo carregado — sem MutationObserver para a taxa.
 
 Teste:
-    document.querySelectorAll('.fundo-adm-sub-v866').length
+    document.querySelectorAll('.fundo-adm-native-v867').length
 
-REVERTER
---------
-Basta recolocar o catalog-detail-v845.js da V865/anterior.
+Ver valores:
+    [...document.querySelectorAll('.fundo-adm-native-v867')]
+      .slice(0,10)
+      .map(x => x.textContent.trim())
 
-BASE ORIGINAL PRESERVADA
-------------------------
-A funcionalidade original do catalog-detail-v845.js continua sendo carregada
-do commit fixo:
+IMPORTANTE
+----------
+Não deve mais aparecer:
+    fundo-adm-sub-v865
+    fundo-adm-sub-v866
+
+A Taxa Adm da V867 NÃO usa MutationObserver.
+
+CAMADA V845 ORIGINAL
+--------------------
+As funções de detalhe/documentos existentes são preservadas por meio da
+versão original fixada no commit:
     dab771a588e5d2b4b0cbf08a572d2691446db78e
