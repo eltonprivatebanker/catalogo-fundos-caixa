@@ -27189,3 +27189,63 @@ Stacktrace:
 [14:20:34] =================================================================
 [14:20:34] [FIM] 181 fundos consolidados. Pipeline v18.9/v678 completo.
 [14:20:34] =================================================================
+[21:02:48] =================================================================
+[21:02:48] ⚡ ROBÔ SIPII v18.9 / v678 — modo indicadores
+[21:02:48] =================================================================
+[21:02:48] [MODO indicadores] Atualizando mercado_atual.json...
+[21:02:48] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[21:02:49] [SELIC] SGS 432 por período OK — 731 registros | último=14.0% em 2026-09-10
+[21:02:49] [Poupança] Buscando série 196 (nova) para acum. ano...
+[21:02:50]   [Poupança] nova: mensal=0.6698% | acum. ano=6.1542% (9 meses)
+[21:02:50]   [Poupança] antiga = nova (Selic 14.0% > 8,5% → TR+0,50% para ambas)
+[21:02:50] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[21:02:50]   [CDI] Série 4391 BCB carregada: 44 competências
+[21:02:51]   [CDI] Série diária SGS 12: 0.3104% no mês até 09/09/2026 (6 observações)
+[21:02:51]   [CDI] mês fechado=1.09% (ago/2026) | parcial=0.3104% (set/2026 até 09/09/2026; origem=bcb_sgs_12_diario) | ano fechado=9.319% | ano c/ parcial=9.6583% | 12M=14.6274% | 24M=29.4068% | 36M=43.9098%
+[21:02:51] [IPCA] Base local: 559 meses.
+[21:02:52] [IPCA] Base salva: 559 meses.
+[21:02:52]   [IPCA] 12M=4.443% | 24M=9.9004% | 36M=14.844%
+[21:02:52]   [META INFLAÇÃO] gráfico sincronizado: jul/2026 = 4.443% em 12 meses.
+[21:02:52] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[21:03:24]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[21:03:24]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[21:03:24] [PTAX] Dólar PTAX: último=5.1149 (2026-09-10) | mês fechado=2.05% | mês atual=-1.29% | ano=-7.04% | 12M=-3.83% | 24M=-6.12% | 36M=2.14%
+[21:03:24] [Índices] Calculando Ibovespa (^BVSP)...
+[21:03:24] [Yahoo Histórico] Buscando ^BVSP...
+[21:03:25] [Yahoo Histórico] ^BVSP OK — 854 registros
+[21:03:25] [Índices] Ibovespa: mês fechado=-0.33% | mês atual=6.12% | ano=16.85% | 12M=32.26% | 24M=40.16% | 36M=63.27%
+[21:03:25] [Índices] Calculando IFIX (^IFIX)...
+[21:03:25] [Yahoo Histórico] Buscando ^IFIX...
+[21:03:25] [Yahoo Histórico] ^IFIX HTTP 404
+[21:03:25]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[21:03:25] [Índices] Calculando S&P 500 (^GSPC)...
+[21:03:25] [Yahoo Histórico] Buscando ^GSPC...
+[21:03:25] [Yahoo Histórico] ^GSPC OK — 858 registros
+[21:03:25] [Índices] S&P 500: mês fechado=2.62% | mês atual=-1.23% | ano=10.9% | 12M=16.22% | 24M=38.14% | 36M=70.31%
+[21:03:25] [Índices] Calculando Dow Jones (^DJI)...
+[21:03:25] [Yahoo Histórico] Buscando ^DJI...
+[21:03:25] [Yahoo Histórico] ^DJI OK — 858 registros
+[21:03:25] [Índices] Dow Jones: mês fechado=1.34% | mês atual=-2.11% | ano=8.32% | 12M=14.45% | 24M=27.81% | 36M=50.58%
+[21:03:25] [Índices] Calculando Nasdaq (^IXIC)...
+[21:03:25] [Yahoo Histórico] Buscando ^IXIC...
+[21:03:25] [Yahoo Histórico] ^IXIC OK — 858 registros
+[21:03:25] [Índices] Nasdaq: mês fechado=3.93% | mês atual=-1.1% | ano=12.22% | 12M=19.17% | 24M=53.19% | 36M=89.53%
+[21:03:25] [Indicadores mensais] Série consolidada: 37 competências
+[21:03:25] [Focus] Coletando expectativas do Banco Central...
+[21:03:25] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[21:03:27] [Focus PDF] PDF disponível encontrado: R20260904.pdf (04/09/2026)
+[21:03:27]   [Focus] -> IPCA
+[21:03:29]   [Focus] -> Selic
+[21:03:31]   [Focus] -> PIB Total
+[21:03:32]   [Focus] -> Câmbio
+[21:03:34]   [Focus] -> IGP-M
+[21:03:36] [SUCESSO] mercado_atual.json exportado
+[21:03:36]   Selic: valor=14.0% | vigente_desde=06/08/2026 | data_ref=2026-08-06 | fonte=BCB SGS 432 | fallback=False
+[21:03:36]   CDI: mensal=1.09% | 12M=14.6274% | 24M=29.4068% | 36M=43.9098%
+[21:03:36]   IPCA: 12M=4.443% | 24M=9.9004% | 36M=14.844%
+[21:03:36]   PTAX: 37 fechamentos mensais pré-salvos
+[21:03:36]   Poupança nova:  mensal=0.6698% | acum. ano=6.1542%
+[21:03:36]   Poupança antiga: mensal=0.6698% | acum. ano=6.1542%
+[21:03:36] =================================================================
+[21:03:36] [FIM] Modo indicadores concluído.
+[21:03:36] =================================================================
