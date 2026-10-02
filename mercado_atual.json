@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "01/10/2026 16:15:36",
+    "atualizado_em": "02/10/2026 15:27:24",
     "cards": {
         "selic_meta": {
             "valor": 13.75,
@@ -2029,13 +2029,13 @@
             "fonte_valor": "Referência estimada: Selic Meta - 0,10 p.p.; CDI mensal/acumulado: BCB SGS 4391",
             "mensal": 1.08,
             "mes_ref": "set/2026",
-            "parcial_mes_atual": null,
+            "parcial_mes_atual": 0.0508,
             "parcial_ref": "out/2026",
-            "parcial_ate": null,
-            "parcial_data_iso": null,
-            "parcial_origem": null,
+            "parcial_ate": "01/10/2026",
+            "parcial_data_iso": "2026-10-01",
+            "parcial_origem": "bcb_sgs_12_diario",
             "acum_ano": 10.4997,
-            "acum_ano_com_parcial": 10.4997,
+            "acum_ano_com_parcial": 10.5558,
             "acum_12m": 14.4688,
             "acum_24m": 29.7148,
             "acum_36m": 44.0666,
@@ -2254,6 +2254,11 @@
                     "key": "2026-09",
                     "label": "set/2026",
                     "valor": 1.08
+                },
+                {
+                    "key": "2026-10",
+                    "label": "out/2026",
+                    "valor": 0.0508
                 }
             ],
             "fonte_acum": "BCB SGS 12 (parcial diário) + SGS 4391 (fechamentos/fallback) + overrides locais",
@@ -5074,9 +5079,9 @@
             "unidade": "%"
         },
         "poupanca_nova": {
-            "valor": 0.6698,
-            "mensal": 0.6698,
-            "acum_ano": 6.1542,
+            "valor": 0.6624,
+            "mensal": 0.6624,
+            "acum_ano": 6.8573,
             "historico_ano": [
                 {
                     "data": "01/01/2026",
@@ -5113,15 +5118,19 @@
                 {
                     "data": "01/09/2026",
                     "valor": 0.6698
+                },
+                {
+                    "data": "01/10/2026",
+                    "valor": 0.6624
                 }
             ],
             "unidade": "% a.m.",
             "nota": "TR + 0,50% a.m. (Selic > 8,5% a.a.)"
         },
         "poupanca_antiga": {
-            "valor": 0.6698,
-            "mensal": 0.6698,
-            "acum_ano": 6.1542,
+            "valor": 0.6624,
+            "mensal": 0.6624,
+            "acum_ano": 6.8573,
             "historico_ano": [
                 {
                     "data": "01/01/2026",
@@ -5158,27 +5167,31 @@
                 {
                     "data": "01/09/2026",
                     "valor": 0.6698
+                },
+                {
+                    "data": "01/10/2026",
+                    "valor": 0.6624
                 }
             ],
             "unidade": "% a.m.",
             "nota": "TR + 0,50% a.m. — independente da Selic"
         },
         "ibovespa": {
-            "atual": 186819.09,
+            "atual": 190361.23,
             "anterior": 186340.0,
-            "variacao_mensal": 0.26,
+            "variacao_mensal": 2.16,
             "fechamento_mes_anterior": 186340.0,
             "fechamento_mes_base": 177419.0,
             "variacao_mes_fechado": 5.03,
-            "variacao_mes_atual": 0.26,
-            "acum_ano": 15.95,
-            "acum_12m": 28.38,
-            "acum_24m": 41.0,
-            "acum_36m": 60.27,
+            "variacao_mes_atual": 2.16,
+            "acum_ano": 18.15,
+            "acum_12m": 32.24,
+            "acum_24m": 42.58,
+            "acum_36m": 65.45,
             "mes_anterior_label": "set/2026",
             "mes_base_label": "ago/2026",
             "data_mes_anterior": "2026-09-30",
-            "data_atual": "2026-10-01",
+            "data_atual": "2026-10-02",
             "historico": [
                 {
                     "key": "2023-10",
@@ -5399,28 +5412,28 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.26,
-                    "fechamento": 186819.09
+                    "valor": 2.16,
+                    "fechamento": 190361.23
                 }
             ],
             "fonte": "Yahoo Finance"
         },
         "dolar": {
-            "atual": 5.2079,
+            "atual": 5.2238,
             "anterior": 5.1809,
-            "variacao_mensal": 0.52,
+            "variacao_mensal": 0.83,
             "fechamento_mes_anterior": 5.1809,
             "fechamento_mes_base": 5.1816,
             "variacao_mes_fechado": -0.01,
-            "variacao_mes_atual": 0.52,
-            "acum_ano": -5.35,
-            "acum_12m": -3.28,
-            "acum_24m": -9.87,
-            "acum_36m": 2.97,
+            "variacao_mes_atual": 0.83,
+            "acum_ano": -5.06,
+            "acum_12m": -2.98,
+            "acum_24m": -9.59,
+            "acum_36m": 3.29,
             "mes_anterior_label": "set/2026",
             "mes_base_label": "ago/2026",
             "data_mes_anterior": "2026-09-30",
-            "data_atual": "2026-10-01",
+            "data_atual": "2026-10-02",
             "historico": [
                 {
                     "key": "2023-10",
@@ -5677,9 +5690,9 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.52,
-                    "cotacao": 5.2079,
-                    "data_ref": "2026-10-01"
+                    "valor": 0.83,
+                    "cotacao": 5.2238,
+                    "data_ref": "2026-10-02"
                 }
             ],
             "fonte": "Banco Central do Brasil - PTAX"
@@ -5977,10 +5990,10 @@
         {
             "key": "2026-10",
             "label": "out/2026",
-            "cdi": null,
+            "cdi": 0.0508,
             "ipca": null,
-            "ibov": 0.26,
-            "dolar": 0.52
+            "ibov": 2.16,
+            "dolar": 0.83
         }
     ],
     "indices_mercado": {
@@ -5995,13 +6008,13 @@
             "fechamento_mes_base": 5.1816,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": -0.01,
-            "fechamento_atual": 5.2079,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.52,
-            "acum_ano": -5.35,
-            "acum_12m": -3.28,
-            "acum_24m": -9.87,
-            "acum_36m": 2.97,
+            "fechamento_atual": 5.2238,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 0.83,
+            "acum_ano": -5.06,
+            "acum_12m": -2.98,
+            "acum_24m": -9.59,
+            "acum_36m": 3.29,
             "base_ano": 5.5024,
             "base_12m": 5.3843,
             "base_24m": 5.7779,
@@ -6264,9 +6277,9 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.52,
-                    "cotacao": 5.2079,
-                    "data_ref": "2026-10-01"
+                    "valor": 0.83,
+                    "cotacao": 5.2238,
+                    "data_ref": "2026-10-02"
                 }
             ]
         },
@@ -6281,17 +6294,17 @@
             "fechamento_mes_base": 177419.0,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": 5.03,
-            "fechamento_atual": 186819.09,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.26,
-            "acum_ano": 15.95,
-            "acum_12m": 28.38,
-            "acum_24m": 41.0,
-            "acum_36m": 60.27,
+            "fechamento_atual": 190361.23,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 2.16,
+            "acum_ano": 18.15,
+            "acum_12m": 32.24,
+            "acum_24m": 42.58,
+            "acum_36m": 65.45,
             "base_ano": 161125.0,
-            "base_12m": 145517.0,
-            "base_24m": 132495.0,
-            "base_36m": 116565.0,
+            "base_12m": 143950.0,
+            "base_24m": 133515.0,
+            "base_36m": 115057.0,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -6514,8 +6527,8 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.26,
-                    "fechamento": 186819.09
+                    "valor": 2.16,
+                    "fechamento": 190361.23
                 }
             ]
         },
@@ -6537,17 +6550,17 @@
             "fechamento_mes_base": 7686.14,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": -0.45,
-            "fechamento_atual": 7675.14,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.31,
-            "acum_ano": 12.12,
-            "acum_12m": 14.36,
-            "acum_24m": 34.45,
-            "acum_36m": 78.99,
+            "fechamento_atual": 7715.89,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 0.84,
+            "acum_ano": 12.71,
+            "acum_12m": 14.9,
+            "acum_24m": 35.14,
+            "acum_36m": 79.93,
             "base_ano": 6845.5,
-            "base_12m": 6711.2,
-            "base_24m": 5708.75,
-            "base_36m": 4288.05,
+            "base_12m": 6715.35,
+            "base_24m": 5709.54,
+            "base_36m": 4288.39,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -6770,23 +6783,23 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.31,
-                    "fechamento": 7675.14
+                    "valor": 0.84,
+                    "fechamento": 7715.89
                 }
             ],
-            "fechamento_atual_brl": 39971.36,
+            "fechamento_atual_brl": 40306.27,
             "fechamento_mes_anterior_brl": 39641.86,
             "fechamento_mes_base_brl": 39826.5,
             "base_ano_brl": 37666.68,
-            "base_12m_brl": 36135.11,
-            "base_24m_brl": 32984.59,
-            "base_36m_brl": 21686.81,
+            "base_12m_brl": 36157.46,
+            "base_24m_brl": 32989.15,
+            "base_36m_brl": 21688.53,
             "variacao_mes_fechado_brl": -0.46,
-            "variacao_mes_atual_brl": 0.83,
-            "acum_ano_brl": 6.12,
-            "acum_12m_brl": 10.62,
-            "acum_24m_brl": 21.18,
-            "acum_36m_brl": 84.31
+            "variacao_mes_atual_brl": 1.68,
+            "acum_ano_brl": 7.01,
+            "acum_12m_brl": 11.47,
+            "acum_24m_brl": 22.18,
+            "acum_36m_brl": 85.84
         },
         "dow_jones": {
             "nome": "Dow Jones",
@@ -6799,17 +6812,17 @@
             "fechamento_mes_base": 53185.9,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": -4.29,
-            "fechamento_atual": 50942.99,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.07,
-            "acum_ano": 5.99,
-            "acum_12m": 9.69,
-            "acum_24m": 20.84,
-            "acum_36m": 52.03,
+            "fechamento_atual": 51108.52,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 0.4,
+            "acum_ano": 6.34,
+            "acum_12m": 9.86,
+            "acum_24m": 21.12,
+            "acum_36m": 52.87,
             "base_ano": 48063.29,
-            "base_12m": 46441.1,
-            "base_24m": 42156.97,
-            "base_36m": 33507.5,
+            "base_12m": 46519.72,
+            "base_24m": 42196.52,
+            "base_36m": 33433.35,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -7032,23 +7045,23 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.07,
-                    "fechamento": 50942.99
+                    "valor": 0.4,
+                    "fechamento": 51108.52
                 }
             ],
-            "fechamento_atual_brl": 265306.0,
+            "fechamento_atual_brl": 266980.69,
             "fechamento_mes_anterior_brl": 263739.15,
             "fechamento_mes_base_brl": 275588.06,
             "base_ano_brl": 264463.45,
-            "base_12m_brl": 250052.81,
-            "base_24m_brl": 243578.76,
-            "base_36m_brl": 169464.18,
+            "base_12m_brl": 250476.13,
+            "base_24m_brl": 243807.27,
+            "base_36m_brl": 169089.17,
             "variacao_mes_fechado_brl": -4.3,
-            "variacao_mes_atual_brl": 0.59,
-            "acum_ano_brl": 0.32,
-            "acum_12m_brl": 6.1,
-            "acum_24m_brl": 8.92,
-            "acum_36m_brl": 56.56
+            "variacao_mes_atual_brl": 1.23,
+            "acum_ano_brl": 0.95,
+            "acum_12m_brl": 6.59,
+            "acum_24m_brl": 9.5,
+            "acum_36m_brl": 57.89
         },
         "nasdaq": {
             "nome": "Nasdaq",
@@ -7061,17 +7074,17 @@
             "fechamento_mes_base": 26370.89,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": 1.86,
-            "fechamento_atual": 26930.1,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.26,
-            "acum_ano": 15.87,
-            "acum_12m": 18.35,
-            "acum_24m": 50.36,
-            "acum_36m": 103.72,
+            "fechamento_atual": 27160.89,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 1.12,
+            "acum_ano": 16.86,
+            "acum_12m": 18.9,
+            "acum_24m": 51.52,
+            "acum_36m": 104.1,
             "base_ano": 23241.99,
-            "base_12m": 22755.16,
-            "base_24m": 17910.36,
-            "base_36m": 13219.32,
+            "base_12m": 22844.05,
+            "base_24m": 17925.12,
+            "base_36m": 13307.77,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -7294,30 +7307,30 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.26,
-                    "fechamento": 26930.1
+                    "valor": 1.12,
+                    "fechamento": 27160.89
                 }
             ],
-            "fechamento_atual_brl": 140249.27,
+            "fechamento_atual_brl": 141883.06,
             "fechamento_mes_anterior_brl": 139164.47,
             "fechamento_mes_base_brl": 136643.4,
             "base_ano_brl": 127886.73,
-            "base_12m_brl": 122520.61,
-            "base_24m_brl": 103484.27,
-            "base_36m_brl": 66856.71,
+            "base_12m_brl": 122999.22,
+            "base_24m_brl": 103569.55,
+            "base_36m_brl": 67304.05,
             "variacao_mes_fechado_brl": 1.84,
-            "variacao_mes_atual_brl": 0.78,
-            "acum_ano_brl": 9.67,
-            "acum_12m_brl": 14.47,
-            "acum_24m_brl": 35.53,
-            "acum_36m_brl": 109.78
+            "variacao_mes_atual_brl": 1.95,
+            "acum_ano_brl": 10.94,
+            "acum_12m_brl": 15.35,
+            "acum_24m_brl": 36.99,
+            "acum_36m_brl": 110.81
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7675.14,
-        "sp500_brl": 39971.36,
-        "dow_jones": 50942.99,
-        "nasdaq": 26930.1,
+        "sp500_usd": 7715.89,
+        "sp500_brl": 40306.27,
+        "dow_jones": 51108.52,
+        "nasdaq": 27160.89,
         "sp500": {
             "nome": "S&P 500",
             "ticker": "^GSPC",
@@ -7329,17 +7342,17 @@
             "fechamento_mes_base": 7686.14,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": -0.45,
-            "fechamento_atual": 7675.14,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.31,
-            "acum_ano": 12.12,
-            "acum_12m": 14.36,
-            "acum_24m": 34.45,
-            "acum_36m": 78.99,
+            "fechamento_atual": 7715.89,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 0.84,
+            "acum_ano": 12.71,
+            "acum_12m": 14.9,
+            "acum_24m": 35.14,
+            "acum_36m": 79.93,
             "base_ano": 6845.5,
-            "base_12m": 6711.2,
-            "base_24m": 5708.75,
-            "base_36m": 4288.05,
+            "base_12m": 6715.35,
+            "base_24m": 5709.54,
+            "base_36m": 4288.39,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -7562,23 +7575,23 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.31,
-                    "fechamento": 7675.14
+                    "valor": 0.84,
+                    "fechamento": 7715.89
                 }
             ],
-            "fechamento_atual_brl": 39971.36,
+            "fechamento_atual_brl": 40306.27,
             "fechamento_mes_anterior_brl": 39641.86,
             "fechamento_mes_base_brl": 39826.5,
             "base_ano_brl": 37666.68,
-            "base_12m_brl": 36135.11,
-            "base_24m_brl": 32984.59,
-            "base_36m_brl": 21686.81,
+            "base_12m_brl": 36157.46,
+            "base_24m_brl": 32989.15,
+            "base_36m_brl": 21688.53,
             "variacao_mes_fechado_brl": -0.46,
-            "variacao_mes_atual_brl": 0.83,
-            "acum_ano_brl": 6.12,
-            "acum_12m_brl": 10.62,
-            "acum_24m_brl": 21.18,
-            "acum_36m_brl": 84.31
+            "variacao_mes_atual_brl": 1.68,
+            "acum_ano_brl": 7.01,
+            "acum_12m_brl": 11.47,
+            "acum_24m_brl": 22.18,
+            "acum_36m_brl": 85.84
         },
         "dow_jones_detalhado": {
             "nome": "Dow Jones",
@@ -7591,17 +7604,17 @@
             "fechamento_mes_base": 53185.9,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": -4.29,
-            "fechamento_atual": 50942.99,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.07,
-            "acum_ano": 5.99,
-            "acum_12m": 9.69,
-            "acum_24m": 20.84,
-            "acum_36m": 52.03,
+            "fechamento_atual": 51108.52,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 0.4,
+            "acum_ano": 6.34,
+            "acum_12m": 9.86,
+            "acum_24m": 21.12,
+            "acum_36m": 52.87,
             "base_ano": 48063.29,
-            "base_12m": 46441.1,
-            "base_24m": 42156.97,
-            "base_36m": 33507.5,
+            "base_12m": 46519.72,
+            "base_24m": 42196.52,
+            "base_36m": 33433.35,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -7824,23 +7837,23 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.07,
-                    "fechamento": 50942.99
+                    "valor": 0.4,
+                    "fechamento": 51108.52
                 }
             ],
-            "fechamento_atual_brl": 265306.0,
+            "fechamento_atual_brl": 266980.69,
             "fechamento_mes_anterior_brl": 263739.15,
             "fechamento_mes_base_brl": 275588.06,
             "base_ano_brl": 264463.45,
-            "base_12m_brl": 250052.81,
-            "base_24m_brl": 243578.76,
-            "base_36m_brl": 169464.18,
+            "base_12m_brl": 250476.13,
+            "base_24m_brl": 243807.27,
+            "base_36m_brl": 169089.17,
             "variacao_mes_fechado_brl": -4.3,
-            "variacao_mes_atual_brl": 0.59,
-            "acum_ano_brl": 0.32,
-            "acum_12m_brl": 6.1,
-            "acum_24m_brl": 8.92,
-            "acum_36m_brl": 56.56
+            "variacao_mes_atual_brl": 1.23,
+            "acum_ano_brl": 0.95,
+            "acum_12m_brl": 6.59,
+            "acum_24m_brl": 9.5,
+            "acum_36m_brl": 57.89
         },
         "nasdaq_detalhado": {
             "nome": "Nasdaq",
@@ -7853,17 +7866,17 @@
             "fechamento_mes_base": 26370.89,
             "data_mes_base": "2026-08-31",
             "variacao_mes_fechado": 1.86,
-            "fechamento_atual": 26930.1,
-            "data_atual": "2026-10-01",
-            "variacao_mes_atual": 0.26,
-            "acum_ano": 15.87,
-            "acum_12m": 18.35,
-            "acum_24m": 50.36,
-            "acum_36m": 103.72,
+            "fechamento_atual": 27160.89,
+            "data_atual": "2026-10-02",
+            "variacao_mes_atual": 1.12,
+            "acum_ano": 16.86,
+            "acum_12m": 18.9,
+            "acum_24m": 51.52,
+            "acum_36m": 104.1,
             "base_ano": 23241.99,
-            "base_12m": 22755.16,
-            "base_24m": 17910.36,
-            "base_36m": 13219.32,
+            "base_12m": 22844.05,
+            "base_24m": 17925.12,
+            "base_36m": 13307.77,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
             "historico": [
@@ -8086,23 +8099,23 @@
                 {
                     "key": "2026-10",
                     "label": "out/2026",
-                    "valor": 0.26,
-                    "fechamento": 26930.1
+                    "valor": 1.12,
+                    "fechamento": 27160.89
                 }
             ],
-            "fechamento_atual_brl": 140249.27,
+            "fechamento_atual_brl": 141883.06,
             "fechamento_mes_anterior_brl": 139164.47,
             "fechamento_mes_base_brl": 136643.4,
             "base_ano_brl": 127886.73,
-            "base_12m_brl": 122520.61,
-            "base_24m_brl": 103484.27,
-            "base_36m_brl": 66856.71,
+            "base_12m_brl": 122999.22,
+            "base_24m_brl": 103569.55,
+            "base_36m_brl": 67304.05,
             "variacao_mes_fechado_brl": 1.84,
-            "variacao_mes_atual_brl": 0.78,
-            "acum_ano_brl": 9.67,
-            "acum_12m_brl": 14.47,
-            "acum_24m_brl": 35.53,
-            "acum_36m_brl": 109.78
+            "variacao_mes_atual_brl": 1.95,
+            "acum_ano_brl": 10.94,
+            "acum_12m_brl": 15.35,
+            "acum_24m_brl": 36.99,
+            "acum_36m_brl": 110.81
         }
     },
     "ptax_historico": [
@@ -8397,14 +8410,14 @@
         {
             "key": "2026-10",
             "mes": "out/2026",
-            "cotacao": 5.2079,
-            "var_pct": 0.52,
-            "data_ref": "2026-10-01",
-            "dataHoraCotacao": "2026-10-01 13:10:35.4469"
+            "cotacao": 5.2238,
+            "var_pct": 0.83,
+            "data_ref": "2026-10-02",
+            "dataHoraCotacao": "2026-10-02 13:03:16.256632"
         }
     ],
     "focus": {
-        "data_coleta": "01/10/2026 16:15",
+        "data_coleta": "02/10/2026 15:27",
         "fonte": "odata",
         "IPCA": {
             "2026": {
