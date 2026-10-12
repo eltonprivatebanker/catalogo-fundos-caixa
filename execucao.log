@@ -32162,3 +32162,247 @@ Stacktrace:
 [16:05:15] =================================================================
 [16:05:15] [FIM] 181 fundos consolidados. Pipeline v18.9/v678 completo.
 [16:05:15] =================================================================
+[18:44:11] =================================================================
+[18:44:11] ⚡ ROBÔ SIPII v18.9 / v678 — modo fundos/full
+[18:44:11] =================================================================
+[18:44:12]   [CAIXA] renda-fixa → +39 links (39 total)
+[18:44:14]   [CAIXA] referenciados → +4 links (43 total)
+[18:44:15]   [CAIXA] fundo-simples → +2 links (45 total)
+[18:44:17]   [CAIXA] curto-prazo → +1 links (46 total)
+[18:44:18]   [CAIXA] multimercado → +19 links (65 total)
+[18:44:20]   [CAIXA] cambiais → +1 links (66 total)
+[18:44:22]   [CAIXA] fundos-de-acoes → +12 links (78 total)
+[18:44:23]   [CAIXA] fundos-de-indices → +2 links (80 total)
+[18:44:25]   [CAIXA] renda-fixa → +8 links (88 total)
+[18:44:26]   [CAIXA] empresa → +5 links (93 total)
+[18:44:27]   [CAIXA] fmp-fgts → HTTP 404
+[18:44:28]   [CAIXA] rpps → +8 links (101 total)
+[18:44:29] [CAIXA] Total URLs dinâmicas: 101
+[18:44:29] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[18:44:31] [Fundos.json] Download OK e arquivo local atualizado — 208 registros.
+[18:44:31] [Fundos.json DEBUG] Campos do 1º registro (84 campos):
+[18:44:31]   'ItemInternalId'                    = '5df31bdb-5f11-4f27-a862-6387a6ae3fa3'
+[18:44:31]   'co_siico'                          = '55'
+[18:44:31]   'nu_cnpj'                           = '00834074000123'
+[18:44:31]   'no_fundo'                          = 'CAIXA PRATICO FIC FIF RF CURTO PRAZO - RESP LTDA'
+[18:44:31]   'ic_flag_exibir_portfolio'          = '1'
+[18:44:31]   'dt_inicial'                        = '1995-10-02T00:00:00Z'
+[18:44:31]   'id_perfil_risco'                   = '1'
+[18:44:31]   'no_perfil_risco'                   = 'Conservador'
+[18:44:31]   'id_classificacao_cvm'              = '8'
+[18:44:31]   'no_classificacao_cvm'              = 'Renda Fixa'
+[18:44:31]   'de_horario_resgate'                = '18h00'
+[18:44:31]   'vr_aplicacao_inicial'              = '0.01'
+[18:44:31]   'co_oferta_siart'                   = 'GOV'
+[18:44:31]   'id_estrategia'                     = '36'
+[18:44:31]   'no_estrategia'                     = 'RF 100% TPF - Curto Prazo                                   '
+[18:44:31]   'pc_taxa_adm_cliente'               = '1.7'
+[18:44:31]   'de_link_detalhes'                  = '/Sistemas/#/PortfolioQS/55'
+[18:44:31]   'dt_cota_atual'                     = '2026-09-30T00:00:00Z'
+[18:44:31]   'vr_cota_atual'                     = '9.76195'
+[18:44:31]   'dt_cota_dia_anterior'              = '2026-09-29T00:00:00Z'
+[18:44:31]   'vr_cota_dia_anterior'              = '9.75777'
+[18:44:31]   'pc_rentabilidade_dia_anterior'     = '0.04283765655472511'
+[18:44:31]   'dt_cota_mes_anterior'              = '2026-08-31T00:00:00Z'
+[18:44:31]   'vr_cota_mes_anterior'              = '9.671842'
+[18:44:31]   'pc_rentabilidade_mes_anterior'     = '0.9316529364313437'
+[18:44:31]   'dt_cota_ano_anterior'              = '2025-12-31T00:00:00Z'
+[18:44:31]   'vr_cota_ano_anterior'              = '8.95089'
+[18:44:31]   'pc_rentabilidade_ano_anterior'     = '9.061221844978544'
+[18:44:31]   'dt_cota_12m_anterior'              = '2025-10-01T00:00:00Z'
+[18:44:31]   'vr_cota_12m_anterior'              = '8.685175'
+[18:44:31]   'pc_rentabilidade_12m_anterior'     = '12.397850359952448'
+[18:44:31]   'in_cdi_atual'                      = '19.80452091'
+[18:44:31]   'in_cdi_ano'                        = '17.92159302'
+[18:44:31]   'pc_cdi_ano'                        = '10.506476121125'
+[18:44:31]   'pc_rentabilidade_cdi_ano'          = '95.31'
+[18:44:31]   'in_cdi_12m'                        = '17.30998219'
+[18:44:31]   'pc_cdi_12m'                        = '14.410983733501'
+[18:44:31]   'pc_rentabilidade_cdi_12m'          = '86.03'
+[18:44:31]   'co_siico00'                        = '0055'
+[18:44:31]   'de_pesquisa_index'                 = 'CAIXA PRATICO FIC FIF RF CURTO PRAZO - RESP LTDA 0055 008340'
+[18:44:31]   'de_link_aplicacao'                 = 'http://plataforma.caixa'
+[18:44:31]   'vr_pl'                             = '2637897887.85'
+[18:44:31]   'no_benchmark'                      = 'CDI'
+[18:44:31]   'de_tipo_api'                       = 'SIM – API SIMPLIFICADO'
+[18:44:31]   'de_tipo_automatico'                = 'APLICACAO_RESGATE'
+[18:44:31]   'vr_resgate_minimo'                 = '0.01'
+[18:44:31]   'vr_aplicacao_adicional_minima'     = '0.01'
+[18:44:31]   'vr_saldo_minimo'                   = '0.01'
+[18:44:31]   'de_conversao_aplicacao'            = 'D+0 (du)'
+[18:44:31]   'de_conversao_resgate'              = 'D+0 (du)'
+[18:44:31]   'de_pagamento_resgate'              = 'D+00 (du)'
+[18:44:31]   'de_adiant_manual_automatico'       = 'NÃO SE APLICA'
+[18:44:31]   'pc_taxa_adm_maxima'                = '1.7'
+[18:44:31]   'co_mn'                             = 'FI657'
+[18:44:31]   'no_classificacao_tributaria'       = 'CURTO PRAZO'
+[18:44:31]   'no_razao_social'                   = 'CAIXA PRÁTICO FUNDO DE INVESTIMENTO EM COTAS DE CLASSE DE FU'
+[18:44:31]   'no_classificacao_investidor'       = 'GERAL'
+[18:44:31]   'de_observacao_qs'                  = 'Movimentações: O FUNDO oferece mecanismo resgate automático.'
+[18:44:31]   'de_tipo_estorno_aplicacao'         = 'NÃO'
+[18:44:31]   'co_oferta_ibc'                     = 'GOV'
+[18:44:31]   'de_due_diligence'                  = 'INDISPONIVEL'
+[18:44:31]   'de_horario_limite'                 = '18:00'
+[18:44:31]   'de_destino'                        = 'PJ PUB'
+[18:44:31]   'ic_mov_automatica'                 = 'True'
+[18:44:31]   'de_link_regulamento'               = 'https://www.caixa.gov.br/downloads/aplicacao-financeira-regu'
+[18:44:31]   'de_link_lamina'                    = 'INDISPONIVEL'
+[18:44:31]   'de_link_termo_adesao'              = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-term'
+[18:44:31]   'de_link_boletim_comercial'         = 'INDISPONIVEL'
+[18:44:31]   'de_link_fato_relevante'            = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-comu'
+[18:44:31]   'de_link_raio_x'                    = 'INDISPONIVEL'
+[18:44:31]   'de_link_info_compl'                = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-'
+[18:44:31]   'de_link_pagina_fundo'              = 'http://www.caixa.gov.br/fundos-investimento/curto-prazo/fic-'
+[18:44:31]   'de_link_sumario'                   = 'INDISPONIVEL'
+[18:44:31]   'lista_publico_alvo'                = '["GOV"]'
+[18:44:31]   'lista_segmento'                    = '["GOV"]'
+[18:44:31] [Fundos.json] 207 produtos indexados.
+[18:44:31] [Fundos.json] fundos_caixa.json salvo — 207 CNPJs indexados.
+[18:44:31] Raspando segmento: PESSOA FÍSICA...
+[18:44:32] [PF] Abrindo SIPII...
+[18:44:45] Raspando segmento: PESSOA JURÍDICA...
+[18:44:45] [PJ] Abrindo SIPII...
+[18:45:00] Raspando segmento: GOVERNO...
+[18:45:00] [GOV] Abrindo SIPII...
+[18:45:04] [GOV] Erro geral: Message: Link não encontrado: GOVERNO; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[18:45:06] Raspando segmento: RPPS...
+[18:45:06] [RPPS] Abrindo SIPII...
+[18:45:24]   [RPPS] RENDA FIXA SIMPLES: 3 fundos.
+[18:45:37]   [RPPS] RENDA FIXA: 41 fundos.
+[18:45:39]   [RPPS] Erro em 'RENDA FIXA REFERENCIADO': Tabela ativa não encontrada
+[18:45:39]   [RPPS] Sessão perdida em 'RENDA FIXA CURTO PRAZO'. Reiniciando...
+[18:45:40] [RPPS] Abrindo SIPII...
+[18:46:03]   [RPPS] Falha ao recuperar 'RENDA FIXA CURTO PRAZO': Message: Link não encontrado: RENDA FIXA CURTO PRAZO; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[18:46:10]   [RPPS] MULTIMERCADO: 14 fundos.
+[18:46:10]   [RPPS] Sessão perdida em 'CAMBIAL'. Reiniciando...
+[18:46:11] [RPPS] Abrindo SIPII...
+[18:46:32]   [RPPS] Falha ao recuperar 'CAMBIAL': Message: Link não encontrado: CAMBIAL; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[18:46:38]   [RPPS] ACOES: 14 fundos.
+[18:46:38]   [RPPS] Sessão perdida em 'FUNDO DE INDICE'. Reiniciando...
+[18:46:39] [RPPS] Abrindo SIPII...
+[18:46:42]   [RPPS] Falha ao recuperar 'FUNDO DE INDICE': Message: Link não encontrado: RPPS; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[18:46:42]   [RPPS] Sessão perdida em 'FUNDOS MUTUOS DE PRIVATIZACAO'. Reiniciando...
+[18:46:43] [RPPS] Abrindo SIPII...
+[18:46:55]   [RPPS] Falha ao recuperar 'FUNDOS MUTUOS DE PRIVATIZACAO': Tabela ativa não encontrada
+[18:46:58] Raspando segmento: TODOS...
+[18:46:58] [TODOS] Abrindo SIPII...
+[18:47:15]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[18:47:28]   [TODOS] RENDA FIXA: 42 fundos.
+[18:47:30]   [TODOS] Erro em 'RENDA FIXA REFERENCIADO': Tabela ativa não encontrada
+[18:47:30]   [TODOS] Sessão perdida em 'RENDA FIXA CURTO PRAZO'. Reiniciando...
+[18:47:31] [TODOS] Abrindo SIPII...
+[18:47:46]   [TODOS] Falha ao recuperar 'RENDA FIXA CURTO PRAZO': Tabela ativa não encontrada
+[18:47:48]   [TODOS] Erro em 'MULTIMERCADO': Tabela ativa não encontrada
+[18:47:51]   [TODOS] Erro em 'CAMBIAL': Tabela ativa não encontrada
+[18:47:53]   [TODOS] Erro em 'ACOES': Tabela ativa não encontrada
+[18:47:55]   [TODOS] Erro em 'FUNDO DE INDICE': Tabela ativa não encontrada
+[18:47:57] [Fallback Rentabilidade] 16 linhas sem rentabilidade em 09/10/2026.
+[18:47:57] [Fallback Rentabilidade] Tentando 08/10/2026 para 3 grupos pendentes...
+[18:47:57] [RPPS] Abrindo SIPII...
+[18:48:05] [SIPII] Data de consulta ajustada para 08/10/2026.
+[18:48:10] [Fallback Rentabilidade] Nenhum dado retornado em 08/10/2026.
+[18:48:10] [Fallback Rentabilidade] Tentando 07/10/2026 para 3 grupos pendentes...
+[18:48:11] [RPPS] Abrindo SIPII...
+[18:48:24] [SIPII] Data de consulta ajustada para 07/10/2026.
+[18:48:40]   [RPPS] RENDA FIXA | data 07/10/2026: 25 fundos.
+[18:48:46]   [RPPS] MULTIMERCADO | data 07/10/2026: 14 fundos.
+[18:48:52]   [RPPS] ACOES | data 07/10/2026: 14 fundos.
+[18:48:52] [Fallback Rentabilidade] 0 linhas corrigidas usando 07/10/2026.
+[18:48:52] [Fallback Rentabilidade] Tentando 06/10/2026 para 3 grupos pendentes...
+[18:48:52] [RPPS] Abrindo SIPII...
+[18:49:00] [SIPII] Data de consulta ajustada para 06/10/2026.
+[18:49:06] [Fallback Rentabilidade] Nenhum dado retornado em 06/10/2026.
+[18:49:06] [Fallback Rentabilidade] Tentando 05/10/2026 para 3 grupos pendentes...
+[18:49:07] [RPPS] Abrindo SIPII...
+[18:49:15] [SIPII] Data de consulta ajustada para 05/10/2026.
+[18:49:21] [Fallback Rentabilidade] Nenhum dado retornado em 05/10/2026.
+[18:49:21] [Fallback Rentabilidade] Tentando 02/10/2026 para 3 grupos pendentes...
+[18:49:21] [RPPS] Abrindo SIPII...
+[18:49:24] [RPPS] Erro geral: Message: Link não encontrado: RPPS; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[18:49:24] [Fallback Rentabilidade] Nenhum dado retornado em 02/10/2026.
+[18:49:24] [Fallback Rentabilidade] Total corrigido: 0. Pendentes finais: 16.
+[18:49:24] [VALIDAÇÃO] Base atual insegura: apenas 95 fundos (< 150). Tentando preservar última base publicada...
+[18:49:24] [VALIDAÇÃO] Usando base anterior 'dados_atuais.csv' para não publicar dado parcial (181 fundos; 165 com rentabilidade válida).
+[18:49:24]   [Meta] Fallback nome→codfundo 5980 para 'CAIXA FIF E-SIMPLES RENDA FIXA LP RESP LTDA' (fallback_estatico:e simples renda fixa)
+[18:49:24]   [Meta] Fallback nome→codfundo 5570 para 'CAIXA FIC FIF GERAÇÃO JOVEM CRED PRIV RF LP RESP LTDA' (fallback_estatico:geracao jovem)
+[18:49:24]   [Meta] Fallback nome→codfundo 5972 para 'CAIXA FIC FIF EXCLUSIVO FUNC RF CREDITO PRIVADO LP RESP' (fallback_estatico:exclusivo func)
+[18:49:24]   [Meta] Fallback nome→codfundo 89 para 'CAIXA FIC FIFINVESTIDOR RF LP RESP LTDA' (fallback_estatico:fifinvestidor)
+[18:49:24]   [Meta] Fallback nome→codfundo 6533 para 'CAIXA FIC FIF PLUS QUALI RF CREDI PRIV LP RESP LTDA' (fallback_estatico:plus quali)
+[18:49:24]   [Meta] Fallback nome→codfundo 5411 para 'CAIXA FIC FIF MEGA RF REFERENC DI LONGO PRAZO - RESP LT' (fallback_estatico:mega rf ref)
+[18:49:24]   [Meta] Fallback nome→codfundo 82 para 'CAIXA FIF MULTIMERCADO RV 30 LP RESP LTDA' (fallback_estatico:multimercado rv 30)
+[18:49:24]   [Meta] Fallback nome→codfundo 7991 para 'CAIXA CARTEIRA QUANT QUALI FIC FIF MM LP RESP LTDA' (fallback_estatico:carteira quant quali)
+[18:49:24]   [Meta] Fallback nome→codfundo 7980 para 'CAIXA HASHDEX NASDAQ CRYPTO INDEX FIC FIF MM RESP LTDA' (fallback_estatico:hashdex nasdaq crypto)
+[18:49:24]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA ETF IBOVESPA FUNDO DE ÍNDICE RESP LTDA' (fallback_estatico:etf ibovespa)
+[18:49:24]   [Meta] Fallback nome→codfundo 5413 para 'CAIXA FIC FIF TRANSFERÊNCIA VOLUNTÁRIA RF CP RESP LTDA' (fallback_estatico:transferencia voluntaria)
+[18:49:24]   [Meta] Fallback nome→codfundo 5825 para 'CAIXA FIF BRASIL IDKA IPCA 2A TIT PUB RF LP RESP LTDA' (fallback_estatico:brasil idka ipca 2a)
+[18:49:24]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA FIF AÇÕES BRASIL ETF IBOVESPA RESP LTDA' (fallback_estatico:etf ibovespa)
+[18:49:24] [Fundos.json] Vinculados: 176/181 | URLs válidas: 164/181 | codfundo: 181/181
+[18:49:24] [Auditoria] auditoria_fundos.json salvo — 176/181 vinculados.
+[18:49:25] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[18:49:25] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20261012.xlsx
+[18:49:25] [KPIs] JSON exportado: kpis_dashboard.json
+[18:49:25] [MODO indicadores] Atualizando mercado_atual.json...
+[18:49:25] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[18:49:26] [SELIC] SGS 432 por período OK — 731 registros | último=13.75% em 2026-10-12
+[18:49:26] [Poupança] Buscando série 196 (nova) para acum. ano...
+[18:49:27]   [Poupança] nova: mensal=0.6624% | acum. ano=6.8573% (10 meses)
+[18:49:27]   [Poupança] antiga = nova (Selic 13.75% > 8,5% → TR+0,50% para ambas)
+[18:49:27] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[18:49:28]   [CDI] Série 4391 BCB carregada: 44 competências
+[18:49:28]   [CDI] Série diária SGS 12: 0.3561% no mês até 09/10/2026 (7 observações)
+[18:49:28]   [CDI] mês fechado=1.08% (set/2026) | parcial=0.3561% (out/2026 até 09/10/2026; origem=bcb_sgs_12_diario) | ano fechado=10.4997% | ano c/ parcial=10.8931% | 12M=14.4688% | 24M=29.7148% | 36M=44.0666%
+[18:49:28] [IPCA] Base local: 561 meses.
+[18:49:29] [IPCA] Base salva: 561 meses.
+[18:49:29]   [IPCA] 12M=4.5761% | 24M=9.9852% | 36M=14.8517%
+[18:49:29]   [META INFLAÇÃO] gráfico sincronizado: set/2026 = 4.5761% em 12 meses.
+[18:49:29] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[18:49:59]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[18:49:59]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[18:49:59] [PTAX] Dólar PTAX: último=4.9892 (2026-10-09) | mês fechado=-0.01% | mês atual=-3.7% | ano=-9.33% | 12M=-7.34% | 24M=-13.65% | 36M=-1.35%
+[18:49:59] [Índices] Calculando Ibovespa (^BVSP)...
+[18:49:59] [Yahoo Histórico] Buscando ^BVSP...
+[18:49:59] [Yahoo Histórico] ^BVSP OK — 854 registros
+[18:49:59] [Índices] Ibovespa: mês fechado=5.03% | mês atual=12.2% | ano=29.75% | 12M=48.61% | 24M=60.83% | 36M=78.61%
+[18:49:59] [Índices] Calculando IFIX (^IFIX)...
+[18:49:59] [Yahoo Histórico] Buscando ^IFIX...
+[18:49:59] [Yahoo Histórico] ^IFIX HTTP 404
+[18:49:59]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[18:49:59] [Índices] Calculando S&P 500 (^GSPC)...
+[18:49:59] [Yahoo Histórico] Buscando ^GSPC...
+[18:49:59] [Yahoo Histórico] ^GSPC OK — 857 registros
+[18:49:59] [Índices] S&P 500: mês fechado=-0.45% | mês atual=2.03% | ano=14.05% | 12M=19.15% | 24M=34.26% | 36M=79.49%
+[18:49:59] [Índices] Calculando Dow Jones (^DJI)...
+[18:49:59] [Yahoo Histórico] Buscando ^DJI...
+[18:49:59] [Yahoo Histórico] ^DJI OK — 857 registros
+[18:49:59] [Índices] Dow Jones: mês fechado=-4.29% | mês atual=1.86% | ano=7.88% | 12M=14.01% | 24M=20.97% | 36M=54.17%
+[18:49:59] [Índices] Calculando Nasdaq (^IXIC)...
+[18:49:59] [Yahoo Histórico] Buscando ^IXIC...
+[18:50:00] [Yahoo Histórico] ^IXIC OK — 857 registros
+[18:50:00] [Índices] Nasdaq: mês fechado=1.86% | mês atual=1.43% | ano=17.23% | 12M=22.7% | 24M=48.54% | 36M=100.72%
+[18:50:00] [Indicadores mensais] Série consolidada: 37 competências
+[18:50:00] [Focus] Coletando expectativas do Banco Central...
+[18:50:00] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[18:50:00] [Focus PDF] R20261009.pdf indisponível — HTTP 401 | 16 bytes
+[18:50:01] [Focus PDF] PDF disponível encontrado: R20261002.pdf (02/10/2026)
+[18:50:01]   [Focus] -> IPCA
+[18:50:02]   [Focus] -> Selic
+[18:50:04]   [Focus] -> PIB Total
+[18:50:06]   [Focus] -> Câmbio
+[18:50:08]   [Focus] -> IGP-M
+[18:50:10] [SUCESSO] mercado_atual.json exportado
+[18:50:10]   Selic: valor=13.75% | vigente_desde=17/09/2026 | data_ref=2026-09-17 | fonte=BCB SGS 432 | fallback=False
+[18:50:10]   CDI: mensal=1.08% | 12M=14.4688% | 24M=29.7148% | 36M=44.0666%
+[18:50:10]   IPCA: 12M=4.5761% | 24M=9.9852% | 36M=14.8517%
+[18:50:10]   PTAX: 37 fechamentos mensais pré-salvos
+[18:50:10]   Poupança nova:  mensal=0.6624% | acum. ano=6.8573%
+[18:50:10]   Poupança antiga: mensal=0.6624% | acum. ano=6.8573%
+[18:50:10] [LIMPEZA] Removido: sipii_caixa_20261002.csv
+[18:50:10] [LIMPEZA] Removido: sipii_caixa_20261002.xlsx
+[18:50:10] =================================================================
+[18:50:10] [FIM] 181 fundos consolidados. Pipeline v18.9/v678 completo.
+[18:50:10] =================================================================
