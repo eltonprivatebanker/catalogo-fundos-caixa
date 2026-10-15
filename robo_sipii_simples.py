@@ -1,6 +1,15 @@
 """
 ROBÔ SIPII CAIXA — v18.9 / v678 (Modular + Selic Dinâmica)
 ==========================================================
+Extensão Ouro (14/10/2026):
+  + Cotação de referência: contrato futuro de ouro COMEX GC=F (US$/onça-troy),
+    via mesmo serviço Yahoo Finance utilizado pelos índices existentes.
+  + Conversão indicativa para R$/grama pela PTAX venda (1 onça-troy = 31,1034768 g).
+  + Séries mensais e variações MTD, ano, 12M, 24M, 36M; fontes e datas explícitas.
+  + Dados novos em indices_mercado.ouro / .ouro_usd, cards e indicadores_mensais;
+    sem alterar indicadores anteriores. Em falhas, último ouro publicado é marcado como cache.
+  + GC=F é FUTURO de ouro, não ouro spot nem rentabilidade de investimento físico.
+
 Novidades v18.9 / v678:
   + Execução modular por --modo: full, indicadores, debug-selic, fundos e metadados.
   + Rotina automática diária segue em modo full; execução manual permite escolher módulo.
@@ -237,6 +246,8 @@ FUNDOS_JSON_LOCAL   = BASE_DIR / "fundos.json"
 FUNDOS_CAIXA_PATH   = BASE_DIR / "fundos_caixa.json"   # índice leve de documentos
 FUNDOS_AUDITORIA_PATH = BASE_DIR / "auditoria_fundos.json"
 PTAX_CACHE_PATH    = BASE_DIR / "ptax_historico_cache.json"
+OURO_TICKER        = "GC=F"      # Futuro COMEX, NÃO é ouro à vista (spot)
+GRAMAS_ONCA_TROY   = 31.1034768  # Constante internacional de conversão
 
 # ---------------------------------------------------------------------------
 # Dicionário estático — URLs validadas manualmente
@@ -2774,6 +2785,164 @@ class ColetorMercado:
 
         return indice_usd
 
+    # -----------------------------------------------------------------------
+    # Ouro de referência: futuro COMEX em USD/onça-troy, convertido em BRL/g.
+    # Mantém o mesmo contrato de dados usado pelos demais índices do painel.
+    # -----------------------------------------------------------------------
+    def _montar_ouro_brl(self, ouro_usd, ptax_historico):
+        """Monta retornos mensais do futuro GC=F em R$/grama.
+
+        Usa *fechamentos mensais compatíveis* por competência. A série não deve
+        combinar, por exemplo, ouro de setembro com dólar de outubro.
+        Como os calendários de negociação diferem, preços de fechamento podem
+        corresponder a dias distintos dentro da mesma competência mensal.
+        Não representa preço spot, cotação comercial ou retorno líquido.
+        """
+        if not isinstance(ouro_usd, dict) or ouro_usd.get("erro"):
+            return None
+
+        precos_ouro = {}
+        for item in ouro_usd.get("historico", []) or []:
+            try:
+                chave = str(item.get("key") or "")
+                preco = float(item.get("fechamento"))
+                if re.fullmatch(r"\d{4}-\d{2}", chave) and preco > 0:
+                    precos_ouro[chave] = preco
+            except (TypeError, ValueError, AttributeError):
+                continue
+
+        ptax = {}
+        for item in ptax_historico or []:
+            try:
+                chave = str(item.get("key") or "")
+                valor = float(item.get("cotacao"))
+                if re.fullmatch(r"\d{4}-\d{2}", chave) and valor > 0:
+                    ptax[chave] = item
+            except (TypeError, ValueError, AttributeError):
+                continue
+
+        chaves = sorted(set(precos_ouro).intersection(ptax))
+        if not chaves:
+            log("[OURO] Sem competência comum entre GC=F e PTAX: R$/g indisponível")
+            return None
+
+        def meses_atras(key, qtd):
+            ano, mes = map(int, key.split("-"))
+            numero = ano * 12 + mes - 1 - qtd
+            return f"{numero // 12:04d}-{numero % 12 + 1:02d}"
+
+        def mes_seguinte(anterior, atual):
+            return meses_atras(atual, 1) == anterior
+
+        # Internamente, calcula variações ANTES do arredondamento dos preços.
+        bruto = {key: precos_ouro[key] * float(ptax[key]["cotacao"]) / GRAMAS_ONCA_TROY
+                 for key in chaves}
+        historico = []
+        chave_anterior = None
+        for key in chaves[-37:]:
+            preco_brl = bruto[key]
+            anterior = bruto.get(chave_anterior) if chave_anterior and mes_seguinte(chave_anterior, key) else None
+            ano, mes = map(int, key.split("-"))
+            historico.append({
+                "key": key,
+                "label": f"{MESES_PT[mes - 1]}/{ano}",
+                "valor": self._variacao_pct(preco_brl, anterior),
+                "fechamento": round(preco_brl, 4),
+                "cotacao_usd_onca": precos_ouro[key],
+                "ptax_brl_usd": float(ptax[key]["cotacao"]),
+                "data_ref_ptax": ptax[key].get("data_ref"),
+            })
+            chave_anterior = key
+
+        atual = chaves[-1]
+        primeiro_mes_atual = agora_brasilia().strftime("%Y-%m")
+        tem_mes_atual = atual == primeiro_mes_atual
+        mes_fechado = meses_atras(primeiro_mes_atual, 1)
+        mes_base = meses_atras(primeiro_mes_atual, 2)
+        ano = int(atual[:4])
+
+        def base_preco(key):
+            return bruto.get(key)
+
+        def arredondado(key):
+            preco = base_preco(key)
+            return round(preco, 4) if preco is not None else None
+
+        preco_atual = bruto[atual]
+        preco_mes_fechado = base_preco(mes_fechado)
+        preco_mes_base = base_preco(mes_base)
+        referencia_ano = f"{ano - 1}-12"
+        ref_ouro = ouro_usd.get("data_atual") if str(ouro_usd.get("data_atual") or "")[:7] == atual else None
+        ref_ptax = ptax[atual].get("data_ref")
+        # Data conservadora: a combinação não deve parecer mais nova do que
+        # qualquer uma das duas fontes. Os dias exatos ficam separados.
+        datas = [d for d in (ref_ouro, ref_ptax) if isinstance(d, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", d)]
+        data_combinada = min(datas) if len(datas) == 2 else (datas[0] if datas else None)
+
+        resultado = {
+            "nome": "Ouro futuro COMEX (referência em R$/grama)",
+            "ticker": OURO_TICKER,
+            "tipo_referencia": "contrato_futuro_comex",
+            "unidade": "R$/g",
+            "fonte": "Yahoo Finance GC=F (futuro COMEX) + BCB PTAX venda",
+            "nota": "Conversão indicativa; não representa ouro spot, preço de negociação ou rendimento líquido.",
+            "gramas_por_onca_troy": GRAMAS_ONCA_TROY,
+            "fechamento_atual": round(preco_atual, 4),
+            "data_atual": data_combinada,
+            "competencia_atual": atual,
+            "data_ref_ouro": ref_ouro,
+            "data_ref_ptax": ref_ptax,
+            "cotacao_usd_onca": precos_ouro[atual],
+            "ptax_brl_usd": float(ptax[atual]["cotacao"]),
+            "fechamento_mes_anterior": arredondado(mes_fechado),
+            "data_mes_anterior": ptax.get(mes_fechado, {}).get("data_ref"),
+            "fechamento_mes_base": arredondado(mes_base),
+            "data_mes_base": ptax.get(mes_base, {}).get("data_ref"),
+            "mes_anterior_label": f"{MESES_PT[int(mes_fechado[5:])-1]}/{mes_fechado[:4]}",
+            "mes_base_label": f"{MESES_PT[int(mes_base[5:])-1]}/{mes_base[:4]}",
+            "variacao_mes_fechado": self._variacao_pct(preco_mes_fechado, preco_mes_base),
+            "variacao_mes_atual": self._variacao_pct(preco_atual, preco_mes_fechado) if tem_mes_atual else None,
+            "acum_ano": self._variacao_pct(preco_atual, base_preco(referencia_ano)),
+            "acum_12m": self._variacao_pct(preco_atual, base_preco(meses_atras(atual, 12))),
+            "acum_24m": self._variacao_pct(preco_atual, base_preco(meses_atras(atual, 24))),
+            "acum_36m": self._variacao_pct(preco_atual, base_preco(meses_atras(atual, 36))),
+            "base_ano": arredondado(referencia_ano),
+            "base_12m": arredondado(meses_atras(atual, 12)),
+            "base_24m": arredondado(meses_atras(atual, 24)),
+            "base_36m": arredondado(meses_atras(atual, 36)),
+            "tem_mes_atual": tem_mes_atual,
+            "status_mes_atual": "parcial" if tem_mes_atual else "sem_parcial",
+            "historico": historico,
+            "fallback": False,
+        }
+        log(f"[OURO] GC=F + PTAX: {resultado['fechamento_atual']:.2f} R$/g ({atual}) "
+            f"| mês={resultado['variacao_mes_atual']}% | ano={resultado['acum_ano']}% "
+            f"| 12M={resultado['acum_12m']}% | 36M={resultado['acum_36m']}%")
+        return resultado
+
+    def _ultimo_ouro_publicado(self, campo):
+        """Fallback explícito: dados de ouro anteriormente publicados no JSON."""
+        try:
+            path = BASE_DIR / "mercado_atual.json"
+            if not path.exists():
+                return None
+            anterior = json.loads(path.read_text(encoding="utf-8"))
+            indice = (anterior.get("indices_mercado") or {}).get(campo)
+            if not isinstance(indice, dict) or indice.get("fechamento_atual") is None:
+                return None
+            indice = dict(indice)
+            indice["fallback"] = True
+            indice["status_fonte"] = "cache_defasado"
+            indice["nota_cache"] = (
+                "Fonte temporariamente indisponível. "
+                "Mantida a última cotação publicada; confira as datas de referência."
+            )
+            log(f"[OURO] {campo}: usando último valor já publicado ({indice.get('data_atual')})")
+            return indice
+        except Exception as e:
+            log(f"[OURO] Falha ao recuperar cache {campo}: {e}")
+            return None
+
     def _carregar_base_selic(self, incluir_selic_atual=True):
         """
         Carrega o histórico local da Selic, removendo zeros e datas futuras.
@@ -2897,9 +3066,10 @@ class ColetorMercado:
         )
         return resultado
 
-    def _montar_indicadores_mensais(self, cdi_acum, ipca_historico, ibov_indice, dolar_indice, meses=37):
+    def _montar_indicadores_mensais(self, cdi_acum, ipca_historico, ibov_indice, dolar_indice,
+                                   meses=37, ouro_indice=None, ouro_usd_indice=None):
         """
-        Consolida CDI, IPCA, Ibovespa e Dólar em uma única série mensal.
+        Consolida CDI, IPCA, Ibovespa, Dólar e Ouro (BRL/USD) na série mensal.
 
         A página mobile usa este bloco para evitar lógica frágil no browser,
         já que cada indicador nasce em uma estrutura diferente do JSON.
@@ -2924,6 +3094,8 @@ class ColetorMercado:
             "ipca": {},
             "ibov": {},
             "dolar": {},
+            "ouro": {},
+            "ouro_usd": {},
         }
 
         for item in (cdi_acum or {}).get("historico", []) or []:
@@ -2946,6 +3118,12 @@ class ColetorMercado:
             if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
                 mapas["dolar"][key] = normalizar_numero(item.get("valor"))
 
+        for campo, indice in (("ouro", ouro_indice), ("ouro_usd", ouro_usd_indice)):
+            for item in (indice or {}).get("historico", []) or []:
+                key = item.get("key")
+                if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
+                    mapas[campo][key] = normalizar_numero(item.get("valor"))
+
         chaves = sorted(set().union(*[set(mapa.keys()) for mapa in mapas.values()]))
         resultado = []
         for key in chaves[-meses:]:
@@ -2956,6 +3134,8 @@ class ColetorMercado:
                 "ipca": mapas["ipca"].get(key),
                 "ibov": mapas["ibov"].get(key),
                 "dolar": mapas["dolar"].get(key),
+                "ouro": mapas["ouro"].get(key),
+                "ouro_usd": mapas["ouro_usd"].get(key),
             })
 
         log(f"[Indicadores mensais] Série consolidada: {len(resultado)} competências")
@@ -3170,6 +3350,34 @@ class ColetorMercado:
         dow_indice    = self._resumo_indice_yahoo("^DJI", "Dow Jones")
         nasdaq_indice = self._resumo_indice_yahoo("^IXIC", "Nasdaq")
 
+        # Ouro: GC=F é preço de referência do contrato FUTURO COMEX (US$/onça).
+        # O indicador brasileiro deriva de GC=F × PTAX venda / 31,1034768.
+        # Se a coleta falhar, reaproveita o último dado com flag de cache.
+        ouro_usd_indice = {}
+        ouro_indice = {}
+        try:
+            ouro_usd_indice = self._resumo_indice_yahoo(
+                OURO_TICKER, "Ouro futuro COMEX (USD/onça-troy)"
+            )
+            if ouro_usd_indice.get("erro") or ouro_usd_indice.get("fechamento_atual") is None:
+                ouro_usd_indice = self._ultimo_ouro_publicado("ouro_usd") or ouro_usd_indice
+            else:
+                ouro_usd_indice["unidade"] = "USD/onça-troy"
+                ouro_usd_indice["tipo_referencia"] = "contrato_futuro_comex"
+                ouro_usd_indice["nota"] = "Referência de contrato futuro; não é ouro spot."
+                ouro_usd_indice["fallback"] = False
+
+            if ouro_usd_indice.get("fallback"):
+                ouro_indice = self._ultimo_ouro_publicado("ouro") or {}
+            else:
+                ouro_indice = self._montar_ouro_brl(ouro_usd_indice, ptax_historico) or {}
+                if not ouro_indice:
+                    ouro_indice = self._ultimo_ouro_publicado("ouro") or {}
+        except Exception as e:
+            log(f"[OURO] Falha na coleta/conversão: {e}")
+            ouro_usd_indice = self._ultimo_ouro_publicado("ouro_usd") or ouro_usd_indice
+            ouro_indice = self._ultimo_ouro_publicado("ouro") or ouro_indice
+
         sp500_indice  = self._converter_indice_usd_para_brl(sp500_indice, dolar_indice)
         dow_indice    = self._converter_indice_usd_para_brl(dow_indice, dolar_indice)
         nasdaq_indice = self._converter_indice_usd_para_brl(nasdaq_indice, dolar_indice)
@@ -3180,6 +3388,8 @@ class ColetorMercado:
             ibov_indice,
             dolar_indice,
             meses=37,
+            ouro_indice=ouro_indice,
+            ouro_usd_indice=ouro_usd_indice,
         )
 
         # Focus
@@ -3250,6 +3460,22 @@ class ColetorMercado:
                     "nota":         "TR + 0,50% a.m. — independente da Selic",
                 },
 
+                # Referências de ouro adicionais, sem alterar os demais cards.
+                "ouro": {
+                    "valor": ouro_indice.get("fechamento_atual"),
+                    "unidade": "R$/g",
+                    "cotacao_usd_onca": ouro_usd_indice.get("fechamento_atual"),
+                    "variacao_mensal": ouro_indice.get("variacao_mes_atual") if ouro_indice.get("variacao_mes_atual") is not None else ouro_indice.get("variacao_mes_fechado"),
+                    "acum_ano": ouro_indice.get("acum_ano"),
+                    "acum_12m": ouro_indice.get("acum_12m"),
+                    "acum_24m": ouro_indice.get("acum_24m"),
+                    "acum_36m": ouro_indice.get("acum_36m"),
+                    "data_ref_ouro": ouro_indice.get("data_ref_ouro"),
+                    "data_ref_ptax": ouro_indice.get("data_ref_ptax"),
+                    "fonte": ouro_indice.get("fonte"),
+                    "fallback": ouro_indice.get("fallback", False),
+                },
+
                 # Compatibilidade com a index atual + campos novos
                 "ibovespa": {
                     "atual":    ibov_indice.get("fechamento_atual"),
@@ -3305,6 +3531,8 @@ class ColetorMercado:
             # Nova estrutura principal para a tabela de mercado da página.
             "indices_mercado": {
                 "dolar":     dolar_indice,
+                "ouro":      ouro_indice,
+                "ouro_usd":  ouro_usd_indice,
                 "ibovespa":  ibov_indice,
                 "ifix":      ifix_indice,   # ★ v17.3: FIIs — usado pelo fechamento rápido mobile
                 "sp500":     sp500_indice,
@@ -3907,6 +4135,8 @@ def salvar_mercado_atual():
     ipca    = indicadores.get("cards", {}).get("ipca", {})
     selic   = indicadores.get("cards", {}).get("selic_meta", {})
     ptax    = indicadores.get("ptax_historico", [])
+    ouro    = indicadores.get("indices_mercado", {}).get("ouro", {})
+    ouro_usd = indicadores.get("indices_mercado", {}).get("ouro_usd", {})
     pnova   = indicadores.get("cards", {}).get("poupanca_nova", {})
     pantiga = indicadores.get("cards", {}).get("poupanca_antiga", {})
 
@@ -3915,6 +4145,9 @@ def salvar_mercado_atual():
     log(f"  CDI: mensal={cdi.get('mensal')}% | 12M={cdi.get('acum_12m')}% | 24M={cdi.get('acum_24m')}% | 36M={cdi.get('acum_36m')}%")
     log(f"  IPCA: 12M={ipca.get('acum_12m')}% | 24M={ipca.get('acum_24m')}% | 36M={ipca.get('acum_36m')}%")
     log(f"  PTAX: {len(ptax)} fechamentos mensais pré-salvos")
+    log(f"  Ouro GC=F: USD/oz={ouro_usd.get('fechamento_atual')} | BRL/g={ouro.get('fechamento_atual')} "
+        f"| data_ouro={ouro.get('data_ref_ouro')} | data_ptax={ouro.get('data_ref_ptax')} "
+        f"| cache={ouro.get('fallback')}")
     log(f"  Poupança nova:  mensal={pnova.get('valor')}% | acum. ano={pnova.get('acum_ano')}%")
     log(f"  Poupança antiga: mensal={pantiga.get('valor')}% | acum. ano={pantiga.get('acum_ano')}%")
     return indicadores
