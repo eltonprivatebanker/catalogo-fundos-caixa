@@ -32899,3 +32899,69 @@ Stacktrace:
 [15:33:08] =================================================================
 [15:33:08] [FIM] 181 fundos consolidados. Pipeline v18.9/v678 completo.
 [15:33:08] =================================================================
+[22:07:09] =================================================================
+[22:07:09] ⚡ ROBÔ SIPII v18.9 / v678 — modo indicadores
+[22:07:09] =================================================================
+[22:07:09] [MODO indicadores] Atualizando mercado_atual.json...
+[22:07:09] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[22:07:09] [SELIC] SGS 432 por período OK — 731 registros | último=13.75% em 2026-10-14
+[22:07:09] [Poupança] Buscando série 196 (nova) para acum. ano...
+[22:07:10]   [Poupança] nova: mensal=0.6624% | acum. ano=6.8573% (10 meses)
+[22:07:10]   [Poupança] antiga = nova (Selic 13.75% > 8,5% → TR+0,50% para ambas)
+[22:07:10] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[22:07:10]   [CDI] Série 4391 BCB carregada: 44 competências
+[22:07:11]   [CDI] Série diária SGS 12: 0.407% no mês até 13/10/2026 (8 observações)
+[22:07:11]   [CDI] mês fechado=1.08% (set/2026) | parcial=0.407% (out/2026 até 13/10/2026; origem=bcb_sgs_12_diario) | ano fechado=10.4997% | ano c/ parcial=10.9494% | 12M=14.4688% | 24M=29.7148% | 36M=44.0666%
+[22:07:11] [IPCA] Base local: 561 meses.
+[22:07:11] [IPCA] Base salva: 561 meses.
+[22:07:11]   [IPCA] 12M=4.5761% | 24M=9.9852% | 36M=14.8517%
+[22:07:11]   [META INFLAÇÃO] gráfico sincronizado: set/2026 = 4.5761% em 12 meses.
+[22:07:11] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[22:07:33]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[22:07:33]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[22:07:33] [PTAX] Dólar PTAX: último=5.0441 (2026-10-14) | mês fechado=-0.01% | mês atual=-2.64% | ano=-8.33% | 12M=-6.32% | 24M=-12.7% | 36M=-0.26%
+[22:07:33] [Índices] Calculando Ibovespa (^BVSP)...
+[22:07:33] [Yahoo Histórico] Buscando ^BVSP...
+[22:07:34] [Yahoo Histórico] ^BVSP OK — 855 registros
+[22:07:34] [Índices] Ibovespa: mês fechado=5.03% | mês atual=10.82% | ano=28.17% | 12M=45.75% | 24M=57.63% | 36M=78.4%
+[22:07:34] [Índices] Calculando IFIX (^IFIX)...
+[22:07:34] [Yahoo Histórico] Buscando ^IFIX...
+[22:07:34] [Yahoo Histórico] ^IFIX HTTP 404
+[22:07:34]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[22:07:34] [Índices] Calculando S&P 500 (^GSPC)...
+[22:07:34] [Yahoo Histórico] Buscando ^GSPC...
+[22:07:34] [Yahoo Histórico] ^GSPC OK — 858 registros
+[22:07:34] [Índices] S&P 500: mês fechado=-0.45% | mês atual=0.88% | ano=12.76% | 12M=16.17% | 24M=31.73% | 36M=78.36%
+[22:07:34] [Índices] Calculando Dow Jones (^DJI)...
+[22:07:34] [Yahoo Histórico] Buscando ^DJI...
+[22:07:34] [Yahoo Histórico] ^DJI OK — 858 registros
+[22:07:34] [Índices] Dow Jones: mês fechado=-4.29% | mês atual=1.41% | ano=7.4% | 12M=11.56% | 24M=19.87% | 36M=53.31%
+[22:07:34] [Índices] Calculando Nasdaq (^IXIC)...
+[22:07:34] [Yahoo Histórico] Buscando ^IXIC...
+[22:07:34] [Yahoo Histórico] ^IXIC OK — 858 registros
+[22:07:34] [Índices] Nasdaq: mês fechado=1.86% | mês atual=-0.63% | ano=14.85% | 12M=18.52% | 24M=44.26% | 36M=99.09%
+[22:07:34] [Índices] Calculando Ouro futuro COMEX (USD/onça-troy) (GC=F)...
+[22:07:34] [Yahoo Histórico] Buscando GC=F...
+[22:07:34] [Yahoo Histórico] GC=F OK — 861 registros
+[22:07:34] [Índices] Ouro futuro COMEX (USD/onça-troy): mês fechado=-6.58% | mês atual=-0.61% | ano=-4.14% | 12M=-0.05% | 24M=56.11% | 36M=114.33%
+[22:07:34] [OURO] GC=F + PTAX: 674.83 R$/g (2026-10) | mês=-3.23% | ano=-12.13% | 12M=-2.46% | 36M=108.1%
+[22:07:34] [Indicadores mensais] Série consolidada: 37 competências
+[22:07:34] [Focus] Coletando expectativas do Banco Central...
+[22:07:34] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[22:07:34] [Focus PDF] PDF disponível encontrado: R20261009.pdf (09/10/2026)
+[22:07:34]   [Focus] -> IPCA
+[22:07:36]   [Focus] -> Selic
+[22:07:38]   [Focus] -> PIB Total
+[22:07:40]   [Focus] -> Câmbio
+[22:07:42]   [Focus] -> IGP-M
+[22:07:43] [SUCESSO] mercado_atual.json exportado
+[22:07:43]   Selic: valor=13.75% | vigente_desde=17/09/2026 | data_ref=2026-09-17 | fonte=BCB SGS 432 | fallback=False
+[22:07:43]   CDI: mensal=1.08% | 12M=14.4688% | 24M=29.7148% | 36M=44.0666%
+[22:07:43]   IPCA: 12M=4.5761% | 24M=9.9852% | 36M=14.8517%
+[22:07:43]   PTAX: 37 fechamentos mensais pré-salvos
+[22:07:43]   Ouro GC=F: USD/oz=4161.2 | BRL/g=674.8284 | data_ouro=2026-10-14 | data_ptax=2026-10-14 | cache=False
+[22:07:43]   Poupança nova:  mensal=0.6624% | acum. ano=6.8573%
+[22:07:43]   Poupança antiga: mensal=0.6624% | acum. ano=6.8573%
+[22:07:43] =================================================================
+[22:07:43] [FIM] Modo indicadores concluído.
+[22:07:43] =================================================================
