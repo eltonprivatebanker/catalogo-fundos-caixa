@@ -5993,12 +5993,13 @@ html.v875-real body #sec-mercado #v878-market-panes .indic-ref-bar > section{
   v878Pane(by('closedMonthLaunch'),false,'none');
  }
  // Normalização da geometria por inline!important: não muda o motor legado.
- function v878Normalise(el){
+ function v878Normalise(el,resetPadding){
   if(!el)return;
   var css={ 'box-sizing':'border-box','margin-left':'0px','margin-right':'0px',
-    'padding-left':'0px','padding-right':'0px','left':'0px','right':'auto',
+    'left':'0px','right':'auto',
     'inset-inline-start':'0px','inset-inline-end':'auto',
     'min-width':'0px','max-width':'none','width':'100%','transform':'none','float':'none' };
+  if(resetPadding){css['padding-left']='0px';css['padding-right']='0px'}
   for(var name in css){
    if(el.style.getPropertyValue(name)!==css[name] ||
       el.style.getPropertyPriority(name)!=='important')el.style.setProperty(name,css[name],'important');
@@ -6007,10 +6008,10 @@ html.v875-real body #sec-mercado #v878-market-panes .indic-ref-bar > section{
  function v878Geometry(){
   var stage=by('v877-stage');
   if(!stage)return;
-  v878Normalise(stage);
+  v878Normalise(stage,true);
   var ids=['sec-fundos','comparWorkspaceV723','rankingsSection','v875-market-menu',
     'sec-mercado','sec-dolar','sec-focus','sec-graficos'];
-  ids.forEach(function(id){v878Normalise(by(id))});
+  ids.forEach(function(id){v878Normalise(by(id),false)});
  }
  function v878Diagnostico(){
   var ids=['v877-stage','comparWorkspaceV723','rankingsSection','sec-mercado',
