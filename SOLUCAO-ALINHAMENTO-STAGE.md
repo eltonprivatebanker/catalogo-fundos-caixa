@@ -65,6 +65,9 @@ Para qualquer outra seção visível:
 - Após mudar a seção, medir imediatamente e após estabilização (ex.: 500ms) para detectar scripts legados que reaplicam a margem.
 - Validar 1463px e uma largura menor para garantir que a correção desktop não prejudique responsividade.
 
+
+- **V887 (teste, ainda pendente de validação visual):** confirmado no HTML do Inspetor o mesmo `margin-left: 208px` em `#sec-graficos` dentro do `#v877-stage`. A normalização do módulo ativo foi estendida para `mercado/juros`, preservando as correções de Dólar e Focus. Diagnóstico: `window.__v887Diagnostico()`. A V886 não foi alterada.
+
 ## Versões de referência
 
 - V884: Catálogo sem recuo duplicado.
