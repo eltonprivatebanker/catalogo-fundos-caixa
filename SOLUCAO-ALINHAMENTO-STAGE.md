@@ -69,4 +69,6 @@ Para qualquer outra seção visível:
 
 - V884: Catálogo sem recuo duplicado.
 - V885: Comparador sem recuo duplicado (confirmado em 06/11/2026).
+- V886 (teste, **ainda sem validação visual pelo usuário**): a mesma normalização agora foi aplicada exclusivamente aos módulos ativos `#sec-dolar` e `#sec-focus`, com comando `window.__v886Diagnostico()` para inspecionar o recuo. Preserva V885. `#sec-graficos` segue pendente de confirmação.
+
 
