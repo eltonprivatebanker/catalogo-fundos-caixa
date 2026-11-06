@@ -1,0 +1,13 @@
+/* V898 — semântica e hierarquia do Boletim Focus; desktop. */
+#sec-focus .v898-focus-intro{display:none}
+@media(min-width:769px){
+ #sec-focus .v898-focus-intro{display:block;color:#aab9cd;font-size:.72rem;line-height:1.4;margin:5px 0 9px;max-width:900px}
+ #sec-focus .v898-focus-basis{grid-column:1/-1;margin:0;padding:0 3px;line-height:1.4;font-size:.65rem;color:#a6b5ca}
+ #sec-focus .v898-focus-basis strong{color:#d5dfed}
+ #sec-focus .focus-summary-v802{margin-bottom:0!important}
+ #sec-focus .focus-summary-copy-v802 p{line-height:1.38!important;font-size:.72rem!important}
+ #sec-focus .focus-card-v802 .fcad-label{margin-bottom:2px!important}
+ #sec-focus .v898-focus-unit{display:block;margin:0 0 7px;color:#9aacc4;font-size:.62rem;line-height:1.3}
+ #sec-focus .focus-card-v802 .focus-trend-v806{margin-top:0!important}
+ #sec-focus .focus-card-v802 .focus-sparkline-v595{opacity:.82}
+}
