@@ -1,0 +1,76 @@
+/* V899 — Inflação e juros: ajustes conservadores, desktop.
+   Preserva valores, gráficos SVG, períodos, motores de dados e versão mobile. */
+@media(min-width:769px){
+  /* O resumo já existe no HTML: apenas aproximá-lo do título e trazê-lo antes do gráfico. */
+  html body #sec-graficos #mobileIpcaMensalV400{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+  }
+  html body #sec-graficos #mobileIpcaMensalV400 > .econ-dash-card-head-v378{
+    order:0!important;
+    margin-bottom:10px!important;
+  }
+  html body #sec-graficos #mobileIpcaMensalV400 > .ipca-kpis-v378{
+    order:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:9px!important;
+    margin:0 0 12px!important;
+    padding:0!important;
+  }
+  html body #sec-graficos #mobileIpcaMensalV400 > .ipca-kpis-v378 > div{
+    padding:10px 12px!important;
+    min-width:0!important;
+  }
+  html body #sec-graficos #mobileIpcaMensalV400 > #econSparkIpcaV367{
+    order:2!important;
+    width:100%!important;
+    min-width:0!important;
+    flex:1 1 auto!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 #v860IpcaMetaSummary{
+    margin:9px 0 11px!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 #v860IpcaMetaSummary > div{
+    padding:10px 12px!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 .v899-meta-delta{
+    display:block!important;
+    margin-top:6px!important;
+    color:#aebed4!important;
+    font-size:.62rem!important;
+    line-height:1.35!important;
+    letter-spacing:0!important;
+    text-transform:none!important;
+    font-weight:600!important;
+    white-space:normal!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 .v899-meta-delta[data-status="above"],
+  html body #sec-graficos #mobileIpcaMetaV400 .v899-meta-delta[data-status="below"]{
+    color:#ff9aae!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 .v899-meta-delta[data-status="within"]{
+    color:#84dcbd!important;
+  }
+  html body #sec-graficos #econSparkIpcaV367 .econ-svg-ipca-bars-v378 .axis,
+  html body #sec-graficos #econSparkMetaV367 .econ-meta-legacy-svg-v379 .axis{
+    fill:#99aac3!important;
+    font-size:8.5px!important;
+  }
+  html body #sec-graficos #v860Ipca15Row .ipca15-compare-copy-v712 small{
+    color:#aebbd1!important;
+    line-height:1.38!important;
+  }
+}
+/* A primeira dobra se torna mais compacta em monitores grandes.
+   A altura é moderada para preservar legendas e eixos dos gráficos. */
+@media(min-width:1280px){
+  html body #sec-graficos #mobileIpcaMensalV400 > #econSparkIpcaV367,
+  html body #sec-graficos #mobileIpcaMetaV400 > #econSparkMetaV367{
+    box-sizing:border-box!important;
+    min-height:310px!important;
+    height:310px!important;
+    max-height:310px!important;
+  }
+}
