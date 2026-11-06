@@ -1,0 +1,110 @@
+/* V900 — legibilidade da inflação e acesso funcional a Fontes.
+   Preserva cálculos, SVG, motor de dados e identidade visual atual. */
+@media (min-width:769px) {
+  /* Valores das escalas nos dois gráficos: mais legíveis, com contraste adequado. */
+  html body #sec-graficos #econSparkIpcaV367 .econ-svg-ipca-bars-v378 .axis,
+  html body #sec-graficos #econSparkMetaV367 .econ-meta-legacy-svg-v379 .axis,
+  html body #sec-graficos #econSparkMetaV367 .econ-line-svg-v378 .axis {
+    font-size:11px!important;
+    fill:#aebed5!important;
+    opacity:1!important;
+  }
+  html body #sec-graficos #econSparkIpcaV367 .econ-svg-ipca-bars-v378 .axis.x,
+  html body #sec-graficos #econSparkMetaV367 .econ-meta-legacy-svg-v379 .axis.x {
+    font-size:10.4px!important;
+  }
+  /* Legenda abaixo do IPCA 12M: distinguir melhor as três referências. */
+  html body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379 {
+    font-size:.73rem!important;
+    line-height:1.5!important;
+    gap:12px 17px!important;
+    margin-top:10px!important;
+    color:#c4d1e4!important;
+    justify-content:center!important;
+    flex-wrap:wrap!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379 > span {
+    font-size:.73rem!important;
+    line-height:1.5!important;
+    color:#c4d1e4!important;
+    white-space:nowrap!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379 i {
+    flex-shrink:0!important;
+  }
+  /* Proteção de apresentação se scripts legados recriarem o primeiro rótulo. */
+  html body #sec-graficos #mobileIpcaMetaV400 #v860IpcaMetaSummary > div:first-child > small {
+    font-size:0!important;
+    line-height:0!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 #v860IpcaMetaSummary > div:first-child > small::after {
+    content:"IPCA 12M";
+    display:block!important;
+    font-size:.67rem!important;
+    line-height:1.2!important;
+    letter-spacing:.08em!important;
+    color:#a7b6cd!important;
+    font-weight:800!important;
+  }
+  html body #sec-graficos #mobileIpcaMetaV400 #v860IpcaMetaSummary > div:nth-child(2) > small {
+    color:#a7b6cd!important;
+  }
+}
+/* Painel de Fontes: reutiliza o conteúdo institucional do rodapé. */
+#v900SourcesDialog {
+  box-sizing:border-box;
+  display:none;
+  width:min(780px,calc(100vw - 28px));
+  max-width:780px;
+  max-height:min(85vh,850px);
+  margin:auto;
+  padding:0;
+  color:#edf2fc;
+  background:linear-gradient(180deg,#10192a,#080e1a);
+  border:1px solid rgba(205,162,95,.30);
+  border-radius:16px;
+  box-shadow:0 24px 72px rgba(0,0,0,.60);
+  overflow:auto;
+}
+#v900SourcesDialog[open]{display:block}
+#v900SourcesDialog::backdrop{background:rgba(2,6,15,.75);backdrop-filter:blur(3px)}
+#v900SourcesDialog .v900-sources-header{
+  position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:18px 21px;border-bottom:1px solid rgba(148,163,184,.13);background:#10192a;
+}
+#v900SourcesDialog .v900-sources-header h2{font-size:1.12rem;line-height:1.2;margin:0;color:#f7f8fc}
+#v900SourcesDialog .v900-sources-header p{font-size:.72rem;line-height:1.4;margin:5px 0 0;color:#a7b7cf}
+#v900SourcesDialog .v900-sources-close{
+  flex:0 0 auto;width:34px;height:34px;border:1px solid rgba(148,163,184,.22);border-radius:9px;
+  background:#172135;color:#e0e9f7;font-size:1.15rem;cursor:pointer;
+}
+#v900SourcesDialog .v900-sources-close:hover{border-color:#d3a859;color:#ffd38a}
+#v900SourcesDialog .v900-sources-content{padding:18px 21px 23px}
+#v900SourcesDialog .footer-clean-body{display:block!important;padding:0!important;margin:0!important;max-height:none!important}
+#v900SourcesDialog .footer-clean-grid{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;margin:0 0 16px!important;
+}
+#v900SourcesDialog .footer-clean-item{
+  box-sizing:border-box;min-width:0;padding:13px!important;border-radius:11px;
+  border:1px solid rgba(148,163,184,.15);background:rgba(11,18,32,.65);line-height:1.5;
+}
+#v900SourcesDialog .footer-clean-item strong{display:block;margin-bottom:7px;font-size:.77rem;color:#efc776}
+#v900SourcesDialog .footer-clean-item span{display:block;font-size:.70rem;color:#b6c3d6}
+#v900SourcesDialog .footer-clean-sources{
+  display:flex!important;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none!important;
+}
+#v900SourcesDialog .footer-clean-sources .sources-title{
+  flex:0 0 100%;padding:0 0 3px!important;border:0!important;background:transparent!important;
+  color:#e5edf8;font-size:.80rem;font-weight:750;
+}
+#v900SourcesDialog .footer-clean-sources li:not(.sources-title){
+  padding:7px 11px;border:1px solid rgba(148,163,184,.18);border-radius:8px;
+  color:#cbd8e9;background:rgba(21,31,49,.6);font-size:.71rem;
+}
+#v900SourcesDialog .v900-sources-close:focus-visible{outline:2px solid #f0bf64;outline-offset:2px}
+@media(max-width:680px){
+  #v900SourcesDialog .v900-sources-header{padding:14px 15px}
+  #v900SourcesDialog .v900-sources-content{padding:13px 15px 16px}
+  #v900SourcesDialog .footer-clean-grid{grid-template-columns:1fr!important}
+}
