@@ -1,0 +1,212 @@
+{
+  "auditoria": "2026-11-06",
+  "data_retorno_csv": "2026-11-05",
+  "data_pl_csv_confirmada": false,
+  "fontes": {
+    "dados_atuais_csv_sha": "daa1d74cde37428f8606281aeeb001410f575df9",
+    "fundos_json_sha": "38cea38c541658c5600e4ce65656200d08f19123",
+    "kpis_dashboard_json_sha": "fb34aae17886d295f2cdf6c4720c3cf087908dac",
+    "repositorio": "https://github.com/eltonprivatebanker/catalogo-fundos-caixa",
+    "ramo": "Testes-da-versão-01"
+  },
+  "universo": {
+    "cadastro_oficial": 209,
+    "linhas_csv": 183,
+    "adicionados_do_cadastro": 42,
+    "total_catalogo": 225,
+    "com_pl_e_retorno_12m": 170,
+    "sem_retorno_12m": 55,
+    "elegiveis_preliminares": 141
+  },
+  "patrimonios": {
+    "pl_bruto_csv_mm": 350759.129,
+    "pl_elegivel_filtrado_mm": 300213.298,
+    "cobertura_pl_pct": 85.59,
+    "fic_nome_contagem": 101,
+    "fic_nome_pl_mm": 230847.955,
+    "pl_adicional_cadastro_mm": 50362.718
+  },
+  "inconsistencias": {
+    "motivos": {
+      "SEM_PL_VALIDO": 17,
+      "SEM_RETORNO_12M": 55,
+      "IDENTIFICADOR_AUSENTE": 5,
+      "HISTORICO_12M_INCOMPLETO": 18,
+      "CNPJ_REPETIDO": 21,
+      "CODIGO_REPETIDO": 21,
+      "SEM_RETORNO_12M_OPERACIONAL": 42
+    },
+    "grupos_cnpj_repetido": 9,
+    "registros_em_cnpj_repetido": 21,
+    "registros_com_id_ausente": 5,
+    "retorno_numerico_mas_historico_incompleto": 6,
+    "cotacoes_cadastro_datas": {
+      "2026-10-29": 36,
+      "SEM_DATA": 4,
+      "2026-10-28": 2
+    }
+  },
+  "alinhamento_kpis": {
+    "pl_total_dashboard_mm": 350759.13,
+    "pl_bruto_confere": true
+  },
+  "categorias": [
+    {
+      "categoria": "RENDA FIXA",
+      "fundos_catalogo": 106,
+      "fundos_com_dados": 68,
+      "fundos_elegiveis": 55,
+      "pl_bruto_mm": 137231.196,
+      "pl_elegivel_mm": 110137.514,
+      "cobertura_pl_pct": 80.26,
+      "retorno_12m_ponderado_bruto_pct": 13.7939,
+      "retorno_12m_ponderado_filtrado_pct": 13.9443,
+      "media_simples_filtrada_pct": 13.1493,
+      "mediana_filtrada_pct": 13.66,
+      "fic_nome_contagem": 41,
+      "fic_nome_pl_mm": 50399.126
+    },
+    {
+      "categoria": "RENDA FIXA REFERENCIADO",
+      "fundos_catalogo": 19,
+      "fundos_com_dados": 15,
+      "fundos_elegiveis": 13,
+      "pl_bruto_mm": 134411.001,
+      "pl_elegivel_mm": 112850.811,
+      "cobertura_pl_pct": 83.96,
+      "retorno_12m_ponderado_bruto_pct": 13.9277,
+      "retorno_12m_ponderado_filtrado_pct": 13.8756,
+      "media_simples_filtrada_pct": 13.5654,
+      "mediana_filtrada_pct": 13.87,
+      "fic_nome_contagem": 14,
+      "fic_nome_pl_mm": 116394.609
+    },
+    {
+      "categoria": "RENDA FIXA CURTO PRAZO",
+      "fundos_catalogo": 6,
+      "fundos_com_dados": 5,
+      "fundos_elegiveis": 5,
+      "pl_bruto_mm": 50931.555,
+      "pl_elegivel_mm": 50931.555,
+      "cobertura_pl_pct": 100,
+      "retorno_12m_ponderado_bruto_pct": 11.7786,
+      "retorno_12m_ponderado_filtrado_pct": 11.7786,
+      "media_simples_filtrada_pct": 12.702,
+      "mediana_filtrada_pct": 12.24,
+      "fic_nome_contagem": 4,
+      "fic_nome_pl_mm": 50630.309
+    },
+    {
+      "categoria": "ACOES",
+      "fundos_catalogo": 39,
+      "fundos_com_dados": 36,
+      "fundos_elegiveis": 33,
+      "pl_bruto_mm": 9305.671,
+      "pl_elegivel_mm": 8748.681,
+      "cobertura_pl_pct": 94.01,
+      "retorno_12m_ponderado_bruto_pct": 11.3555,
+      "retorno_12m_ponderado_filtrado_pct": 8.9278,
+      "media_simples_filtrada_pct": 2.7439,
+      "mediana_filtrada_pct": -0.37,
+      "fic_nome_contagem": 12,
+      "fic_nome_pl_mm": 2877.27
+    },
+    {
+      "categoria": "RENDA FIXA SIMPLES",
+      "fundos_catalogo": 5,
+      "fundos_com_dados": 5,
+      "fundos_elegiveis": 5,
+      "pl_bruto_mm": 7963.916,
+      "pl_elegivel_mm": 7963.916,
+      "cobertura_pl_pct": 100,
+      "retorno_12m_ponderado_bruto_pct": 12.0928,
+      "retorno_12m_ponderado_filtrado_pct": 12.0928,
+      "media_simples_filtrada_pct": 12.258,
+      "mediana_filtrada_pct": 12.28,
+      "fic_nome_contagem": 4,
+      "fic_nome_pl_mm": 7564.956
+    },
+    {
+      "categoria": "MULTIMERCADO",
+      "fundos_catalogo": 35,
+      "fundos_com_dados": 30,
+      "fundos_elegiveis": 22,
+      "pl_bruto_mm": 6261.689,
+      "pl_elegivel_mm": 5877.553,
+      "cobertura_pl_pct": 93.87,
+      "retorno_12m_ponderado_bruto_pct": 13.0933,
+      "retorno_12m_ponderado_filtrado_pct": 13.3173,
+      "media_simples_filtrada_pct": 7.335,
+      "mediana_filtrada_pct": 8.695,
+      "fic_nome_contagem": 25,
+      "fic_nome_pl_mm": 2887.422
+    },
+    {
+      "categoria": "FUNDOS MUTUOS DE PRIVATIZACAO",
+      "fundos_catalogo": 10,
+      "fundos_com_dados": 9,
+      "fundos_elegiveis": 7,
+      "pl_bruto_mm": 4543.605,
+      "pl_elegivel_mm": 3609.005,
+      "cobertura_pl_pct": 79.43,
+      "retorno_12m_ponderado_bruto_pct": 33.2032,
+      "retorno_12m_ponderado_filtrado_pct": 41.6807,
+      "media_simples_filtrada_pct": 30.0729,
+      "mediana_filtrada_pct": 6.49,
+      "fic_nome_contagem": 0,
+      "fic_nome_pl_mm": 0
+    },
+    {
+      "categoria": "CAMBIAL",
+      "fundos_catalogo": 1,
+      "fundos_com_dados": 1,
+      "fundos_elegiveis": 1,
+      "pl_bruto_mm": 94.263,
+      "pl_elegivel_mm": 94.263,
+      "cobertura_pl_pct": 100,
+      "retorno_12m_ponderado_bruto_pct": 6.85,
+      "retorno_12m_ponderado_filtrado_pct": 6.85,
+      "media_simples_filtrada_pct": 6.85,
+      "mediana_filtrada_pct": 6.85,
+      "fic_nome_contagem": 1,
+      "fic_nome_pl_mm": 94.263
+    },
+    {
+      "categoria": "FUNDO DE INDICE",
+      "fundos_catalogo": 1,
+      "fundos_com_dados": 1,
+      "fundos_elegiveis": 0,
+      "pl_bruto_mm": 16.233,
+      "pl_elegivel_mm": 0,
+      "cobertura_pl_pct": 0,
+      "retorno_12m_ponderado_bruto_pct": 8.24,
+      "retorno_12m_ponderado_filtrado_pct": null,
+      "media_simples_filtrada_pct": null,
+      "mediana_filtrada_pct": null,
+      "fic_nome_contagem": 0,
+      "fic_nome_pl_mm": 0
+    },
+    {
+      "categoria": "INVESTIMENTO IMOBILIARIO",
+      "fundos_catalogo": 3,
+      "fundos_com_dados": 0,
+      "fundos_elegiveis": 0,
+      "pl_bruto_mm": 0,
+      "pl_elegivel_mm": 0,
+      "cobertura_pl_pct": null,
+      "retorno_12m_ponderado_bruto_pct": null,
+      "retorno_12m_ponderado_filtrado_pct": null,
+      "media_simples_filtrada_pct": null,
+      "mediana_filtrada_pct": null,
+      "fic_nome_contagem": 0,
+      "fic_nome_pl_mm": 0
+    }
+  ],
+  "limitacoes": [
+    "PL do CSV não possui coluna independente para data de referência do patrimônio.",
+    "É uma média de rentabilidades passadas ponderada pelo PL da fotografia, NÃO retorno histórico de uma carteira.",
+    "Registros com CNPJ/código repetidos foram excluídos do cenário conservador, mesmo quando podem ter rentabilidade válida.",
+    "Não há informações de posições investidas suficientes para detectar dupla contagem FI/FIC.",
+    "Dados do cadastro CAIXA com cotas de outubro não entram no denominador de rentabilidade de 12 meses do CSV de novembro."
+  ]
+}
