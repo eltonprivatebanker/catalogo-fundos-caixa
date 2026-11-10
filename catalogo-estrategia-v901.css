@@ -1,0 +1,18 @@
+/* V901 — filtro experimental de estratégia; isolado da V900 */
+#strategyFilterV901{display:flex;align-items:center;gap:14px;min-height:59px;padding:12px 0;border-top:1px solid rgba(140,157,186,.18);flex-wrap:wrap}
+#strategyFilterV901 .strategy-label{width:168px;flex:none;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#abc4ec}
+#strategyFilterV901 .strategy-picker{position:relative;width:min(360px,calc(100vw - 75px));max-width:100%}
+#strategyToggleV901{width:100%;min-height:40px;background:#101625;color:#e2e9fb;border:1px solid #303a51;border-radius:10px;padding:0 13px;text-align:left;display:flex;align-items:center;justify-content:space-between;font:inherit;cursor:pointer}
+#strategyToggleV901:focus-visible,#strategySearchV901:focus-visible{outline:2px solid #c69d5c;outline-offset:2px}
+#strategyMenuV901{position:absolute;top:calc(100% + 5px);left:0;z-index:999;width:min(400px,90vw);max-height:355px;overflow:auto;background:#151c2b;border:1px solid #38465b;border-radius:10px;padding:12px;box-shadow:0 18px 40px #0009}
+#strategyMenuV901[hidden]{display:none!important}
+#strategySearchV901{width:100%;height:37px;border:1px solid #3b4860;border-radius:8px;color:#fff;background:#0d1320;padding:9px;box-sizing:border-box}
+#strategyOptionsV901{max-height:240px;overflow:auto;margin-top:8px}
+#strategyOptionsV901 label{display:flex;align-items:center;gap:9px;padding:7px;border-radius:6px;color:#e3e9f5;font-size:13px;cursor:pointer}
+#strategyOptionsV901 label:hover{background:#263249}
+#strategyOptionsV901 input{accent-color:#c89b50}
+#strategyFilterV901 .strategy-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#strategyClearV901{background:transparent;border:1px solid #33425a;border-radius:8px;color:#c7d7ed;padding:7px 11px;cursor:pointer}
+#strategyCountV901{font-size:12px;color:#a8b6ce}
+#tableBody tr.strategy-hidden-v901,.mobile-fund-cards > .strategy-hidden-v901{display:none!important}
+@media(max-width:768px){#strategyFilterV901{padding:12px 8px}#strategyFilterV901 .strategy-label{width:100%}#strategyFilterV901 .strategy-picker{width:100%}#strategyMenuV901{width:100%;box-sizing:border-box}}
