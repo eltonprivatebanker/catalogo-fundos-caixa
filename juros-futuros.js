@@ -87,6 +87,29 @@
     frame.style.height = `${Math.max(330, Math.min(h + 2, 900))}px`;
   }
 
+  // V721: os widgets são servidos por outro site (GitHub Pages).
+  // Cross-origin impede contentDocument; a altura é comunicada pelo próprio widget.
+  function jurosFuturosHeightV721(event){
+    if(event.origin !== 'https://eltonprivatebanker.github.io') return;
+    const data = event.data;
+    if(!data || data.type !== 'juros-brasil-widget-height') return;
+
+    const id = data.widget === 'evolucao-di-fundos'
+      ? HISTORY_ID
+      : data.widget === 'curva-di-fundos' ? CURRENT_ID : null;
+    if(!id) return;
+
+    const frame = document.getElementById(id);
+    if(!frame || event.source !== frame.contentWindow) return;
+
+    const height = data.height;
+    if(typeof height !== 'number' || !Number.isFinite(height)) return;
+    // Sem +2 recorrente: scrollHeight pode refletir a altura da viewport do iframe.
+    frame.style.height = `${Math.max(330, Math.min(1800, Math.ceil(height)))}px`;
+  }
+
+  window.addEventListener('message', jurosFuturosHeightV721);
+
   function prepare(frame, kind){
     if(!frame || frame.dataset.nativeV719 === '1') return;
     frame.dataset.nativeV719 = '1';
