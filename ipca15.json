@@ -13,24 +13,18 @@
     }
   },
   "atual": {
+    "competencia": "202611",
+    "mensal": 0.22,
+    "acumulado_ano": 4.38,
+    "acumulado_12m": 4.64
+  },
+  "anterior": {
     "competencia": "202610",
     "mensal": 0.32,
     "acumulado_ano": 4.15,
     "acumulado_12m": 4.62
   },
-  "anterior": {
-    "competencia": "202609",
-    "mensal": 0.7,
-    "acumulado_ano": 3.82,
-    "acumulado_12m": 4.47
-  },
   "historico": [
-    {
-      "competencia": "202411",
-      "mensal": 0.62,
-      "acumulado_ano": 4.35,
-      "acumulado_12m": 4.77
-    },
     {
       "competencia": "202412",
       "mensal": 0.34,
@@ -168,7 +162,13 @@
       "mensal": 0.32,
       "acumulado_ano": 4.15,
       "acumulado_12m": 4.62
+    },
+    {
+      "competencia": "202611",
+      "mensal": 0.22,
+      "acumulado_ano": 4.38,
+      "acumulado_12m": 4.64
     }
   ],
-  "gerado_em_utc": "2026-11-16T23:10:27.681268Z"
+  "gerado_em_utc": "2026-11-26T22:37:45.841486Z"
 }
